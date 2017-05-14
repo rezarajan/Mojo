@@ -1,13 +1,18 @@
 package bluefirelabs.mojo;
 
+import android.app.ProgressDialog;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -23,6 +28,14 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import bluefirelabs.mojo.DataHandler.HttpDataHandler;
+
+import static android.net.wifi.WifiConfiguration.Status.strings;
+
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
@@ -33,11 +46,27 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Location mLastLocation;
     private Marker mCurrLocationMarker;
     private GoogleApiClient mGoogleApiClient;
+    private TextView textView;
+    private Button button;
+    double lat, lng;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
+
+        textView = (TextView)findViewById(R.id.locationAddress);
+        button = (Button)findViewById(R.id.locate);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                lat = mLastLocation.getLatitude();
+                lng = mLastLocation.getLongitude();
+                textView.setText(Double.toString(lat) + "," + Double.toString(lng));
+                //new GetAddress().execute(String.format("%.4f,%.4f",lat,lng));
+            }
+        });
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -128,6 +157,48 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         //stop location updates
         if (mGoogleApiClient != null) {
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+        }
+    }
+
+    private class GetAddress extends AsyncTask<String,Void,String>{
+
+        ProgressDialog dialog = new ProgressDialog(MapsActivity.this);
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            dialog.setMessage("Please wait...");
+            dialog.setCanceledOnTouchOutside(false);
+            dialog.show();
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            try{
+                double lat = Double.parseDouble(strings[0].split(",")[0]);
+                double lng = Double.parseDouble(strings[0].split(",")[1]);
+                String response;
+                HttpDataHandler http = new HttpDataHandler();
+                String url = String.format("https://maps.googleapis.com/maps/api/geocode/json?latlng=%.4f,%.4f&sensor=false",lat,lng);
+                response = http.GetHTTPData(url);
+            } catch (Exception ex){
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            try{
+                JSONObject jsonObject = new JSONObject(s);
+
+                String address = ((JSONArray)jsonObject.get("results")).getJSONObject(0).get("formatted_address").toString();
+                textView.setText(address);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            if(dialog.isShowing()){
+                dialog.dismiss();
+            }
         }
     }
 }
