@@ -22,6 +22,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <service
+            android:name="bluefirelabs.mojo.background_tasks.FetchAddressIntentService"
+            android:exported="false"/>
 
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -45,6 +48,7 @@
             </intent-filter>
         </activity>
         <activity android:name="bluefirelabs.mojo.permissions.permission_location" />
+        <activity android:name=".Find_Me" />
         <activity
             android:name="bluefirelabs.mojo.MapsActivity"
             android:label="@string/title_activity_maps"></activity>
