@@ -172,6 +172,7 @@ public class permission_location extends AppCompatActivity implements GoogleApiC
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     // permission granted
                     permissionIsGranted = true;
+                    settingButton.setText("Next");
                 } else {
                     //permission denied
                     permissionIsGranted = false;
