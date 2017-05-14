@@ -1,4 +1,4 @@
-package bluefiretechnologies.mojo;
+package bluefirelabs.mojo;
 
 import android.Manifest;
 import android.content.Intent;

@@ -1,4 +1,4 @@
-package bluefiretechnologies.mojo;
+package bluefirelabs.mojo;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;

@@ -1,4 +1,4 @@
-package bluefiretechnologies.mojo.permissions;
+package bluefirelabs.mojo.permissions;
 
 import android.Manifest;
 import android.content.Intent;
@@ -21,8 +21,8 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
-import bluefiretechnologies.mojo.MapsActivity;
-import bluefiretechnologies.mojo.R;
+import bluefirelabs.mojo.MapsActivity;
+import bluefirelabs.mojo.R;
 
 public class permission_location extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
@@ -40,12 +40,12 @@ public class permission_location extends AppCompatActivity implements GoogleApiC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        settingButton = (Button) findViewById(R.id.btSettings);
 
-        requestLocationUpdates();
+        requestMinimalUpdates();
         if(!permissionIsGranted) {
                 latitudeText = (TextView) findViewById(R.id.tvLatitude);
                 longitudeText = (TextView) findViewById(R.id.tvLongitude);
-                settingButton = (Button) findViewById(R.id.btSettings);
 
                 googleApiClient = new GoogleApiClient.Builder(this)
                         .addApi(LocationServices.API)
@@ -85,6 +85,7 @@ public class permission_location extends AppCompatActivity implements GoogleApiC
         finish();
     }
 
+
     private void requestLocationUpdates() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -96,6 +97,26 @@ public class permission_location extends AppCompatActivity implements GoogleApiC
             // for ActivityCompat#requestPermissions for more details.
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSION_REQUEST_FINE_LOCATION);
+
+            } else {
+                permissionIsGranted = true;
+
+            }
+        } else {
+            callNextActivity();
+        }
+    }
+
+    private void requestMinimalUpdates() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 
             } else {
                 permissionIsGranted = true;

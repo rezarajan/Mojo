@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="bluefiretechnologies.mojo">
+    package="bluefirelabs.mojo">
 
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
@@ -8,6 +8,11 @@
          location permissions for the 'MyLocation' functionality. 
     -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+    <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.READ_PROFILE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
 
     <application
         android:allowBackup="true"
@@ -28,8 +33,9 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
+
         <activity
-            android:name="bluefiretechnologies.mojo.Splash"
+            android:name="bluefirelabs.mojo.Splash"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -37,13 +43,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="bluefiretechnologies.mojo.displayLocation" />
+        <activity android:name="bluefirelabs.mojo.displayLocation" />
+        <activity android:name="bluefirelabs.mojo.permissions.permission_location" />
         <activity
-            android:name="bluefiretechnologies.mojo.permissions.permission_location"></activity>
+            android:name="bluefirelabs.mojo.MapsActivity"
+            android:label="@string/title_activity_maps"></activity>
         <activity
-            android:name="bluefiretechnologies.mojo.MapsActivity"
-            android:label="@string/title_activity_maps">
-        </activity>
+            android:name="bluefirelabs.mojo.Login"
+            android:label="@string/title_activity_login"></activity>
     </application>
 
 </manifest>
