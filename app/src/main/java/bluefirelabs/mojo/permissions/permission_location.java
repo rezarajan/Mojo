@@ -41,6 +41,7 @@ public class permission_location extends AppCompatActivity implements GoogleApiC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         settingButton = (Button) findViewById(R.id.btSettings);
+        overridePendingTransition(R.transition.fade_in, R.transition.fade_out);
 
         requestMinimalUpdates();
         if(!permissionIsGranted) {

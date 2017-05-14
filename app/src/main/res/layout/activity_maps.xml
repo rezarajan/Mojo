@@ -9,8 +9,9 @@
         android:layout_width="match_parent"
         android:layout_height="30dp"
         android:layout_alignParentTop="true"
-        android:text="Allow Location"
-        android:textSize="24sp" />
+        android:text="Location"
+        android:gravity="center"
+        android:textSize="10sp" />
 
     <fragment
         android:id="@+id/map"

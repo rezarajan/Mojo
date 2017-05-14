@@ -63,7 +63,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public void onClick(View v) {
                 lat = mLastLocation.getLatitude();
                 lng = mLastLocation.getLongitude();
-                textView.setText(Double.toString(lat) + "," + Double.toString(lng));
+                textView.setText("Lat: " + Double.toString(lat) + ",Long: " + Double.toString(lng));
                 //new GetAddress().execute(String.format("%.4f,%.4f",lat,lng));
             }
         });
@@ -181,6 +181,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 HttpDataHandler http = new HttpDataHandler();
                 String url = String.format("https://maps.googleapis.com/maps/api/geocode/json?latlng=%.4f,%.4f&sensor=false",lat,lng);
                 response = http.GetHTTPData(url);
+                return response;
             } catch (Exception ex){
             }
             return null;
