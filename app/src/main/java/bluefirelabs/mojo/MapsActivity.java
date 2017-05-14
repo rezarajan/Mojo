@@ -1,18 +1,22 @@
 package bluefirelabs.mojo;
 
-import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Geocoder;
 import android.location.Location;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.os.ResultReceiver;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -28,13 +32,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import bluefirelabs.mojo.handlers.HttpDataHandler;
-
-import static android.net.wifi.WifiConfiguration.Status.strings;
+import bluefirelabs.mojo.background_tasks.Constants;
+import bluefirelabs.mojo.background_tasks.FetchAddressIntentService;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
@@ -44,11 +43,42 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap mMap;
     private LocationRequest mLocationRequest;
     private Location mLastLocation;
+    private AddressResultReceiver mResultReceiver;
     private Marker mCurrLocationMarker;
     private GoogleApiClient mGoogleApiClient;
     private TextView textView;
     private Button button;
-    double lat, lng;
+    boolean mAddressRequested = false;
+    String mAddressOutput;
+
+    class AddressResultReceiver extends ResultReceiver {
+        public AddressResultReceiver(Handler handler) {
+            super(handler);
+        }
+
+        @Override
+        protected void onReceiveResult(int resultCode, Bundle resultData) {
+
+            // Display the address string
+            // or an error message sent from the intent service.
+            mAddressOutput = resultData.getString(Constants.RESULT_DATA_KEY);
+            textView.setText(mAddressOutput);
+
+            // Show a toast message if an address was found.
+            if (resultCode == Constants.SUCCESS_RESULT) {
+                Context context = getApplicationContext();
+                Toast.makeText(context, getString(R.string.address_found), Toast.LENGTH_SHORT).show();
+            }
+
+        }
+    }
+
+    protected void startIntentService() {
+        Intent intent = new Intent(this, FetchAddressIntentService.class);
+        intent.putExtra(Constants.RECEIVER, mResultReceiver);
+        intent.putExtra(Constants.LOCATION_DATA_EXTRA, mLastLocation);
+        startService(intent);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,10 +91,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                lat = mLastLocation.getLatitude();
-                lng = mLastLocation.getLongitude();
-                textView.setText("Lat: " + Double.toString(lat) + ",Long: " + Double.toString(lng));
+                //lat = mLastLocation.getLatitude();
+                //lng = mLastLocation.getLongitude();
+                //textView.setText("Lat: " + Double.toString(lat) + ",Long: " + Double.toString(lng));
                 //new GetAddress().execute(String.format("%.4f,%.4f",lat,lng));
+                // Only start the service to fetch the address if GoogleApiClient is
+                // connected.
+                if (mGoogleApiClient.isConnected() && mLastLocation != null) {
+                    startIntentService();
+                }
+                // If GoogleApiClient isn't connected, process the user's request by
+                // setting mAddressRequested to true. Later, when GoogleApiClient connects,
+                // launch the service to fetch the address. As far as the user is
+                // concerned, pressing the Fetch Address button
+                // immediately kicks off the process of getting the address.
+                mAddressRequested = true;
             }
         });
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -112,8 +153,28 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .build();
         mGoogleApiClient.connect();
     }
+
     @Override
     public void onConnected(@Nullable Bundle bundle) {
+
+        // Gets the best and most recent location currently available,
+        // which may be null in rare cases when a location is not available.
+        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
+                mGoogleApiClient);
+
+        if (mLastLocation != null) {
+            // Determine whether a Geocoder is available.
+            if (!Geocoder.isPresent()) {
+                Toast.makeText(this, R.string.no_geocoder_available,
+                        Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            if (mAddressRequested) {
+                startIntentService();
+            }
+        }
+
         mLocationRequest = new LocationRequest();
         mLocationRequest.setInterval(1000);
         mLocationRequest.setFastestInterval(1000);
@@ -157,49 +218,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         //stop location updates
         if (mGoogleApiClient != null) {
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
-        }
-    }
-
-    private class GetAddress extends AsyncTask<String,Void,String>{
-
-        ProgressDialog dialog = new ProgressDialog(MapsActivity.this);
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            dialog.setMessage("Please wait...");
-            dialog.setCanceledOnTouchOutside(false);
-            dialog.show();
-        }
-
-        @Override
-        protected String doInBackground(String... params) {
-            try{
-                double lat = Double.parseDouble(strings[0].split(",")[0]);
-                double lng = Double.parseDouble(strings[0].split(",")[1]);
-                String response;
-                HttpDataHandler http = new HttpDataHandler();
-                String url = String.format("https://maps.googleapis.com/maps/api/geocode/json?latlng=%.4f,%.4f&sensor=false",lat,lng);
-                response = http.GetHTTPData(url);
-                return response;
-            } catch (Exception ex){
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            try{
-                JSONObject jsonObject = new JSONObject(s);
-
-                String address = ((JSONArray)jsonObject.get("results")).getJSONObject(0).get("formatted_address").toString();
-                textView.setText(address);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            if(dialog.isShowing()){
-                dialog.dismiss();
-            }
         }
     }
 }

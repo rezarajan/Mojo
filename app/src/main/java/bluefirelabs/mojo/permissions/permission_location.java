@@ -21,7 +21,7 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
-import bluefirelabs.mojo.Find_Me;
+import bluefirelabs.mojo.Current_Location;
 import bluefirelabs.mojo.R;
 
 public class permission_location extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
@@ -81,7 +81,7 @@ public class permission_location extends AppCompatActivity implements GoogleApiC
     }
 
     public void callNextActivity(){
-        Intent intent = new Intent(permission_location.this, Find_Me.class);
+        Intent intent = new Intent(permission_location.this, bluefirelabs.mojo.background_tasks.Current_Location.class);
         startActivity(intent);
         finish();
     }
