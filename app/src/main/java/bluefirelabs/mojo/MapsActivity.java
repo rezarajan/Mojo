@@ -32,7 +32,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import bluefirelabs.mojo.DataHandler.HttpDataHandler;
+import bluefirelabs.mojo.handlers.HttpDataHandler;
 
 import static android.net.wifi.WifiConfiguration.Status.strings;
 

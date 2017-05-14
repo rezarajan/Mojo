@@ -29,7 +29,7 @@
              Note that the API key is linked to the encryption key used to sign the APK.
              You need a different API key for each encryption key, including the release key that is used to
              sign the APK for publishing.
-             You can define the keys for the debug and release targets in src/debug/ and src/release/. 
+             You can define the keys for the debug and release targets in src/debug/ and src/release/.
         -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -44,13 +44,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="bluefirelabs.mojo.displayLocation" />
         <activity android:name="bluefirelabs.mojo.permissions.permission_location" />
         <activity
             android:name="bluefirelabs.mojo.MapsActivity"
             android:label="@string/title_activity_maps"></activity>
         <activity
             android:name="bluefirelabs.mojo.Login"
+            android:label="@string/title_activity_login"></activity>
+        <activity
+            android:name="bluefirelabs.mojo.background_tasks.location_find"
             android:label="@string/title_activity_login"></activity>
     </application>
 

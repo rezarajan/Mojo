@@ -1,4 +1,4 @@
-package bluefirelabs.mojo.DataHandler;
+package bluefirelabs.mojo.handlers;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -13,12 +13,14 @@ import java.net.URL;
  */
 
 public class HttpDataHandler {
-    public HttpDataHandler(){
 
+    public HttpDataHandler() {
     }
-    public String GetHTTPData(String requestUrl){
+
+    public String GetHTTPData(String requestUrl)
+    {
         URL url;
-        String response = "";
+        String respone = "";
         try{
             url = new URL(requestUrl);
             HttpURLConnection conn = (HttpURLConnection)url.openConnection();
@@ -29,22 +31,22 @@ public class HttpDataHandler {
             conn.setDoOutput(true);
             int responseCode = conn.getResponseCode();
 
-            if(responseCode == HttpURLConnection.HTTP_OK){
+            if(responseCode == HttpURLConnection.HTTP_OK)
+            {
                 String line;
                 BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                while((line = br.readLine()) != null){
-                    response+=line;
-                }
-            } else{
-                response = "";
+                while((line = br.readLine()) != null)
+                    respone+=line;
             }
-        } catch (ProtocolException e){
+            else
+                respone = "";
+        } catch (ProtocolException e) {
             e.printStackTrace();
-        } catch (MalformedURLException e){
+        } catch (MalformedURLException e) {
             e.printStackTrace();
-        } catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
-        return response;
+        return respone;
     }
 }

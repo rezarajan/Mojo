@@ -45,32 +45,32 @@ public class permission_location extends AppCompatActivity implements GoogleApiC
 
         requestMinimalUpdates();
         if(!permissionIsGranted) {
-                latitudeText = (TextView) findViewById(R.id.tvLatitude);
-                longitudeText = (TextView) findViewById(R.id.tvLongitude);
+            latitudeText = (TextView) findViewById(R.id.tvLatitude);
+            longitudeText = (TextView) findViewById(R.id.tvLongitude);
 
-                googleApiClient = new GoogleApiClient.Builder(this)
-                        .addApi(LocationServices.API)
-                        .addConnectionCallbacks(this)
-                        .addOnConnectionFailedListener(this)
-                        .build();
+            googleApiClient = new GoogleApiClient.Builder(this)
+                    .addApi(LocationServices.API)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .build();
 
-                locationRequest = new LocationRequest();
-                locationRequest.setInterval(10 * 1000);
-                locationRequest.setFastestInterval(15 * 1000);
-                locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+            locationRequest = new LocationRequest();
+            locationRequest.setInterval(10 * 1000);
+            locationRequest.setFastestInterval(15 * 1000);
+            locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
-                settingButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
+            settingButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
               /*  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSION_REQUEST_FINE_LOCATION);
                 } else {
                     permissionIsGranted = true;
                 } */
 
-                        requestLocationUpdates();
-                    }
-                });
+                    requestLocationUpdates();
+                }
+            });
         } else {
             callNextActivity();
         }
@@ -81,7 +81,7 @@ public class permission_location extends AppCompatActivity implements GoogleApiC
     }
 
     public void callNextActivity(){
-        Intent intent = new Intent(permission_location.this, MapsActivity.class);
+        Intent intent = new Intent(permission_location.this, bluefirelabs.mojo.background_tasks.location_find.class);
         startActivity(intent);
         finish();
     }
