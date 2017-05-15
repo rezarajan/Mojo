@@ -3,6 +3,7 @@ package bluefirelabs.mojo;
 import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Criteria;
 import android.location.Location;
@@ -30,6 +31,7 @@ import bluefirelabs.mojo.handlers.HttpDataHandler;
 
 public class Find_Me  extends AppCompatActivity implements LocationListener {
     Button btnShow;
+    Button btnRestaurants;
     TextView textView;
 
     LocationManager locationManager;
@@ -65,7 +67,10 @@ public class Find_Me  extends AppCompatActivity implements LocationListener {
         setContentView(R.layout.getlocation_layout);
 
         btnShow = (Button) findViewById(R.id.btnGetAddress);
+        btnRestaurants = (Button) findViewById(R.id.btnRestaurants);
         textView = (TextView) findViewById(R.id.txtAddress);
+
+        final Intent intent = new Intent(Find_Me.this, Restaurants_Cards.class);
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
@@ -89,6 +94,14 @@ public class Find_Me  extends AppCompatActivity implements LocationListener {
                 lat = myLocation.getLatitude();
                 lng = myLocation.getLongitude();
                 new GetAddress().execute(String.format("%.4f,%.4f",lat,lng));
+            }
+        });
+
+        btnRestaurants.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(intent);
+                finish();
             }
         });
     }

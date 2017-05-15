@@ -12,7 +12,7 @@ public class Restaurants_Cards extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_restaurants__cards);
+        setContentView(R.layout.card_view);
 
         restaurantHelper = new Restaurants_DatabaseAdapter(this);
     }

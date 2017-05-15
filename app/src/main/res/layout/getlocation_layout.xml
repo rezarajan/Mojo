@@ -19,6 +19,16 @@
         style="@style/Widget.AppCompat.Button.Colored"
     />
 
+    <Button
+        android:id="@+id/btnRestaurants"
+        android:layout_centerInParent="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtAddress"
+        android:text="View Restaurants"
+        style="@style/Widget.AppCompat.Button.Colored"
+        />
+
     <TextView
         android:id="@+id/txtAddress"
         android:layout_marginTop="20dp"
