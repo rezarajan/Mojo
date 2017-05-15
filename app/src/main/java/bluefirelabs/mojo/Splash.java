@@ -26,7 +26,7 @@ public class Splash extends AppCompatActivity {
                 } finally {
 
                     //Intent intent = new Intent(Splash.this, displayLocation.class);
-                    Intent intent = new Intent(Splash.this, Login.class);
+                    Intent intent = new Intent(Splash.this, Restaurants_Cards.class);
                     startActivity(intent);
                     finish();
                 }

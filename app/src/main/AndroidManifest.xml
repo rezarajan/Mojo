@@ -23,8 +23,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <service
-            android:name="bluefirelabs.mojo.background_tasks.FetchAddressIntentService"
-            android:exported="false"/>
+            android:name=".background_tasks.FetchAddressIntentService"
+            android:exported="false" />
 
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -39,7 +39,7 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name="bluefirelabs.mojo.Splash"
+            android:name=".Splash"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -47,24 +47,22 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name="bluefirelabs.mojo.permissions.permission_location" />
-
-        <activity android:name="bluefirelabs.mojo.background_tasks.Current_Location" />
-
+        <activity android:name=".permissions.permission_location" />
+        <activity android:name=".background_tasks.Current_Location" />
         <activity android:name=".Find_Me" />
-
         <activity
-            android:name="bluefirelabs.mojo.MapsActivity"
-            android:label="@string/title_activity_maps"></activity>
-
+            android:name=".MapsActivity"
+            android:label="@string/title_activity_maps" />
         <activity
-            android:name="bluefirelabs.mojo.Login"
-            android:label="@string/title_activity_login"></activity>
-
+            android:name=".Login"
+            android:label="@string/title_activity_login" />
         <activity
-            android:name="bluefirelabs.mojo.background_tasks.location_find"
-            android:label="@string/title_activity_login"></activity>
+            android:name=".background_tasks.location_find"
+            android:label="@string/title_activity_login" />
+        <activity
+            android:name=".Restaurants_Cards"
+            android:label="@string/title_activity_restaurants__cards"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
