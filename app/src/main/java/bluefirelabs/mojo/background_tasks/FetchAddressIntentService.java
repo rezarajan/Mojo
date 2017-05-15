@@ -6,7 +6,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
-import android.support.v4.os.ResultReceiver;
+import android.os.ResultReceiver;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -26,12 +26,6 @@ import static com.google.android.gms.wearable.DataMap.TAG;
 public class FetchAddressIntentService extends IntentService {
     protected ResultReceiver mReceiver;
 
-    private void deliverResultToReceiver(int resultCode, String message) {
-        Bundle bundle = new Bundle();
-        bundle.putString(Constants.RESULT_DATA_KEY, message);
-        mReceiver.send(resultCode, bundle);
-    }
-
     public FetchAddressIntentService() {
         super("FetchAddressIntentService");
     }
@@ -46,6 +40,8 @@ public class FetchAddressIntentService extends IntentService {
                 Constants.LOCATION_DATA_EXTRA);
 
         List<Address> addresses = null;
+
+        mReceiver = intent.getParcelableExtra(Constants.RECEIVER);
 
         try {
             addresses = geocoder.getFromLocation(
@@ -87,5 +83,11 @@ public class FetchAddressIntentService extends IntentService {
                     TextUtils.join(System.getProperty("line.separator"),
                             addressFragments));
         }
+    }
+
+    private void deliverResultToReceiver(int resultCode, String message) {
+        Bundle bundle = new Bundle();
+        bundle.putString(Constants.RESULT_DATA_KEY, message);
+        mReceiver.send(resultCode, bundle);
     }
 }

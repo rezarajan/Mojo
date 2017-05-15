@@ -47,14 +47,21 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity android:name="bluefirelabs.mojo.permissions.permission_location" />
+
         <activity android:name="bluefirelabs.mojo.background_tasks.Current_Location" />
+
+        <activity android:name=".Find_Me" />
+
         <activity
             android:name="bluefirelabs.mojo.MapsActivity"
             android:label="@string/title_activity_maps"></activity>
+
         <activity
             android:name="bluefirelabs.mojo.Login"
             android:label="@string/title_activity_login"></activity>
+
         <activity
             android:name="bluefirelabs.mojo.background_tasks.location_find"
             android:label="@string/title_activity_login"></activity>

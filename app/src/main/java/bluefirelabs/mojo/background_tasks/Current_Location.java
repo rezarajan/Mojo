@@ -1,8 +1,11 @@
 package bluefirelabs.mojo.background_tasks;
 
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.ResultReceiver;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -34,10 +37,20 @@ public class Current_Location extends AppCompatActivity implements GoogleApiClie
     boolean mRequestingLocationUpdates = true;
     private TextView textView;
     private Button button;
+    private String mAddressOutput;
+    public AddressResultReceiver mResultReceiver;
+
+    protected void startIntentService() {
+        Intent intent = new Intent(this, FetchAddressIntentService.class);
+        intent.putExtra(Constants.RECEIVER, mResultReceiver);
+        intent.putExtra(Constants.LOCATION_DATA_EXTRA, mCurrentLocation);
+        startService(intent);
+    }
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.getlocation_layout);
+        mResultReceiver = new AddressResultReceiver(null);
         textView = (TextView) findViewById(R.id.txtAddress);
         button = (Button) findViewById(R.id.btnGetAddress);
         // Create an instance of GoogleAPIClient.
@@ -52,7 +65,8 @@ public class Current_Location extends AppCompatActivity implements GoogleApiClie
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startLocationUpdates();
+                //startLocationUpdates();
+                startIntentService();
             }
         });
     }
@@ -137,6 +151,34 @@ public class Current_Location extends AppCompatActivity implements GoogleApiClie
     }
 
     private void updateUI() {
-        textView.setText(String.valueOf(mCurrentLocation.getLongitude()));
+        //textView.setText(String.valueOf(mCurrentLocation.getLongitude()));
+    }
+
+    private class AddressResultReceiver extends ResultReceiver {
+        /**
+         * Create a new ResultReceive to receive results.  Your
+         * {@link #onReceiveResult} method will be called from the thread running
+         * <var>handler</var> if given, or from an arbitrary thread if null.
+         *
+         * @param handler
+         */
+        public AddressResultReceiver(Handler handler) {
+            super(handler);
+        }
+
+        @Override
+        protected void onReceiveResult(int resultCode, final Bundle resultData) {
+            // Display the address string
+            // or an error message sent from the intent service.
+            mAddressOutput = resultData.getString(Constants.RESULT_DATA_KEY);
+            //textView.setText(mAddressOutput);
+
+            // Show a toast message if an address was found.
+            if (resultCode == Constants.SUCCESS_RESULT) {
+                //showToast(getString(R.string.address_found));
+                textView.setText(mAddressOutput);
+            }
+
+        }
     }
 }
