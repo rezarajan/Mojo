@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -22,13 +23,15 @@ import java.util.HashMap;
 import java.util.List;
 
 import bluefirelabs.mojo.background_tasks.MapHttpConnection;
-import bluefirelabs.mojo.background_tasks.PathJSONParser;
+import bluefirelabs.mojo.background_tasks.PathJSONParser_duration;
+
+import static bluefirelabs.mojo.R.id.map;
 
 /**
  * Created by Reza Rajan on 2017-05-16.
  */
 
-public class distance extends AppCompatActivity implements OnMapReadyCallback{
+public class distance_duration extends AppCompatActivity implements OnMapReadyCallback{
 
     private GoogleMap mMap;
     private String url;
@@ -39,9 +42,9 @@ public class distance extends AppCompatActivity implements OnMapReadyCallback{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
+                .findFragmentById(map);
         mapFragment.getMapAsync(this);
-        txtView = (TextView)findViewById(R.id.locationAddress);
+        txtView = (TextView) findViewById(R.id.locationAddress);
     }
 
     @Override
@@ -109,38 +112,60 @@ public class distance extends AppCompatActivity implements OnMapReadyCallback{
 
     }
 
-    private class ParserTask extends AsyncTask<String,Integer, List<List<HashMap<String , String >>>> {
+    /** A class to parse the Google Places in JSON format */
+    private class ParserTask extends AsyncTask<String, Integer, List<List<HashMap<String,String>>> >{
+
+        // Parsing the data in non-ui thread
         @Override
-        protected List<List<HashMap<String, String>>> doInBackground(
-                String... jsonData) {
-            // TODO Auto-generated method stub
+        protected List<List<HashMap<String, String>>> doInBackground(String... jsonData) {
+
             JSONObject jObject;
             List<List<HashMap<String, String>>> routes = null;
-            try {
+
+            try{
                 jObject = new JSONObject(jsonData[0]);
-                PathJSONParser parser = new PathJSONParser();
+                PathJSONParser_duration parser = new PathJSONParser_duration();
+
+                // Starts parsing data
                 routes = parser.parse(jObject);
-
-
-            } catch (Exception e) {
+            }catch(Exception e){
                 e.printStackTrace();
             }
             return routes;
         }
 
         @Override
-        protected void onPostExecute(List<List<HashMap<String, String>>> routes) {
+        protected void onPostExecute(List<List<HashMap<String, String>>> result) {
             ArrayList<LatLng> points = null;
-            PolylineOptions polyLineOptions = null;
+            PolylineOptions lineOptions = null;
+            MarkerOptions markerOptions = new MarkerOptions();
+            String distance = "";
+            String duration = "";
 
-            // traversing through routes
-            for (int i = 0; i < routes.size(); i++) {
+            if(result.size()<1){
+                Toast.makeText(getBaseContext(), "No Points", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            // Traversing through all the routes
+            for(int i=0;i<result.size();i++){
                 points = new ArrayList<LatLng>();
-                polyLineOptions = new PolylineOptions();
-                List<HashMap<String, String>> path = routes.get(i);
+                lineOptions = new PolylineOptions();
 
-                for (int j = 0; j < path.size(); j++) {
-                    HashMap<String, String> point = path.get(j);
+                // Fetching i-th route
+                List<HashMap<String, String>> path = result.get(i);
+
+                // Fetching all the points in i-th route
+                for(int j=0;j<path.size();j++){
+                    HashMap<String,String> point = path.get(j);
+
+                    if(j==0){    // Get distance from the list
+                        distance = (String)point.get("distance");
+                        continue;
+                    }else if(j==1){ // Get duration from the list
+                        duration = (String)point.get("duration");
+                        continue;
+                    }
 
                     double lat = Double.parseDouble(point.get("lat"));
                     double lng = Double.parseDouble(point.get("lng"));
@@ -149,15 +174,17 @@ public class distance extends AppCompatActivity implements OnMapReadyCallback{
                     points.add(position);
                 }
 
-                polyLineOptions.addAll(points);
-                polyLineOptions.width(4);
-                polyLineOptions.color(Color.BLUE);
+                // Adding all the points in the route to LineOptions
+                lineOptions.addAll(points);
+                lineOptions.width(2);
+                lineOptions.color(Color.BLUE);
             }
 
-            mMap.addPolyline(polyLineOptions);
-            txtView.setText(routes.toString());
+            txtView.setText("Distance:"+distance + ", Duration:"+duration);
 
-        }}
+            // Drawing polyline in the Google Map for the i-th route
+            mMap.addPolyline(lineOptions);
+        }
+    }}
 
 
-}
