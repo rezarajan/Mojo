@@ -60,6 +60,8 @@
             android:name=".background_tasks.location_find"
             android:label="@string/title_activity_login" />
         <activity
+            android:name=".xmlAdapter"/>
+        <activity
             android:name=".Restaurants_Cards"
             android:label="@string/title_activity_restaurants__cards"
             android:theme="@style/AppTheme.NoActionBar"></activity>
