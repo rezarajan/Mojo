@@ -56,9 +56,8 @@
         <activity
             android:name=".Login"
             android:label="@string/title_activity_login" />
-        <activity
-            android:name=".background_tasks.location_find"
-            android:label="@string/title_activity_login" />
+        <activity android:name=".background_tasks.location_find"/>
+        <activity android:name=".distance"/>
         <activity
             android:name=".xmlAdapter"/>
         <activity
