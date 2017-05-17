@@ -1,8 +1,16 @@
 package bluefirelabs.mojo;
 
+import android.content.Context;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.TextView;
@@ -31,11 +39,16 @@ import static bluefirelabs.mojo.R.id.map;
  * Created by Reza Rajan on 2017-05-16.
  */
 
-public class distance_duration extends AppCompatActivity implements OnMapReadyCallback{
+public class distance_duration extends AppCompatActivity implements OnMapReadyCallback, LocationListener {
 
     private GoogleMap mMap;
     private String url;
     TextView txtView;
+    LocationManager locationManager;
+    String provider;
+    final int MY_PERMISSION_REQUEST_CODE = 7171;
+    double lat, lng;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +57,23 @@ public class distance_duration extends AppCompatActivity implements OnMapReadyCa
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(map);
         mapFragment.getMapAsync(this);
+
+        /*
+        Updating last known location
+         */
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this, new String[]{
+                    android.Manifest.permission.ACCESS_COARSE_LOCATION,
+                    android.Manifest.permission.ACCESS_FINE_LOCATION
+            }, MY_PERMISSION_REQUEST_CODE);
+
+        } else {
+            getLocation();
+        }
+        Location myLocation = locationManager.getLastKnownLocation(provider);
+        lat = myLocation.getLatitude();
+        lng = myLocation.getLongitude();
         txtView = (TextView) findViewById(R.id.locationAddress);
     }
 
@@ -52,8 +82,8 @@ public class distance_duration extends AppCompatActivity implements OnMapReadyCa
         mMap = googleMap;
 
         // Add a marker in Sydney, Australia, and move the camera.
-        LatLng sydney = new LatLng(-34, 151);
-        LatLng sydney_1 = new LatLng(-32, 150);
+        LatLng sydney = new LatLng(lat, lng);
+        LatLng sydney_1 = new LatLng(37.408870, -122.064426);
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
 
@@ -61,32 +91,32 @@ public class distance_duration extends AppCompatActivity implements OnMapReadyCa
         new ReadTask().execute(url);
     }
 
-    private String  getMapsApiDirectionsUrl(LatLng origin,LatLng dest) {
+    private String getMapsApiDirectionsUrl(LatLng origin, LatLng dest) {
         // Origin of route
-        String str_origin = "origin="+origin.latitude+","+origin.longitude;
+        String str_origin = "origin=" + origin.latitude + "," + origin.longitude;
 
         // Destination of route
-        String str_dest = "destination="+dest.latitude+","+dest.longitude;
+        String str_dest = "destination=" + dest.latitude + "," + dest.longitude;
 
 
         // Sensor enabled
         String sensor = "sensor=false";
 
         // Building the parameters to the web service
-        String parameters = str_origin+"&"+str_dest+"&"+sensor;
+        String parameters = str_origin + "&" + str_dest + "&" + sensor;
 
         // Output format
         String output = "json";
 
         // Building the url to the web service
-        String url = "https://maps.googleapis.com/maps/api/directions/"+output+"?"+parameters;
+        String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters;
 
 
         return url;
 
     }
 
-    private class ReadTask extends AsyncTask<String, Void , String> {
+    private class ReadTask extends AsyncTask<String, Void, String> {
 
         @Override
         protected String doInBackground(String... url) {
@@ -112,8 +142,10 @@ public class distance_duration extends AppCompatActivity implements OnMapReadyCa
 
     }
 
-    /** A class to parse the Google Places in JSON format */
-    private class ParserTask extends AsyncTask<String, Integer, List<List<HashMap<String,String>>> >{
+    /**
+     * A class to parse the Google Places in JSON format
+     */
+    private class ParserTask extends AsyncTask<String, Integer, List<List<HashMap<String, String>>>> {
 
         // Parsing the data in non-ui thread
         @Override
@@ -122,13 +154,13 @@ public class distance_duration extends AppCompatActivity implements OnMapReadyCa
             JSONObject jObject;
             List<List<HashMap<String, String>>> routes = null;
 
-            try{
+            try {
                 jObject = new JSONObject(jsonData[0]);
                 PathJSONParser_duration parser = new PathJSONParser_duration();
 
                 // Starts parsing data
                 routes = parser.parse(jObject);
-            }catch(Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             return routes;
@@ -142,13 +174,13 @@ public class distance_duration extends AppCompatActivity implements OnMapReadyCa
             String distance = "";
             String duration = "";
 
-            if(result.size()<1){
+            if (result.size() < 1) {
                 Toast.makeText(getBaseContext(), "No Points", Toast.LENGTH_SHORT).show();
                 return;
             }
 
             // Traversing through all the routes
-            for(int i=0;i<result.size();i++){
+            for (int i = 0; i < result.size(); i++) {
                 points = new ArrayList<LatLng>();
                 lineOptions = new PolylineOptions();
 
@@ -156,14 +188,14 @@ public class distance_duration extends AppCompatActivity implements OnMapReadyCa
                 List<HashMap<String, String>> path = result.get(i);
 
                 // Fetching all the points in i-th route
-                for(int j=0;j<path.size();j++){
-                    HashMap<String,String> point = path.get(j);
+                for (int j = 0; j < path.size(); j++) {
+                    HashMap<String, String> point = path.get(j);
 
-                    if(j==0){    // Get distance from the list
-                        distance = (String)point.get("distance");
+                    if (j == 0) {    // Get distance from the list
+                        distance = (String) point.get("distance");
                         continue;
-                    }else if(j==1){ // Get duration from the list
-                        duration = (String)point.get("duration");
+                    } else if (j == 1) { // Get duration from the list
+                        duration = (String) point.get("duration");
                         continue;
                     }
 
@@ -180,11 +212,69 @@ public class distance_duration extends AppCompatActivity implements OnMapReadyCa
                 lineOptions.color(Color.BLUE);
             }
 
-            txtView.setText("Distance:"+distance + ", Duration:"+duration);
+            txtView.setText("Distance:" + distance + ", Duration:" + duration);
 
             // Drawing polyline in the Google Map for the i-th route
             mMap.addPolyline(lineOptions);
         }
-    }}
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+            return;
+        }
+        locationManager.requestLocationUpdates(provider, 400, 1, this);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSION_REQUEST_CODE:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                    getLocation();
+                break;
+
+        }
+    }
+
+    private void getLocation() {
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        provider = locationManager.getBestProvider(new Criteria(), false);
+
+
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+            return;
+        }
+        final Location location = locationManager.getLastKnownLocation(provider);
+        if (location == null)
+            Log.e("ERROR", "Location is null");
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        lat = location.getLatitude();
+        lng = location.getLongitude();
+    }
+
+    @Override
+    public void onStatusChanged(String s, int i, Bundle bundle) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String s) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String s) {
+    }
+}
+
 
 

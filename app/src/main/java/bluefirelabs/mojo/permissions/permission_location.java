@@ -21,7 +21,6 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
-import bluefirelabs.mojo.Find_Me;
 import bluefirelabs.mojo.R;
 
 public class permission_location extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
@@ -81,7 +80,7 @@ public class permission_location extends AppCompatActivity implements GoogleApiC
     }
 
     public void callNextActivity(){
-        Intent intent = new Intent(permission_location.this, Find_Me.class);
+        Intent intent = new Intent(permission_location.this, bluefirelabs.mojo.distance_duration.class);
         startActivity(intent);
         finish();
     }
@@ -173,7 +172,8 @@ public class permission_location extends AppCompatActivity implements GoogleApiC
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     // permission granted
                     permissionIsGranted = true;
-                    settingButton.setText("Next");
+                    //settingButton.setText("Next");  //this would change the text on the button and then require you to press next
+                    callNextActivity(); //this automates moving to the next activity
                 } else {
                     //permission denied
                     permissionIsGranted = false;
