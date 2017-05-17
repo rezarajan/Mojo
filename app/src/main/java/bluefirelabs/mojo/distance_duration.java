@@ -16,6 +16,9 @@ import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -42,12 +45,17 @@ import static bluefirelabs.mojo.R.id.map;
 public class distance_duration extends AppCompatActivity implements OnMapReadyCallback, LocationListener {
 
     private GoogleMap mMap;
+    private GoogleApiClient mGoogleApiClient;
+    private LocationRequest mLocationRequest;
+    private long UPDATE_INTERVAL = 10 * 1000;  /* 10 secs */
+    private long FASTEST_INTERVAL = 2000; /* 2 sec */
     private String url;
     TextView txtView;
     LocationManager locationManager;
     String provider;
     final int MY_PERMISSION_REQUEST_CODE = 7171;
     double lat, lng;
+    private Location myLocation;
 
 
     @Override
@@ -57,6 +65,17 @@ public class distance_duration extends AppCompatActivity implements OnMapReadyCa
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(map);
         mapFragment.getMapAsync(this);
+
+        if (mGoogleApiClient == null) {
+            mGoogleApiClient = new GoogleApiClient.Builder(this)
+                    .addConnectionCallbacks((GoogleApiClient.ConnectionCallbacks) this)
+                    .addOnConnectionFailedListener((GoogleApiClient.OnConnectionFailedListener) this)
+                    .addApi(LocationServices.API)
+                    .build();
+        }
+        if (mGoogleApiClient != null) {
+            mGoogleApiClient.connect();
+        }
 
         /*
         Updating last known location
@@ -71,7 +90,7 @@ public class distance_duration extends AppCompatActivity implements OnMapReadyCa
         } else {
             getLocation();
         }
-        Location myLocation = locationManager.getLastKnownLocation(provider);
+        myLocation = locationManager.getLastKnownLocation(provider);
         lat = myLocation.getLatitude();
         lng = myLocation.getLongitude();
         txtView = (TextView) findViewById(R.id.locationAddress);
@@ -219,6 +238,42 @@ public class distance_duration extends AppCompatActivity implements OnMapReadyCa
         }
     }
 
+    protected void startLocationUpdates() {
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        // Create the location request
+        mLocationRequest = LocationRequest.create()
+                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+                .setInterval(UPDATE_INTERVAL)
+                .setFastestInterval(FASTEST_INTERVAL);
+        // Request location updates
+        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient,
+                mLocationRequest, (com.google.android.gms.location.LocationListener) this);
+    }
+
+    protected void onStart() {
+        mGoogleApiClient.connect();
+        super.onStart();
+    }
+
+    protected void onStop() {
+        // Disconnecting the client invalidates it.
+        LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, (com.google.android.gms.location.LocationListener) this);
+
+        // only stop if it's connected, otherwise we crash
+        if (mGoogleApiClient != null) {
+            mGoogleApiClient.disconnect();
+        }
+        super.onStop();
+    }
 
     @Override
     protected void onResume() {
@@ -228,6 +283,26 @@ public class distance_duration extends AppCompatActivity implements OnMapReadyCa
             return;
         }
         locationManager.requestLocationUpdates(provider, 400, 1, this);
+    }
+
+    public void onConnected(Bundle bundle) {
+        // Get last known recent location.
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        myLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        // Note that this can be NULL if last location isn't already known.
+        if (myLocation != null) {
+        }
+        // Begin polling for new location updates.
+        startLocationUpdates();
     }
 
     @Override

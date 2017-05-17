@@ -80,7 +80,7 @@ public class permission_location extends AppCompatActivity implements GoogleApiC
     }
 
     public void callNextActivity(){
-        Intent intent = new Intent(permission_location.this, bluefirelabs.mojo.distance_duration.class);
+        Intent intent = new Intent(permission_location.this, bluefirelabs.mojo.Restaurants_Cards.class);
         startActivity(intent);
         finish();
     }

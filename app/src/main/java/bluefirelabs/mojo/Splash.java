@@ -25,7 +25,7 @@ public class Splash extends AppCompatActivity {
 
                 } finally {
 
-                    //Intent intent = new Intent(Splash.this, displayLocation.class);
+                    //Start a new intent
                     Intent intent = new Intent(Splash.this, Login.class);
                     startActivity(intent);
                     finish();
