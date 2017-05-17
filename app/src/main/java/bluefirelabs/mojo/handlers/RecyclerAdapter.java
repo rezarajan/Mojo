@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import bluefirelabs.mojo.R;
@@ -29,16 +30,29 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             "Restaurant Six",
             "Restaurant Seven",
             "Restaurant Eight"};
+    private int[] icon =
+            {R.mipmap.ic_launcher,
+                    R.mipmap.ic_launcher,
+                    R.mipmap.ic_launcher,
+                    R.mipmap.ic_launcher,
+                    R.mipmap.ic_launcher,
+                    R.mipmap.ic_launcher,
+                    R.mipmap.ic_launcher,
+                    R.mipmap.ic_launcher};
 
     class ViewHolder extends RecyclerView.ViewHolder{
 
 
         public TextView itemTitle;
+        public TextView itemDescription;
+        public ImageView itemIcon;
 
 
         public ViewHolder(final View itemView) {
             super(itemView);
+            itemIcon = (ImageView) itemView.findViewById(R.id.item_icon);
             itemTitle = (TextView)itemView.findViewById(R.id.item_title);
+            itemDescription = (TextView)itemView.findViewById(R.id.item_description);
 
             context = itemView.getContext();
 
@@ -84,7 +98,9 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int i) {
+        viewHolder.itemIcon.setImageResource(icon[i]);
         viewHolder.itemTitle.setText(titles[i]);
+        viewHolder.itemDescription.setText(titles[i]);
     }
 
     @Override
