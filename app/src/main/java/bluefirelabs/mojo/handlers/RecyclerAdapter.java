@@ -4,6 +4,8 @@ package bluefirelabs.mojo.handlers;
  * Created by Reza Rajan on 2017-05-17.
  */
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,17 +14,21 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import bluefirelabs.mojo.R;
+import bluefirelabs.mojo.distance_duration;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
 
-    private String[] titles = {"Chapter One",
-            "Chapter Two",
-            "Chapter Three",
-            "Chapter Four",
-            "Chapter Five",
-            "Chapter Six",
-            "Chapter Seven",
-            "Chapter Eight"};
+    private Context context;
+
+    private String[] titles =
+            {"Restaurant One",
+            "Restaurant Two",
+            "Restaurant Three",
+            "Resturant Four",
+            "Restaurant Five",
+            "Restaurant Six",
+            "Restaurant Seven",
+            "Restaurant Eight"};
 
     class ViewHolder extends RecyclerView.ViewHolder{
 
@@ -30,9 +36,11 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         public TextView itemTitle;
 
 
-        public ViewHolder(View itemView) {
+        public ViewHolder(final View itemView) {
             super(itemView);
             itemTitle = (TextView)itemView.findViewById(R.id.item_title);
+
+            context = itemView.getContext();
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v) {
@@ -42,6 +50,24 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
                             Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
 
+                    final Intent intent;
+
+                    intent = new Intent(context, distance_duration.class);
+
+                    /*This is for card-specific intent actions
+                    switch(getAdapterPosition()){
+                        case 0:
+                            intent = new Intent(context, MapsActivity.class);
+                            break;
+                        case 1:
+                            intent = new Intent(context, MapsActivity.class);
+                            break;
+                        default:
+                            intent = new Intent(context, MapsActivity.class);
+                            break;
+                    }
+                    */
+                    context.startActivity(intent);
 
                 }
             });
