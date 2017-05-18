@@ -35,7 +35,7 @@ public class Restaurants_Cards extends AppCompatActivity {
 
             recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
-            layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+            layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
             recyclerView.setLayoutManager(layoutManager);
 
             adapter = new RecyclerAdapter();
