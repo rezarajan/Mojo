@@ -31,14 +31,14 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             "Restaurant Seven",
             "Restaurant Eight"};
     private int[] icon =
-            {R.mipmap.ic_launcher,
-                    R.mipmap.ic_launcher,
-                    R.mipmap.ic_launcher,
-                    R.mipmap.ic_launcher,
-                    R.mipmap.ic_launcher,
-                    R.mipmap.ic_launcher,
-                    R.mipmap.ic_launcher,
-                    R.mipmap.ic_launcher};
+            {R.drawable.restaurant_icon,
+                    R.drawable.restaurant_icon,
+                    R.drawable.restaurant_icon,
+                    R.drawable.restaurant_icon,
+                    R.drawable.restaurant_icon,
+                    R.drawable.restaurant_icon,
+                    R.drawable.restaurant_icon,
+                    R.drawable.restaurant_icon};
 
     class ViewHolder extends RecyclerView.ViewHolder{
 

@@ -20,12 +20,6 @@ public class Restaurants_Cards extends AppCompatActivity {
     RecyclerView.Adapter adapter;
 
 
-    public void callNextActivity(){
-        Intent intent = new Intent(this, bluefirelabs.mojo.distance_duration.class);
-        startActivity(intent);
-        finish();
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
