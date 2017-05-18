@@ -56,7 +56,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
             context = itemView.getContext();
 
-            itemView.setOnClickListener(new View.OnClickListener() {
+            /*itemDescription.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v) {
                     int position = getAdapterPosition();
 
@@ -67,6 +67,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
                     final Intent intent;
 
                     intent = new Intent(context, distance_duration.class);
+                    */
 
                     /*This is for card-specific intent actions
                     switch(getAdapterPosition()){
@@ -81,6 +82,17 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
                             break;
                     }
                     */
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View v) {
+                    int position = getAdapterPosition();
+
+                    Snackbar.make(v, "Click detected on item " + position,
+                            Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+
+                    final Intent intent;
+
+                    intent = new Intent(context, distance_duration.class);
                     context.startActivity(intent);
 
                 }
