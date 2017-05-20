@@ -22,6 +22,7 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
 import bluefirelabs.mojo.R;
+import bluefirelabs.mojo.Restaurant_Cards;
 
 public class permission_location extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
@@ -80,7 +81,7 @@ public class permission_location extends AppCompatActivity implements GoogleApiC
     }
 
     public void callNextActivity(){
-        Intent intent = new Intent(permission_location.this, bluefirelabs.mojo.Restaurants_Cards.class);
+        Intent intent = new Intent(permission_location.this, Restaurant_Cards.class);
         startActivity(intent);
         finish();
     }

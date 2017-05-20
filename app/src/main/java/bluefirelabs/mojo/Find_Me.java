@@ -70,7 +70,7 @@ public class Find_Me  extends AppCompatActivity implements LocationListener {
         btnRestaurants = (Button) findViewById(R.id.btnRestaurants);
         textView = (TextView) findViewById(R.id.txtAddress);
 
-        final Intent intent = new Intent(Find_Me.this, Restaurants_Cards.class);
+        final Intent intent = new Intent(Find_Me.this, Restaurants_Cards_old.class);
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 

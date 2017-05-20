@@ -1,39 +1,36 @@
 package bluefirelabs.mojo;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.TextView;
 
 import bluefirelabs.mojo.handlers.RecyclerAdapter;
 
-public class Restaurants_Cards extends AppCompatActivity {
+/**
+ * Created by rezarajan on 19/05/2017.
+ */
+
+public class Restaurant_Cards extends AppCompatActivity implements bluefirelabs.mojo.fragments.currentinfo_fragment.currentinfoListener, bluefirelabs.mojo.fragments.restaurantlist_fragmnet.restaurantlistListener {
 
     RecyclerView recyclerView;
     RecyclerView.LayoutManager layoutManager;
     RecyclerView.Adapter adapter;
 
-
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            setContentView(R.layout.menu_card_layout);
-            // Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-            // setSupportActionBar(toolbar);
+    protected void onCreate(Bundle savedInstanceState){
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.hub_layout);
 
-            recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
-            layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-            recyclerView.setLayoutManager(layoutManager);
+        layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        recyclerView.setLayoutManager(layoutManager);
 
-            adapter = new RecyclerAdapter();
-            recyclerView.setAdapter(adapter);
+        adapter = new RecyclerAdapter();
+        recyclerView.setAdapter(adapter);
     }
 
     @Override
@@ -57,4 +54,5 @@ public class Restaurants_Cards extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
 }

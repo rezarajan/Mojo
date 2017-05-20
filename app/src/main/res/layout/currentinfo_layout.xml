@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:id="@+id/rel">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_alignParentRight="true"
+            android:scaleType="centerCrop"
+            android:id="@+id/imgMain"
+            android:src="@drawable/dummy_background" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="4dp"
+            android:layout_centerInParent="true"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:id="@+id/txt_1"
+            android:text="Browse and order from the best of LOCATION"
+            android:textColor="#000000"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="4dp"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:layout_above="@id/txt_1"
+            android:text="Current Location"
+            android:textColor="#000000"
+            android:id="@+id/txt"/>
+
+    </RelativeLayout>
+
+</RelativeLayout>

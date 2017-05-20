@@ -56,12 +56,13 @@
             android:name=".Login"
             android:label="@string/title_activity_login" />
         <activity android:name=".background_tasks.location_find"/>
+        <activity android:name=".Restaurant_Cards"/>
         <activity android:name=".distance"/>
         <activity android:name=".distance_duration"/>
         <activity
             android:name=".xmlAdapter"/>
         <activity
-            android:name=".Restaurants_Cards"
+            android:name=".Restaurants_Cards_old"
             android:label="@string/title_activity_restaurants__cards"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
