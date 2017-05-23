@@ -71,6 +71,7 @@ public class distance_duration extends AppCompatActivity implements OnMapReadyCa
         } else {
             getLocation();
         }
+        locationManager.requestLocationUpdates(provider, 400, 1, this);
         Location myLocation = locationManager.getLastKnownLocation(provider);
         lat = myLocation.getLatitude();
         lng = myLocation.getLongitude();
@@ -244,6 +245,7 @@ public class distance_duration extends AppCompatActivity implements OnMapReadyCa
     private void getLocation() {
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         provider = locationManager.getBestProvider(new Criteria(), false);
+        locationManager.requestLocationUpdates(provider, 400, 1, this);
 
 
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -257,6 +259,7 @@ public class distance_duration extends AppCompatActivity implements OnMapReadyCa
 
     @Override
     public void onLocationChanged(Location location) {
+        getLocation();
         lat = location.getLatitude();
         lng = location.getLongitude();
     }
