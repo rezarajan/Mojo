@@ -36,7 +36,7 @@ public class Restaurant_Cards extends AppCompatActivity implements bluefirelabs.
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.layout.menu_card, menu);
+        //getMenuInflater().inflate(R.layout.menu_card, menu);
         return true;
     }
 
@@ -46,11 +46,6 @@ public class Restaurant_Cards extends AppCompatActivity implements bluefirelabs.
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
 
         return super.onOptionsItemSelected(item);
     }

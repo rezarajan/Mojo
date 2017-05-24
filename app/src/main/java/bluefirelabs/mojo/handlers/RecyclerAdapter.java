@@ -15,7 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import bluefirelabs.mojo.R;
-import bluefirelabs.mojo.distance_duration;
+import bluefirelabs.mojo.food_menu;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
 
@@ -72,13 +72,13 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
                     /*This is for card-specific intent actions
                     switch(getAdapterPosition()){
                         case 0:
-                            intent = new Intent(context, MapsActivity.class);
+                            intent = new Intent(context, distance_duration.class);
                             break;
                         case 1:
-                            intent = new Intent(context, MapsActivity.class);
+                            intent = new Intent(context, distance_duration.class);
                             break;
                         default:
-                            intent = new Intent(context, MapsActivity.class);
+                            intent = new Intent(context, distance_duration.class);
                             break;
                     }
                     */
@@ -92,7 +92,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
                     final Intent intent;
 
-                    intent = new Intent(context, distance_duration.class);
+                    intent = new Intent(context, food_menu.class);
                     context.startActivity(intent);
 
                 }

@@ -22,4 +22,5 @@
     <string name="address_found">Address found</string>
     <string name="no_geocoder_available">No Geocoder available</string>
     <string name="title_activity_restaurants__cards">Restaurants_Cards</string>
+    <string name="title_activity_food_menu">food_menu</string>
 </resources>

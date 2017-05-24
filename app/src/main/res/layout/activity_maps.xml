@@ -19,7 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/locationAddress"
-    tools:context="bluefirelabs.mojo.MapsActivity" />
+    tools:context="bluefirelabs.mojo.distance_duration" />
 
     <Button
         android:id="@+id/locate"
