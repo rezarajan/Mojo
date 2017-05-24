@@ -8,7 +8,7 @@ import android.support.v7.widget.RecyclerView;
 
 import bluefirelabs.mojo.handlers.RecyclerAdapter;
 
-public class food_menu extends AppCompatActivity {
+public class Dummy_Drinks_Menu extends AppCompatActivity {
 
     RecyclerView recyclerView;
     RecyclerView.LayoutManager layoutManager;

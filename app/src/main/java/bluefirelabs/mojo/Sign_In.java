@@ -1,11 +1,7 @@
 package bluefirelabs.mojo;
 
-import android.*;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.location.Location;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
@@ -22,9 +18,9 @@ public class Sign_In extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_screen);
 
-        TextView button1 = (TextView) findViewById(R.id.button1);
+        TextView sign_in = (TextView) findViewById(R.id.sign_in);
 
-        button1.setOnClickListener(new View.OnClickListener() {
+        sign_in.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(Sign_In.this, Login.class);

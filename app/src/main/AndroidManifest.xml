@@ -55,7 +55,7 @@
         <activity android:name=".Restaurant_Cards" />
         <activity android:name=".distance_duration" />
         <activity
-            android:name=".food_menu"
+            android:name=".Dummy_Drinks_Menu"
             android:label="@string/title_activity_food_menu"
             android:theme="@style/Theme.AppCompat.NoActionBar"></activity>
     </application>

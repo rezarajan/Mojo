@@ -15,7 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import bluefirelabs.mojo.R;
-import bluefirelabs.mojo.food_menu;
+import bluefirelabs.mojo.Dummy_Drinks_Menu;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
 
@@ -92,7 +92,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
                     final Intent intent;
 
-                    intent = new Intent(context, food_menu.class);
+                    intent = new Intent(context, Dummy_Drinks_Menu.class);
                     context.startActivity(intent);
 
                 }
