@@ -53,9 +53,10 @@
             android:label="@string/title_activity_login" />
         <activity android:name=".Sign_In" />
         <activity android:name=".Restaurant_Cards" />
-        <activity android:name=".distance_duration" />
+        <activity android:name=".Runner_Mapper" />
+        <activity android:name=".Drinks_Menu" />
         <activity
-            android:name=".Dummy_Drinks_Menu"
+            android:name=".Restaurant_Menu"
             android:label="@string/title_activity_food_menu"
             android:theme="@style/Theme.AppCompat.NoActionBar"></activity>
     </application>

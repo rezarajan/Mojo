@@ -14,31 +14,21 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import bluefirelabs.mojo.Drinks_Menu;
 import bluefirelabs.mojo.R;
-import bluefirelabs.mojo.Restaurant_Menu;
 
-public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
+public class RecyclerAdapter_Menu extends RecyclerView.Adapter<RecyclerAdapter_Menu.ViewHolder> {
 
     private Context context;
 
     private String[] titles =
-            {"Restaurant One",
-            "Restaurant Two",
-            "Restaurant Three",
-            "Restaurant Four",
-            "Restaurant Five",
-            "Restaurant Six",
-            "Restaurant Seven",
-            "Restaurant Eight"};
+            {"Food",
+            "Drinks",
+            "Desserts",};
     private int[] icon =
-            {R.drawable.restaurant,
-                    R.drawable.restaurant_icon,
-                    R.drawable.restaurant_icon,
-                    R.drawable.restaurant_icon,
-                    R.drawable.restaurant_icon,
-                    R.drawable.restaurant_icon,
-                    R.drawable.restaurant_icon,
-                    R.drawable.restaurant_icon};
+            {R.drawable.food,
+                    R.drawable.drinks,
+                    R.drawable.dessert};
 
     class ViewHolder extends RecyclerView.ViewHolder{
 
@@ -92,7 +82,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
                     final Intent intent;
 
-                    intent = new Intent(context, Restaurant_Menu.class);
+                    intent = new Intent(context, Drinks_Menu.class);
                     context.startActivity(intent);
 
                 }

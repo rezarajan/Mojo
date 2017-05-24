@@ -44,24 +44,26 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center">
+
         <TextView
             android:id="@+id/txtPls"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:layout_gravity="center"
-            android:text="Please "/>
+            android:gravity="center"
+            android:text="Please " />
 
         <TextView
             android:id="@+id/sign_in"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:layout_gravity="center"
             android:layout_toEndOf="@id/txtPls"
-            android:onClick="onClick"
             android:clickable="true"
-            android:text="Sign in"/>
+            android:gravity="center"
+            android:onClick="onClick"
+            android:text="Sign in"
+            android:textStyle="bold"/>
 
     </RelativeLayout>
 

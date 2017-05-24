@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import bluefirelabs.mojo.R;
+import bluefirelabs.mojo.Runner_Mapper;
 
 /**
  * Created by rezarajan on 19/05/2017.
@@ -44,7 +45,7 @@ public class currentinfo_fragment extends Fragment{
         currentlocation.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getContext(), bluefirelabs.mojo.distance_duration.class);
+                Intent intent = new Intent(getContext(), Runner_Mapper.class);
                 startActivity(intent);
             }
         });

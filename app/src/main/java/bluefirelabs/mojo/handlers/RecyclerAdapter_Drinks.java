@@ -5,54 +5,37 @@ package bluefirelabs.mojo.handlers;
  */
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import bluefirelabs.mojo.R;
-import bluefirelabs.mojo.Restaurant_Menu;
 
-public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
+public class RecyclerAdapter_Drinks extends RecyclerView.Adapter<RecyclerAdapter_Drinks.ViewHolder> {
 
     private Context context;
 
     private String[] titles =
-            {"Restaurant One",
-            "Restaurant Two",
-            "Restaurant Three",
-            "Restaurant Four",
-            "Restaurant Five",
-            "Restaurant Six",
-            "Restaurant Seven",
-            "Restaurant Eight"};
+            {"Coke",
+            "Sprite",
+            "Canada Dry",};
     private int[] icon =
-            {R.drawable.restaurant,
-                    R.drawable.restaurant_icon,
-                    R.drawable.restaurant_icon,
-                    R.drawable.restaurant_icon,
-                    R.drawable.restaurant_icon,
-                    R.drawable.restaurant_icon,
-                    R.drawable.restaurant_icon,
-                    R.drawable.restaurant_icon};
+            {R.drawable.food,
+                    R.drawable.drinks,
+                    R.drawable.dessert};
 
     class ViewHolder extends RecyclerView.ViewHolder{
 
 
         public TextView itemTitle;
-        public TextView itemDescription;
-        public ImageView itemIcon;
 
 
         public ViewHolder(final View itemView) {
             super(itemView);
-            itemIcon = (ImageView) itemView.findViewById(R.id.item_icon);
             itemTitle = (TextView)itemView.findViewById(R.id.item_title);
-            itemDescription = (TextView)itemView.findViewById(R.id.item_description);
 
             context = itemView.getContext();
 
@@ -90,10 +73,10 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
                             Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
 
-                    final Intent intent;
+                    //final Intent intent;
 
-                    intent = new Intent(context, Restaurant_Menu.class);
-                    context.startActivity(intent);
+                    //intent = new Intent(context, Drinks_Menu.class);
+                    //context.startActivity(intent);
 
                 }
             });
@@ -103,16 +86,14 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View v = LayoutInflater.from(viewGroup.getContext())
-                .inflate(R.layout.card_layout, viewGroup, false);
+                .inflate(R.layout.food_card, viewGroup, false);
         ViewHolder viewHolder = new ViewHolder(v);
         return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int i) {
-        viewHolder.itemIcon.setImageResource(icon[i]);
         viewHolder.itemTitle.setText(titles[i]);
-        viewHolder.itemDescription.setText(titles[i]);
     }
 
     @Override

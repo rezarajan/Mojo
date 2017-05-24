@@ -39,7 +39,7 @@ import static bluefirelabs.mojo.R.id.map;
  * Created by Reza Rajan on 2017-05-16.
  */
 
-public class distance_duration extends AppCompatActivity implements OnMapReadyCallback, LocationListener {
+public class Runner_Mapper extends AppCompatActivity implements OnMapReadyCallback, LocationListener {
 
     private GoogleMap mMap;
     private String url;

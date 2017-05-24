@@ -6,10 +6,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
-import bluefirelabs.mojo.handlers.RecyclerAdapter;
+import bluefirelabs.mojo.handlers.RecyclerAdapter_Drinks;
 
-public class Dummy_Drinks_Menu extends AppCompatActivity {
+/**
+ * Created by Reza Rajan on 2017-05-24.
+ */
 
+public class Drinks_Menu extends AppCompatActivity{
     RecyclerView recyclerView;
     RecyclerView.LayoutManager layoutManager;
     RecyclerView.Adapter adapter;
@@ -17,7 +20,7 @@ public class Dummy_Drinks_Menu extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.content_food_menu);
+        setContentView(R.layout.food_menu);
         //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         //toolbar.setTitle("Menu");
 
@@ -30,9 +33,8 @@ public class Dummy_Drinks_Menu extends AppCompatActivity {
         layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
 
-        adapter = new RecyclerAdapter();
+        adapter = new RecyclerAdapter_Drinks();
         recyclerView.setAdapter(adapter);
 
     }
-
 }
