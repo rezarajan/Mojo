@@ -242,7 +242,7 @@ public class Runner_Mapper extends AppCompatActivity implements OnMapReadyCallba
         }
     }
 
-    private void getLocation() {
+    public void getLocation() {
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         provider = locationManager.getBestProvider(new Criteria(), false);
         locationManager.requestLocationUpdates(provider, 400, 1, this);

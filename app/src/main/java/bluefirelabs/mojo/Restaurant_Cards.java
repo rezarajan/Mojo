@@ -24,7 +24,14 @@ public class Restaurant_Cards extends AppCompatActivity implements bluefirelabs.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.hub_layout);
 
+
+        //TextView smalldesc = (TextView)findViewById(R.id.small_description_location);
+
+        //smalldesc.setText("Hello");
+
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+
+        recyclerView.setNestedScrollingEnabled(false);
 
         layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
