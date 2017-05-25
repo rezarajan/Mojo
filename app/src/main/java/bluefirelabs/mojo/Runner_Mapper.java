@@ -73,8 +73,12 @@ public class Runner_Mapper extends AppCompatActivity implements OnMapReadyCallba
         }
         locationManager.requestLocationUpdates(provider, 400, 1, this);
         Location myLocation = locationManager.getLastKnownLocation(provider);
-        lat = myLocation.getLatitude();
-        lng = myLocation.getLongitude();
+        if(myLocation == null){
+            getLocation();
+        } else {
+            lat = myLocation.getLatitude();
+            lng = myLocation.getLongitude();
+        }
         txtView = (TextView) findViewById(R.id.locationAddress);
     }
 
