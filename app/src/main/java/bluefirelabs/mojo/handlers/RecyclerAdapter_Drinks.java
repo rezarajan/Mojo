@@ -5,6 +5,7 @@ package bluefirelabs.mojo.handlers;
  */
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -73,10 +74,10 @@ public class RecyclerAdapter_Drinks extends RecyclerView.Adapter<RecyclerAdapter
                             Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
 
-                    //final Intent intent;
+                    final Intent intent;
 
-                    //intent = new Intent(context, Drinks_Menu.class);
-                    //context.startActivity(intent);
+                    intent = new Intent(context, database.CreateDatabase.class);
+                    context.startActivity(intent);
 
                 }
             });

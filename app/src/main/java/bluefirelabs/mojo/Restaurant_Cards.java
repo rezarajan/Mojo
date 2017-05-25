@@ -30,7 +30,6 @@ public class Restaurant_Cards extends AppCompatActivity implements bluefirelabs.
         //smalldesc.setText("Hello");
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-
         recyclerView.setNestedScrollingEnabled(false);
 
         layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
