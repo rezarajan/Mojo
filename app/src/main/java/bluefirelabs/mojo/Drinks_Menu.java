@@ -36,6 +36,5 @@ public class Drinks_Menu extends AppCompatActivity{
 
         adapter = new RecyclerAdapter_Drinks();
         recyclerView.setAdapter(adapter);
-
     }
 }
