@@ -22,10 +22,14 @@ public class RecyclerAdapter_Drinks extends RecyclerView.Adapter<RecyclerAdapter
     DatabaseHelper myDb;
     private String restaurant = "Restaurant";
 
+    Button imagebutton_delete;
+    Integer primary_key_count = 0;
+    Integer coke = 0, sprite = 0, canada_dry = 0;
+
     private String[] titles =
             {"Coke",
-            "Sprite",
-            "Canada Dry",};
+                    "Sprite",
+                    "Canada Dry",};
 
     private String[] cost =
             {"6",
@@ -36,7 +40,7 @@ public class RecyclerAdapter_Drinks extends RecyclerView.Adapter<RecyclerAdapter
                     R.drawable.drinks,
                     R.drawable.dessert};
 
-    class ViewHolder extends RecyclerView.ViewHolder{
+    class ViewHolder extends RecyclerView.ViewHolder {
 
 
         public TextView itemTitle;
@@ -44,8 +48,9 @@ public class RecyclerAdapter_Drinks extends RecyclerView.Adapter<RecyclerAdapter
 
         public ViewHolder(final View itemView) {
             super(itemView);
-            itemTitle = (TextView)itemView.findViewById(R.id.item_title);
-            Button imagebutton = (Button) itemView.findViewById(R.id.imageButton);
+            itemTitle = (TextView) itemView.findViewById(R.id.item_title);
+            Button imagebutton = (Button) itemView.findViewById(R.id.imageButton_add);
+            imagebutton_delete = (Button) itemView.findViewById(R.id.imageButton_delete);
 
 
             context = itemView.getContext();
@@ -115,14 +120,46 @@ public class RecyclerAdapter_Drinks extends RecyclerView.Adapter<RecyclerAdapter
 
                     boolean isInserted = myDb.insertData(restaurant,
                             titles[position],
-                            cost[position]);
+                            cost[position]);                                //Adds the item at at the specific position to the database
 
-                    if(isInserted == true){
+                    if (isInserted == true) {
                         Snackbar.make(v, "Data Inserted",
                                 Snackbar.LENGTH_LONG)
                                 .setAction("Action", null).show();
-                    } else{
+                    } else {
                         Snackbar.make(v, "Data not Inserted",
+                                Snackbar.LENGTH_LONG)
+                                .setAction("Action", null).show();
+                    }
+                }
+            });
+
+            imagebutton_delete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    Integer deletedRows = 0;
+
+                    switch(position){
+                        case 0:
+                            deletedRows = myDb.deleteData("Coke");
+                            break;
+                        case 1:
+                            deletedRows = myDb.deleteData("Sprite");
+                            break;
+                        case 2:
+                            deletedRows = myDb.deleteData("Canada Dry");
+                            break;
+                        default:
+                            break;
+
+                    }
+                    if(deletedRows > 0){
+                            Snackbar.make(v, "Data Deleted",
+                                    Snackbar.LENGTH_LONG)
+                                    .setAction("Action", null).show();
+                    } else {
+                        Snackbar.make(v, "Data not Deleted",
                                 Snackbar.LENGTH_LONG)
                                 .setAction("Action", null).show();
                     }

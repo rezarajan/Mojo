@@ -3,6 +3,7 @@ package bluefirelabs.mojo;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -22,7 +23,9 @@ public class Drinks_Menu extends AppCompatActivity{
     RecyclerView.LayoutManager layoutManager;
     RecyclerView.Adapter adapter;
     DatabaseHelper myDb;
-    Button checkout_btn;
+    FloatingActionButton checkout_btn;
+    Button checkout_btn_1;
+    Button imagebutton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,8 +34,10 @@ public class Drinks_Menu extends AppCompatActivity{
         //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         //toolbar.setTitle("Menu");
 
-        checkout_btn = (Button)findViewById(R.id.checkoutbutton);
+        checkout_btn = (FloatingActionButton)findViewById(R.id.fabCheckout);
         myDb = new DatabaseHelper(this); //calls constructor from the database helper class
+
+        imagebutton = (Button) findViewById(R.id.imageButton_add);
 
         CollapsingToolbarLayout collapsingToolbar = (CollapsingToolbarLayout)findViewById(R.id.collapsingToolbar);
         collapsingToolbar.setTitle("Drinks");
@@ -75,7 +80,6 @@ public class Drinks_Menu extends AppCompatActivity{
             }
         });
     }
-
 
     public void showMessage(String title, String message){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);

@@ -50,14 +50,19 @@
                 android:orientation="vertical">
 
                 <include layout="@layout/restaurantinfo_layout" />
-                <Button
-                    android:id="@+id/checkoutbutton"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Checkout"
-                    android:layout_alignParentBottom="true"/>
 
             </LinearLayout>
         </android.support.v4.widget.NestedScrollView>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fabCheckout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        app:fabSize="normal"
+        android:src="@mipmap/ic_launcher"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="16dp"/>
+
 </android.support.design.widget.CoordinatorLayout>
 
