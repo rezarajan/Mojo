@@ -55,6 +55,7 @@
         <activity android:name=".Restaurant_Cards" />
         <activity android:name=".Runner_Mapper" />
         <activity android:name=".Drinks_Menu" />
+        <activity android:name=".Checkout" />
         <activity android:name="database.CreateDatabase" />
         <activity
             android:name=".Restaurant_Menu"

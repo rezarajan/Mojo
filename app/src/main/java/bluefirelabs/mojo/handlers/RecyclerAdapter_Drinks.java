@@ -23,8 +23,6 @@ public class RecyclerAdapter_Drinks extends RecyclerView.Adapter<RecyclerAdapter
     private String restaurant = "Restaurant";
 
     Button imagebutton_delete;
-    Integer primary_key_count = 0;
-    Integer coke = 0, sprite = 0, canada_dry = 0;
 
     private String[] titles =
             {"Coke",

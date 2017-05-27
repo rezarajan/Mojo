@@ -1,6 +1,6 @@
 package bluefirelabs.mojo;
 
-import android.database.Cursor;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -59,14 +59,17 @@ public class Drinks_Menu extends AppCompatActivity{
         checkout_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               Cursor res = myDb.getAllData();
+
+                Intent intent = new Intent(v.getContext(), Checkout.class);
+                startActivity(intent);
+              /* Cursor res = myDb.getAllData();
                 if(res.getCount() == 0){
                     //no data in database, show message
                     showMessage("Error", "No data found");
                     return;
-                }
+                } */
 
-                StringBuffer buffer = new StringBuffer();
+                /* StringBuffer buffer = new StringBuffer();
                 while (res.moveToNext()){
                     buffer.append("ID: " + res.getString(0) + "\n");
                     buffer.append("RESTAURANT: " + res.getString(1) + "\n");
@@ -75,7 +78,7 @@ public class Drinks_Menu extends AppCompatActivity{
                 }
 
                 //Show all data
-                showMessage("Data", buffer.toString());
+                showMessage("Data", buffer.toString()); */
 
             }
         });
