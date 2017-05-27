@@ -1,9 +1,13 @@
 package bluefirelabs.mojo;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -49,5 +53,35 @@ public class Checkout extends AppCompatActivity{
         mListView.setAdapter(adapter);
 
 
+        //set a listener for item clicks
+        //this leads to the edit menu
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String name = parent.getItemAtPosition(position).toString();
+                Log.d(TAG, "onItemClicked: You clicked on: " + name);
+
+                Cursor data = myDb.getItemID(name);
+                int itemID = -1;
+                while(data.moveToNext()){
+                    itemID = data.getInt(0);
+                }
+                if(itemID > 0){
+                    Snackbar.make(view, "The ID is: " + itemID,
+                            Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+
+                    Intent editCheckoutintent = new Intent(Checkout.this, editcheckout.class);
+                    editCheckoutintent.putExtra("ID", itemID);
+                    editCheckoutintent.putExtra("name", name);
+                    startActivity(editCheckoutintent);
+
+                } else {
+                    Snackbar.make(view, "No ID associated with that name",
+                            Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                }
+            }
+        });
     }
 }

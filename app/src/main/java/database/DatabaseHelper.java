@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 /**
  * Created by Reza Rajan on 2017-05-24.
@@ -61,5 +62,31 @@ public class DatabaseHelper extends SQLiteOpenHelper{
     public Integer deleteData(String TODELETE){
         SQLiteDatabase db = this.getWritableDatabase();
         return db.delete(TABLE_NAME, ITEM + " = ?", new String[] {TODELETE});
+    }
+
+    public Cursor getItemID(String name){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "SELECT " + ID + " FROM " + TABLE_NAME + " WHERE " + ITEM + " = '" + name + "'";
+
+        Cursor data = db.rawQuery(query, null);
+        return data;
+    }
+
+    public void updateName(String newName, int id, String oldName){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "UPDATE " + TABLE_NAME + " SET " + ITEM + " = '" + newName + "' WHERE " + ID + " = '" + id + "'" + " AND " + ITEM + " = '" + oldName + "'";
+
+        Log.d("DatabaseHelper: ", "updateName: query: " + query);
+        Log.d("DatabaseHelper: ", "updateName: Setting name to: " + newName);
+        db.execSQL(query);
+    }
+
+    public void deleteName(int id, String name){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "DELETE FROM " + TABLE_NAME + " WHERE " + ID + " = '" + id + "'" + " AND " + ITEM + " = '" + name + "'";
+
+        Log.d("DatabaseHelper: ", "deleteName: query: " + query);
+        Log.d("DatabaseHelper: ", "deleteName: Deleting: " + name + " from database");
+        db.execSQL(query);
     }
 }
