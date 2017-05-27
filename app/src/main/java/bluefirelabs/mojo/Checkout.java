@@ -84,4 +84,14 @@ public class Checkout extends AppCompatActivity{
             }
         });
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setContentView(R.layout.checkout_layout);
+        mListView = (ListView)findViewById(R.id.listview_checkout);
+        myDb = new DatabaseHelper(this);
+
+        populateListView();
+    }
 }
