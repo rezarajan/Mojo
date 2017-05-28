@@ -23,4 +23,12 @@
     <string name="no_geocoder_available">No Geocoder available</string>
     <string name="title_activity_restaurants__cards">Restaurants_Cards</string>
     <string name="title_activity_food_menu">food_menu</string>
+    <string name="title_activity_main_hub">MainHub</string>
+    
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+
+
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
 </resources>

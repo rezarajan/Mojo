@@ -91,14 +91,8 @@ public class Login extends AppCompatActivity implements LoaderCallbacks<Cursor> 
         });
 
         firebaseAuth = FirebaseAuth.getInstance();
-        if(firebaseAuth.getCurrentUser() != null){
-            Intent intent = new Intent(Login.this, bluefirelabs.mojo.permissions.permission_location.class);
-            startActivity(intent);
-            finish();
-        } else {
 
             Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
-            Button mEmailLogOutButton = (Button) findViewById(R.id.button_logout);
             mEmailSignInButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -106,19 +100,8 @@ public class Login extends AppCompatActivity implements LoaderCallbacks<Cursor> 
                 }
             });
 
-            mEmailLogOutButton.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    firebaseAuth.signOut();
-                    Snackbar.make(findViewById(android.R.id.content), "User Signed Out",
-                            Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
-                }
-            });
-
             mLoginFormView = findViewById(R.id.login_form);
             mProgressView = findViewById(R.id.login_progress);
-        }
     }
 
     private void populateAutoComplete() {
@@ -334,7 +317,7 @@ public class Login extends AppCompatActivity implements LoaderCallbacks<Cursor> 
         @Override
         protected Boolean doInBackground(Void... params) {
             // TODO: attempt authentication against a network service.
-
+            /*
             try {
                 // Simulate network access.
                 Thread.sleep(2000);
@@ -349,7 +332,7 @@ public class Login extends AppCompatActivity implements LoaderCallbacks<Cursor> 
                     return pieces[1].equals(mPassword);
                 }
             }
-
+            */
             firebaseUserCheck(mEmail, mPassword);
             return true;
         }

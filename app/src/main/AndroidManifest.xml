@@ -40,7 +40,6 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-
         <service android:name=".FirebaseInstanceIDService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
@@ -74,6 +73,10 @@
         <activity
             android:name=".Restaurant_Menu"
             android:label="@string/title_activity_food_menu"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+        <activity
+            android:name=".MainHub"
+            android:label="@string/title_activity_main_hub"
             android:theme="@style/Theme.AppCompat.NoActionBar"></activity>
     </application>
 
