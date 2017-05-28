@@ -20,7 +20,7 @@ public class Splash extends AppCompatActivity {
             public void run() {
                 try {
                     super.run();
-                    sleep(500);  //Delay of 5 seconds
+                    //sleep(500);  //Delay of 5 seconds
                 } catch (Exception e) {
 
                 } finally {

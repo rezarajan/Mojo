@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "154381954480-v560a52kaj67evq30e7g4m7o1vh8luvg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "bluefirelabs.mojo",
+            "certificate_hash": "3f486e5721365c9780737d1deb169922f631643a"
+          }
+        },
+        {
           "client_id": "154381954480-t0j9mrses7414l2oipd2q0nd38c77m5j.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -29,8 +37,13 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "154381954480-t0j9mrses7414l2oipd2q0nd38c77m5j.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2

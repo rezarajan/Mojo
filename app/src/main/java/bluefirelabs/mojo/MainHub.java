@@ -1,8 +1,10 @@
 package bluefirelabs.mojo;
 
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.location.Criteria;
 import android.location.Location;
@@ -37,8 +39,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import bluefirelabs.mojo.background_tasks.MyFirebaseInstanceIDService;
 import bluefirelabs.mojo.fragments.restaurantlist_fragment;
 import bluefirelabs.mojo.handlers.HttpDataHandler;
+import bluefirelabs.mojo.handlers.SharedPrefManager;
 
 public class MainHub extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener
@@ -46,12 +50,7 @@ public class MainHub extends AppCompatActivity
         , restaurantlist_fragment.restaurantlistListener
         , android.location.LocationListener {
 
-    RecyclerView recyclerView;
-    RecyclerView.LayoutManager layoutManager;
-    RecyclerView.Adapter adapter;
 
-    private String url;
-    TextView txtView;
     LocationManager locationManager;
     String provider;
     final int MY_PERMISSION_REQUEST_CODE = 7171;
@@ -59,6 +58,7 @@ public class MainHub extends AppCompatActivity
     TextView small_description;
     TextView userEmail;
     FirebaseAuth firebaseAuth;
+    private BroadcastReceiver broadcastReceiver;
 
     public static class RecyclerViewHolder extends RecyclerView.ViewHolder {
 
@@ -128,8 +128,35 @@ public class MainHub extends AppCompatActivity
 
         View header=navigationView.getHeaderView(0);
 
+        broadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+
+            }
+        };
+
+        registerReceiver(broadcastReceiver, new IntentFilter(MyFirebaseInstanceIDService.TOKEN_BROADCAST));
+
+        if(SharedPrefManager.getInstance(this).getToken() != null){
+            Log.d("FCM Token: ", SharedPrefManager.getInstance(this).getToken());
+        }
+
         firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser user = firebaseAuth.getCurrentUser();
+       /* user.getToken(true)
+                .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<GetTokenResult> task) {
+                        if (task.isSuccessful()) {
+                            String idToken = task.getResult().getToken();
+                            Log.d("Token: ", idToken);
+                            // Send token to your backend via HTTPS
+                            // ...
+                        } else {
+                            // Handle error -> task.getException();
+                        }
+                    }
+                }); */
 
         userEmail = (TextView) header.findViewById(R.id.emailTxt);
         userEmail.setText(user.getEmail());
