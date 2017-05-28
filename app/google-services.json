@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "154381954480",
+    "firebase_url": "https://mojo-611fa.firebaseio.com",
+    "project_id": "mojo-611fa",
+    "storage_bucket": "mojo-611fa.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:154381954480:android:53e4bc0cb1fec7c4",
+        "android_client_info": {
+          "package_name": "bluefirelabs.mojo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "154381954480-t0j9mrses7414l2oipd2q0nd38c77m5j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAjFTzjiNmePwIAJpHq4FG-VyX70N-i8m4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -3,22 +3,20 @@ package bluefirelabs.mojo;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.app.LoaderManager.LoaderCallbacks;
-
 import android.content.CursorLoader;
+import android.content.Intent;
 import android.content.Loader;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
-
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -30,6 +28,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,6 +42,8 @@ import static android.Manifest.permission.READ_CONTACTS;
  * A login screen that offers login via email/password.
  */
 public class Login extends AppCompatActivity implements LoaderCallbacks<Cursor> {
+
+    private FirebaseAuth firebaseAuth;
 
     /**
      * Id to identity READ_CONTACTS permission request.
@@ -85,16 +90,35 @@ public class Login extends AppCompatActivity implements LoaderCallbacks<Cursor> 
             }
         });
 
-        Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
-        mEmailSignInButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                attemptLogin();
-            }
-        });
+        firebaseAuth = FirebaseAuth.getInstance();
+        if(firebaseAuth.getCurrentUser() != null){
+            Intent intent = new Intent(Login.this, bluefirelabs.mojo.permissions.permission_location.class);
+            startActivity(intent);
+            finish();
+        } else {
 
-        mLoginFormView = findViewById(R.id.login_form);
-        mProgressView = findViewById(R.id.login_progress);
+            Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
+            Button mEmailLogOutButton = (Button) findViewById(R.id.button_logout);
+            mEmailSignInButton.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    attemptLogin();
+                }
+            });
+
+            mEmailLogOutButton.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    firebaseAuth.signOut();
+                    Snackbar.make(findViewById(android.R.id.content), "User Signed Out",
+                            Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                }
+            });
+
+            mLoginFormView = findViewById(R.id.login_form);
+            mProgressView = findViewById(R.id.login_progress);
+        }
     }
 
     private void populateAutoComplete() {
@@ -326,9 +350,11 @@ public class Login extends AppCompatActivity implements LoaderCallbacks<Cursor> 
                 }
             }
 
-            // TODO: register the new account here.
+            firebaseUserCheck(mEmail, mPassword);
             return true;
         }
+
+
 
         @Override
         protected void onPostExecute(final Boolean success) {
@@ -336,9 +362,9 @@ public class Login extends AppCompatActivity implements LoaderCallbacks<Cursor> 
             showProgress(false);
 
             if (success) {
-                Intent intent = new Intent(Login.this, bluefirelabs.mojo.permissions.permission_location.class);
-                startActivity(intent);
-                finish();
+                //Intent intent = new Intent(Login.this, bluefirelabs.mojo.permissions.permission_location.class);
+                //startActivity(intent);
+                //finish();
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
@@ -350,6 +376,57 @@ public class Login extends AppCompatActivity implements LoaderCallbacks<Cursor> 
             mAuthTask = null;
             showProgress(false);
         }
+    }
+
+    protected void firebaseUserCheck(final String mEmail, final String mPassword){
+        // Authenticates account with Firebase
+        firebaseAuth.createUserWithEmailAndPassword(mEmail, mPassword)
+                .addOnCompleteListener(Login.this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if(task.isSuccessful()){
+                            //user is successfully registered and logged in
+                            Intent intent = new Intent(Login.this, bluefirelabs.mojo.permissions.permission_location.class);
+                            Snackbar.make(findViewById(android.R.id.content), "User Created",
+                                    Snackbar.LENGTH_LONG)
+                                    .setAction("Action", null).show();
+                            startActivity(intent);
+                            finish();
+                        }
+                        else{
+                            if(firebaseAuth.getCurrentUser() != null){
+                                Intent intent = new Intent(Login.this, bluefirelabs.mojo.permissions.permission_location.class);
+                                startActivity(intent);
+                                finish();
+                            } else {
+                                userLogin(mEmail, mPassword);
+
+                            }
+                        }
+                    }
+                });
+    }
+
+    protected void userLogin(String mEmail, String mPassword){
+        firebaseAuth.signInWithEmailAndPassword(mEmail, mPassword)
+                .addOnCompleteListener(Login.this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+
+                        if(task.isSuccessful()){
+                            Intent intent = new Intent(Login.this, bluefirelabs.mojo.permissions.permission_location.class);
+                            Snackbar.make(findViewById(android.R.id.content), "User Logged In",
+                                    Snackbar.LENGTH_LONG)
+                                    .setAction("Action", null).show();
+                            startActivity(intent);
+                            finish();
+                        } else {
+                            Snackbar.make(findViewById(android.R.id.content), "Incorrect Username and/or Password",
+                                    Snackbar.LENGTH_LONG)
+                                    .setAction("Action", null).show();
+                        }
+                    }
+                });
     }
 }
 

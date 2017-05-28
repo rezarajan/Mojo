@@ -43,6 +43,7 @@ public class Restaurant_Cards extends AppCompatActivity implements bluefirelabs.
     double lat, lng;
     TextView small_description;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
