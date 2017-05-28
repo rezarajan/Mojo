@@ -24,7 +24,6 @@ public class Drinks_Menu extends AppCompatActivity{
     RecyclerView.Adapter adapter;
     DatabaseHelper myDb;
     FloatingActionButton checkout_btn;
-    Button checkout_btn_1;
     Button imagebutton;
 
     @Override

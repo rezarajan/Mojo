@@ -53,63 +53,6 @@ public class RecyclerAdapter_Drinks extends RecyclerView.Adapter<RecyclerAdapter
 
             context = itemView.getContext();
 
-            /*itemDescription.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View v) {
-                    int position = getAdapterPosition();
-
-                    Snackbar.make(v, "Click detected on item " + position,
-                            Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
-
-                    final Intent intent;
-
-                    intent = new Intent(context, Runner_Mapper.class);
-                    */
-
-                    /*This is for card-specific intent actions
-                    switch(getAdapterPosition()){
-                        case 0:
-                            intent = new Intent(context, Runner_Mapper.class);
-                            break;
-                        case 1:
-                            intent = new Intent(context, Runner_Mapper.class);
-                            break;
-                        default:
-                            intent = new Intent(context, Runner_Mapper.class);
-                            break;
-                    }
-                    */
-            /* itemView.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View v) {
-                    int position = getAdapterPosition();
-
-                    Snackbar.make(v, "Click detected on item " + position,
-                            Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
-
-
-                    boolean isInserted = myDb.insertData(restaurant,
-                            titles[position],
-                            cost[position]);
-
-                    if(isInserted == true){
-                        Snackbar.make(v, "Data Inserted",
-                                Snackbar.LENGTH_LONG)
-                                .setAction("Action", null).show();
-                    } else{
-                        Snackbar.make(v, "Data not Inserted",
-                                Snackbar.LENGTH_LONG)
-                                .setAction("Action", null).show();
-                    }
-
-                    final Intent intent;
-
-                    intent = new Intent(context, database.CreateDatabase.class);
-                    context.startActivity(intent);
-
-                }
-            }); */
-
             imagebutton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

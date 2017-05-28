@@ -14,12 +14,16 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import bluefirelabs.mojo.Drinks_Menu;
 import bluefirelabs.mojo.R;
 
 public class RecyclerAdapter_Menu extends RecyclerView.Adapter<RecyclerAdapter_Menu.ViewHolder> {
 
     private Context context;
+    private DatabaseReference mDatabase;
 
     private String[] titles =
             {"Food",
@@ -43,6 +47,7 @@ public class RecyclerAdapter_Menu extends RecyclerView.Adapter<RecyclerAdapter_M
             itemIcon = (ImageView) itemView.findViewById(R.id.item_icon);
             itemTitle = (TextView)itemView.findViewById(R.id.item_title);
             itemDescription = (TextView)itemView.findViewById(R.id.item_description);
+            mDatabase = FirebaseDatabase.getInstance().getReference();
 
             context = itemView.getContext();
 

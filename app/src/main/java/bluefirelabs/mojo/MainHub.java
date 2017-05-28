@@ -24,22 +24,26 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import bluefirelabs.mojo.fragments.restaurantlist_fragment;
 import bluefirelabs.mojo.handlers.HttpDataHandler;
-import bluefirelabs.mojo.handlers.RecyclerAdapter;
 
 public class MainHub extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener
         , bluefirelabs.mojo.fragments.currentinfo_fragment.currentinfoListener
-        , bluefirelabs.mojo.fragments.restaurantlist_fragmnet.restaurantlistListener
+        , restaurantlist_fragment.restaurantlistListener
         , android.location.LocationListener {
 
     RecyclerView recyclerView;
@@ -55,6 +59,47 @@ public class MainHub extends AppCompatActivity
     TextView small_description;
     TextView userEmail;
     FirebaseAuth firebaseAuth;
+
+    public static class RecyclerViewHolder extends RecyclerView.ViewHolder {
+
+        private Context context;
+        public TextView itemTitle;
+        public TextView itemDescription;
+        public ImageView itemIcon;
+
+        public RecyclerViewHolder(View itemView) {
+            super(itemView);
+
+            itemIcon = (ImageView) itemView.findViewById(R.id.item_icon);
+            itemTitle = (TextView) itemView.findViewById(R.id.item_title);
+            itemDescription = (TextView) itemView.findViewById(R.id.item_description);
+            context = itemView.getContext();
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+
+                    Snackbar.make(v, "Click detected on item " + position,
+                            Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+
+                    final Intent intent;
+
+                    intent = new Intent(context, Restaurant_Menu.class);
+                    context.startActivity(intent);
+
+                }
+            });
+        }
+    }
+
+    public static final String RESTAURANT = "listing";
+    private DatabaseReference mFirebaseDatabaseReference;
+    private FirebaseRecyclerAdapter<Restaurant_List, RecyclerViewHolder> mFirebaseAdapter;
+
+    private RecyclerView mRestaurantRecyclerView;
+    private LinearLayoutManager mLinearLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,14 +135,41 @@ public class MainHub extends AppCompatActivity
         userEmail.setText(user.getEmail());
 
 
-        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        recyclerView.setNestedScrollingEnabled(false);
+        mRestaurantRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        mLinearLayoutManager = new LinearLayoutManager(this);
+        mLinearLayoutManager.setStackFromEnd(true);
 
-        layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        recyclerView.setLayoutManager(layoutManager);
+        mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
+        mFirebaseAdapter = new FirebaseRecyclerAdapter<Restaurant_List, MainHub.RecyclerViewHolder>(
+                Restaurant_List.class,
+                R.layout.card_layout,
+                MainHub.RecyclerViewHolder.class,
+                mFirebaseDatabaseReference.child(RESTAURANT)
+        ) {
+            @Override
+            protected void populateViewHolder(MainHub.RecyclerViewHolder viewHolder, Restaurant_List model, int position) {
+                Log.d("Description: ", model.getDescription());
+                viewHolder.itemDescription.setText(model.getDescription());
+                viewHolder.itemTitle.setText(model.getRestaurant());
+                viewHolder.itemIcon.setImageResource(R.drawable.restaurant_icon);
+            }
+        };
 
-        adapter = new RecyclerAdapter();
-        recyclerView.setAdapter(adapter);
+        mFirebaseAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver(){
+            @Override
+            public void onItemRangeInserted(int positionStart, int itemCount) {
+                super.onItemRangeInserted(positionStart, itemCount);
+                int restaurantCount = mFirebaseAdapter.getItemCount();
+                int lastVisiblePosition = mLinearLayoutManager.findLastVisibleItemPosition();
+                if(lastVisiblePosition == -1 || (positionStart >= (restaurantCount -1) && lastVisiblePosition == (positionStart -1))){
+                    mRestaurantRecyclerView.scrollToPosition(positionStart);
+                }
+            }
+        });
+
+        mRestaurantRecyclerView.setLayoutManager(mLinearLayoutManager);
+        mRestaurantRecyclerView.setAdapter(mFirebaseAdapter);
+
 
         small_description = (TextView) findViewById(R.id.small_description_location);
 

@@ -6,7 +6,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import bluefirelabs.mojo.R;
 
@@ -14,7 +13,7 @@ import bluefirelabs.mojo.R;
  * Created by rezarajan on 19/05/2017.
  */
 
-public class restaurantlist_fragmnet extends Fragment{
+public class restaurantlist_fragment extends Fragment{
 
     restaurantlistListener restaurantlistlistener;
 

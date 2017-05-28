@@ -52,7 +52,7 @@
 
         <fragment
             android:id="@+id/fragment2"
-            android:name="bluefirelabs.mojo.fragments.restaurantlist_fragmnet"
+            android:name="bluefirelabs.mojo.fragments.restaurantlist_fragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             tools:layout="@layout/restaurantinfo_layout" />
