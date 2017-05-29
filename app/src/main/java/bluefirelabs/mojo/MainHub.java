@@ -34,10 +34,15 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import bluefirelabs.mojo.background_tasks.MyFirebaseInstanceIDService;
 import bluefirelabs.mojo.fragments.restaurantlist_fragment;
@@ -74,6 +79,7 @@ public class MainHub extends AppCompatActivity
             itemTitle = (TextView) itemView.findViewById(R.id.item_title);
             itemDescription = (TextView) itemView.findViewById(R.id.item_description);
             context = itemView.getContext();
+
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -166,6 +172,17 @@ public class MainHub extends AppCompatActivity
         mLinearLayoutManager = new LinearLayoutManager(this);
         mLinearLayoutManager.setStackFromEnd(true);
 
+
+
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Notifications");
+        Map notification = new HashMap<>();
+        notification.put("user_token", FirebaseInstanceId.getInstance().getToken());
+        notification.put("message", "testMessage");
+        reference.push().setValue(notification);
+        //reference.child("token").setValue(FirebaseInstanceId.getInstance().getToken());
+
+        FirebaseMessaging.getInstance().subscribeToTopic("usertest");
+
         mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
         mFirebaseAdapter = new FirebaseRecyclerAdapter<Restaurant_List, MainHub.RecyclerViewHolder>(
                 Restaurant_List.class,
@@ -199,6 +216,9 @@ public class MainHub extends AppCompatActivity
 
 
         small_description = (TextView) findViewById(R.id.small_description_location);
+
+        //FirebaseApp.initializeApp(this);
+        //FirebaseMessaging.getInstance().subscribeToTopic("Notifications");
 
         /*Location Functions */
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
