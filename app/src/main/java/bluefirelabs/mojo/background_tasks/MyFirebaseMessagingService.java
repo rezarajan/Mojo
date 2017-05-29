@@ -20,6 +20,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     //private static final String IMAGEURL = "imageUrl";
     private static final String UID = "uid";
     private static final String TEXT = "text";
+    private static final String TITLE = "title";
+    private static final String BODY = "body";
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
@@ -49,28 +51,30 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             Map<String, String> payload = remoteMessage.getData();
             Log.d(TAG, "Message data payload: " + remoteMessage.getData());
 
-            String username = payload.get(USERNAME);
+            /*String username = payload.get(USERNAME);
             String email = payload.get(EMAIL);
             //String imageUrl = payload.get(IMAGEURL);
             String uid = payload.get(UID);
             String text = payload.get(TEXT);
-
-            showNotification(payload);
+            String title = payload.get(TITLE);
+            String body = payload.get(BODY); */
 
             Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
             Log.d(TAG, "Message data payload: " + remoteMessage.getNotification().getTitle());
-            showNotification(payload);
+            //showNotification(payload);
         }
 
         // Also if you intend on generating your own notifications as a result of a received FCM
         // message, here is where that should be initiated. See sendNotification method below.
 
         //notifyUser(remoteMessage.getFrom(), remoteMessage.getNotification().getBody());
+
+        notifyUser(remoteMessage.getNotification().getTitle(), remoteMessage.getNotification().getBody());
     }
 
     private void showNotification(Map<String, String> payload) {
         MyNotificationManager myNotificationManager = new MyNotificationManager(getApplicationContext());
-        myNotificationManager.showNotification(payload.get("title"), payload.get("body"), new Intent(getApplicationContext(), MainHub.class));     //what happens when the notification is clicked
+        myNotificationManager.showNotification(payload.get(TITLE), payload.get(BODY), new Intent(getApplicationContext(), MainHub.class));     //what happens when the notification is clicked
                                                                                                                                                   //TODO: Add more variables such as imageUrl for a custom notificatoin view
     }
 
