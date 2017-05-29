@@ -7,11 +7,13 @@ admin.initializeApp(functions.config().firebase);
 
 exports.sendPowerNotification = functions.database.ref("Notifications").onWrite((event) => {
     const data = event.data;
+	var title_msg = data.val();
     console.log('Event triggered');
     if (!data.changed()) {
         return;
     }
     const status = data.val();
+	
     //const onOff =  status ? "on": "off";
 
     const payload = {
@@ -20,7 +22,7 @@ exports.sendPowerNotification = functions.database.ref("Notifications").onWrite(
             //body: 'Test',
             //sound: "default"
 			
-			title: 'Electricity Monitor - Power status changed',
+			title: title_msg.title,
             body: 'Test',
             sound: "default"
 			
