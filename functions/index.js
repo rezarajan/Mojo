@@ -17,7 +17,7 @@ exports.sendPowerNotification = functions.database.ref("Notifications").onWrite(
     //const onOff =  status ? "on": "off";
 
     const payload = {
-        notification: {
+        data: {
             //title: 'Electricity Monitor - Power status changed',
             //body: 'Test',
             //sound: "default"
@@ -27,6 +27,7 @@ exports.sendPowerNotification = functions.database.ref("Notifications").onWrite(
             sound: "default"
 			
         }
+		
     };
 
     const options = {

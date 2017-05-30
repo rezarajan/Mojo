@@ -55,13 +55,14 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             String email = payload.get(EMAIL);
             //String imageUrl = payload.get(IMAGEURL);
             String uid = payload.get(UID);
-            String text = payload.get(TEXT);
+            String text = payload.get(TEXT); */
             String title = payload.get(TITLE);
-            String body = payload.get(BODY); */
+            //String body = payload.get(BODY);
 
             Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
             Log.d(TAG, "Message data payload: " + remoteMessage.getNotification().getTitle());
             //showNotification(payload);
+            notifyUser(title, remoteMessage.getNotification().getBody());
         }
 
         // Also if you intend on generating your own notifications as a result of a received FCM
@@ -69,7 +70,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         //notifyUser(remoteMessage.getFrom(), remoteMessage.getNotification().getBody());
 
-        notifyUser(remoteMessage.getNotification().getTitle(), remoteMessage.getNotification().getBody());
+        //notifyUser(remoteMessage.getNotification().getTitle(), remoteMessage.getNotification().getBody());
     }
 
     private void showNotification(Map<String, String> payload) {

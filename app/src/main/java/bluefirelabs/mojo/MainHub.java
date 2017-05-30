@@ -177,6 +177,7 @@ public class MainHub extends AppCompatActivity
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Notifications");
         Map notification = new HashMap<>();
         notification.put("user_token", FirebaseInstanceId.getInstance().getToken());
+        notification.put("uid", user.getUid());
         notification.put("message", "testMessage");
         reference.push().setValue(notification);
         //reference.child("token").setValue(FirebaseInstanceId.getInstance().getToken());
