@@ -6,8 +6,16 @@ admin.initializeApp(functions.config().firebase);
 
 
 exports.sendPowerNotification = functions.database.ref("Notifications/{pushId}/").onWrite((event) => {
+	var db = admin.database();
+	var refNode = db.ref("TestNode");
+	
+	refNode.set({
+  alanisawesome: {
+    date_of_birth: "June 23, 1912",
+    full_name: "Alan Turing"
+  }
+});
     const data = event.data;
-	var title_msg = data.val();
     console.log('Event triggered');
     if (!data.changed()) {
         return;
@@ -22,8 +30,8 @@ exports.sendPowerNotification = functions.database.ref("Notifications/{pushId}/"
             //body: 'Test',
             //sound: "default"
 			
-			message: title_msg.message,
-            uid: title_msg.uid,
+			message: status.message,
+            uid: status.uid,
             sound: "default"
 			
         }
@@ -38,3 +46,5 @@ exports.sendPowerNotification = functions.database.ref("Notifications/{pushId}/"
     return admin.messaging().sendToTopic("usertest", payload, options);
 
 });
+
+
