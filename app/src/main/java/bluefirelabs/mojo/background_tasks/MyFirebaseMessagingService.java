@@ -76,7 +76,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     private void showNotification(Map<String, String> payload) {
         MyNotificationManager myNotificationManager = new MyNotificationManager(getApplicationContext());
-        myNotificationManager.showNotification(payload.get("message"), payload.get("uid"), new Intent(getApplicationContext(), MainHub.class));     //what happens when the notification is clicked
+        myNotificationManager.showNotification(payload.get("customeruid"), payload.get("vendoruid"), new Intent(getApplicationContext(), MainHub.class));     //what happens when the notification is clicked
                                                                                                                                                   //TODO: Add more variables such as imageUrl for a custom notificatoin view
     }
 

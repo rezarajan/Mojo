@@ -97,3 +97,33 @@ exports.requestsMonitor = functions.database.ref("requests/{pushId}/").onWrite((
 	});
 
 });
+
+exports.uidMonitor = functions.database.ref("uid/{uid}/").onWrite((event) => {
+	const data = event.data;
+    console.log('Event triggered');
+    if (!data.changed()) {
+        return;
+    }
+    const status = data.val();
+	const payload = {
+    data: {
+        //title: 'Electricity Monitor - Power status changed',
+        //body: 'Test',
+        //sound: "default"
+		
+		customeruid: status.customeruid,
+        vendoruid: status.vendoruid,
+        sound: "default"
+		
+    }
+		
+    };
+
+    const options = {
+        priority: "high",
+        timeToLive: 60 * 60 * 24 //24 hours
+    };
+    console.log('Sending notifications');
+    return admin.messaging().sendToTopic("usertest", payload, options);
+
+});
