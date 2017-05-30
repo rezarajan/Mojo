@@ -51,18 +51,19 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             Map<String, String> payload = remoteMessage.getData();
             Log.d(TAG, "Message data payload: " + remoteMessage.getData());
 
-            /*String username = payload.get(USERNAME);
-            String email = payload.get(EMAIL);
+            //String username = payload.get(USERNAME);
+            //String email = payload.get(EMAIL);
             //String imageUrl = payload.get(IMAGEURL);
             String uid = payload.get(UID);
-            String text = payload.get(TEXT); */
-            String title = payload.get(TITLE);
+            String message = payload.get("message");
+            //String text = payload.get(TEXT);
+            //String title = payload.get(TITLE);
             //String body = payload.get(BODY);
 
             Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
             Log.d(TAG, "Message data payload: " + remoteMessage.getNotification().getTitle());
             //showNotification(payload);
-            notifyUser(title, remoteMessage.getNotification().getBody());
+            notifyUser(message, uid);
         }
 
         // Also if you intend on generating your own notifications as a result of a received FCM
@@ -75,7 +76,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     private void showNotification(Map<String, String> payload) {
         MyNotificationManager myNotificationManager = new MyNotificationManager(getApplicationContext());
-        myNotificationManager.showNotification(payload.get(TITLE), payload.get(BODY), new Intent(getApplicationContext(), MainHub.class));     //what happens when the notification is clicked
+        myNotificationManager.showNotification(payload.get("message"), payload.get("uid"), new Intent(getApplicationContext(), MainHub.class));     //what happens when the notification is clicked
                                                                                                                                                   //TODO: Add more variables such as imageUrl for a custom notificatoin view
     }
 

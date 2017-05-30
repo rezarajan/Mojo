@@ -5,7 +5,7 @@ const admin = require('firebase-admin');
 admin.initializeApp(functions.config().firebase);
 
 
-exports.sendPowerNotification = functions.database.ref("Notifications").onWrite((event) => {
+exports.sendPowerNotification = functions.database.ref("Notifications/{pushId}/").onWrite((event) => {
     const data = event.data;
 	var title_msg = data.val();
     console.log('Event triggered');
@@ -22,8 +22,8 @@ exports.sendPowerNotification = functions.database.ref("Notifications").onWrite(
             //body: 'Test',
             //sound: "default"
 			
-			title: title_msg.title,
-            body: 'Test',
+			message: title_msg.message,
+            uid: title_msg.uid,
             sound: "default"
 			
         }
