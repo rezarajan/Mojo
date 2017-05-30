@@ -12,7 +12,7 @@ exports.sendPowerNotification = functions.database.ref("Notifications/{pushId}/"
 	refNode.push();
 	var postId = refNode.push().key;
 	
-	refNode.push({
+	refNode.child(postId).set({
 		customeruid: "customeruid",
 		vendoruid: "vendoruid",
 		items: "items",
