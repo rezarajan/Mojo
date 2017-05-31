@@ -67,6 +67,7 @@ public class VendorHub extends AppCompatActivity
     TextView userEmail;
     FirebaseAuth firebaseAuth;
     private BroadcastReceiver broadcastReceiver;
+    private static String pushId;
 
     public static class RecyclerViewHolder extends RecyclerView.ViewHolder {
 
@@ -97,7 +98,7 @@ public class VendorHub extends AppCompatActivity
                     //It bypasses the wildcard requirement by filtering for a speific child value in the
                     //reference provided, which is requests in this case
                     final DatabaseReference reference1 = FirebaseDatabase.getInstance().getReference("requests/");
-                    reference1.orderByChild("orderid").equalTo("-KlSF5GydNxjegYK--R2").addChildEventListener(new ChildEventListener() {     //searches specifically for the orderid "-KlSF5GydNxjegYK--R2"
+                    reference1.orderByChild("orderid").equalTo(pushId).addChildEventListener(new ChildEventListener() {     //searches specifically for the orderid "-KlSF5GydNxjegYK--R2"
                         @Override
                         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                             Map<String, Object> newPost = (Map<String, Object>) dataSnapshot.getValue();        //stores all the child data in a map
@@ -154,6 +155,7 @@ public class VendorHub extends AppCompatActivity
         setContentView(R.layout.activity_main_hub);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        FirebaseMessaging.getInstance().subscribeToTopic("usertest");
 
         /* FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -215,17 +217,18 @@ public class VendorHub extends AppCompatActivity
 
 
 
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Notifications");
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("orders");
+        pushId = reference.push().getKey();
         Map notification = new HashMap<>();
         notification.put("user_token", FirebaseInstanceId.getInstance().getToken());
         notification.put("customeruid", user.getUid());
         notification.put("vendoruid", "Restaurant One");
         notification.put("items", "Fruit Bowl");
+        notification.put("postid", pushId);
         //reference.push().setValue(notification);
-        reference.push().setValue(notification);
-        //reference.child("token").setValue(FirebaseInstanceId.getInstance().getToken());
 
-        FirebaseMessaging.getInstance().subscribeToTopic("usertest");
+        reference.child(pushId).setValue(notification);
+        //reference.child("token").setValue(FirebaseInstanceId.getInstance().getToken());
 /*
 ///////////////////////////////////////////////////////////////////////////////////////////////////
         //This part of the code retrieved a specific part of the data from the firebase database
