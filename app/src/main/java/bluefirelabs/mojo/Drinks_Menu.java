@@ -23,7 +23,7 @@ public class Drinks_Menu extends AppCompatActivity{
     RecyclerView.LayoutManager layoutManager;
     RecyclerView.Adapter adapter;
     DatabaseHelper myDb;
-    FloatingActionButton checkout_btn;
+    FloatingActionButton checkout_btn, vendorview;
     Button imagebutton;
 
     @Override
@@ -34,6 +34,7 @@ public class Drinks_Menu extends AppCompatActivity{
         //toolbar.setTitle("Menu");
 
         checkout_btn = (FloatingActionButton)findViewById(R.id.fabCheckout);
+        vendorview = (FloatingActionButton)findViewById(R.id.fabVendor);
         myDb = new DatabaseHelper(this); //calls constructor from the database helper class
 
         imagebutton = (Button) findViewById(R.id.imageButton_add);
@@ -81,7 +82,18 @@ public class Drinks_Menu extends AppCompatActivity{
 
             }
         });
+
+        vendorview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(v.getContext(), VendorHub.class);
+                startActivity(intent);
+            }
+        });
     }
+
+
 
     public void showMessage(String title, String message){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);

@@ -54,15 +54,32 @@
             </LinearLayout>
         </android.support.v4.widget.NestedScrollView>
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fabCheckout"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="end|bottom"
-        app:fabSize="normal"
-        android:src="@mipmap/ic_launcher"
-        android:layout_marginRight="16dp"
-        android:layout_marginBottom="16dp"/>
+        android:orientation="horizontal"
+        android:layout_gravity="end|bottom">
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fabCheckout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            app:fabSize="normal"
+            android:src="@mipmap/ic_launcher"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="16dp"/>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fabVendor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:layout_marginBottom="16dp"
+            android:layout_marginRight="16dp"
+            android:src="@mipmap/ic_launcher"
+            app:fabSize="normal" />
+    </LinearLayout>
+
 
 </android.support.design.widget.CoordinatorLayout>
 

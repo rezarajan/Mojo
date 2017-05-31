@@ -33,7 +33,7 @@ public class Checkout extends AppCompatActivity{
         mListView = (ListView)findViewById(R.id.listview_checkout);
         myDb = new DatabaseHelper(this);
 
-        populateListView();
+        //populateListView();
     }
 
     private void populateListView() {
