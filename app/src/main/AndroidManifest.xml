@@ -49,26 +49,48 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".permissions.permission_location" />
+        <activity android:name=".permissions.permission_location"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".Login"
-            android:label="@string/title_activity_login" />
-        <activity android:name=".Sign_In" />
-        <activity android:name=".Runner_Mapper" />
-        <activity android:name=".Drinks_Menu" />
-        <activity android:name=".Checkout" />
-        <activity android:name=".editcheckout" />
-        <activity android:name=".uploadImage" />
-        <activity android:name=".VendorHub" />
+            android:label="@string/title_activity_login"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".Sign_In"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".Runner_Mapper"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".Drinks_Menu"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".Checkout"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".editcheckout"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".uploadImage"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".VendorHub"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
         <activity android:name="database.CreateDatabase" />
         <activity
             android:name=".Restaurant_Menu"
             android:label="@string/title_activity_food_menu"
-            android:theme="@style/Theme.AppCompat.NoActionBar" />
+            android:theme="@style/Theme.AppCompat.NoActionBar"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".MainHub"
             android:label="@string/title_activity_main_hub"
-            android:theme="@style/Theme.AppCompat.NoActionBar" />
+            android:theme="@style/Theme.AppCompat.NoActionBar"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
 
         <service
             android:name=".background_tasks.MyFirebaseInstanceIDService"
