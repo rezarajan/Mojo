@@ -7,22 +7,6 @@ admin.initializeApp(functions.config().firebase);
 
 
 exports.sendPowerNotification = functions.database.ref("Notifications/{pushId}/").onWrite((event) => {
-	var db = admin.database();
-	var refNode = db.ref("orders");
-	refNode.push();
-	var postId = refNode.push().key;
-	
-	refNode.child(postId).set({
-		customeruid: "customeruid",
-		vendoruid: "vendoruid",
-		items: "items",
-		postid: postId
-		
-		//alanisawesome: {
-		//date_of_birth: "June 23, 1912",
-		//full_name: "Alan Turing"
-		//}
-	});
     const data = event.data;
     console.log('Event triggered');
     if (!data.changed()) {
@@ -31,46 +15,43 @@ exports.sendPowerNotification = functions.database.ref("Notifications/{pushId}/"
     const status = data.val();
 	
     //const onOff =  status ? "on": "off";
-
-    const payload = {
-        data: {
-            //title: 'Electricity Monitor - Power status changed',
-            //body: 'Test',
-            //sound: "default"
-			
-			message: status.message,
-            uid: status.uid,
-            sound: "default"
-			
-        }
+	
+	var db = admin.database();
+	var refNode = db.ref("orders");
+	refNode.push();
+	var postId = refNode.push().key;
+	
+	refNode.child(postId).set({
+		customeruid: status.customeruid,
+		vendoruid: status.vendoruid,
+		items: status.items,
+		postid: postId
 		
-    };
-
-    const options = {
-        priority: "high",
-        timeToLive: 60 * 60 * 24 //24 hours
-    };
-    console.log('Sending notifications');
-    return admin.messaging().sendToTopic("usertest", payload, options);
+		//alanisawesome: {
+		//date_of_birth: "June 23, 1912",
+		//full_name: "Alan Turing"
+		//}
+	});
 
 });
 
 exports.orderMonitor = functions.database.ref("orders/{pushId}/").onWrite((event) => {
-	var db = admin.database();
-	var refNode = db.ref("requests");
-	
-    const data = event.data;
+	const data = event.data;
     console.log('Event triggered');
     if (!data.changed()) {
         return;
     }
     const status = data.val();
 	
+	var db = admin.database();
+	var refNode = db.ref("requests");
+	
 	//the push creates the request id
-	refNode.push({
-		customeruid: "customeruid",
-		vendoruid: "vendoruid",
-		result: "result",
+	refNode.child(status.postid).set({
+		customeruid: status.customeruid,
+		vendoruid: status.vendoruid,
+		items: status.items,
+		result: "asking",				//sends to the requests node with parameter asking
 		orderid: status.postid
 	});
 
@@ -85,40 +66,72 @@ exports.requestsMonitor = functions.database.ref("requests/{pushId}/").onWrite((
     const status = data.val();
 	//var venduid = status.vendoruid;
 	
-	if(status.result == "asking"){
+	if(status.result == "asking"){		//if asking then send to the uid node for vendor response
 		var db = admin.database();
 		var refNode = db.ref("uid/");
-		//the push creates the request id
-		refNode.child(status.vendoruid).set({
-			customeruid: "customeruid",
-			vendoruid: "vendoruid",
-			result: "asking",
-			orderid: status.orderid
+		//the set uses the push key
+		refNode.child(status.vendoruid).child(status.orderid).set({
+				customeruid: status.customeruid,
+				vendoruid: status.vendoruid,
+				items: status.items,
+				result: "asking",
+				orderid: status.orderid
 		});
-	} else if (status.result == "accepted"){
+	} else if (status.result == "accepted"){	//if vendor accepts the order then send response to user
 		var db = admin.database();
 		var refNode = db.ref("inprogress/");	//changed the reference
-		refNode.child(status.vendoruid).set({
-			customeruid: "customeruid",
-			vendoruid: "vendoruid",
-			result: "accepted",
-			orderid: status.orderid
+		//the set uses the push key
+		refNode.child(status.vendoruid).child(status.orderid).set({
+				customeruid: status.customeruid,
+				vendoruid: status.vendoruid,
+				items: status.items,
+				result: "accepted",
+				orderid: status.orderid
 		});
-	} else {
+	} else {									//if the vendor declines the order then send response to user
 		var db = admin.database();
 		var refNode = db.ref("uid/");
-		//the push creates the request id
-		refNode.child(status.vendoruid).set({
-			customeruid: "customeruid",
-			vendoruid: "vendoruid",
-			result: "denied",
-			orderid: status.orderid
+		//the set uses the push key
+		refNode.child(status.vendoruid).child(status.orderid).set({
+				customeruid: status.customeruid,
+				vendoruid: status.vendoruid,
+				items: status.items,
+				result: "declined",		//this is the only value we have to change after the first if		
+				orderid: status.orderid
+		});
+		refNode.child(status.customeruid).child(status.orderid).set({
+				customeruid: status.customeruid,
+				vendoruid: status.vendoruid,
+				items: status.items,
+				result: "declined",
+				orderid: status.orderid
 		});
 	}
 
 });
 
-exports.uidMonitor = functions.database.ref("uid/{uid}/").onWrite((event) => {
+exports.inprogressMonitor = functions.database.ref("inprogress/{vendoruid}/{pushId}/").onWrite((event) => {
+	const data = event.data;
+    console.log('Event triggered');
+    if (!data.changed()) {
+        return;
+    }
+    const status = data.val();
+	
+	var db = admin.database();
+	var refNode = db.ref("uid/");
+	
+	refNode.child(status.customeruid).child(status.orderid).set({
+			customeruid: status.customeruid,
+			vendoruid: status.vendoruid,
+			items: status.items,
+			result: "accepted",
+			orderid: status.orderid
+	});
+
+});
+
+exports.uidMonitor = functions.database.ref("uid/{uid}/{pushId}").onWrite((event) => {		//notifies user/vendor
 	const data = event.data;
     console.log('Event triggered');
     if (!data.changed()) {
@@ -133,6 +146,7 @@ exports.uidMonitor = functions.database.ref("uid/{uid}/").onWrite((event) => {
 		
 		customeruid: status.customeruid,
         vendoruid: status.vendoruid,
+		message: status.result,
         sound: "default"
 		
     }
