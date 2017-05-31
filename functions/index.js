@@ -85,16 +85,36 @@ exports.requestsMonitor = functions.database.ref("requests/{pushId}/").onWrite((
     const status = data.val();
 	//var venduid = status.vendoruid;
 	
-	var db = admin.database();
-	var refNode = db.ref("uid/");
-	
-	//the push creates the request id
-	refNode.child(status.vendoruid).set({
-		customeruid: "customeruid",
-		vendoruid: "vendoruid",
-		result: "result",
-		orderid: status.orderid
-	});
+	if(status.result == "asking"){
+		var db = admin.database();
+		var refNode = db.ref("uid/");
+		//the push creates the request id
+		refNode.child(status.vendoruid).set({
+			customeruid: "customeruid",
+			vendoruid: "vendoruid",
+			result: "asking",
+			orderid: status.orderid
+		});
+	} else if (status.result == "accepted"){
+		var db = admin.database();
+		var refNode = db.ref("inprogress/");	//changed the reference
+		refNode.child(status.vendoruid).set({
+			customeruid: "customeruid",
+			vendoruid: "vendoruid",
+			result: "accepted",
+			orderid: status.orderid
+		});
+	} else {
+		var db = admin.database();
+		var refNode = db.ref("uid/");
+		//the push creates the request id
+		refNode.child(status.vendoruid).set({
+			customeruid: "customeruid",
+			vendoruid: "vendoruid",
+			result: "denied",
+			orderid: status.orderid
+		});
+	}
 
 });
 
