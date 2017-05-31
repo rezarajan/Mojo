@@ -193,13 +193,18 @@ public class VendorHub extends AppCompatActivity
         //This part of the code retrieved a specific part of the data from the firebase database
         //It bypasses the wildcard requirement by filtering for a speific child value in the
         //reference provided, which is requests in this case
-        DatabaseReference reference1 = FirebaseDatabase.getInstance().getReference("requests/");
+        final DatabaseReference reference1 = FirebaseDatabase.getInstance().getReference("requests/");
         reference1.orderByChild("orderid").equalTo("-KlSF5GydNxjegYK--R2").addChildEventListener(new ChildEventListener() {     //searches specifically for the orderid "-KlSF5GydNxjegYK--R2"
              @Override
              public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Map<String, Object> newPost = (Map<String, Object>) dataSnapshot.getValue();        //stores all the child data in a map
                 Log.e("onChildAdded", dataSnapshot.toString());
                 Log.e("orderid retrieved", newPost.get("orderid").toString());                      //searches the map newPost for the child "orderid" and then returns the value
+                 DatabaseReference hopperRef = reference1.child(newPost.get("orderid").toString()); //this part adds a child reference to the orderid in requests. Remember, the parent is set up to be the orderid.
+                 Map<String, Object> hopperUpdates = new HashMap<String, Object>();
+                 hopperUpdates.put("result", "accepted");                                           //appends the key "result" a value of "accepted". This can be changed to suit
+
+                 hopperRef.updateChildren(hopperUpdates);                                           //updates the child, without destroying, or overwriting all data
              }
 
              @Override
