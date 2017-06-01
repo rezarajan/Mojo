@@ -32,12 +32,12 @@ public class MyNotificationManager {
         );
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
-        Notification mNotification = builder.setSmallIcon(R.mipmap.ic_launcher_round)
+        Notification mNotification = builder.setSmallIcon(R.mipmap.ic_launcher)
                 .setAutoCancel(true)
                 .setContentIntent(pendingIntent)
                 .setContentTitle(from)
                 .setContentText(notificaiton)
-                .setLargeIcon(BitmapFactory.decodeResource(context.getResources(),R.mipmap.ic_launcher_round))
+                .setLargeIcon(BitmapFactory.decodeResource(context.getResources(),R.mipmap.ic_launcher))
                 .build();
 
         mNotification.flags |= Notification.FLAG_AUTO_CANCEL;
