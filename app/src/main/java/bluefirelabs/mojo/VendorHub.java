@@ -49,6 +49,7 @@ import java.util.List;
 import java.util.Map;
 
 import bluefirelabs.mojo.background_tasks.MyFirebaseInstanceIDService;
+import bluefirelabs.mojo.background_tasks.Order_List;
 import bluefirelabs.mojo.fragments.restaurantlist_fragment;
 import bluefirelabs.mojo.handlers.HttpDataHandler;
 import bluefirelabs.mojo.handlers.SharedPrefManager;
@@ -76,6 +77,7 @@ public class VendorHub extends AppCompatActivity
         private Context context;
         public TextView itemTitle;
         public TextView itemDescription;
+        public TextView itemName;
         public ImageView itemIcon;
         public List<Object> idList= new ArrayList<Object>();
 
@@ -85,6 +87,7 @@ public class VendorHub extends AppCompatActivity
             itemIcon = (ImageView) itemView.findViewById(R.id.item_icon);
             itemTitle = (TextView) itemView.findViewById(R.id.item_title);
             itemDescription = (TextView) itemView.findViewById(R.id.item_description);
+            itemName = (TextView) itemView.findViewById(R.id.item_name);
             context = itemView.getContext();
 
 
@@ -98,7 +101,7 @@ public class VendorHub extends AppCompatActivity
                             .setAction("Action", null).show();
                     ///////////////////////////////////////////////////////////////////////////////////////////////////
                     //This part of the code retrieved a specific part of the data from the firebase database
-                    //It bypasses the wildcard requirement by filtering for a speific child value in the
+                    //It bypasses the wildcard requirement by filtering for a specific child value in the
                     //reference provided, which is requests in this case
                     final DatabaseReference reference1 = FirebaseDatabase.getInstance().getReference("requests");
                     //reference1.orderByChild("orderid").equalTo(pushId).addChildEventListener(new ChildEventListener() {     //searches specifically for the orderid "-KlSF5GydNxjegYK--R2"
@@ -282,7 +285,7 @@ public class VendorHub extends AppCompatActivity
         mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
         mFirebaseAdapter = new FirebaseRecyclerAdapter<Order_List, VendorHub.RecyclerViewHolder>(
                 Order_List.class,
-                R.layout.card_layout,
+                R.layout.vendor_card_layout,
                 VendorHub.RecyclerViewHolder.class,
                 mFirebaseDatabaseReference.child(RESTAURANT)
         ) {
@@ -292,7 +295,9 @@ public class VendorHub extends AppCompatActivity
                 Log.d("Description: ", model.getOrderid());
                 viewHolder.itemDescription.setText(model.getItems());
                 viewHolder.itemTitle.setText(model.getOrderid());
-                viewHolder.itemIcon.setImageResource(R.drawable.restaurant_icon);
+                viewHolder.itemName.setText((model.getName()));
+                viewHolder.itemName.setText(model.getName());
+                //viewHolder.itemIcon.setImageResource(R.drawable.restaurant_icon);
                 //viewHolder.idList.add(i, model.getOrderid());      //adds the OrderId's to an arraylsit so it can be accessed later for the "accept" update
                 //Log.d("IdList: ", (String) viewHolder.idList.get(i));
                 //i++;

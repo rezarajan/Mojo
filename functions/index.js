@@ -66,14 +66,26 @@ exports.requestsMonitor = functions.database.ref("requests/{pushId}/").onWrite((
     }
     const status = data.val();
 	//var venduid = status.vendoruid;
+	var database = admin.database().ref().child("uid").child(status.customeruid).child("info");
+	//var userData;
+	var userData;
+	var userDataName;
 	
-	if(status.result == "asking"){		//if asking then send to the uid node for vendor response
+	database.once('value')
+		.then(function(dataSnapshot) {
+			// handle read data.
+			var userData = dataSnapshot.val();
+			var userDataName = userData.name;
+			console.log("User Data: " + userDataName);
+			//return userDataName;
+		if(status.result == "asking"){		//if asking then send to the uid node for vendor response
 		var db = admin.database();
 		var refNode = db.ref("uid/");
 		//the set uses the push key
 		refNode.child(status.vendoruid).child(status.orderid).set({
 				customeruid: status.customeruid,
 				vendoruid: status.vendoruid,
+				name: userDataName,
 				items: status.items,
 				result: "asking",
 				orderid: status.orderid
@@ -108,6 +120,7 @@ exports.requestsMonitor = functions.database.ref("requests/{pushId}/").onWrite((
 				orderid: status.orderid
 		});
 	}
+	});
 
 });
 

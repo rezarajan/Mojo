@@ -1,4 +1,4 @@
-package bluefirelabs.mojo;
+package bluefirelabs.mojo.background_tasks;
 
 /**
  * Created by Reza Rajan on 2017-05-28.
@@ -8,6 +8,7 @@ public class Order_List {
 
     private String orderid;
     private String items;
+    private String name;
 
     public Order_List(){
 
@@ -32,6 +33,14 @@ public class Order_List {
 
     public void setItems(String items) {
         this.items = items;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
 }
