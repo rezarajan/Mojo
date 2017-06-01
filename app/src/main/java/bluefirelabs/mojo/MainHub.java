@@ -34,11 +34,15 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import bluefirelabs.mojo.background_tasks.MyFirebaseInstanceIDService;
 import bluefirelabs.mojo.fragments.restaurantlist_fragment;
@@ -60,6 +64,7 @@ public class MainHub extends AppCompatActivity
     TextView userEmail;
     FirebaseAuth firebaseAuth;
     private BroadcastReceiver broadcastReceiver;
+    private String pushId;
 
     public static class RecyclerViewHolder extends RecyclerView.ViewHolder {
 
@@ -169,6 +174,17 @@ public class MainHub extends AppCompatActivity
         mLinearLayoutManager.setStackFromEnd(true);
 
 
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("orders");
+        pushId = reference.push().getKey();
+        Map notification = new HashMap<>();
+        notification.put("user_token", FirebaseInstanceId.getInstance().getToken());
+        notification.put("customeruid", user.getUid());
+        notification.put("vendoruid", "Restaurant One");
+        notification.put("items", "Fruit Bowl");
+        notification.put("postid", pushId);
+
+        reference.child(pushId).setValue(notification);
+
 
         /*DatabaseReference reference = FirebaseDatabase.getInstance().getReference("orders");
         String pushId = reference.push().getKey();
@@ -177,7 +193,7 @@ public class MainHub extends AppCompatActivity
         notification.put("customeruid", user.getUid());
         notification.put("vendoruid", "Restaurant One");
         notification.put("items", "Fruit Bowl");
-        notification.put("orderid", pushId);
+        notification.put("postid", pushId);
         //reference.push().setValue(notification);
 
         reference.child(pushId).setValue(notification);

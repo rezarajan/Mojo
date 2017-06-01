@@ -6,7 +6,7 @@ const admin = require('firebase-admin');
 admin.initializeApp(functions.config().firebase);
 
 
-exports.sendPowerNotification = functions.database.ref("Notifications/{pushId}/").onWrite((event) => {
+/*exports.sendPowerNotification = functions.database.ref("Notifications/{pushId}/").onWrite((event) => {
     const data = event.data;
     console.log('Event triggered');
     if (!data.changed()) {
@@ -34,6 +34,7 @@ exports.sendPowerNotification = functions.database.ref("Notifications/{pushId}/"
 	});
 
 });
+*/
 
 exports.orderMonitor = functions.database.ref("orders/{pushId}/").onWrite((event) => {
 	const data = event.data;
@@ -92,14 +93,14 @@ exports.requestsMonitor = functions.database.ref("requests/{pushId}/").onWrite((
 		var db = admin.database();
 		var refNode = db.ref("uid/");
 		//the set uses the push key
-		refNode.child(status.vendoruid).child(status.orderid).set({
+		refNode.child(status.vendoruid).child(status.orderid).set({		//vendoruid
 				customeruid: status.customeruid,
 				vendoruid: status.vendoruid,
 				items: status.items,
 				result: "declined",		//this is the only value we have to change after the first if		
 				orderid: status.orderid
 		});
-		refNode.child(status.customeruid).child(status.orderid).set({
+		refNode.child(status.customeruid).child(status.orderid).set({		//customeruid
 				customeruid: status.customeruid,
 				vendoruid: status.vendoruid,
 				items: status.items,
@@ -138,6 +139,7 @@ exports.uidMonitor = functions.database.ref("uid/{uid}/{pushId}").onWrite((event
         return;
     }
     const status = data.val();
+	
 	const payload = {
     data: {
         //title: 'Electricity Monitor - Power status changed',

@@ -37,14 +37,15 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import bluefirelabs.mojo.background_tasks.MyFirebaseInstanceIDService;
@@ -67,7 +68,8 @@ public class VendorHub extends AppCompatActivity
     TextView userEmail;
     FirebaseAuth firebaseAuth;
     private BroadcastReceiver broadcastReceiver;
-    private static String pushId;
+    //private String pushId;
+    //public static List<Object> idList= new ArrayList<Object>();
 
     public static class RecyclerViewHolder extends RecyclerView.ViewHolder {
 
@@ -75,6 +77,7 @@ public class VendorHub extends AppCompatActivity
         public TextView itemTitle;
         public TextView itemDescription;
         public ImageView itemIcon;
+        public List<Object> idList= new ArrayList<Object>();
 
         public RecyclerViewHolder(View itemView) {
             super(itemView);
@@ -88,7 +91,7 @@ public class VendorHub extends AppCompatActivity
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    int position = getAdapterPosition();
+                    final int position = getAdapterPosition();
 
                     Snackbar.make(v, "Click detected on item " + position,
                             Snackbar.LENGTH_LONG)
@@ -97,14 +100,20 @@ public class VendorHub extends AppCompatActivity
                     //This part of the code retrieved a specific part of the data from the firebase database
                     //It bypasses the wildcard requirement by filtering for a speific child value in the
                     //reference provided, which is requests in this case
-                    final DatabaseReference reference1 = FirebaseDatabase.getInstance().getReference("requests/");
-                    reference1.orderByChild("orderid").equalTo(pushId).addChildEventListener(new ChildEventListener() {     //searches specifically for the orderid "-KlSF5GydNxjegYK--R2"
+                    final DatabaseReference reference1 = FirebaseDatabase.getInstance().getReference("requests");
+                    //reference1.orderByChild("orderid").equalTo(pushId).addChildEventListener(new ChildEventListener() {     //searches specifically for the orderid "-KlSF5GydNxjegYK--R2"
+                    reference1.orderByChild("orderid").equalTo(itemTitle.getText().toString()).addChildEventListener(new ChildEventListener() {
                         @Override
                         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                             Map<String, Object> newPost = (Map<String, Object>) dataSnapshot.getValue();        //stores all the child data in a map
                             Log.e("onChildAdded", dataSnapshot.toString());
-                            Log.e("orderid retrieved", newPost.get("orderid").toString());                      //searches the map newPost for the child "orderid" and then returns the value
-                            DatabaseReference hopperRef = reference1.child(newPost.get("orderid").toString()); //this part adds a child reference to the orderid in requests. Remember, the parent is set up to be the orderid.
+                            //Log.e("orderid retrieved", newPost.get("orderid").toString());                      //searches the map newPost for the child "orderid" and then returns the value
+                            //Log.e("idList Order", idList.get(position+1).toString());
+
+                            Log.e("idListTextView", itemTitle.getText().toString());
+                            //DatabaseReference hopperRef = reference1.child(newPost.get("orderid").toString()); //this part adds a child reference to the orderid in requests. Remember, the parent is set up to be the orderid.
+                            //DatabaseReference hopperRef = reference1.child(idList.get(position+1).toString());      //+1 becuase the position gives a value of 1 less than what is needed
+                            DatabaseReference hopperRef = reference1.child(itemTitle.getText().toString());     //uses the itemTitle, which is set to be the orderid, in order to get the order id on click of a specific card
                             Map<String, Object> hopperUpdates = new HashMap<String, Object>();
                             hopperUpdates.put("result", "accepted");                                           //appends the key "result" a value of "accepted". This can be changed to suit
 
@@ -217,7 +226,7 @@ public class VendorHub extends AppCompatActivity
 
 
 
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("orders");
+        /*DatabaseReference reference = FirebaseDatabase.getInstance().getReference("orders");
         pushId = reference.push().getKey();
         Map notification = new HashMap<>();
         notification.put("user_token", FirebaseInstanceId.getInstance().getToken());
@@ -279,10 +288,14 @@ public class VendorHub extends AppCompatActivity
         ) {
             @Override
             protected void populateViewHolder(VendorHub.RecyclerViewHolder viewHolder, Order_List model, int position) {
+                //int i = 0;
                 Log.d("Description: ", model.getOrderid());
                 viewHolder.itemDescription.setText(model.getItems());
                 viewHolder.itemTitle.setText(model.getOrderid());
                 viewHolder.itemIcon.setImageResource(R.drawable.restaurant_icon);
+                //viewHolder.idList.add(i, model.getOrderid());      //adds the OrderId's to an arraylsit so it can be accessed later for the "accept" update
+                //Log.d("IdList: ", (String) viewHolder.idList.get(i));
+                //i++;
             }
         };
 
