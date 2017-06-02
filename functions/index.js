@@ -181,9 +181,6 @@ exports.requestOrderMonitor = functions.database.ref("uid/{uid}/requests/{pushId
 	
 	console.log("Vendor: " + status.vendoruid);
 	return admin.messaging().sendToTopic(status.vendoruid, payload, options);		//using the vendoruid as the topic
-
-
-	
 	
 
 });
@@ -218,6 +215,13 @@ exports.acceptedOrderMonitor = functions.database.ref("uid/{uid}/accepted/{pushI
     console.log('Sending notifications');
     //return admin.messaging().sendToTopic("usertest", payload, options);
 	
+	var db = admin.database();
+	var ref = db.ref().child("uid").child(status.vendoruid).child("requests");
+	ref.orderByKey().equalTo(status.orderid).on("child_added", function(snapshot) {
+	console.log(snapshot.key);
+	ref.child(snapshot.key).remove();		//removes the order from requests after the restaurant has accepted it
+});
+	
 	var database = admin.database().ref().child("orders").child(status.orderid);
 	//var userData;
 	var userToken;
@@ -232,7 +236,4 @@ exports.acceptedOrderMonitor = functions.database.ref("uid/{uid}/accepted/{pushI
 			return admin.messaging().sendToDevice(userTokenid, payload, options);		//using the user_token as the receiver
 
 		});
-
-
-
 });

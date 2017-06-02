@@ -20,9 +20,12 @@ import com.google.android.gms.location.FusedLocationProviderApi;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import bluefirelabs.mojo.MainHub;
 import bluefirelabs.mojo.R;
+import bluefirelabs.mojo.VendorHub;
 
 public class permission_location extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
@@ -81,9 +84,17 @@ public class permission_location extends AppCompatActivity implements GoogleApiC
     }
 
     public void callNextActivity(){
-        Intent intent = new Intent(permission_location.this, MainHub.class);
-        startActivity(intent);
-        finish();
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = firebaseAuth.getCurrentUser();
+        if(user.getEmail().equals("vendor@gmail.com")){
+            Intent intent = new Intent(permission_location.this, VendorHub.class);
+            startActivity(intent);
+            finish();
+        } else {
+            Intent intent = new Intent(permission_location.this, MainHub.class);
+            startActivity(intent);
+            finish();
+        }
     }
 
 
