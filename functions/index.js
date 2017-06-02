@@ -157,12 +157,13 @@ exports.requestOrderMonitor = functions.database.ref("uid/{uid}/requests/{pushId
     }
     const status = data.val();
 	
-	const payload = {
+	if(status != null){
+		const payload = {
     data: {
         //title: 'Electricity Monitor - Power status changed',
         //body: 'Test',
         //sound: "default"
-		
+
 		customeruid: status.customeruid,
         vendoruid: status.vendoruid,
 		message: status.result,
@@ -181,6 +182,11 @@ exports.requestOrderMonitor = functions.database.ref("uid/{uid}/requests/{pushId
 	
 	console.log("Vendor: " + status.vendoruid);
 	return admin.messaging().sendToTopic(status.vendoruid, payload, options);		//using the vendoruid as the topic
+	}
+	else{
+		return;
+	}
+	
 	
 
 });
