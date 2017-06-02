@@ -92,44 +92,82 @@ exports.requestsMonitor = functions.database.ref("requests/{pushId}/").onWrite((
 		if(status.result == "asking"){		//if asking then send to the uid node for vendor response
 		var db = admin.database();
 		var refNode = db.ref("uid/");
+		var ref = db.ref("requests").child(status.orderid);
+		
+		ref.child("items").once("value")
+		.then(function(snapshot) {
+			if(snapshot.val() != null){
 		//the set uses the push key
 		refNode.child(status.vendoruid).child("requests").child(status.orderid).set({
 				customeruid: status.customeruid,
 				vendoruid: status.vendoruid,
 				name: userDataName,
-				items: status.items,
+				items: snapshot.val(),
 				result: "asking",
 				orderid: status.orderid
 		});
+				//refNode.child(status.orderid).child("items").set(snapshot.val());
+			} else{
+				return;
+			}
+			
+	});
+
+
 	} else if (status.result == "accepted"){	//if vendor accepts the order then send response to user
 		var db = admin.database();
 		var refNode = db.ref("inprogress/");	//changed the reference
+		var ref = db.ref("requests").child(status.orderid);
+		
+		ref.child("items").once("value")
+		.then(function(snapshot) {
+			if(snapshot.val() != null){
+		//the set uses the push key
 		//the set uses the push key
 		refNode.child(status.vendoruid).child(status.orderid).set({
 				customeruid: status.customeruid,
 				vendoruid: status.vendoruid,
-				items: status.items,
+				items: snapshot.val(),
 				result: "accepted",
 				orderid: status.orderid
 		});
+				//refNode.child(status.orderid).child("items").set(snapshot.val());
+			} else{
+				return;
+			}
+			
+	});
+
 	} else {									//if the vendor declines the order then send response to user
 		var db = admin.database();
 		var refNode = db.ref("uid/");
+		var ref = db.ref("requests").child(status.orderid);
+		
+		ref.child("items").once("value")
+		.then(function(snapshot) {
+			if(snapshot.val() != null){
 		//the set uses the push key
 		refNode.child(status.vendoruid).child("declined").child(status.orderid).set({		//vendoruid
 				customeruid: status.customeruid,
 				vendoruid: status.vendoruid,
-				items: status.items,
+				items: snapshot.val(),
 				result: "declined",		//this is the only value we have to change after the first if		
 				orderid: status.orderid
 		});
 		refNode.child(status.customeruid).child(status.orderid).set({		//customeruid
 				customeruid: status.customeruid,
 				vendoruid: status.vendoruid,
-				items: status.items,
+				items: snapshot.val(),
 				result: "declined",
 				orderid: status.orderid
 		});
+				//refNode.child(status.orderid).child("items").set(snapshot.val());
+			} else{
+				return;
+			}
+			
+	});
+
 	}
 	});
 
@@ -145,19 +183,31 @@ exports.inprogressMonitor = functions.database.ref("inprogress/{vendoruid}/{push
 	
 	var db = admin.database();
 	var refNode = db.ref("uid/");
+	var ref = db.ref("requests").child(status.orderid);
+	
+		ref.child("items").once("value")
+		.then(function(snapshot) {
+			if(snapshot.val() != null){
+		//the set uses the push key
 	refNode.child(status.vendoruid).child("accepted").child(status.orderid).set({
 			customeruid: status.customeruid,
 			vendoruid: status.vendoruid,
-			items: status.items,
+			items: snapshot.val(),
 			result: "accepted",
 			orderid: status.orderid
 	});
 	refNode.child(status.customeruid).child(status.orderid).set({
 			customeruid: status.customeruid,
 			vendoruid: status.vendoruid,
-			items: status.items,
+			items: snapshot.val(),
 			result: "accepted",
 			orderid: status.orderid
+	});
+				//refNode.child(status.orderid).child("items").set(snapshot.val());
+			} else{
+				return;
+			}
+			
 	});
 
 });

@@ -7,16 +7,16 @@ package bluefirelabs.mojo.background_tasks;
 public class Order_List {
 
     private String orderid;
-    private String items;
+    //private String items;
     private String name;
 
     public Order_List(){
 
     }
 
-    public Order_List(String orderid, String items) {
+    public Order_List(String orderid, String name) {
         this.orderid = orderid;
-        this.items = items;
+        //this.items = items;
     }
 
     public String getOrderid() {
@@ -27,13 +27,13 @@ public class Order_List {
         this.orderid = orderid;
     }
 
-    public String getItems() {
+    /*public String getItems() {
         return items;
-    }
+    }*/
 
-    public void setItems(String items) {
+    /*public void setItems(String items) {
         this.items = items;
-    }
+    }*/
 
     public String getName() {
         return name;

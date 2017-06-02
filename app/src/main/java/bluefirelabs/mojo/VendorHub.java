@@ -44,9 +44,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import bluefirelabs.mojo.background_tasks.MyFirebaseInstanceIDService;
 import bluefirelabs.mojo.background_tasks.Order_List;
@@ -108,19 +106,19 @@ public class VendorHub extends AppCompatActivity
                     reference1.orderByChild("orderid").equalTo(itemTitle.getText().toString()).addChildEventListener(new ChildEventListener() {
                         @Override
                         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                            Map<String, Object> newPost = (Map<String, Object>) dataSnapshot.getValue();        //stores all the child data in a map
-                            Log.e("onChildAdded", dataSnapshot.toString());
+                            //Map<String, Object> newPost = (Map<String, Object>) dataSnapshot.getValue();        //stores all the child data in a map
+                            //Log.e("onChildAdded", dataSnapshot.toString());
                             //Log.e("orderid retrieved", newPost.get("orderid").toString());                      //searches the map newPost for the child "orderid" and then returns the value
                             //Log.e("idList Order", idList.get(position+1).toString());
 
-                            Log.e("idListTextView", itemTitle.getText().toString());
+                            //Log.e("idListTextView", itemTitle.getText().toString());
                             //DatabaseReference hopperRef = reference1.child(newPost.get("orderid").toString()); //this part adds a child reference to the orderid in requests. Remember, the parent is set up to be the orderid.
                             //DatabaseReference hopperRef = reference1.child(idList.get(position+1).toString());      //+1 becuase the position gives a value of 1 less than what is needed
-                            DatabaseReference hopperRef = reference1.child(itemTitle.getText().toString());     //uses the itemTitle, which is set to be the orderid, in order to get the order id on click of a specific card
-                            Map<String, Object> hopperUpdates = new HashMap<String, Object>();
-                            hopperUpdates.put("result", "accepted");                                           //appends the key "result" a value of "accepted". This can be changed to suit
+                            //DatabaseReference hopperRef = reference1.child(itemTitle.getText().toString());     //uses the itemTitle, which is set to be the orderid, in order to get the order id on click of a specific card
+                            //Map<String, Object> hopperUpdates = new HashMap<String, Object>();
+                            //hopperUpdates.put("result", "accepted");                                           //appends the key "result" a value of "accepted". This can be changed to suit
 
-                            hopperRef.updateChildren(hopperUpdates);                                           //updates the child, without destroying, or overwriting all data
+                            //hopperRef.updateChildren(hopperUpdates);                                           //updates the child, without destroying, or overwriting all data
                         }
 
                         @Override
@@ -143,18 +141,12 @@ public class VendorHub extends AppCompatActivity
 
                         }
                     });
-
-                    //final Intent intent;
-
-                    //intent = new Intent(context, Restaurant_Menu.class);
-                    //context.startActivity(intent);
-
                 }
             });
         }
     }
 
-    public static final String RESTAURANT = "uid/Starbucks/requests";
+    public static final String RESTAURANT = "uid/Starbucks/requests/";
     private DatabaseReference mFirebaseDatabaseReference;
     private FirebaseRecyclerAdapter<Order_List, RecyclerViewHolder> mFirebaseAdapter;
 
@@ -167,17 +159,7 @@ public class VendorHub extends AppCompatActivity
         setContentView(R.layout.activity_main_hub);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        //FirebaseMessaging.getInstance().subscribeToTopic("usertest");
         FirebaseMessaging.getInstance().subscribeToTopic("Starbucks");
-
-        /* FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        }); */
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -205,20 +187,6 @@ public class VendorHub extends AppCompatActivity
 
         firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser user = firebaseAuth.getCurrentUser();
-       /* user.getToken(true)
-                .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<GetTokenResult> task) {
-                        if (task.isSuccessful()) {
-                            String idToken = task.getResult().getToken();
-                            Log.d("Token: ", idToken);
-                            // Send token to your backend via HTTPS
-                            // ...
-                        } else {
-                            // Handle error -> task.getException();
-                        }
-                    }
-                }); */
 
         userEmail = (TextView) header.findViewById(R.id.emailTxt);
         userEmail.setText(user.getEmail());
@@ -228,60 +196,6 @@ public class VendorHub extends AppCompatActivity
         mLinearLayoutManager = new LinearLayoutManager(this);
         mLinearLayoutManager.setStackFromEnd(true);
 
-
-
-        /*DatabaseReference reference = FirebaseDatabase.getInstance().getReference("orders");
-        pushId = reference.push().getKey();
-        Map notification = new HashMap<>();
-        notification.put("user_token", FirebaseInstanceId.getInstance().getToken());
-        notification.put("customeruid", user.getUid());
-        notification.put("vendoruid", "Restaurant One");
-        notification.put("items", "Fruit Bowl");
-        notification.put("postid", pushId);
-        //reference.push().setValue(notification);
-
-        reference.child(pushId).setValue(notification);
-        //reference.child("token").setValue(FirebaseInstanceId.getInstance().getToken());
-/*
-///////////////////////////////////////////////////////////////////////////////////////////////////
-        //This part of the code retrieved a specific part of the data from the firebase database
-        //It bypasses the wildcard requirement by filtering for a speific child value in the
-        //reference provided, which is requests in this case
-        final DatabaseReference reference1 = FirebaseDatabase.getInstance().getReference("requests/");
-        reference1.orderByChild("orderid").equalTo("-KlSF5GydNxjegYK--R2").addChildEventListener(new ChildEventListener() {     //searches specifically for the orderid "-KlSF5GydNxjegYK--R2"
-             @Override
-             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Map<String, Object> newPost = (Map<String, Object>) dataSnapshot.getValue();        //stores all the child data in a map
-                Log.e("onChildAdded", dataSnapshot.toString());
-                Log.e("orderid retrieved", newPost.get("orderid").toString());                      //searches the map newPost for the child "orderid" and then returns the value
-                 DatabaseReference hopperRef = reference1.child(newPost.get("orderid").toString()); //this part adds a child reference to the orderid in requests. Remember, the parent is set up to be the orderid.
-                 Map<String, Object> hopperUpdates = new HashMap<String, Object>();
-                 hopperUpdates.put("result", "accepted");                                           //appends the key "result" a value of "accepted". This can be changed to suit
-
-                 hopperRef.updateChildren(hopperUpdates);                                           //updates the child, without destroying, or overwriting all data
-             }
-
-             @Override
-             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-             }
-
-             @Override
-             public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-             }
-
-             @Override
-             public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-             }
-
-             @Override
-             public void onCancelled(DatabaseError databaseError) {
-
-             }
-        });
-        */
 
         mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
         mFirebaseAdapter = new FirebaseRecyclerAdapter<Order_List, VendorHub.RecyclerViewHolder>(
@@ -293,11 +207,10 @@ public class VendorHub extends AppCompatActivity
             @Override
             protected void populateViewHolder(VendorHub.RecyclerViewHolder viewHolder, Order_List model, int position) {
                 //int i = 0;
-                Log.d("Description: ", model.getOrderid());
-                //viewHolder.itemDescription.setText(model.getItems());     //TODO: Change the setter and getter for getItems();
+                //Log.d("Description: ", model.getOrderid());
+                //viewHolder.itemDescription.setText(model.getItems());
                 viewHolder.itemTitle.setText(model.getOrderid());
                 viewHolder.itemName.setText((model.getName()));
-                viewHolder.itemName.setText(model.getName());
                 //viewHolder.itemIcon.setImageResource(R.drawable.restaurant_icon);
                 //viewHolder.idList.add(i, model.getOrderid());      //adds the OrderId's to an arraylsit so it can be accessed later for the "accept" update
                 //Log.d("IdList: ", (String) viewHolder.idList.get(i));
@@ -412,13 +325,9 @@ public class VendorHub extends AppCompatActivity
             startActivity(intent);
 
         } /* else if (id == R.id.nav_slideshow) {
-
         } else if (id == R.id.nav_manage) {
-
         } else if (id == R.id.nav_share) {
-
         } else if (id == R.id.nav_send) {
-
         } */
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
