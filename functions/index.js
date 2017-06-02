@@ -43,17 +43,31 @@ exports.orderMonitor = functions.database.ref("orders/{pushId}/").onWrite((event
     const status = data.val();
 	
 	var db = admin.database();
-	var refNode = db.ref("requests");
 	
-	//the push creates the request id
-	refNode.child(status.postid).set({
-		customeruid: status.customeruid,
-		vendoruid: status.vendoruid,
-		items: status.items,
-		result: "asking",				//sends to the requests node with parameter asking
-		orderid: status.postid
-	});
+	if(status != null){
+	var ref = db.ref("orders").child(status.postid);
+	var refNode = db.ref("requests");
 
+	ref.child("items").once("value")
+		.then(function(snapshot) {
+			if(snapshot.val() != null){
+				//the push creates the request id
+				refNode.child(status.postid).set({
+				customeruid: status.customeruid,
+				vendoruid: status.vendoruid,
+				items: snapshot.val(),
+				result: "asking",				//sends to the requests node with parameter asking
+				orderid: status.postid
+				});
+				//refNode.child(status.postid).child("items").set(snapshot.val());
+			} else{
+				return;
+			}
+			
+	});
+	} else {
+		return;
+	}
 });
 
 exports.requestsMonitor = functions.database.ref("requests/{pushId}/").onWrite((event) => {
@@ -68,7 +82,6 @@ exports.requestsMonitor = functions.database.ref("requests/{pushId}/").onWrite((
 	//var userData;
 	var userData;
 	var userDataName;
-	
 	database.once('value')
 		.then(function(dataSnapshot) {
 			// handle read data.

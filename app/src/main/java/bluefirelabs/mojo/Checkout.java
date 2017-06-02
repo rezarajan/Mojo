@@ -12,7 +12,15 @@ import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
+
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import database.DatabaseHelper;
 
@@ -25,6 +33,7 @@ public class Checkout extends AppCompatActivity{
     private static final String TAG = "ListDataActivity";
     DatabaseHelper myDb;
     private ListView mListView;
+    private String pushId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,11 +42,29 @@ public class Checkout extends AppCompatActivity{
         mListView = (ListView)findViewById(R.id.listview_checkout);
         myDb = new DatabaseHelper(this);
 
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("orders");
+        FirebaseUser user = firebaseAuth.getCurrentUser();
+        pushId = reference.push().getKey();     //String
+
+
         //populateListView();
     }
 
     private void populateListView() {
         Log.d(TAG, "populateListView: Displaying data in the ListView");
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("orders");
+        FirebaseUser user = firebaseAuth.getCurrentUser();
+
+
+        Map notification = new HashMap<>();
+        Map itemListing = new HashMap<>();
+
+        notification.put("user_token", FirebaseInstanceId.getInstance().getToken());
+        notification.put("customeruid", user.getUid());
+        notification.put("vendoruid", "Starbucks");
+        notification.put("postid", pushId);
 
         //get the data and append to a list
         Cursor data = myDb.getAllData();
@@ -47,7 +74,12 @@ public class Checkout extends AppCompatActivity{
             //get the value from the database in column
             //then add it to the ArrayList
             listData.add(data.getString(2));
+            itemListing.put(data.getString(2), "1");    //itemId, quantity
         }
+
+        reference.child(pushId).setValue(notification);
+        reference.child(pushId).child("items").setValue(itemListing);
+
         //create the list adapter and set the adapter
         ListAdapter adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, listData);
         mListView.setAdapter(adapter);

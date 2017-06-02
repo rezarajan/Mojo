@@ -294,7 +294,7 @@ public class VendorHub extends AppCompatActivity
             protected void populateViewHolder(VendorHub.RecyclerViewHolder viewHolder, Order_List model, int position) {
                 //int i = 0;
                 Log.d("Description: ", model.getOrderid());
-                viewHolder.itemDescription.setText(model.getItems());
+                //viewHolder.itemDescription.setText(model.getItems());     //TODO: Change the setter and getter for getItems();
                 viewHolder.itemTitle.setText(model.getOrderid());
                 viewHolder.itemName.setText((model.getName()));
                 viewHolder.itemName.setText(model.getName());
