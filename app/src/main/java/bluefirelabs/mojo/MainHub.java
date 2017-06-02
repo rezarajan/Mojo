@@ -35,7 +35,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -179,7 +178,7 @@ public class MainHub extends AppCompatActivity
         Map notification = new HashMap<>();
         notification.put("user_token", FirebaseInstanceId.getInstance().getToken());
         notification.put("customeruid", user.getUid());
-        notification.put("vendoruid", "Restaurant One");
+        notification.put("vendoruid", "Starbucks");
         notification.put("items", "Fruit Bowl");
         notification.put("postid", pushId);
 
@@ -199,7 +198,7 @@ public class MainHub extends AppCompatActivity
         reference.child(pushId).setValue(notification);
         //reference.child("token").setValue(FirebaseInstanceId.getInstance().getToken()); */
 
-        FirebaseMessaging.getInstance().subscribeToTopic("usertest");
+        //FirebaseMessaging.getInstance().subscribeToTopic("Starbucks");
 
         mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
         mFirebaseAdapter = new FirebaseRecyclerAdapter<Restaurant_List, MainHub.RecyclerViewHolder>(

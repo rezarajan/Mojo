@@ -154,7 +154,7 @@ public class VendorHub extends AppCompatActivity
         }
     }
 
-    public static final String RESTAURANT = "uid/Restaurant One";
+    public static final String RESTAURANT = "uid/Starbucks";
     private DatabaseReference mFirebaseDatabaseReference;
     private FirebaseRecyclerAdapter<Order_List, RecyclerViewHolder> mFirebaseAdapter;
 
@@ -167,7 +167,8 @@ public class VendorHub extends AppCompatActivity
         setContentView(R.layout.activity_main_hub);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        FirebaseMessaging.getInstance().subscribeToTopic("usertest");
+        //FirebaseMessaging.getInstance().subscribeToTopic("usertest");
+        FirebaseMessaging.getInstance().subscribeToTopic("Starbucks");
 
         /* FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {

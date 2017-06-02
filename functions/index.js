@@ -134,7 +134,13 @@ exports.inprogressMonitor = functions.database.ref("inprogress/{vendoruid}/{push
 	
 	var db = admin.database();
 	var refNode = db.ref("uid/");
-	
+	refNode.child(status.vendoruid).child(status.orderid).set({
+			customeruid: status.customeruid,
+			vendoruid: status.vendoruid,
+			items: status.items,
+			result: "accepted",
+			orderid: status.orderid
+	});
 	refNode.child(status.customeruid).child(status.orderid).set({
 			customeruid: status.customeruid,
 			vendoruid: status.vendoruid,
@@ -173,6 +179,37 @@ exports.uidMonitor = functions.database.ref("uid/{uid}/{pushId}").onWrite((event
         timeToLive: 60 * 60 * 24 //24 hours
     };
     console.log('Sending notifications');
-    return admin.messaging().sendToTopic("usertest", payload, options);
+    //return admin.messaging().sendToTopic("usertest", payload, options);
+	
+	var database = admin.database().ref().child("orders").child(status.orderid);
+	//var userData;
+	var userToken;
+	var userTokenid;
+	
+	if(status.result == "asking"){		//send to the vendor only
+		database.once('value')
+		.then(function(dataSnapshot) {
+			// handle read data.
+			var userToken = dataSnapshot.val();
+			var userTokenid = userToken.user_token;
+			console.log("Vendor: " + status.vendoruid);
+			return admin.messaging().sendToTopic(status.vendoruid, payload, options);		//using the vendoruid as the topic
+
+		});
+	} else if(status.result == "accepted" || status.result == "declined"){
+		database.once('value')
+		.then(function(dataSnapshot) {
+			// handle read data.
+			var userToken = dataSnapshot.val();
+			var userTokenid = userToken.user_token;
+			console.log("User Token: " + userTokenid);
+			return admin.messaging().sendToDevice(userTokenid, payload, options);		//using the user_token as the receiver
+
+		});
+	}
+	
+
+	
+	
 
 });
