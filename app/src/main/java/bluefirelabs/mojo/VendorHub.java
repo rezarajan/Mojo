@@ -154,7 +154,7 @@ public class VendorHub extends AppCompatActivity
         }
     }
 
-    public static final String RESTAURANT = "uid/Starbucks";
+    public static final String RESTAURANT = "uid/Starbucks/requests";
     private DatabaseReference mFirebaseDatabaseReference;
     private FirebaseRecyclerAdapter<Order_List, RecyclerViewHolder> mFirebaseAdapter;
 

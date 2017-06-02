@@ -82,7 +82,7 @@ exports.requestsMonitor = functions.database.ref("requests/{pushId}/").onWrite((
 		var db = admin.database();
 		var refNode = db.ref("uid/");
 		//the set uses the push key
-		refNode.child(status.vendoruid).child(status.orderid).set({
+		refNode.child(status.vendoruid).child("requests").child(status.orderid).set({
 				customeruid: status.customeruid,
 				vendoruid: status.vendoruid,
 				name: userDataName,
@@ -105,7 +105,7 @@ exports.requestsMonitor = functions.database.ref("requests/{pushId}/").onWrite((
 		var db = admin.database();
 		var refNode = db.ref("uid/");
 		//the set uses the push key
-		refNode.child(status.vendoruid).child(status.orderid).set({		//vendoruid
+		refNode.child(status.vendoruid).child("declined").child(status.orderid).set({		//vendoruid
 				customeruid: status.customeruid,
 				vendoruid: status.vendoruid,
 				items: status.items,
@@ -134,7 +134,7 @@ exports.inprogressMonitor = functions.database.ref("inprogress/{vendoruid}/{push
 	
 	var db = admin.database();
 	var refNode = db.ref("uid/");
-	refNode.child(status.vendoruid).child(status.orderid).set({
+	refNode.child(status.vendoruid).child("accepted").child(status.orderid).set({
 			customeruid: status.customeruid,
 			vendoruid: status.vendoruid,
 			items: status.items,
@@ -151,7 +151,7 @@ exports.inprogressMonitor = functions.database.ref("inprogress/{vendoruid}/{push
 
 });
 
-exports.uidMonitor = functions.database.ref("uid/{uid}/{pushId}").onWrite((event) => {		//notifies user/vendor
+exports.uidMonitor = functions.database.ref("uid/{uid}/{result}/{pushId}").onWrite((event) => {		//notifies user/vendor
 	const data = event.data;
     console.log('Event triggered');
     if (!data.changed()) {
@@ -181,7 +181,7 @@ exports.uidMonitor = functions.database.ref("uid/{uid}/{pushId}").onWrite((event
     console.log('Sending notifications');
     //return admin.messaging().sendToTopic("usertest", payload, options);
 	
-	var database = admin.database().ref().child("orders").child(status.orderid);
+	var database = admin.database().ref().child("orders").child(status.orderid);		//to get the user token
 	//var userData;
 	var userToken;
 	var userTokenid;
