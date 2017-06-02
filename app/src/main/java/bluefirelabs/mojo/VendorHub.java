@@ -44,7 +44,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import bluefirelabs.mojo.background_tasks.MyFirebaseInstanceIDService;
 import bluefirelabs.mojo.background_tasks.Order_List;
@@ -114,11 +116,11 @@ public class VendorHub extends AppCompatActivity
                             //Log.e("idListTextView", itemTitle.getText().toString());
                             //DatabaseReference hopperRef = reference1.child(newPost.get("orderid").toString()); //this part adds a child reference to the orderid in requests. Remember, the parent is set up to be the orderid.
                             //DatabaseReference hopperRef = reference1.child(idList.get(position+1).toString());      //+1 becuase the position gives a value of 1 less than what is needed
-                            //DatabaseReference hopperRef = reference1.child(itemTitle.getText().toString());     //uses the itemTitle, which is set to be the orderid, in order to get the order id on click of a specific card
-                            //Map<String, Object> hopperUpdates = new HashMap<String, Object>();
-                            //hopperUpdates.put("result", "accepted");                                           //appends the key "result" a value of "accepted". This can be changed to suit
+                            DatabaseReference hopperRef = reference1.child(itemTitle.getText().toString());     //uses the itemTitle, which is set to be the orderid, in order to get the order id on click of a specific card
+                            Map<String, Object> hopperUpdates = new HashMap<String, Object>();
+                            hopperUpdates.put("result", "accepted");                                           //appends the key "result" a value of "accepted". This can be changed to suit
 
-                            //hopperRef.updateChildren(hopperUpdates);                                           //updates the child, without destroying, or overwriting all data
+                            hopperRef.updateChildren(hopperUpdates);                                           //updates the child, without destroying, or overwriting all data
                         }
 
                         @Override
