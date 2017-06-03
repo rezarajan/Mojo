@@ -48,7 +48,7 @@ public class RecyclerAdapter_Drinks extends RecyclerView.Adapter<RecyclerAdapter
             super(itemView);
             itemTitle = (TextView) itemView.findViewById(R.id.item_title);
             Button imagebutton = (Button) itemView.findViewById(R.id.imageButton_add);
-            imagebutton_delete = (Button) itemView.findViewById(R.id.imageButton_delete);
+            //imagebutton_delete = (Button) itemView.findViewById(R.id.imageButton_delete);
 
 
             context = itemView.getContext();
@@ -75,7 +75,7 @@ public class RecyclerAdapter_Drinks extends RecyclerView.Adapter<RecyclerAdapter
                 }
             });
 
-            imagebutton_delete.setOnClickListener(new View.OnClickListener() {
+            /*imagebutton_delete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int position = getAdapterPosition();
@@ -105,7 +105,7 @@ public class RecyclerAdapter_Drinks extends RecyclerView.Adapter<RecyclerAdapter
                                 .setAction("Action", null).show();
                     }
                 }
-            });
+            }); */
         }
     }
 
