@@ -32,12 +32,18 @@ import android.widget.TextView;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.Map;
 
 import bluefirelabs.mojo.background_tasks.MyFirebaseInstanceIDService;
 import bluefirelabs.mojo.fragments.restaurantlist_fragment;
@@ -59,7 +65,6 @@ public class MainHub extends AppCompatActivity
     TextView userEmail;
     FirebaseAuth firebaseAuth;
     private BroadcastReceiver broadcastReceiver;
-    private String pushId;
 
     public static class RecyclerViewHolder extends RecyclerView.ViewHolder {
 
@@ -86,12 +91,45 @@ public class MainHub extends AppCompatActivity
                             Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
 
-                    final Intent intent;
 
-                    intent = new Intent(context, Restaurant_Menu.class);
-                    context.startActivity(intent);
+                    final DatabaseReference reference1 = FirebaseDatabase.getInstance().getReference("listing");
+                    reference1.orderByChild("restaurant").equalTo(itemTitle.getText().toString()).addChildEventListener(new ChildEventListener() {
+                        @Override
+                        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                            Map<String, Object> hopperValues = (Map<String, Object>) dataSnapshot.getValue();
+                            //hopperValues.put("key", dataSnapshot.getKey().toString());
+                            //Log.d("Values", dataSnapshot.getKey().toString());
+                            //Log.d("Values", dataSnapshot.getValue().toString());
 
-                }
+
+                            Intent intent = new Intent(context, Restaurant_Menu.class);
+                            intent.putExtra("Restaurant", itemTitle.getText().toString());
+                            intent.putExtra("Icon", hopperValues.get("icon").toString());
+                            Log.d("icon", hopperValues.get("icon").toString());
+                            context.startActivity(intent);
+                        }
+
+                        @Override
+                        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                        }
+
+                        @Override
+                        public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                        }
+
+                        @Override
+                        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+                 }
             });
         }
     }
@@ -109,15 +147,6 @@ public class MainHub extends AppCompatActivity
         setContentView(R.layout.activity_main_hub);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        /* FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        }); */
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -168,34 +197,6 @@ public class MainHub extends AppCompatActivity
         mLinearLayoutManager = new LinearLayoutManager(this);
         mLinearLayoutManager.setStackFromEnd(true);
 
-        /*
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("orders");
-        pushId = reference.push().getKey();
-        Map notification = new HashMap<>();
-        notification.put("user_token", FirebaseInstanceId.getInstance().getToken());
-        notification.put("customeruid", user.getUid());
-        notification.put("vendoruid", "Starbucks");
-        notification.put("items", "Fruit Bowl");
-        notification.put("postid", pushId);
-
-        reference.child(pushId).setValue(notification);
-
-
-        /*DatabaseReference reference = FirebaseDatabase.getInstance().getReference("orders");
-        String pushId = reference.push().getKey();
-        Map notification = new HashMap<>();
-        notification.put("user_token", FirebaseInstanceId.getInstance().getToken());
-        notification.put("customeruid", user.getUid());
-        notification.put("vendoruid", "Restaurant One");
-        notification.put("items", "Fruit Bowl");
-        notification.put("postid", pushId);
-        //reference.push().setValue(notification);
-
-        reference.child(pushId).setValue(notification);
-        //reference.child("token").setValue(FirebaseInstanceId.getInstance().getToken()); */
-
-        //FirebaseMessaging.getInstance().subscribeToTopic("Starbucks");
-
         mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
         mFirebaseAdapter = new FirebaseRecyclerAdapter<Restaurant_List, MainHub.RecyclerViewHolder>(
                 Restaurant_List.class,
@@ -208,7 +209,8 @@ public class MainHub extends AppCompatActivity
                 Log.d("Description: ", model.getDescription());
                 viewHolder.itemDescription.setText(model.getDescription());
                 viewHolder.itemTitle.setText(model.getRestaurant());
-                viewHolder.itemIcon.setImageResource(R.drawable.restaurant_icon);
+                //viewHolder.itemIcon.setImageResource(R.drawable.restaurant_icon);
+                Picasso.with(MainHub.this).load(model.getIcon()).into(viewHolder.itemIcon);
             }
         };
 
@@ -226,6 +228,7 @@ public class MainHub extends AppCompatActivity
 
         mRestaurantRecyclerView.setLayoutManager(mLinearLayoutManager);
         mRestaurantRecyclerView.setAdapter(mFirebaseAdapter);
+        mRestaurantRecyclerView.setNestedScrollingEnabled(false);
 
 
         small_description = (TextView) findViewById(R.id.small_description_location);
