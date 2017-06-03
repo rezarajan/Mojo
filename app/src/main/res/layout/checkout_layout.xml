@@ -6,5 +6,25 @@
     <ListView
         android:id="@+id/listview_checkout"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:visibility="invisible"/>
+
+    <Button
+        android:id="@+id/button_place_order"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:text="Checkout"
+        android:visibility="invisible"/>
+
+    <TextView
+        android:id="@+id/content_available_indicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No Items in your Cart"
+        android:layout_centerInParent="true"/>
+
 </RelativeLayout>

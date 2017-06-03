@@ -9,8 +9,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -33,6 +35,8 @@ public class Checkout extends AppCompatActivity{
     private static final String TAG = "ListDataActivity";
     DatabaseHelper myDb;
     private ListView mListView;
+    private Button placeorder;
+    private TextView noitems;
     private String pushId;
 
     @Override
@@ -40,31 +44,30 @@ public class Checkout extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.checkout_layout);
         mListView = (ListView)findViewById(R.id.listview_checkout);
+        placeorder = (Button)findViewById(R.id.button_place_order);
+        noitems = (TextView)findViewById(R.id.content_available_indicator);
         myDb = new DatabaseHelper(this);
+        Cursor data = myDb.getAllData();
+        if(data.getCount() > 0){
+            placeorder.setVisibility(View.VISIBLE);
+            mListView.setVisibility(View.VISIBLE);
+            noitems.setVisibility(View.INVISIBLE);
+        } else {
+            placeorder.setVisibility(View.INVISIBLE);
+            mListView.setVisibility(View.INVISIBLE);
+            noitems.setVisibility(View.VISIBLE);
+        }
 
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("orders");
         FirebaseUser user = firebaseAuth.getCurrentUser();
         pushId = reference.push().getKey();     //String
 
-
         //populateListView();
     }
 
     private void populateListView() {
         Log.d(TAG, "populateListView: Displaying data in the ListView");
-        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("orders");
-        FirebaseUser user = firebaseAuth.getCurrentUser();
-
-
-        Map notification = new HashMap<>();
-        Map itemListing = new HashMap<>();
-
-        notification.put("user_token", FirebaseInstanceId.getInstance().getToken());
-        notification.put("customeruid", user.getUid());
-        notification.put("vendoruid", "Starbucks");
-        notification.put("postid", pushId);
 
         //get the data and append to a list
         Cursor data = myDb.getAllData();
@@ -74,11 +77,7 @@ public class Checkout extends AppCompatActivity{
             //get the value from the database in column
             //then add it to the ArrayList
             listData.add(data.getString(2));
-            itemListing.put(data.getString(2), "1");    //itemId, quantity
         }
-
-        reference.child(pushId).setValue(notification);
-        reference.child(pushId).child("items").setValue(itemListing);
 
         //create the list adapter and set the adapter
         ListAdapter adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, listData);
@@ -121,9 +120,53 @@ public class Checkout extends AppCompatActivity{
     protected void onResume() {
         super.onResume();
         setContentView(R.layout.checkout_layout);
-        mListView = (ListView)findViewById(R.id.listview_checkout);
         myDb = new DatabaseHelper(this);
-
+        mListView = (ListView)findViewById(R.id.listview_checkout);
+        placeorder = (Button)findViewById(R.id.button_place_order);
+        noitems = (TextView)findViewById(R.id.content_available_indicator);
+        Cursor data = myDb.getAllData();
+        if(data.getCount() > 0){
+            placeorder.setVisibility(View.VISIBLE);
+            mListView.setVisibility(View.VISIBLE);
+            noitems.setVisibility(View.INVISIBLE);
+        } else {
+            placeorder.setVisibility(View.INVISIBLE);
+            mListView.setVisibility(View.INVISIBLE);
+            noitems.setVisibility(View.VISIBLE);
+        }
         populateListView();
+        placeorder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("Button clicked", "Placing order");
+
+                FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+                DatabaseReference reference = FirebaseDatabase.getInstance().getReference("orders");
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+
+
+                Map notification = new HashMap<>();
+                Map itemListing = new HashMap<>();
+
+                notification.put("user_token", FirebaseInstanceId.getInstance().getToken());
+                notification.put("customeruid", user.getUid());
+                notification.put("vendoruid", "Starbucks");
+                notification.put("postid", pushId);
+
+                //get the data and append to a list
+                Cursor data = myDb.getAllData();
+
+                ArrayList<String> listData = new ArrayList<>();
+                while(data.moveToNext()){
+                    //get the value from the database in column
+                    //then add it to the ArrayList
+                    listData.add(data.getString(2));
+                    itemListing.put(data.getString(2), "1");    //itemId, quantity
+                }
+
+                reference.child(pushId).setValue(notification);
+                reference.child(pushId).child("items").setValue(itemListing);
+            }
+        });
     }
 }
