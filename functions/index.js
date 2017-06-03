@@ -44,13 +44,13 @@ exports.orderMonitor = functions.database.ref("orders/{pushId}/").onWrite((event
 	
 	var db = admin.database();
 	
-	if(status != null){
+	if(status !== null){
 	var ref = db.ref("orders").child(status.postid);
 	var refNode = db.ref("requests");
 
 	ref.child("items").once("value")
 		.then(function(snapshot) {
-			if(snapshot.val() != null){
+			if(snapshot.val() !== null){
 				//the push creates the request id
 				refNode.child(status.postid).set({
 				customeruid: status.customeruid,
@@ -89,14 +89,14 @@ exports.requestsMonitor = functions.database.ref("requests/{pushId}/").onWrite((
 			var userDataName = userData.name;
 			console.log("User Data: " + userDataName);
 			//return userDataName;
-		if(status.result == "asking"){		//if asking then send to the uid node for vendor response
+		if(status.result === "asking"){		//if asking then send to the uid node for vendor response
 		var db = admin.database();
 		var refNode = db.ref("uid/");
 		var ref = db.ref("requests").child(status.orderid);
 		
 		ref.child("items").once("value")
 		.then(function(snapshot) {
-			if(snapshot.val() != null){
+			if(snapshot.val() !== null){
 		//the set uses the push key
 		refNode.child(status.vendoruid).child("requests").child(status.orderid).set({
 				customeruid: status.customeruid,
@@ -114,14 +114,14 @@ exports.requestsMonitor = functions.database.ref("requests/{pushId}/").onWrite((
 	});
 
 
-	} else if (status.result == "accepted"){	//if vendor accepts the order then send response to user
+	} else if (status.result === "accepted"){	//if vendor accepts the order then send response to user
 		var db = admin.database();
 		var refNode = db.ref("inprogress/");	//changed the reference
 		var ref = db.ref("requests").child(status.orderid);
 		
 		ref.child("items").once("value")
 		.then(function(snapshot) {
-			if(snapshot.val() != null){
+			if(snapshot.val() !== null){
 		//the set uses the push key
 		//the set uses the push key
 		refNode.child(status.vendoruid).child(status.orderid).set({
@@ -138,14 +138,14 @@ exports.requestsMonitor = functions.database.ref("requests/{pushId}/").onWrite((
 			
 	});
 
-	} else {									//if the vendor declines the order then send response to user
+	} else if (status.result === "declined"){									//if the vendor declines the order then send response to user
 		var db = admin.database();
 		var refNode = db.ref("uid/");
 		var ref = db.ref("requests").child(status.orderid);
 		
 		ref.child("items").once("value")
 		.then(function(snapshot) {
-			if(snapshot.val() != null){
+			if(snapshot.val() !== null){
 		//the set uses the push key
 		refNode.child(status.vendoruid).child("declined").child(status.orderid).set({		//vendoruid
 				customeruid: status.customeruid,
@@ -159,6 +159,30 @@ exports.requestsMonitor = functions.database.ref("requests/{pushId}/").onWrite((
 				vendoruid: status.vendoruid,
 				items: snapshot.val(),
 				result: "declined",
+				orderid: status.orderid
+		});
+				//refNode.child(status.orderid).child("items").set(snapshot.val());
+			} else{
+				return;
+			}
+			
+	});
+
+	} else if (status.result === "sending"){	//if vendor accepts the order then send response to user
+		var db = admin.database();
+		var refNode = db.ref("inprogress/");	//changed the reference
+		var ref = db.ref("requests").child(status.orderid);
+		
+		ref.child("items").once("value")
+		.then(function(snapshot) {
+			if(snapshot.val() !== null){
+		//the set uses the push key
+		//the set uses the push key
+		refNode.child(status.vendoruid).child(status.orderid).set({
+				customeruid: status.customeruid,
+				vendoruid: status.vendoruid,
+				items: snapshot.val(),
+				result: "sending",
 				orderid: status.orderid
 		});
 				//refNode.child(status.orderid).child("items").set(snapshot.val());
@@ -185,9 +209,10 @@ exports.inprogressMonitor = functions.database.ref("inprogress/{vendoruid}/{push
 	var refNode = db.ref("uid/");
 	var ref = db.ref("requests").child(status.orderid);
 	
-		ref.child("items").once("value")
+	if (status.result === "accepted"){	//if vendor accepts the order then send response to user
+				ref.child("items").once("value")
 		.then(function(snapshot) {
-			if(snapshot.val() != null){
+			if(snapshot.val() !== null){
 		//the set uses the push key
 	refNode.child(status.vendoruid).child("accepted").child(status.orderid).set({
 			customeruid: status.customeruid,
@@ -209,6 +234,36 @@ exports.inprogressMonitor = functions.database.ref("inprogress/{vendoruid}/{push
 			}
 			
 	});
+		
+	} else if (status.result === "sending"){	//if vendor accepts the order then send response to user
+				ref.child("items").once("value")
+		.then(function(snapshot) {
+			if(snapshot.val() !== null){
+		//the set uses the push key
+	refNode.child(status.vendoruid).child("sending").child(status.orderid).set({
+			customeruid: status.customeruid,
+			vendoruid: status.vendoruid,
+			items: snapshot.val(),
+			result: "sending",
+			orderid: status.orderid
+	});
+	refNode.child(status.customeruid).child(status.orderid).set({
+			customeruid: status.customeruid,
+			vendoruid: status.vendoruid,
+			items: snapshot.val(),
+			result: "sending",
+			orderid: status.orderid
+	});
+				//refNode.child(status.orderid).child("items").set(snapshot.val());
+			} else{
+				return;
+			}
+			
+	});
+		
+	}
+	
+
 
 });
 
@@ -240,7 +295,7 @@ exports.requestOrderMonitor = functions.database.ref("uid/{uid}/requests/{pushId
         priority: "high",
         timeToLive: 60 * 60 * 24 //24 hours
     };
-    console.log('Sending notifications');
+    console.log('Sending requests notifications');
     //return admin.messaging().sendToTopic("usertest", payload, options);
 	
 	console.log("Vendor: " + status.vendoruid);
@@ -281,7 +336,106 @@ exports.acceptedOrderMonitor = functions.database.ref("uid/{uid}/accepted/{pushI
         priority: "high",
         timeToLive: 60 * 60 * 24 //24 hours
     };
-    console.log('Sending notifications');
+    console.log('Sending accepted notifications');
+    //return admin.messaging().sendToTopic("usertest", payload, options);
+	
+	var database = admin.database().ref().child("orders").child(status.orderid);
+	//var userData;
+	var userToken;
+	var userTokenid;
+	
+	database.once('value')
+		.then(function(dataSnapshot) {
+			// handle read data.
+			var userToken = dataSnapshot.val();
+			var userTokenid = userToken.user_token;
+			console.log("User Token: " + userTokenid);
+			return admin.messaging().sendToDevice(userTokenid, payload, options);		//using the user_token as the receiver
+
+		});
+});
+
+exports.sendingOrderMonitor = functions.database.ref("uid/{uid}/sending/{pushId}").onWrite((event) => {		//notifies user/vendor
+	const data = event.data;
+    console.log('Event triggered');
+    if (!data.changed()) {
+        return;
+    }
+    const status = data.val();
+	
+	const payload = {
+    data: {
+        //title: 'Electricity Monitor - Power status changed',
+        //body: 'Test',
+        //sound: "default"
+		
+		customeruid: status.customeruid,
+        vendoruid: status.vendoruid,
+		message: status.result,
+        sound: "default"
+		
+    }
+		
+    };
+
+    const options = {
+        priority: "high",
+        timeToLive: 60 * 60 * 24 //24 hours
+    };
+    console.log('Sending delivery notifications');
+    //return admin.messaging().sendToTopic("usertest", payload, options);
+	
+	var db = admin.database();
+	var ref = db.ref().child("uid").child(status.vendoruid).child("requests");
+	ref.orderByKey().equalTo(status.orderid).on("child_added", function(snapshot) {
+	console.log(snapshot.key);
+	ref.child(snapshot.key).remove();		//removes the order from requests after the restaurant has accepted it
+});
+	
+	var database = admin.database().ref().child("orders").child(status.orderid);
+	//var userData;
+	var userToken;
+	var userTokenid;
+	
+	database.once('value')
+		.then(function(dataSnapshot) {
+			// handle read data.
+			var userToken = dataSnapshot.val();
+			var userTokenid = userToken.user_token;
+			console.log("User Token: " + userTokenid);
+			return admin.messaging().sendToDevice(userTokenid, payload, options);		//using the user_token as the receiver
+
+		});
+});
+
+exports.declinedOrderMonitor = functions.database.ref("uid/{uid}/declined/{pushId}").onWrite((event) => {		//notifies user/vendor
+	const data = event.data;
+    console.log('Event triggered');
+    if (!data.changed()) {
+        return;
+    }
+    const status = data.val();
+	
+	const payload = {
+    data: {
+        //title: 'Electricity Monitor - Power status changed',
+        //body: 'Test',
+        //sound: "default"
+		
+		customeruid: status.customeruid,
+        vendoruid: status.vendoruid,
+		message: status.result,
+        sound: "default"
+		
+    }
+		
+    };
+
+    const options = {
+        priority: "high",
+        timeToLive: 60 * 60 * 24 //24 hours
+    };
+    console.log('Sending delivery notifications');
     //return admin.messaging().sendToTopic("usertest", payload, options);
 	
 	var db = admin.database();

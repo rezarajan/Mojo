@@ -26,6 +26,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -79,7 +80,10 @@ public class VendorHub extends AppCompatActivity
         public TextView itemDescription;
         public TextView itemName;
         public ImageView itemIcon;
+        public Button btn_accept, btn_decline, btn_sending;
+
         public List<Object> idList= new ArrayList<Object>();
+        private boolean sending = false;
 
         public RecyclerViewHolder(View itemView) {
             super(itemView);
@@ -88,22 +92,21 @@ public class VendorHub extends AppCompatActivity
             itemTitle = (TextView) itemView.findViewById(R.id.item_title);
             itemDescription = (TextView) itemView.findViewById(R.id.item_description);
             itemName = (TextView) itemView.findViewById(R.id.item_name);
+            btn_accept = (Button) itemView.findViewById(R.id.button_accept);
+            btn_decline = (Button) itemView.findViewById(R.id.button_decline);
+            btn_sending = (Button) itemView.findViewById(R.id.button_sending);
             context = itemView.getContext();
 
+            final DatabaseReference reference1 = FirebaseDatabase.getInstance().getReference("requests");
 
-            itemView.setOnClickListener(new View.OnClickListener() {
+            btn_accept.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    final int position = getAdapterPosition();
-
-                    Snackbar.make(v, "Click detected on item " + position,
-                            Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
                     ///////////////////////////////////////////////////////////////////////////////////////////////////
                     //This part of the code retrieved a specific part of the data from the firebase database
                     //It bypasses the wildcard requirement by filtering for a specific child value in the
                     //reference provided, which is requests in this case
-                    final DatabaseReference reference1 = FirebaseDatabase.getInstance().getReference("requests");
+
                     //reference1.orderByChild("orderid").equalTo(pushId).addChildEventListener(new ChildEventListener() {     //searches specifically for the orderid "-KlSF5GydNxjegYK--R2"
                     reference1.orderByChild("orderid").equalTo(itemTitle.getText().toString()).addChildEventListener(new ChildEventListener() {
                         @Override
@@ -118,8 +121,7 @@ public class VendorHub extends AppCompatActivity
                             //DatabaseReference hopperRef = reference1.child(idList.get(position+1).toString());      //+1 becuase the position gives a value of 1 less than what is needed
                             DatabaseReference hopperRef = reference1.child(itemTitle.getText().toString());     //uses the itemTitle, which is set to be the orderid, in order to get the order id on click of a specific card
                             Map<String, Object> hopperUpdates = new HashMap<String, Object>();
-                            hopperUpdates.put("result", "accepted");                                           //appends the key "result" a value of "accepted". This can be changed to suit
-
+                            hopperUpdates.put("result", "accepted");
                             hopperRef.updateChildren(hopperUpdates);                                           //updates the child, without destroying, or overwriting all data
                         }
 
@@ -143,6 +145,121 @@ public class VendorHub extends AppCompatActivity
 
                         }
                     });
+                    btn_decline.setVisibility(View.INVISIBLE);
+                    btn_accept.setVisibility(View.INVISIBLE);
+                    btn_sending.setVisibility(View.VISIBLE);
+
+                }
+            });
+
+            btn_decline.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ///////////////////////////////////////////////////////////////////////////////////////////////////
+                    //This part of the code retrieved a specific part of the data from the firebase database
+                    //It bypasses the wildcard requirement by filtering for a specific child value in the
+                    //reference provided, which is requests in this case
+
+                    //reference1.orderByChild("orderid").equalTo(pushId).addChildEventListener(new ChildEventListener() {     //searches specifically for the orderid "-KlSF5GydNxjegYK--R2"
+                    reference1.orderByChild("orderid").equalTo(itemTitle.getText().toString()).addChildEventListener(new ChildEventListener() {
+                        @Override
+                        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                            //Map<String, Object> newPost = (Map<String, Object>) dataSnapshot.getValue();        //stores all the child data in a map
+                            //Log.e("onChildAdded", dataSnapshot.toString());
+                            //Log.e("orderid retrieved", newPost.get("orderid").toString());                      //searches the map newPost for the child "orderid" and then returns the value
+                            //Log.e("idList Order", idList.get(position+1).toString());
+
+                            //Log.e("idListTextView", itemTitle.getText().toString());
+                            //DatabaseReference hopperRef = reference1.child(newPost.get("orderid").toString()); //this part adds a child reference to the orderid in requests. Remember, the parent is set up to be the orderid.
+                            //DatabaseReference hopperRef = reference1.child(idList.get(position+1).toString());      //+1 becuase the position gives a value of 1 less than what is needed
+                            DatabaseReference hopperRef = reference1.child(itemTitle.getText().toString());     //uses the itemTitle, which is set to be the orderid, in order to get the order id on click of a specific card
+                            Map<String, Object> hopperUpdates = new HashMap<String, Object>();
+                            hopperUpdates.put("result", "declined");                                           //appends the key "result" a value of "accepted". This can be changed to suit
+                            hopperRef.updateChildren(hopperUpdates);                                           //updates the child, without destroying, or overwriting all data
+                        }
+
+                        @Override
+                        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                        }
+
+                        @Override
+                        public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                        }
+
+                        @Override
+                        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+                }
+            });
+
+            btn_sending.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ///////////////////////////////////////////////////////////////////////////////////////////////////
+                    //This part of the code retrieved a specific part of the data from the firebase database
+                    //It bypasses the wildcard requirement by filtering for a specific child value in the
+                    //reference provided, which is requests in this case
+
+                    //reference1.orderByChild("orderid").equalTo(pushId).addChildEventListener(new ChildEventListener() {     //searches specifically for the orderid "-KlSF5GydNxjegYK--R2"
+                    reference1.orderByChild("orderid").equalTo(itemTitle.getText().toString()).addChildEventListener(new ChildEventListener() {
+                        @Override
+                        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                            //Map<String, Object> newPost = (Map<String, Object>) dataSnapshot.getValue();        //stores all the child data in a map
+                            //Log.e("onChildAdded", dataSnapshot.toString());
+                            //Log.e("orderid retrieved", newPost.get("orderid").toString());                      //searches the map newPost for the child "orderid" and then returns the value
+                            //Log.e("idList Order", idList.get(position+1).toString());
+
+                            //Log.e("idListTextView", itemTitle.getText().toString());
+                            //DatabaseReference hopperRef = reference1.child(newPost.get("orderid").toString()); //this part adds a child reference to the orderid in requests. Remember, the parent is set up to be the orderid.
+                            //DatabaseReference hopperRef = reference1.child(idList.get(position+1).toString());      //+1 becuase the position gives a value of 1 less than what is needed
+                            DatabaseReference hopperRef = reference1.child(itemTitle.getText().toString());     //uses the itemTitle, which is set to be the orderid, in order to get the order id on click of a specific card
+                            Map<String, Object> hopperUpdates = new HashMap<String, Object>();
+                            hopperUpdates.put("result", "sending");                                           //appends the key "result" a value of "accepted". This can be changed to suit
+                            hopperRef.updateChildren(hopperUpdates);                                           //updates the child, without destroying, or overwriting all data
+                        }
+
+                        @Override
+                        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                        }
+
+                        @Override
+                        public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                        }
+
+                        @Override
+                        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+                }
+            });
+
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    final int position = getAdapterPosition();
+
+                    Snackbar.make(v, "Click detected on item " + position,
+                            Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+
                 }
             });
         }
