@@ -33,6 +33,8 @@ public class RecyclerAdapter_Drinks extends RecyclerView.Adapter<RecyclerAdapter
             {"6",
                     "4",
                     "5",};
+
+
     private int[] icon =
             {R.drawable.food,
                     R.drawable.drinks,
@@ -61,7 +63,8 @@ public class RecyclerAdapter_Drinks extends RecyclerView.Adapter<RecyclerAdapter
 
                     boolean isInserted = myDb.insertData(restaurant,
                             titles[position],
-                            cost[position]);                                //Adds the item at at the specific position to the database
+                            cost[position],
+                            "0");                                //Adds the item at at the specific position to the database
 
                     if (isInserted == true) {
                         Snackbar.make(v, "Data Inserted",

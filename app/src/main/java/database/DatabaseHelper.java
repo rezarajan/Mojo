@@ -19,6 +19,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
     public static final String RESTAURANT = "RESTAURANT";       //column 2
     public static final String ITEM = "ITEM";       //column 3
     public static final String COST = "COST";       //column 4
+    public static final String QUANTITY = "QUANTITY";       //column 5
 
 
     public DatabaseHelper(Context context) {
@@ -28,7 +29,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String SQL_String = "CREATE TABLE " + TABLE_NAME + "(" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + RESTAURANT + " TEXT," + ITEM + " TEXT," + COST + " INTEGER)";
+        String SQL_String = "CREATE TABLE " + TABLE_NAME + "(" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + RESTAURANT + " TEXT," + ITEM + " TEXT," + COST + " INTEGER," + QUANTITY + " INTEGER)";
         db.execSQL(SQL_String);
     }
 
@@ -38,12 +39,13 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         onCreate(db);
     }
 
-    public boolean insertData(String restaurant, String item, String cost){
+    public boolean insertData(String restaurant, String item, String cost, String quantity){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(RESTAURANT, restaurant);
         contentValues.put(ITEM, item);
         contentValues.put(COST, cost);
+        contentValues.put(QUANTITY, quantity);
         long result = db.insert(TABLE_NAME, null, contentValues);
         if(result == -1){
             return false;
@@ -87,6 +89,16 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 
         Log.d("DatabaseHelper: ", "deleteName: query: " + query);
         Log.d("DatabaseHelper: ", "deleteName: Deleting: " + name + " from database");
+        db.execSQL(query);
+    }
+
+    public void updateQuantity(String newQuantity, int id){
+        SQLiteDatabase db = this.getWritableDatabase();
+        //String query = "UPDATE " + TABLE_NAME + " SET " + QUANTITY + " = '" + newQuantity + "' WHERE " + ID + " = '" + id + "'" + " AND " + QUANTITY + " = '" + oldQuantity + "'";
+        String query = "UPDATE " + TABLE_NAME + " SET " + QUANTITY + " = '" + newQuantity + "' WHERE " + ID + " = '" + id + "'";
+
+        Log.d("DatabaseHelper: ", "updateQuantity: query: " + query);
+        Log.d("DatabaseHelper: ", "updateQuantity: Setting quantity to: " + newQuantity);
         db.execSQL(query);
     }
 }

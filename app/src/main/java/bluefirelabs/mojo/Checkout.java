@@ -161,7 +161,7 @@ public class Checkout extends AppCompatActivity{
                     //get the value from the database in column
                     //then add it to the ArrayList
                     listData.add(data.getString(2));
-                    itemListing.put(data.getString(2), "1");    //itemId, quantity
+                    itemListing.put(data.getString(2), data.getString(4));    //itemId, quantity
                 }
 
                 reference.child(pushId).setValue(notification);

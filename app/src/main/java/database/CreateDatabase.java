@@ -41,7 +41,8 @@ public class CreateDatabase extends AppCompatActivity{
             public void onClick(View v) {
                 boolean isInserted = myDb.insertData(restaurant.getText().toString(),
                         item.getText().toString(),
-                        cost.getText().toString());
+                        cost.getText().toString(),
+                        "0");
 
                 if(isInserted == true){
                     Toast.makeText(database.CreateDatabase.this, "Data Inserted", Toast.LENGTH_LONG).show();

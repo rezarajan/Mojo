@@ -53,9 +53,9 @@ public class editcheckout extends AppCompatActivity{
             public void onClick(View v) {
                 String item = editable_item.getText().toString();
                 if(!item.equals("")){
-                    myDb.updateName(item, selectedID, selectedName);
+                    myDb.updateQuantity(item, selectedID);
                 } else{
-                    Snackbar.make(v, "Please enter a name",
+                    Snackbar.make(v, "Please enter a quantity",
                             Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
                 }
