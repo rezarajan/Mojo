@@ -4,15 +4,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:weightSum="1">
+    android:weightSum="1"
+    android:background="@color/colorDarkBlue">
 
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:srcCompat="@mipmap/ic_launcher"
         android:layout_weight="0.84"
-        android:scaleType="center"/>
+        android:scaleType="center"
+        app:srcCompat="@drawable/ic_material_product_icon_192pxxhdpi" />
 
     <Button
         android:id="@+id/sign_up"

@@ -78,7 +78,6 @@
         <activity android:name=".VendorHub"
             android:configChanges="orientation"
             android:screenOrientation="portrait"/>
-        <activity android:name="database.CreateDatabase" />
         <activity
             android:name=".Restaurant_Menu"
             android:label="@string/title_activity_food_menu"

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -40,14 +41,23 @@ public class Sign_In extends AppCompatActivity {
                 }
             }); */
 
-            Button sign_in = (Button) findViewById(R.id.social_media);
+            TextView sign_in = (TextView) findViewById(R.id.sign_in);
 
             sign_in.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(Sign_In.this, Login.class);
                     startActivity(intent);
-                    finish();
+                }
+            });
+
+            Button social_media = (Button) findViewById(R.id.social_media);
+
+            social_media.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(Sign_In.this, Login.class);
+                    startActivity(intent);
                 }
             });
         }
