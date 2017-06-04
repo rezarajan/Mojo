@@ -4,16 +4,16 @@
     ".write": "auth != null",
     
     "geofire": {
-      // Allow anyone to read the GeoFire index
-      ".read": true,
+      // Allow only users to read the GeoFire index
+      ".read": "auth != null",
 
       // Index each location's geohash for faster querying
       ".indexOn": ["g"],
 
       // Schema validation
       "$key": {
-        // Allow anyone to add, update, or remove keys in the GeoFire index
-        ".write": true,
+        // Allow only users to add, update, or remove keys in the GeoFire index
+        ".write": "auth != null",
 
         // Key validation
         ".validate": "newData.hasChildren(['g', 'l']) && newData.getPriority().length <= 22 && newData.getPriority().length > 0",
@@ -41,6 +41,35 @@
           ".validate": false
         }
       }
-    }
+    },
+	  
+	"orders":{
+	  // Allow only users to read the GeoFire index
+      ".read": "auth != null",
+	  
+	  // Index user, vendor and order data for faster querying
+	  ".indexOn": ["postid"]
+  },
+	"requests":{
+	  // Allow only users to read the GeoFire index
+      ".read": "auth != null",
+	  
+	  // Index user, vendor and order data for faster querying
+	  ".indexOn": ["result"]
+  },
+    "inprogress":{
+	  // Allow only users to read the GeoFire index
+      ".read": "auth != null",
+	  
+	  // Index user, vendor and order data for faster querying
+	  ".indexOn": ["result"]
+  },
+	"uid":{
+	  // Allow only users to read the GeoFire index
+      ".read": "auth != null",
+	  
+	  // Index user, vendor and order data for faster querying
+	  ".indexOn": ["result"]
+  }  
   }
 }
