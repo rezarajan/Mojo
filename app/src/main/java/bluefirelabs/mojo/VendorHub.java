@@ -318,7 +318,7 @@ public class VendorHub extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_hub);
+        setContentView(R.layout.activity_vendor_main_hub);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         FirebaseMessaging.getInstance().subscribeToTopic("Starbucks");
