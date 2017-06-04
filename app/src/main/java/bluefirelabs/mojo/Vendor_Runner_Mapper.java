@@ -45,7 +45,7 @@ import static bluefirelabs.mojo.R.id.map;
  * Created by Reza Rajan on 2017-05-16.
  */
 
-public class Runner_Mapper extends AppCompatActivity implements OnMapReadyCallback, LocationListener {
+public class Vendor_Runner_Mapper extends AppCompatActivity implements OnMapReadyCallback, LocationListener {
 
     private GoogleMap mMap;
     private String url;
@@ -56,6 +56,7 @@ public class Runner_Mapper extends AppCompatActivity implements OnMapReadyCallba
     double myLat, myLng, runnerLat, runnerLng;
     LatLng myLocation, runnerLocation;
     private ReadTask readTask;
+
 
 
     @Override
@@ -92,7 +93,7 @@ public class Runner_Mapper extends AppCompatActivity implements OnMapReadyCallba
             DatabaseReference ref = FirebaseDatabase.getInstance().getReference("geofire");
             GeoFire geoFire = new GeoFire(ref);
 
-            geoFire.setLocation("User", new GeoLocation(myLat,myLng), new GeoFire.CompletionListener() {
+            geoFire.setLocation("Runner", new GeoLocation(myLat,myLng), new GeoFire.CompletionListener() {
                 @Override
                 public void onComplete(String key, DatabaseError error) {
                     if (error != null) {
@@ -103,7 +104,7 @@ public class Runner_Mapper extends AppCompatActivity implements OnMapReadyCallba
                 }
             });
 
-            geoFire.getLocation("Runner", new LocationCallback() {
+            geoFire.getLocation("User", new LocationCallback() {
                 @Override
                 public void onLocationResult(String key, GeoLocation location) {
                     if (location != null) {
@@ -133,7 +134,7 @@ public class Runner_Mapper extends AppCompatActivity implements OnMapReadyCallba
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("geofire");
         GeoFire geoFire = new GeoFire(ref);
 
-        geoFire.setLocation("User", new GeoLocation(myLat,myLng), new GeoFire.CompletionListener() {
+        geoFire.setLocation("Runner", new GeoLocation(myLat,myLng), new GeoFire.CompletionListener() {
             @Override
             public void onComplete(String key, DatabaseError error) {
                 if (error != null) {
@@ -146,7 +147,7 @@ public class Runner_Mapper extends AppCompatActivity implements OnMapReadyCallba
 
         //Note that the drawing has to be done within the OnLocationResult itself, or else for some reason it resets the value of runnerLat and runnerLng
 
-        geoFire.getLocation("Runner", new LocationCallback() {
+        geoFire.getLocation("User", new LocationCallback() {
             @Override
             public void onLocationResult(String key, GeoLocation location) {
                 if (location != null) {
@@ -157,7 +158,7 @@ public class Runner_Mapper extends AppCompatActivity implements OnMapReadyCallba
                     myLocation = new LatLng(myLat, myLng);
                     //runnerLocation = new LatLng(43.473463, -80.537056);
                     runnerLocation = new LatLng(runnerLat, runnerLng);
-                    mMap.addMarker(new MarkerOptions().position(runnerLocation).title("Runner"));
+                    mMap.addMarker(new MarkerOptions().position(runnerLocation).title("Customer"));
                     //mMap.moveCamera(CameraUpdateFactory.newLatLng(myLocation));
                     mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 17));      //Zooms the map to your location, with zoom parameter = 17
 
@@ -355,7 +356,7 @@ public class Runner_Mapper extends AppCompatActivity implements OnMapReadyCallba
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("geofire");
         GeoFire geoFire = new GeoFire(ref);
 
-        geoFire.setLocation("User", new GeoLocation(myLat,myLng), new GeoFire.CompletionListener() {
+        geoFire.setLocation("Runner", new GeoLocation(myLat,myLng), new GeoFire.CompletionListener() {
             @Override
             public void onComplete(String key, DatabaseError error) {
                 if (error != null) {
@@ -365,13 +366,13 @@ public class Runner_Mapper extends AppCompatActivity implements OnMapReadyCallba
             }
         });
 
-        geoFire.getLocation("Runner", new LocationCallback() {
+        geoFire.getLocation("User", new LocationCallback() {
             @Override
             public void onLocationResult(String key, GeoLocation location) {
                 if (location != null) {
                     runnerLat = location.latitude;
                     runnerLng = location.longitude;
-                    mMap.addMarker(new MarkerOptions().position(runnerLocation).title("Runner"));
+                    mMap.addMarker(new MarkerOptions().position(runnerLocation).title("Customer"));
                     mMap.moveCamera(CameraUpdateFactory.newLatLng(myLocation));
                     url = getMapsApiDirectionsUrl(myLocation, runnerLocation);
                     //readTask.cancel(true);

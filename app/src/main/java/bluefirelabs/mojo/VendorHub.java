@@ -58,7 +58,7 @@ import bluefirelabs.mojo.handlers.SharedPrefManager;
 
 public class VendorHub extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener
-        , bluefirelabs.mojo.fragments.currentinfo_fragment.currentinfoListener
+        , bluefirelabs.mojo.fragments.vendor_currentinfo_fragment.currentinfoListener
         , restaurantlist_fragment.restaurantlistListener
         , android.location.LocationListener {
 
