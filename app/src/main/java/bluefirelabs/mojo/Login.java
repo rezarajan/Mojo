@@ -69,6 +69,14 @@ public class Login extends AppCompatActivity implements LoaderCallbacks<Cursor> 
     private View mLoginFormView;
 
     @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(Login.this, Sign_In.class);
+        startActivity(intent);
+        finish();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
