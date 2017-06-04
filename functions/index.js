@@ -192,6 +192,30 @@ exports.requestsMonitor = functions.database.ref("requests/{pushId}/").onWrite((
 			
 	});
 
+	} else if (status.result === "delivered"){	//if vendor accepts the order then send response to user
+		var db = admin.database();
+		var refNode = db.ref("inprogress/");	//changed the reference
+		var ref = db.ref("requests").child(status.orderid);
+		
+		ref.child("items").once("value")
+		.then(function(snapshot) {
+			if(snapshot.val() !== null){
+		//the set uses the push key
+		//the set uses the push key
+		refNode.child(status.vendoruid).child(status.orderid).set({
+				customeruid: status.customeruid,
+				vendoruid: status.vendoruid,
+				items: snapshot.val(),
+				result: "delivered",
+				orderid: status.orderid
+		});
+				//refNode.child(status.orderid).child("items").set(snapshot.val());
+			} else{
+				return;
+			}
+			
+	});
+
 	}
 	});
 
@@ -252,6 +276,32 @@ exports.inprogressMonitor = functions.database.ref("inprogress/{vendoruid}/{push
 			vendoruid: status.vendoruid,
 			items: snapshot.val(),
 			result: "sending",
+			orderid: status.orderid
+	});
+				//refNode.child(status.orderid).child("items").set(snapshot.val());
+			} else{
+				return;
+			}
+			
+	});
+		
+	} else if (status.result === "delivered"){	//if vendor accepts the order then send response to user
+				ref.child("items").once("value")
+		.then(function(snapshot) {
+			if(snapshot.val() !== null){
+		//the set uses the push key
+	refNode.child(status.vendoruid).child("delivered").child(status.orderid).set({
+			customeruid: status.customeruid,
+			vendoruid: status.vendoruid,
+			items: snapshot.val(),
+			result: "delivered",
+			orderid: status.orderid
+	});
+	refNode.child(status.customeruid).child(status.orderid).set({
+			customeruid: status.customeruid,
+			vendoruid: status.vendoruid,
+			items: snapshot.val(),
+			result: "delivered",
 			orderid: status.orderid
 	});
 				//refNode.child(status.orderid).child("items").set(snapshot.val());
@@ -386,10 +436,12 @@ exports.sendingOrderMonitor = functions.database.ref("uid/{uid}/sending/{pushId}
     //return admin.messaging().sendToTopic("usertest", payload, options);
 	
 	var db = admin.database();
-	var ref = db.ref().child("uid").child(status.vendoruid).child("requests");
+	var ref = db.ref().child("uid").child(status.vendoruid);
 	ref.orderByKey().equalTo(status.orderid).on("child_added", function(snapshot) {
 	console.log(snapshot.key);
-	ref.child(snapshot.key).remove();		//removes the order from requests after the restaurant has accepted it
+	//ref.child("requests").child(snapshot.key).remove();		//removes the order from requests after the restaurant has accepted it
+	ref.child("accepted").child(snapshot.key).remove();		//removes the order from accepted after the restaurant has accepted it
+
 });
 	
 	var database = admin.database().ref().child("orders").child(status.orderid);
@@ -443,6 +495,63 @@ exports.declinedOrderMonitor = functions.database.ref("uid/{uid}/declined/{pushI
 	ref.orderByKey().equalTo(status.orderid).on("child_added", function(snapshot) {
 	console.log(snapshot.key);
 	ref.child(snapshot.key).remove();		//removes the order from requests after the restaurant has accepted it
+});
+	
+	var database = admin.database().ref().child("orders").child(status.orderid);
+	//var userData;
+	var userToken;
+	var userTokenid;
+	
+	database.once('value')
+		.then(function(dataSnapshot) {
+			// handle read data.
+			var userToken = dataSnapshot.val();
+			var userTokenid = userToken.user_token;
+			console.log("User Token: " + userTokenid);
+			return admin.messaging().sendToDevice(userTokenid, payload, options);		//using the user_token as the receiver
+
+		});
+});
+
+exports.deliveredOrderMonitor = functions.database.ref("uid/{uid}/delivered/{pushId}").onWrite((event) => {		//notifies user/vendor
+	const data = event.data;
+    console.log('Event triggered');
+    if (!data.changed()) {
+        return;
+    }
+    const status = data.val();
+	
+	const payload = {
+    data: {
+        //title: 'Electricity Monitor - Power status changed',
+        //body: 'Test',
+        //sound: "default"
+		
+		customeruid: status.customeruid,
+        vendoruid: status.vendoruid,
+		message: status.result,
+        sound: "default"
+		
+    }
+		
+    };
+
+    const options = {
+        priority: "high",
+        timeToLive: 60 * 60 * 24 //24 hours
+    };
+    console.log('Sending delivery notifications');
+    //return admin.messaging().sendToTopic("usertest", payload, options);
+	
+	var db = admin.database();
+	var ref = db.ref().child("uid").child(status.vendoruid).child("requests");
+	var ref2 = db.ref().child("uid").child(status.vendoruid).child("sending");
+	ref.orderByKey().equalTo(status.orderid).on("child_added", function(snapshot) {
+	console.log(snapshot.key);
+	ref.child(snapshot.key).remove();		//removes the order from sending after the restaurant has delivered it
+		console.log('Request removed');
+	ref2.child(snapshot.key).remove();		//removes the order from sending after the restaurant has delivered it
+		console.log('Sending removed');
 });
 	
 	var database = admin.database().ref().child("orders").child(status.orderid);
