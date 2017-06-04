@@ -53,7 +53,9 @@ public class Runner_Mapper extends AppCompatActivity implements OnMapReadyCallba
     LocationManager locationManager;
     String provider;
     final int MY_PERMISSION_REQUEST_CODE = 7171;
-    double lat, lng;
+    double myLat, myLng, runnerLat, runnerLng;
+    LatLng myLocation, runnerLocation;
+    private ReadTask readTask;
 
 
     @Override
@@ -76,19 +78,21 @@ public class Runner_Mapper extends AppCompatActivity implements OnMapReadyCallba
 
         } else {
             getLocation();
+            Log.d("Getting Location", "Now");
         }
         locationManager.requestLocationUpdates(provider, 400, 1, this);
         Location myLocation = locationManager.getLastKnownLocation(provider);
         if(myLocation == null){
             getLocation();
         } else {
-            lat = myLocation.getLatitude();
-            lng = myLocation.getLongitude();
+            myLat = myLocation.getLatitude();
+            myLng = myLocation.getLongitude();
+            Log.d("Location","found");
 
             DatabaseReference ref = FirebaseDatabase.getInstance().getReference("geofire");
             GeoFire geoFire = new GeoFire(ref);
 
-            geoFire.setLocation("User", new GeoLocation(lat,lng), new GeoFire.CompletionListener() {
+            geoFire.setLocation("User", new GeoLocation(myLat,myLng), new GeoFire.CompletionListener() {
                 @Override
                 public void onComplete(String key, DatabaseError error) {
                     if (error != null) {
@@ -103,6 +107,8 @@ public class Runner_Mapper extends AppCompatActivity implements OnMapReadyCallba
                 @Override
                 public void onLocationResult(String key, GeoLocation location) {
                     if (location != null) {
+                        runnerLat = location.latitude;
+                        runnerLng = location.longitude;
                         System.out.println(String.format("The location for key %s is [%f,%f]", key, location.latitude, location.longitude));
                     } else {
                         System.out.println(String.format("There is no location for key %s in GeoFire", key));
@@ -124,15 +130,53 @@ public class Runner_Mapper extends AppCompatActivity implements OnMapReadyCallba
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("geofire");
+        GeoFire geoFire = new GeoFire(ref);
 
-        // Add a marker in Sydney, Australia, and move the camera.
-        LatLng sydney = new LatLng(lat, lng);
-        LatLng sydney_1 = new LatLng(37.408870, -122.064426);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        geoFire.setLocation("User", new GeoLocation(myLat,myLng), new GeoFire.CompletionListener() {
+            @Override
+            public void onComplete(String key, DatabaseError error) {
+                if (error != null) {
+                    System.err.println("There was an error saving the location to GeoFire: " + error);
+                } else {
+                    System.out.println("Location saved on server successfully!");
+                }
+            }
+        });
 
-        url = getMapsApiDirectionsUrl(sydney, sydney_1);
-        new ReadTask().execute(url);
+        //Note that the drawing has to be done within the OnLocationResult itself, or else for some reason it resets the value of runnerLat and runnerLng
+
+        geoFire.getLocation("Runner", new LocationCallback() {
+            @Override
+            public void onLocationResult(String key, GeoLocation location) {
+                if (location != null) {
+                    runnerLat = location.latitude;
+                    runnerLng = location.longitude;
+                    // Add a marker in Sydney, Australia, and move the camera.
+
+                    myLocation = new LatLng(myLat, myLng);
+                    //runnerLocation = new LatLng(43.473463, -80.537056);
+                    runnerLocation = new LatLng(runnerLat, runnerLng);
+                    mMap.addMarker(new MarkerOptions().position(runnerLocation).title("Runner"));
+                    //mMap.moveCamera(CameraUpdateFactory.newLatLng(myLocation));
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 17));      //Zooms the map to your location, with zoom parameter = 17
+
+                    url = getMapsApiDirectionsUrl(myLocation, runnerLocation);
+                    readTask = new ReadTask();
+                    readTask.execute(url);
+                    System.out.println(String.format("The location for maps for key %s is [%f,%f]", key, location.latitude, location.longitude));
+                } else {
+                    System.out.println(String.format("There is no location for key %s in GeoFire", key));
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.err.println("There was an error getting the GeoFire location: " + databaseError);
+            }
+        });
+
+
     }
 
     private String getMapsApiDirectionsUrl(LatLng origin, LatLng dest) {
@@ -169,6 +213,7 @@ public class Runner_Mapper extends AppCompatActivity implements OnMapReadyCallba
             try {
                 MapHttpConnection http = new MapHttpConnection();
                 data = http.readUr(url[0]);
+                Log.d("Data", data.toString());
 
 
             } catch (Exception e) {
@@ -246,41 +291,13 @@ public class Runner_Mapper extends AppCompatActivity implements OnMapReadyCallba
                     double lat = Double.parseDouble(point.get("lat"));
                     double lng = Double.parseDouble(point.get("lng"));
                     LatLng position = new LatLng(lat, lng);
-                    DatabaseReference ref = FirebaseDatabase.getInstance().getReference("geofire");
-                    GeoFire geoFire = new GeoFire(ref);
-
-                    geoFire.setLocation("User", new GeoLocation(lat,lng), new GeoFire.CompletionListener() {
-                        @Override
-                        public void onComplete(String key, DatabaseError error) {
-                            if (error != null) {
-                                System.err.println("There was an error saving the location to GeoFire: " + error);
-                            } else {
-                                System.out.println("Location saved on server successfully!");
-                            }
-                        }
-                    });
-
-                    geoFire.getLocation("Runner", new LocationCallback() {
-                        @Override
-                        public void onLocationResult(String key, GeoLocation location) {
-                            if (location != null) {
-                                System.out.println(String.format("The location for key %s is [%f,%f]", key, location.latitude, location.longitude));
-                            } else {
-                                System.out.println(String.format("There is no location for key %s in GeoFire", key));
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-                            System.err.println("There was an error getting the GeoFire location: " + databaseError);
-                        }
-                    });
 
                     points.add(position);
                 }
 
                 // Adding all the points in the route to LineOptions
                 lineOptions.addAll(points);
+                Log.d("Line Options", lineOptions.toString());
                 lineOptions.width(2);
                 lineOptions.color(Color.BLUE);
             }
@@ -288,7 +305,7 @@ public class Runner_Mapper extends AppCompatActivity implements OnMapReadyCallba
             txtView.setText("Distance:" + distance + ", Duration:" + duration);
 
             // Drawing polyline in the Google Map for the i-th route
-            mMap.addPolyline(lineOptions);
+                mMap.addPolyline(lineOptions);
         }
     }
 
@@ -332,19 +349,18 @@ public class Runner_Mapper extends AppCompatActivity implements OnMapReadyCallba
     @Override
     public void onLocationChanged(Location location) {
         getLocation();
-        lat = location.getLatitude();
-        lng = location.getLongitude();
+        myLat = location.getLatitude();
+        myLng = location.getLongitude();
 
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("geofire");
         GeoFire geoFire = new GeoFire(ref);
 
-        geoFire.setLocation("User", new GeoLocation(lat,lng), new GeoFire.CompletionListener() {
+        geoFire.setLocation("User", new GeoLocation(myLat,myLng), new GeoFire.CompletionListener() {
             @Override
             public void onComplete(String key, DatabaseError error) {
                 if (error != null) {
                     System.err.println("There was an error saving the location to GeoFire: " + error);
                 } else {
-                    System.out.println("Location saved on server successfully!");
                 }
             }
         });
@@ -353,9 +369,15 @@ public class Runner_Mapper extends AppCompatActivity implements OnMapReadyCallba
             @Override
             public void onLocationResult(String key, GeoLocation location) {
                 if (location != null) {
-                    System.out.println(String.format("The location for key %s is [%f,%f]", key, location.latitude, location.longitude));
+                    runnerLat = location.latitude;
+                    runnerLng = location.longitude;
+                    mMap.addMarker(new MarkerOptions().position(runnerLocation).title("Runner"));
+                    mMap.moveCamera(CameraUpdateFactory.newLatLng(myLocation));
+                    url = getMapsApiDirectionsUrl(myLocation, runnerLocation);
+                    //readTask.cancel(true);
+                    //mMap.clear();
+                    //new ReadTask().execute(url);
                 } else {
-                    System.out.println(String.format("There is no location for key %s in GeoFire", key));
                 }
             }
 
