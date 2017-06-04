@@ -103,6 +103,10 @@ public class VendorHub extends AppCompatActivity
 
             final DatabaseReference reference1 = FirebaseDatabase.getInstance().getReference("requests");
 
+            btn_decline.setVisibility(View.VISIBLE);
+            btn_accept.setVisibility(View.VISIBLE);
+            btn_sending.setVisibility(View.INVISIBLE);
+            btn_complete.setVisibility(View.INVISIBLE);
             btn_accept.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -290,6 +294,10 @@ public class VendorHub extends AppCompatActivity
 
                         }
                     });
+
+                    btn_decline.setVisibility(View.VISIBLE);
+                    btn_accept.setVisibility(View.VISIBLE);
+                    btn_complete.setVisibility(View.INVISIBLE);
                 }
             });
 
@@ -383,7 +391,7 @@ public class VendorHub extends AppCompatActivity
                      if(hopperValues != null){
                          itemValues = (Map<String, Object>)hopperValues.get("items");
 
-                         Log.d("ItemValues", itemValues.get("Coke").toString());
+                         //Log.d("ItemValues", itemValues.get("Coke").toString());
 
                          if(itemValues.get("Coke") == null){
                              viewHolder.itemCoke.setVisibility(View.INVISIBLE);
