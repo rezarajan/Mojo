@@ -38,6 +38,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.json.JSONArray;
@@ -76,9 +77,7 @@ public class VendorHub extends AppCompatActivity
     public static class RecyclerViewHolder extends RecyclerView.ViewHolder {
 
         private Context context;
-        public TextView itemTitle;
-        public TextView itemDescription;
-        public TextView itemName;
+        public TextView itemTitle, itemDescription, itemName, itemCoke, itemSprite, itemCanadaDry, itemTotal;
         public ImageView itemIcon;
         public Button btn_accept, btn_decline, btn_sending, btn_complete;
 
@@ -92,6 +91,10 @@ public class VendorHub extends AppCompatActivity
             itemTitle = (TextView) itemView.findViewById(R.id.item_title);
             itemDescription = (TextView) itemView.findViewById(R.id.item_description);
             itemName = (TextView) itemView.findViewById(R.id.item_name);
+            itemCoke = (TextView) itemView.findViewById(R.id.item_coke);
+            itemSprite = (TextView) itemView.findViewById(R.id.item_sprite);
+            itemCanadaDry = (TextView) itemView.findViewById(R.id.item_canada_dry);
+            itemTotal = (TextView) itemView.findViewById(R.id.item_total_cost);
             btn_accept = (Button) itemView.findViewById(R.id.button_accept);
             btn_decline = (Button) itemView.findViewById(R.id.button_decline);
             btn_sending = (Button) itemView.findViewById(R.id.button_sending);
@@ -363,13 +366,70 @@ public class VendorHub extends AppCompatActivity
                 VendorHub.RecyclerViewHolder.class,
                 mFirebaseDatabaseReference.child(RESTAURANT)
         ) {
+            Map<String, Object> hopperValues;
+            Map<String, Object> itemValues;
+            int coke_cost, sprite_cost, canada_dry_cost, total_cost = 0;
+
             @Override
-            protected void populateViewHolder(VendorHub.RecyclerViewHolder viewHolder, Order_List model, int position) {
+            protected void populateViewHolder(final VendorHub.RecyclerViewHolder viewHolder, Order_List model, int position) {
+                final DatabaseReference reference1 = FirebaseDatabase.getInstance().getReference("uid/Starbucks/requests/" + model.getOrderid());
+                reference1.addValueEventListener(new ValueEventListener() {
+                 @Override
+                 public void onDataChange(DataSnapshot dataSnapshot) {
+                     Map<String, Object> hopperValues = (Map<String, Object>) dataSnapshot.getValue();
+                     //hopperValues.put("key", dataSnapshot.getKey().toString());
+                     //Log.d("Values", dataSnapshot.getKey().toString());
+                     //Log.d("Values", dataSnapshot.getValue().toString());
+                     if(hopperValues != null){
+                         itemValues = (Map<String, Object>)hopperValues.get("items");
+
+                         Log.d("ItemValues", itemValues.get("Coke").toString());
+
+                         if(itemValues.get("Coke") == null){
+                             viewHolder.itemCoke.setVisibility(View.INVISIBLE);
+                         } else {
+                             viewHolder.itemCoke.setText("Coke: " + itemValues.get("Coke").toString());
+                             coke_cost=0;
+                             coke_cost = 4* Integer.parseInt(itemValues.get("Coke").toString());
+                             Log.d("Coke Cost", String.valueOf(coke_cost));
+                         }
+
+                         if(itemValues.get("Sprite") == null){
+                             viewHolder.itemSprite.setVisibility(View.INVISIBLE);
+                         } else {
+                             viewHolder.itemSprite.setText("Sprite: " + itemValues.get("Sprite").toString());
+                             sprite_cost=0;
+                             sprite_cost = 5* Integer.parseInt(itemValues.get("Sprite").toString());
+                             Log.d("Sprite Cost", String.valueOf(sprite_cost));
+                         }
+
+                         if(itemValues.get("Canada Dry") == null){
+                             viewHolder.itemCanadaDry.setVisibility(View.INVISIBLE);
+                         } else {
+                             viewHolder.itemCanadaDry.setText("Canada Dry: " + itemValues.get("Canada Dry").toString());
+                             canada_dry_cost=0;
+                             canada_dry_cost = 6* Integer.parseInt(itemValues.get("Canada Dry").toString());
+                             Log.d("Canada Dry Cost", String.valueOf(coke_cost));
+                         }
+
+                         total_cost=0;
+                         total_cost = coke_cost + sprite_cost + canada_dry_cost;
+                         viewHolder.itemTotal.setText("Total Cost: " + String.valueOf(total_cost));
+                     }
+
+
+                 }
+                    @Override public void onCancelled(DatabaseError databaseError) {
+                    }
+                });
                 //int i = 0;
                 //Log.d("Description: ", model.getOrderid());
                 //viewHolder.itemDescription.setText(model.getItems());
                 viewHolder.itemTitle.setText(model.getOrderid());
                 viewHolder.itemName.setText((model.getName()));
+                //viewHolder.itemCoke.setText("Coke: " + itemValues.get("Coke").toString());
+                //viewHolder.itemSprite.setText("Sprite: " + itemValues.get("Sprite").toString());
+                //viewHolder.itemCanadaDry.setText("Canada Dry: " + itemValues.get("Canada Dry").toString());
                 //viewHolder.itemIcon.setImageResource(R.drawable.restaurant_icon);
                 //viewHolder.idList.add(i, model.getOrderid());      //adds the OrderId's to an arraylsit so it can be accessed later for the "accept" update
                 //Log.d("IdList: ", (String) viewHolder.idList.get(i));
