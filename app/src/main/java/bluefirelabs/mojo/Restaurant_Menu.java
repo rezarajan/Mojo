@@ -6,7 +6,6 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.widget.ImageView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -22,7 +21,7 @@ public class Restaurant_Menu extends AppCompatActivity {
     RecyclerView recyclerView;
     RecyclerView.LayoutManager layoutManager;
     RecyclerView.Adapter adapter;
-    public static final String RESTAURANT = "listing";
+    public static final String MENU = "menu/Starbucks";
     private DatabaseReference mFirebaseDatabaseReference;
     private FirebaseRecyclerAdapter<Restaurant_List, FirebaseRecyclerAdapterMenu.RecyclerViewHolder> mFirebaseAdapter;
 
@@ -73,16 +72,18 @@ public class Restaurant_Menu extends AppCompatActivity {
                 Restaurant_List.class,
                 R.layout.card_layout,
                 FirebaseRecyclerAdapterMenu.RecyclerViewHolder.class,
-                mFirebaseDatabaseReference.child(RESTAURANT)
+                mFirebaseDatabaseReference.child(MENU)
         ) {
 
             @Override
             protected void populateViewHolder(FirebaseRecyclerAdapterMenu.RecyclerViewHolder viewHolder, Restaurant_List model, int position) {
-                Log.d("Description: ", model.getDescription());
-                viewHolder.itemDescription.setText(model.getDescription());
-                viewHolder.itemTitle.setText(model.getRestaurant());
+                //Log.d("Description: ", model.getDescription());
+                //viewHolder.itemDescription.setText(model.getDescription());
+                //viewHolder.itemTitle.setText(model.getRestaurant());
+                viewHolder.itemDescription.setText("Drinks");
+                viewHolder.itemTitle.setText("Food");
                 //viewHolder.itemIcon.setImageResource(R.drawable.restaurant_icon);
-                Picasso.with(getApplicationContext()).load(model.getIcon()).into(viewHolder.itemIcon);
+               // Picasso.with(getApplicationContext()).load(model.getIcon()).into(viewHolder.itemIcon);
             }
         };
 

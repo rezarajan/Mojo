@@ -71,7 +71,7 @@ public class Drinks_Menu extends AppCompatActivity{
                 /* StringBuffer buffer = new StringBuffer();
                 while (res.moveToNext()){
                     buffer.append("ID: " + res.getString(0) + "\n");
-                    buffer.append("RESTAURANT: " + res.getString(1) + "\n");
+                    buffer.append("MENU: " + res.getString(1) + "\n");
                     buffer.append("ITEM: " + res.getString(2) + "\n");
                     buffer.append("COST: " + res.getString(3) + "\n\n");
                 }

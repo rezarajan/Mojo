@@ -51,22 +51,25 @@ public class FirebaseRecyclerAdapterMenu {
                             Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
 
+                    Intent intent = new Intent(context, Drinks_Menu.class);
+                    context.startActivity(intent);
 
-                    final DatabaseReference reference1 = FirebaseDatabase.getInstance().getReference("listing");
-                    reference1.orderByChild("restaurant").equalTo(itemTitle.getText().toString()).addChildEventListener(new ChildEventListener() {
+
+                    final DatabaseReference reference1 = FirebaseDatabase.getInstance().getReference("menu");
+                    reference1.orderByValue().addChildEventListener(new ChildEventListener() {
                         @Override
                         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                             Map<String, Object> hopperValues = (Map<String, Object>) dataSnapshot.getValue();
                             //hopperValues.put("key", dataSnapshot.getKey().toString());
                             //Log.d("Values", dataSnapshot.getKey().toString());
-                            //Log.d("Values", dataSnapshot.getValue().toString());
+                            Log.d("Values", dataSnapshot.getValue().toString());
 
 
-                            Intent intent = new Intent(context, Drinks_Menu.class);
-                            intent.putExtra("Restaurant", itemTitle.getText().toString());
-                            intent.putExtra("Icon", hopperValues.get("icon").toString());
-                            Log.d("icon", hopperValues.get("icon").toString());
-                            context.startActivity(intent);
+                            //Intent intent = new Intent(context, Drinks_Menu.class);
+                            //intent.putExtra("Restaurant", itemTitle.getText().toString());
+                            //intent.putExtra("Icon", hopperValues.get("icon").toString());
+                            //Log.d("icon", hopperValues.get("icon").toString());
+                            //context.startActivity(intent);
                         }
 
                         @Override
