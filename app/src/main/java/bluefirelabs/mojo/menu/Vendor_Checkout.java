@@ -109,7 +109,7 @@ public class Vendor_Checkout extends AppCompatActivity{
                         String value = (String) itemValues.get(key);
                         //textview.setText(key + " = " + value);
                         Log.d("itemValues", "Key: " + key + ", Value: " + value);
-                        listData.add(key);
+                        listData.add(key + "    Amount: " + value);
                         //itemTitle.setText(key.toString());
 
                     }

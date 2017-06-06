@@ -57,34 +57,6 @@
             android:textColor="#000000"
             android:layout_below="@id/item_title" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:id="@+id/item_coke"
-            android:text="Coke: "
-            android:textColor="@color/black"
-            android:layout_below="@id/item_description"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:layout_toEndOf="@id/item_coke"
-            android:id="@+id/item_sprite"
-            android:text="Sprite: "
-            android:textColor="@color/black"
-            android:layout_below="@id/item_description"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:layout_toEndOf="@id/item_sprite"
-            android:id="@+id/item_canada_dry"
-            android:text="Canada Dry: "
-            android:textColor="@color/black"
-            android:layout_below="@id/item_description"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -93,7 +65,7 @@
             android:id="@+id/item_total_cost"
             android:text="Total: "
             android:textColor="@color/black"
-            android:layout_below="@id/item_coke"/>
+            android:layout_below="@id/item_description"/>
 
         <Button
             android:id="@+id/button_accept"
