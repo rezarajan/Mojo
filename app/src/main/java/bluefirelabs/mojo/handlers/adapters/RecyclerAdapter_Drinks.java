@@ -1,4 +1,4 @@
-package bluefirelabs.mojo.handlers;
+package bluefirelabs.mojo.handlers.adapters;
 
 /**
  * Created by Reza Rajan on 2017-05-17.

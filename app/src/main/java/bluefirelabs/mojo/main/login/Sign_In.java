@@ -1,4 +1,4 @@
-package bluefirelabs.mojo;
+package bluefirelabs.mojo.main.login;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,6 +8,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
+
+import bluefirelabs.mojo.R;
 
 /**
  * Created by rezarajan on 22/05/2017.

@@ -23,9 +23,9 @@ import com.google.android.gms.location.LocationServices;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import bluefirelabs.mojo.MainHub;
+import bluefirelabs.mojo.main.ui.user.MainHub;
 import bluefirelabs.mojo.R;
-import bluefirelabs.mojo.VendorHub;
+import bluefirelabs.mojo.main.ui.user.VendorHub;
 
 public class permission_location extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 

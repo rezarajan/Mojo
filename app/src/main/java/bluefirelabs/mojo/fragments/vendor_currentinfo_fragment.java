@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import bluefirelabs.mojo.R;
-import bluefirelabs.mojo.Vendor_Runner_Mapper;
+import bluefirelabs.mojo.main.ui.maps.Vendor_Runner_Mapper;
 
 /**
  * Created by rezarajan on 19/05/2017.

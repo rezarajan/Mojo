@@ -1,4 +1,4 @@
-package bluefirelabs.mojo.handlers;
+package bluefirelabs.mojo.handlers.online;
 
 import android.Manifest;
 import android.content.Intent;

@@ -14,17 +14,17 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
 import bluefirelabs.mojo.R;
-import bluefirelabs.mojo.handlers.adapters.FirebaseRecyclerAdapterMenu;
+import bluefirelabs.mojo.handlers.adapters.FirebaseRecyclerAdapterItems;
 import bluefirelabs.mojo.handlers.adapters.Food_List;
 
-public class Restaurant_Menu extends AppCompatActivity {
+public class Items_Menu extends AppCompatActivity {
 
     RecyclerView recyclerView;
     RecyclerView.LayoutManager layoutManager;
     RecyclerView.Adapter adapter;
-    public static final String MENU = "menu/Starbucks";
+    public static final String MENU = "menu/";
     private DatabaseReference mFirebaseDatabaseReference;
-    private FirebaseRecyclerAdapter<Food_List, FirebaseRecyclerAdapterMenu.RecyclerViewHolder> mFirebaseAdapter;
+    private FirebaseRecyclerAdapter<Food_List, FirebaseRecyclerAdapterItems.RecyclerViewHolder> mFirebaseAdapter;
 
     private RecyclerView mRestaurantRecyclerView;
     private LinearLayoutManager mLinearLayoutManager;
@@ -34,7 +34,7 @@ public class Restaurant_Menu extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.restaurant_menu);
+        setContentView(R.layout.food_menu);
         //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         //toolbar.setTitle("Menu");
 
@@ -42,8 +42,8 @@ public class Restaurant_Menu extends AppCompatActivity {
         restaurant = receivedIntent.getStringExtra("Restaurant");
         iconRef = receivedIntent.getStringExtra("Icon");
 
-        ImageView restaurantIcon = (ImageView) findViewById(R.id.restaurant_icon);
-        Picasso.with(Restaurant_Menu.this).load(iconRef).into(restaurantIcon);
+        ImageView restaurantIcon = (ImageView) findViewById(R.id.foodIcon);
+        Picasso.with(Items_Menu.this).load(iconRef).into(restaurantIcon);
 
         CollapsingToolbarLayout collapsingToolbar = (CollapsingToolbarLayout)findViewById(R.id.collapsingToolbar);
         collapsingToolbar.setTitle(restaurant);
@@ -68,21 +68,21 @@ public class Restaurant_Menu extends AppCompatActivity {
         mLinearLayoutManager = new LinearLayoutManager(this);
         mLinearLayoutManager.setStackFromEnd(true);
 
-        mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
-        mFirebaseAdapter = new FirebaseRecyclerAdapter<Food_List, FirebaseRecyclerAdapterMenu.RecyclerViewHolder>(
+        mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference("menu/Starbucks/Desserts/Items");
+        mFirebaseAdapter = new FirebaseRecyclerAdapter<Food_List, FirebaseRecyclerAdapterItems.RecyclerViewHolder>(
                 Food_List.class,
                 R.layout.card_layout,
-                FirebaseRecyclerAdapterMenu.RecyclerViewHolder.class,
-                mFirebaseDatabaseReference.child(MENU)
+                FirebaseRecyclerAdapterItems.RecyclerViewHolder.class,
+                mFirebaseDatabaseReference
         ) {
 
             @Override
-            protected void populateViewHolder(FirebaseRecyclerAdapterMenu.RecyclerViewHolder viewHolder, Food_List model, int position) {
+            protected void populateViewHolder(FirebaseRecyclerAdapterItems.RecyclerViewHolder viewHolder, Food_List model, int position) {
                 //Log.d("Description: ", model.getDescription());
                 //viewHolder.itemDescription.setText(model.getDescription());
                 //viewHolder.itemTitle.setText(model.getRestaurant());
-                viewHolder.itemDescription.setText(model.getType());
-                viewHolder.itemTitle.setText(model.getType());
+                viewHolder.itemDescription.setText("$" + String.valueOf(model.getCost()));
+                viewHolder.itemTitle.setText(model.getName());
                 //viewHolder.itemIcon.setImageResource(R.drawable.restaurant_icon);
                // Picasso.with(getApplicationContext()).load(model.getIcon()).into(viewHolder.itemIcon);
             }

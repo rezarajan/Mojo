@@ -1,30 +1,19 @@
-package bluefirelabs.mojo.handlers;
+package bluefirelabs.mojo.handlers.adapters;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-
-import java.util.Map;
-
-import bluefirelabs.mojo.menu.Drinks_Menu;
 import bluefirelabs.mojo.R;
 
 /**
  * Created by Reza Rajan on 2017-06-06.
  */
 
-public class FirebaseRecyclerAdapterMenu {
+public class FirebaseRecyclerAdapterItems {
 
     public static class RecyclerViewHolder extends RecyclerView.ViewHolder {
 
@@ -51,10 +40,10 @@ public class FirebaseRecyclerAdapterMenu {
                             Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
 
-                    Intent intent = new Intent(context, Drinks_Menu.class);
-                    context.startActivity(intent);
+                    //Intent intent = new Intent(context, Item_Menu.class);
+                    //context.startActivity(intent);
 
-
+                    /*
                     final DatabaseReference reference1 = FirebaseDatabase.getInstance().getReference("menu");
                     reference1.orderByValue().addChildEventListener(new ChildEventListener() {
                         @Override
@@ -91,7 +80,7 @@ public class FirebaseRecyclerAdapterMenu {
                         public void onCancelled(DatabaseError databaseError) {
 
                         }
-                    });
+                    }); */
                 }
             });
         }

@@ -1,4 +1,4 @@
-package bluefirelabs.mojo.handlers;
+package bluefirelabs.mojo.handlers.online;
 
 import android.app.Notification;
 import android.app.NotificationManager;

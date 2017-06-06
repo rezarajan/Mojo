@@ -7,7 +7,7 @@
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
     android:paddingTop="16dp"
-    tools:context="bluefirelabs.mojo.Splash">
+    tools:context="bluefirelabs.mojo.main.login.Splash">
 
     <TextView
         android:layout_width="wrap_content"

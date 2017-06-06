@@ -1,4 +1,4 @@
-package bluefirelabs.mojo.handlers;
+package bluefirelabs.mojo.handlers.online;
 
 import java.io.BufferedReader;
 import java.io.IOException;

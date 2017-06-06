@@ -1,4 +1,4 @@
-package bluefirelabs.mojo;
+package bluefirelabs.mojo.main.ui.user;
 
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
@@ -50,12 +50,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import bluefirelabs.mojo.R;
 import bluefirelabs.mojo.background_tasks.MyFirebaseInstanceIDService;
-import bluefirelabs.mojo.background_tasks.Order_List;
 import bluefirelabs.mojo.fragments.restaurantlist_fragment;
-import bluefirelabs.mojo.handlers.HttpDataHandler;
-import bluefirelabs.mojo.handlers.SharedPrefManager;
-import bluefirelabs.mojo.handlers.uploadImage;
+import bluefirelabs.mojo.handlers.adapters.Food_List;
+import bluefirelabs.mojo.handlers.online.HttpDataHandler;
+import bluefirelabs.mojo.handlers.online.SharedPrefManager;
+import bluefirelabs.mojo.handlers.online.uploadImage;
+import bluefirelabs.mojo.main.login.Sign_In;
 
 public class VendorHub extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener
@@ -319,7 +321,7 @@ public class VendorHub extends AppCompatActivity
 
     public static final String RESTAURANT = "uid/Starbucks/requests/";
     private DatabaseReference mFirebaseDatabaseReference;
-    private FirebaseRecyclerAdapter<Order_List, RecyclerViewHolder> mFirebaseAdapter;
+    private FirebaseRecyclerAdapter<Food_List, RecyclerViewHolder> mFirebaseAdapter;
 
     private RecyclerView mRestaurantRecyclerView;
     private LinearLayoutManager mLinearLayoutManager;
@@ -369,8 +371,8 @@ public class VendorHub extends AppCompatActivity
 
 
         mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
-        mFirebaseAdapter = new FirebaseRecyclerAdapter<Order_List, VendorHub.RecyclerViewHolder>(
-                Order_List.class,
+        mFirebaseAdapter = new FirebaseRecyclerAdapter<Food_List, VendorHub.RecyclerViewHolder>(
+                Food_List.class,
                 R.layout.vendor_card_layout,
                 VendorHub.RecyclerViewHolder.class,
                 mFirebaseDatabaseReference.child(RESTAURANT)
@@ -380,7 +382,7 @@ public class VendorHub extends AppCompatActivity
             int coke_cost, sprite_cost, canada_dry_cost, total_cost = 0;
 
             @Override
-            protected void populateViewHolder(final VendorHub.RecyclerViewHolder viewHolder, Order_List model, int position) {
+            protected void populateViewHolder(final VendorHub.RecyclerViewHolder viewHolder, Food_List model, int position) {
                 final DatabaseReference reference1 = FirebaseDatabase.getInstance().getReference("uid/Starbucks/requests/" + model.getOrderid());
                 reference1.addValueEventListener(new ValueEventListener() {
                  @Override

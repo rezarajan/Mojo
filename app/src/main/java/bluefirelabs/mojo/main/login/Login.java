@@ -1,4 +1,4 @@
-package bluefirelabs.mojo;
+package bluefirelabs.mojo.main.login;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -35,6 +35,8 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import bluefirelabs.mojo.R;
 
 import static android.Manifest.permission.READ_CONTACTS;
 

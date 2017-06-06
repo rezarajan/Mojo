@@ -1,4 +1,4 @@
-package bluefirelabs.mojo;
+package bluefirelabs.mojo.main.ui.maps;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -36,6 +36,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import bluefirelabs.mojo.R;
 import bluefirelabs.mojo.background_tasks.MapHttpConnection;
 import bluefirelabs.mojo.background_tasks.PathJSONParser_duration;
 

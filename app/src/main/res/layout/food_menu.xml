@@ -25,6 +25,7 @@
                     android:fitsSystemWindows="true"
                     android:scaleType="centerCrop"
                     android:src="@drawable/drinks"
+                    android:id="@+id/foodIcon"
                     app:layout_collapseMode="parallax" />
 
 

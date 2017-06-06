@@ -12,7 +12,7 @@ import android.view.View;
 import android.widget.Button;
 
 import bluefirelabs.mojo.R;
-import bluefirelabs.mojo.handlers.RecyclerAdapter_Drinks;
+import bluefirelabs.mojo.handlers.adapters.RecyclerAdapter_Drinks;
 import database.DatabaseHelper;
 
 /**

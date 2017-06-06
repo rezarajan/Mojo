@@ -1,4 +1,4 @@
-package bluefirelabs.mojo;
+package bluefirelabs.mojo.main.login;
 
 import android.content.Intent;
 import android.os.Bundle;

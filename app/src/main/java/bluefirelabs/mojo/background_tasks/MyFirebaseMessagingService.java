@@ -8,8 +8,8 @@ import com.google.firebase.messaging.RemoteMessage;
 
 import java.util.Map;
 
-import bluefirelabs.mojo.MainHub;
-import bluefirelabs.mojo.handlers.MyNotificationManager;
+import bluefirelabs.mojo.main.ui.user.MainHub;
+import bluefirelabs.mojo.handlers.online.MyNotificationManager;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 

@@ -1,4 +1,4 @@
-package bluefirelabs.mojo;
+package bluefirelabs.mojo.main.ui.user;
 
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
@@ -39,13 +39,15 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import bluefirelabs.mojo.R;
 import bluefirelabs.mojo.background_tasks.MyFirebaseInstanceIDService;
 import bluefirelabs.mojo.fragments.restaurantlist_fragment;
-import bluefirelabs.mojo.handlers.FirebaseRecyclerAdapterRestaurants;
-import bluefirelabs.mojo.handlers.HttpDataHandler;
-import bluefirelabs.mojo.handlers.Food_List;
-import bluefirelabs.mojo.handlers.SharedPrefManager;
-import bluefirelabs.mojo.handlers.uploadImage;
+import bluefirelabs.mojo.handlers.adapters.FirebaseRecyclerAdapterRestaurants;
+import bluefirelabs.mojo.handlers.online.HttpDataHandler;
+import bluefirelabs.mojo.handlers.adapters.Food_List;
+import bluefirelabs.mojo.handlers.online.SharedPrefManager;
+import bluefirelabs.mojo.handlers.online.uploadImage;
+import bluefirelabs.mojo.main.login.Sign_In;
 
 public class MainHub extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener
@@ -340,12 +342,19 @@ public class MainHub extends AppCompatActivity
         ) {
 
             @Override
-            protected void populateViewHolder(FirebaseRecyclerAdapterRestaurants.RecyclerViewHolder viewHolder, Food_List model, int position) {
-                Log.d("Description: ", model.getDescription());
+            protected void populateViewHolder(final FirebaseRecyclerAdapterRestaurants.RecyclerViewHolder viewHolder, Food_List model, int position) {
+                //Log.d("Description: ", model.getDescription());
                 viewHolder.itemDescription.setText(model.getDescription());
                 viewHolder.itemTitle.setText(model.getRestaurant());
                 //viewHolder.itemIcon.setImageResource(R.drawable.restaurant_icon);
                 Picasso.with(getApplicationContext()).load(model.getIcon()).into(viewHolder.itemIcon);
+
+                /*viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        viewHolder.getter_restaurants();
+                    }
+                }); */
             }
         };
 

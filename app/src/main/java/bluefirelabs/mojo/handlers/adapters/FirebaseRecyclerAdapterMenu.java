@@ -1,4 +1,4 @@
-package bluefirelabs.mojo.handlers;
+package bluefirelabs.mojo.handlers.adapters;
 
 import android.content.Context;
 import android.content.Intent;
@@ -18,13 +18,13 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.Map;
 
 import bluefirelabs.mojo.R;
-import bluefirelabs.mojo.menu.Restaurant_Menu;
+import bluefirelabs.mojo.menu.Items_Menu;
 
 /**
  * Created by Reza Rajan on 2017-06-06.
  */
 
-public class FirebaseRecyclerAdapterRestaurants {
+public class FirebaseRecyclerAdapterMenu {
 
     public static class RecyclerViewHolder extends RecyclerView.ViewHolder {
 
@@ -51,22 +51,25 @@ public class FirebaseRecyclerAdapterRestaurants {
                             Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
 
+                    Intent intent = new Intent(context, Items_Menu.class);
+                    context.startActivity(intent);
 
-                    final DatabaseReference reference1 = FirebaseDatabase.getInstance().getReference("listing");
-                    reference1.orderByChild("restaurant").equalTo(itemTitle.getText().toString()).addChildEventListener(new ChildEventListener() {
+
+                    final DatabaseReference reference1 = FirebaseDatabase.getInstance().getReference("menu");
+                    reference1.orderByValue().addChildEventListener(new ChildEventListener() {
                         @Override
                         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                             Map<String, Object> hopperValues = (Map<String, Object>) dataSnapshot.getValue();
                             //hopperValues.put("key", dataSnapshot.getKey().toString());
                             //Log.d("Values", dataSnapshot.getKey().toString());
-                            //Log.d("Values", dataSnapshot.getValue().toString());
+                            Log.d("Values", dataSnapshot.getValue().toString());
 
 
-                            Intent intent = new Intent(context, Restaurant_Menu.class);
-                            intent.putExtra("Restaurant", itemTitle.getText().toString());
-                            intent.putExtra("Icon", hopperValues.get("icon").toString());
-                            Log.d("icon", hopperValues.get("icon").toString());
-                            context.startActivity(intent);
+                            //Intent intent = new Intent(context, Drinks_Menu.class);
+                            //intent.putExtra("Restaurant", itemTitle.getText().toString());
+                            //intent.putExtra("Icon", hopperValues.get("icon").toString());
+                            //Log.d("icon", hopperValues.get("icon").toString());
+                            //context.startActivity(intent);
                         }
 
                         @Override
