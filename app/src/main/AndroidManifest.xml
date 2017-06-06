@@ -72,6 +72,9 @@
         <activity android:name=".menu.Checkout"
             android:configChanges="orientation"
             android:screenOrientation="portrait"/>
+        <activity android:name=".menu.Vendor_Checkout"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
         <activity android:name=".menu.editcheckout"
             android:configChanges="orientation"
             android:screenOrientation="portrait"/>

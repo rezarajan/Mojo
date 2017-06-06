@@ -41,6 +41,7 @@ public class Restaurant_Menu extends AppCompatActivity {
         Intent receivedIntent = getIntent();
         restaurant = receivedIntent.getStringExtra("Restaurant");
         iconRef = receivedIntent.getStringExtra("Icon");
+        iconRef = receivedIntent.getStringExtra("Icon");
 
         ImageView restaurantIcon = (ImageView) findViewById(R.id.restaurant_icon);
         Picasso.with(Restaurant_Menu.this).load(iconRef).into(restaurantIcon);

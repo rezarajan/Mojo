@@ -58,6 +58,9 @@ import bluefirelabs.mojo.handlers.online.HttpDataHandler;
 import bluefirelabs.mojo.handlers.online.SharedPrefManager;
 import bluefirelabs.mojo.handlers.online.uploadImage;
 import bluefirelabs.mojo.main.login.Sign_In;
+import bluefirelabs.mojo.menu.Checkout;
+import bluefirelabs.mojo.menu.Vendor_Checkout;
+import bluefirelabs.mojo.menu.editcheckout;
 
 public class VendorHub extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener
@@ -303,19 +306,6 @@ public class VendorHub extends AppCompatActivity
                     btn_complete.setVisibility(View.INVISIBLE);
                 }
             });
-
-
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    final int position = getAdapterPosition();
-
-                    Snackbar.make(v, "Click detected on item " + position,
-                            Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
-
-                }
-            });
         }
     }
 
@@ -383,6 +373,23 @@ public class VendorHub extends AppCompatActivity
 
             @Override
             protected void populateViewHolder(final VendorHub.RecyclerViewHolder viewHolder, Food_List model, int position) {
+                viewHolder.itemTitle.setText(model.getOrderid());
+                viewHolder.itemName.setText((model.getName()));
+
+                viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent editCheckoutintent = new Intent(VendorHub.this, Vendor_Checkout.class);
+                        editCheckoutintent.putExtra("ID", viewHolder.itemTitle.getText().toString());
+                        if(viewHolder.itemTitle.getText().toString() == null){
+                            Log.d("Order ID", "Hello");
+                        } else {
+                            Log.d("Order ID", viewHolder.itemTitle.getText().toString());
+                        }
+
+                        startActivity(editCheckoutintent);
+                    }
+                });
                 final DatabaseReference reference1 = FirebaseDatabase.getInstance().getReference("uid/Starbucks/requests/" + model.getOrderid());
                 reference1.addValueEventListener(new ValueEventListener() {
                  @Override
@@ -436,8 +443,6 @@ public class VendorHub extends AppCompatActivity
                 //int i = 0;
                 //Log.d("Description: ", model.getOrderid());
                 //viewHolder.itemDescription.setText(model.getItems());
-                viewHolder.itemTitle.setText(model.getOrderid());
-                viewHolder.itemName.setText((model.getName()));
                 //viewHolder.itemCoke.setText("Coke: " + itemValues.get("Coke").toString());
                 //viewHolder.itemSprite.setText("Sprite: " + itemValues.get("Sprite").toString());
                 //viewHolder.itemCanadaDry.setText("Canada Dry: " + itemValues.get("Canada Dry").toString());

@@ -22,9 +22,6 @@ import database.DatabaseHelper;
 
 public class Items_Menu extends AppCompatActivity {
 
-    RecyclerView recyclerView;
-    RecyclerView.LayoutManager layoutManager;
-    RecyclerView.Adapter adapter;
     public static final String MENU = "menu/";
     private DatabaseReference mFirebaseDatabaseReference;
     private FirebaseRecyclerAdapter<Food_List, FirebaseRecyclerAdapterItems.RecyclerViewHolder> mFirebaseAdapter;
