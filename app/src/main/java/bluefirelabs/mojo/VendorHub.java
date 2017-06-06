@@ -55,6 +55,7 @@ import bluefirelabs.mojo.background_tasks.Order_List;
 import bluefirelabs.mojo.fragments.restaurantlist_fragment;
 import bluefirelabs.mojo.handlers.HttpDataHandler;
 import bluefirelabs.mojo.handlers.SharedPrefManager;
+import bluefirelabs.mojo.handlers.uploadImage;
 
 public class VendorHub extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener

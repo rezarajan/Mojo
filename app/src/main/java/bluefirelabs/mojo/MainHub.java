@@ -26,15 +26,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
@@ -43,12 +39,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Map;
-
 import bluefirelabs.mojo.background_tasks.MyFirebaseInstanceIDService;
 import bluefirelabs.mojo.fragments.restaurantlist_fragment;
+import bluefirelabs.mojo.handlers.FirebaseRecyclerAdapterRestaurants;
 import bluefirelabs.mojo.handlers.HttpDataHandler;
+import bluefirelabs.mojo.handlers.Restaurant_List;
 import bluefirelabs.mojo.handlers.SharedPrefManager;
+import bluefirelabs.mojo.handlers.uploadImage;
 
 public class MainHub extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener
@@ -66,77 +63,9 @@ public class MainHub extends AppCompatActivity
     FirebaseAuth firebaseAuth;
     private BroadcastReceiver broadcastReceiver;
 
-    public static class RecyclerViewHolder extends RecyclerView.ViewHolder {
-
-        private Context context;
-        public TextView itemTitle;
-        public TextView itemDescription;
-        public ImageView itemIcon;
-
-        public RecyclerViewHolder(View itemView) {
-            super(itemView);
-
-            itemIcon = (ImageView) itemView.findViewById(R.id.item_icon);
-            itemTitle = (TextView) itemView.findViewById(R.id.item_title);
-            itemDescription = (TextView) itemView.findViewById(R.id.item_description);
-            context = itemView.getContext();
-
-
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int position = getAdapterPosition();
-
-                    Snackbar.make(v, "Click detected on item " + position,
-                            Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
-
-
-                    final DatabaseReference reference1 = FirebaseDatabase.getInstance().getReference("listing");
-                    reference1.orderByChild("restaurant").equalTo(itemTitle.getText().toString()).addChildEventListener(new ChildEventListener() {
-                        @Override
-                        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                            Map<String, Object> hopperValues = (Map<String, Object>) dataSnapshot.getValue();
-                            //hopperValues.put("key", dataSnapshot.getKey().toString());
-                            //Log.d("Values", dataSnapshot.getKey().toString());
-                            //Log.d("Values", dataSnapshot.getValue().toString());
-
-
-                            Intent intent = new Intent(context, Restaurant_Menu.class);
-                            intent.putExtra("Restaurant", itemTitle.getText().toString());
-                            intent.putExtra("Icon", hopperValues.get("icon").toString());
-                            Log.d("icon", hopperValues.get("icon").toString());
-                            context.startActivity(intent);
-                        }
-
-                        @Override
-                        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-                        }
-
-                        @Override
-                        public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-                        }
-
-                        @Override
-                        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
-                        }
-                    });
-                 }
-            });
-        }
-    }
-
     public static final String RESTAURANT = "listing";
     private DatabaseReference mFirebaseDatabaseReference;
-    private FirebaseRecyclerAdapter<Restaurant_List, RecyclerViewHolder> mFirebaseAdapter;
+    private FirebaseRecyclerAdapter<Restaurant_List, FirebaseRecyclerAdapterRestaurants.RecyclerViewHolder> mFirebaseAdapter;
 
     private RecyclerView mRestaurantRecyclerView;
     private LinearLayoutManager mLinearLayoutManager;
@@ -193,42 +122,7 @@ public class MainHub extends AppCompatActivity
         userEmail.setText(user.getEmail());
 
 
-        mRestaurantRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        mLinearLayoutManager = new LinearLayoutManager(this);
-        mLinearLayoutManager.setStackFromEnd(true);
-
-        mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
-        mFirebaseAdapter = new FirebaseRecyclerAdapter<Restaurant_List, MainHub.RecyclerViewHolder>(
-                Restaurant_List.class,
-                R.layout.card_layout,
-                MainHub.RecyclerViewHolder.class,
-                mFirebaseDatabaseReference.child(RESTAURANT)
-        ) {
-            @Override
-            protected void populateViewHolder(MainHub.RecyclerViewHolder viewHolder, Restaurant_List model, int position) {
-                Log.d("Description: ", model.getDescription());
-                viewHolder.itemDescription.setText(model.getDescription());
-                viewHolder.itemTitle.setText(model.getRestaurant());
-                //viewHolder.itemIcon.setImageResource(R.drawable.restaurant_icon);
-                Picasso.with(MainHub.this).load(model.getIcon()).into(viewHolder.itemIcon);
-            }
-        };
-
-        mFirebaseAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver(){
-            @Override
-            public void onItemRangeInserted(int positionStart, int itemCount) {
-                super.onItemRangeInserted(positionStart, itemCount);
-                int restaurantCount = mFirebaseAdapter.getItemCount();
-                int lastVisiblePosition = mLinearLayoutManager.findLastVisibleItemPosition();
-                if(lastVisiblePosition == -1 || (positionStart >= (restaurantCount -1) && lastVisiblePosition == (positionStart -1))){
-                    mRestaurantRecyclerView.scrollToPosition(positionStart);
-                }
-            }
-        });
-
-        mRestaurantRecyclerView.setLayoutManager(mLinearLayoutManager);
-        mRestaurantRecyclerView.setAdapter(mFirebaseAdapter);
-        mRestaurantRecyclerView.setNestedScrollingEnabled(false);
+       populateView();
 
 
         small_description = (TextView) findViewById(R.id.small_description_location);
@@ -430,5 +324,45 @@ public class MainHub extends AppCompatActivity
             if(dialog.isShowing())
                 dialog.dismiss();
         }
+    }
+
+    public void populateView(){
+        mRestaurantRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        mLinearLayoutManager = new LinearLayoutManager(this);
+        mLinearLayoutManager.setStackFromEnd(true);
+
+        mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
+        mFirebaseAdapter = new FirebaseRecyclerAdapter<bluefirelabs.mojo.handlers.Restaurant_List, FirebaseRecyclerAdapterRestaurants.RecyclerViewHolder>(
+                Restaurant_List.class,
+                R.layout.card_layout,
+                FirebaseRecyclerAdapterRestaurants.RecyclerViewHolder.class,
+                mFirebaseDatabaseReference.child(RESTAURANT)
+        ) {
+
+            @Override
+            protected void populateViewHolder(FirebaseRecyclerAdapterRestaurants.RecyclerViewHolder viewHolder, Restaurant_List model, int position) {
+                Log.d("Description: ", model.getDescription());
+                viewHolder.itemDescription.setText(model.getDescription());
+                viewHolder.itemTitle.setText(model.getRestaurant());
+                //viewHolder.itemIcon.setImageResource(R.drawable.restaurant_icon);
+                Picasso.with(getApplicationContext()).load(model.getIcon()).into(viewHolder.itemIcon);
+            }
+        };
+
+        mFirebaseAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver(){
+            @Override
+            public void onItemRangeInserted(int positionStart, int itemCount) {
+                super.onItemRangeInserted(positionStart, itemCount);
+                int restaurantCount = mFirebaseAdapter.getItemCount();
+                int lastVisiblePosition = mLinearLayoutManager.findLastVisibleItemPosition();
+                if(lastVisiblePosition == -1 || (positionStart >= (restaurantCount -1) && lastVisiblePosition == (positionStart -1))){
+                    mRestaurantRecyclerView.scrollToPosition(positionStart);
+                }
+            }
+        });
+
+        mRestaurantRecyclerView.setLayoutManager(mLinearLayoutManager);
+        mRestaurantRecyclerView.setAdapter(mFirebaseAdapter);
+        mRestaurantRecyclerView.setNestedScrollingEnabled(false);
     }
 }

@@ -75,7 +75,7 @@
         <activity android:name=".editcheckout"
             android:configChanges="orientation"
             android:screenOrientation="portrait"/>
-        <activity android:name=".uploadImage"
+        <activity android:name=".handlers.uploadImage"
             android:configChanges="orientation"
             android:screenOrientation="portrait"/>
         <activity android:name=".VendorHub"

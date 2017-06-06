@@ -1,4 +1,4 @@
-package bluefirelabs.mojo;
+package bluefirelabs.mojo.handlers;
 
 import android.Manifest;
 import android.content.Intent;
@@ -17,6 +17,8 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+
+import bluefirelabs.mojo.R;
 
 /**
  * Created by Reza Rajan on 2017-05-28.

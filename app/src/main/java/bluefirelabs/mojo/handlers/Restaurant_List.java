@@ -1,4 +1,4 @@
-package bluefirelabs.mojo;
+package bluefirelabs.mojo.handlers;
 
 /**
  * Created by Reza Rajan on 2017-05-28.
