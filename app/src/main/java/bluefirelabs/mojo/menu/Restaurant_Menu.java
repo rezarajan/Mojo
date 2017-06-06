@@ -1,4 +1,4 @@
-package bluefirelabs.mojo;
+package bluefirelabs.mojo.menu;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,8 +13,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
+import bluefirelabs.mojo.R;
 import bluefirelabs.mojo.handlers.FirebaseRecyclerAdapterMenu;
-import bluefirelabs.mojo.handlers.Restaurant_List;
+import bluefirelabs.mojo.handlers.Food_List;
 
 public class Restaurant_Menu extends AppCompatActivity {
 
@@ -23,7 +24,7 @@ public class Restaurant_Menu extends AppCompatActivity {
     RecyclerView.Adapter adapter;
     public static final String MENU = "menu/Starbucks";
     private DatabaseReference mFirebaseDatabaseReference;
-    private FirebaseRecyclerAdapter<Restaurant_List, FirebaseRecyclerAdapterMenu.RecyclerViewHolder> mFirebaseAdapter;
+    private FirebaseRecyclerAdapter<Food_List, FirebaseRecyclerAdapterMenu.RecyclerViewHolder> mFirebaseAdapter;
 
     private RecyclerView mRestaurantRecyclerView;
     private LinearLayoutManager mLinearLayoutManager;
@@ -68,20 +69,20 @@ public class Restaurant_Menu extends AppCompatActivity {
         mLinearLayoutManager.setStackFromEnd(true);
 
         mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
-        mFirebaseAdapter = new FirebaseRecyclerAdapter<Restaurant_List, FirebaseRecyclerAdapterMenu.RecyclerViewHolder>(
-                Restaurant_List.class,
+        mFirebaseAdapter = new FirebaseRecyclerAdapter<Food_List, FirebaseRecyclerAdapterMenu.RecyclerViewHolder>(
+                Food_List.class,
                 R.layout.card_layout,
                 FirebaseRecyclerAdapterMenu.RecyclerViewHolder.class,
                 mFirebaseDatabaseReference.child(MENU)
         ) {
 
             @Override
-            protected void populateViewHolder(FirebaseRecyclerAdapterMenu.RecyclerViewHolder viewHolder, Restaurant_List model, int position) {
+            protected void populateViewHolder(FirebaseRecyclerAdapterMenu.RecyclerViewHolder viewHolder, Food_List model, int position) {
                 //Log.d("Description: ", model.getDescription());
                 //viewHolder.itemDescription.setText(model.getDescription());
                 //viewHolder.itemTitle.setText(model.getRestaurant());
-                viewHolder.itemDescription.setText("Drinks");
-                viewHolder.itemTitle.setText("Food");
+                viewHolder.itemDescription.setText(model.getType());
+                viewHolder.itemTitle.setText(model.getType());
                 //viewHolder.itemIcon.setImageResource(R.drawable.restaurant_icon);
                // Picasso.with(getApplicationContext()).load(model.getIcon()).into(viewHolder.itemIcon);
             }

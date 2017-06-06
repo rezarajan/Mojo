@@ -4,17 +4,19 @@ package bluefirelabs.mojo.handlers;
  * Created by Reza Rajan on 2017-05-28.
  */
 
-public class Restaurant_List {
+public class Food_List {
 
     private String restaurant;
     private String description;
     private String icon;
 
-    public Restaurant_List(){
+    private String type;
+
+    public Food_List(){
 
     }
 
-    public Restaurant_List(String restaurant, String description, String icon){
+    public Food_List(String restaurant, String description, String icon){
         this.restaurant = restaurant;
         this.description = description;
         this.icon = icon;
@@ -43,5 +45,14 @@ public class Restaurant_List {
     public void setIcon(String icon) {
         this.icon = icon;
     }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
 
 }

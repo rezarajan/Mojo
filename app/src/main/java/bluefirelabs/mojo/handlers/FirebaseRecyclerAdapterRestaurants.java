@@ -18,7 +18,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.Map;
 
 import bluefirelabs.mojo.R;
-import bluefirelabs.mojo.Restaurant_Menu;
+import bluefirelabs.mojo.menu.Restaurant_Menu;
 
 /**
  * Created by Reza Rajan on 2017-06-06.

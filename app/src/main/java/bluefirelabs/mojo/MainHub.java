@@ -43,7 +43,7 @@ import bluefirelabs.mojo.background_tasks.MyFirebaseInstanceIDService;
 import bluefirelabs.mojo.fragments.restaurantlist_fragment;
 import bluefirelabs.mojo.handlers.FirebaseRecyclerAdapterRestaurants;
 import bluefirelabs.mojo.handlers.HttpDataHandler;
-import bluefirelabs.mojo.handlers.Restaurant_List;
+import bluefirelabs.mojo.handlers.Food_List;
 import bluefirelabs.mojo.handlers.SharedPrefManager;
 import bluefirelabs.mojo.handlers.uploadImage;
 
@@ -65,7 +65,7 @@ public class MainHub extends AppCompatActivity
 
     public static final String RESTAURANT = "listing";
     private DatabaseReference mFirebaseDatabaseReference;
-    private FirebaseRecyclerAdapter<Restaurant_List, FirebaseRecyclerAdapterRestaurants.RecyclerViewHolder> mFirebaseAdapter;
+    private FirebaseRecyclerAdapter<Food_List, FirebaseRecyclerAdapterRestaurants.RecyclerViewHolder> mFirebaseAdapter;
 
     private RecyclerView mRestaurantRecyclerView;
     private LinearLayoutManager mLinearLayoutManager;
@@ -332,15 +332,15 @@ public class MainHub extends AppCompatActivity
         mLinearLayoutManager.setStackFromEnd(true);
 
         mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
-        mFirebaseAdapter = new FirebaseRecyclerAdapter<bluefirelabs.mojo.handlers.Restaurant_List, FirebaseRecyclerAdapterRestaurants.RecyclerViewHolder>(
-                Restaurant_List.class,
+        mFirebaseAdapter = new FirebaseRecyclerAdapter<Food_List, FirebaseRecyclerAdapterRestaurants.RecyclerViewHolder>(
+                Food_List.class,
                 R.layout.card_layout,
                 FirebaseRecyclerAdapterRestaurants.RecyclerViewHolder.class,
                 mFirebaseDatabaseReference.child(RESTAURANT)
         ) {
 
             @Override
-            protected void populateViewHolder(FirebaseRecyclerAdapterRestaurants.RecyclerViewHolder viewHolder, Restaurant_List model, int position) {
+            protected void populateViewHolder(FirebaseRecyclerAdapterRestaurants.RecyclerViewHolder viewHolder, Food_List model, int position) {
                 Log.d("Description: ", model.getDescription());
                 viewHolder.itemDescription.setText(model.getDescription());
                 viewHolder.itemTitle.setText(model.getRestaurant());

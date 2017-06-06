@@ -1,4 +1,4 @@
-package bluefirelabs.mojo;
+package bluefirelabs.mojo.menu;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import bluefirelabs.mojo.R;
 import database.DatabaseHelper;
 
 /**

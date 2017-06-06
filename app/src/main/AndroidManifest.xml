@@ -66,13 +66,13 @@
         <activity android:name=".Vendor_Runner_Mapper"
             android:configChanges="orientation"
             android:screenOrientation="portrait"/>
-        <activity android:name=".Drinks_Menu"
+        <activity android:name=".menu.Drinks_Menu"
             android:configChanges="orientation"
             android:screenOrientation="portrait"/>
-        <activity android:name=".Checkout"
+        <activity android:name=".menu.Checkout"
             android:configChanges="orientation"
             android:screenOrientation="portrait"/>
-        <activity android:name=".editcheckout"
+        <activity android:name=".menu.editcheckout"
             android:configChanges="orientation"
             android:screenOrientation="portrait"/>
         <activity android:name=".handlers.uploadImage"
@@ -82,7 +82,7 @@
             android:configChanges="orientation"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".Restaurant_Menu"
+            android:name=".menu.Restaurant_Menu"
             android:label="@string/title_activity_food_menu"
             android:theme="@style/Theme.AppCompat.NoActionBar"
             android:configChanges="orientation"

@@ -17,7 +17,7 @@ import android.widget.TextView;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import bluefirelabs.mojo.Drinks_Menu;
+import bluefirelabs.mojo.menu.Drinks_Menu;
 import bluefirelabs.mojo.R;
 
 public class RecyclerAdapter_Menu extends RecyclerView.Adapter<RecyclerAdapter_Menu.ViewHolder> {
