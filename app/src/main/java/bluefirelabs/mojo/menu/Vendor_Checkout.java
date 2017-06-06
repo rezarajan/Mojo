@@ -14,17 +14,13 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -51,7 +47,7 @@ public class Vendor_Checkout extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.checkout_layout);
+        setContentView(R.layout.vendor_checkout_layout);
 
         Intent receivedIntent = getIntent();
 
@@ -161,12 +157,19 @@ public class Vendor_Checkout extends AppCompatActivity{
     @Override
     protected void onResume() {
         super.onResume();
-        setContentView(R.layout.checkout_layout);
-        myDb = new DatabaseHelper(this);
+        setContentView(R.layout.vendor_checkout_layout);
+        //myDb = new DatabaseHelper(this);
         mListView = (ListView)findViewById(R.id.listview_checkout);
         placeorder = (Button)findViewById(R.id.button_place_order);
         noitems = (TextView)findViewById(R.id.content_available_indicator);
-        Cursor data = myDb.getAllData();
+
+        Intent receivedIntent = getIntent();
+
+        //now get the orderID passed as an extra
+        orderId = receivedIntent.getExtras().getString("ID");
+
+        //Cursor data = myDb.getAllData();
+        /*
         if(data.getCount() > 0){
             placeorder.setVisibility(View.VISIBLE);
             mListView.setVisibility(View.VISIBLE);
@@ -175,8 +178,10 @@ public class Vendor_Checkout extends AppCompatActivity{
             placeorder.setVisibility(View.INVISIBLE);
             mListView.setVisibility(View.INVISIBLE);
             noitems.setVisibility(View.VISIBLE);
-        }
+        } */
         populateListView();
+
+        /*
         placeorder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -209,6 +214,6 @@ public class Vendor_Checkout extends AppCompatActivity{
                 //reference.child(pushId).setValue(notification);
                 //reference.child(pushId).child("items").setValue(itemListing);
             }
-        });
+        }); */
     }
 }
