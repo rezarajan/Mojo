@@ -40,6 +40,7 @@ public class Checkout extends AppCompatActivity{
     private TextView noitems;
     private String pushId;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

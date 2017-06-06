@@ -66,9 +66,6 @@
         <activity android:name=".main.ui.maps.Vendor_Runner_Mapper"
             android:configChanges="orientation"
             android:screenOrientation="portrait"/>
-        <activity android:name=".menu.Drinks_Menu"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait"/>
         <activity android:name=".menu.Items_Menu"
             android:configChanges="orientation"
             android:screenOrientation="portrait"/>

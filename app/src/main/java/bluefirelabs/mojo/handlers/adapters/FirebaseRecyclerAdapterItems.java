@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import bluefirelabs.mojo.R;
+import database.DatabaseHelper;
 
 /**
  * Created by Reza Rajan on 2017-06-06.
@@ -22,6 +23,12 @@ public class FirebaseRecyclerAdapterItems {
         public TextView itemDescription;
         public ImageView itemIcon;
 
+        public Context getContext() {
+            return context;
+        }
+
+        DatabaseHelper myDb;
+
         public RecyclerViewHolder(View itemView) {
             super(itemView);
 
@@ -29,6 +36,7 @@ public class FirebaseRecyclerAdapterItems {
             itemTitle = (TextView) itemView.findViewById(R.id.item_title);
             itemDescription = (TextView) itemView.findViewById(R.id.item_description);
             context = itemView.getContext();
+            myDb = new DatabaseHelper(this.getContext()); //calls constructor from the database helper class
 
 
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -39,6 +47,22 @@ public class FirebaseRecyclerAdapterItems {
                     Snackbar.make(v, "Click detected on item " + position,
                             Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
+
+
+                    boolean isInserted = myDb.insertData("Starbucks",
+                            itemTitle.getText().toString(),
+                            itemDescription.getText().toString().replace("$",""),
+                            "0");                                //Adds the item at at the specific position to the database
+
+                    if (isInserted == true) {
+                        Snackbar.make(v, "Data Inserted",
+                                Snackbar.LENGTH_LONG)
+                                .setAction("Action", null).show();
+                    } else {
+                        Snackbar.make(v, "Data not Inserted",
+                                Snackbar.LENGTH_LONG)
+                                .setAction("Action", null).show();
+                    }
 
                     //Intent intent = new Intent(context, Item_Menu.class);
                     //context.startActivity(intent);

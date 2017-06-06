@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import bluefirelabs.mojo.handlers.adapters.FirebaseRecyclerAdapterItems;
+
 /**
  * Created by Reza Rajan on 2017-05-24.
  */
@@ -26,6 +28,8 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         super(context, DATABASE_NAME, null, 1);
 
     }
+
+
 
     @Override
     public void onCreate(SQLiteDatabase db) {

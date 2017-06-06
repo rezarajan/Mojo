@@ -3,9 +3,11 @@ package bluefirelabs.mojo.menu;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -16,6 +18,7 @@ import com.squareup.picasso.Picasso;
 import bluefirelabs.mojo.R;
 import bluefirelabs.mojo.handlers.adapters.FirebaseRecyclerAdapterItems;
 import bluefirelabs.mojo.handlers.adapters.Food_List;
+import database.DatabaseHelper;
 
 public class Items_Menu extends AppCompatActivity {
 
@@ -30,6 +33,8 @@ public class Items_Menu extends AppCompatActivity {
     private LinearLayoutManager mLinearLayoutManager;
 
     private String restaurant, iconRef;
+    FloatingActionButton checkout_btn;
+    DatabaseHelper myDb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +42,8 @@ public class Items_Menu extends AppCompatActivity {
         setContentView(R.layout.food_menu);
         //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         //toolbar.setTitle("Menu");
+
+        checkout_btn = (FloatingActionButton)findViewById(R.id.fabCheckout);
 
         Intent receivedIntent = getIntent();
         restaurant = receivedIntent.getStringExtra("Restaurant");
@@ -47,6 +54,16 @@ public class Items_Menu extends AppCompatActivity {
 
         CollapsingToolbarLayout collapsingToolbar = (CollapsingToolbarLayout)findViewById(R.id.collapsingToolbar);
         collapsingToolbar.setTitle(restaurant);
+        myDb = new DatabaseHelper(this); //calls constructor from the database helper class
+
+        checkout_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(v.getContext(), Checkout.class);
+                startActivity(intent);
+            }
+        });
 
         /*
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
