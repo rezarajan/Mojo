@@ -38,7 +38,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.json.JSONArray;
@@ -58,9 +57,7 @@ import bluefirelabs.mojo.handlers.online.HttpDataHandler;
 import bluefirelabs.mojo.handlers.online.SharedPrefManager;
 import bluefirelabs.mojo.handlers.online.uploadImage;
 import bluefirelabs.mojo.main.login.Sign_In;
-import bluefirelabs.mojo.menu.Checkout;
 import bluefirelabs.mojo.menu.Vendor_Checkout;
-import bluefirelabs.mojo.menu.editcheckout;
 
 public class VendorHub extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener
@@ -370,14 +367,14 @@ public class VendorHub extends AppCompatActivity
 
             @Override
             protected void populateViewHolder(final VendorHub.RecyclerViewHolder viewHolder, Food_List model, int position) {
-                viewHolder.itemTitle.setText(model.getOrderid());
-                viewHolder.itemName.setText((model.getName()));
+                viewHolder.itemTitle.setText("Order ID: " + model.getOrderid());
+                viewHolder.itemName.setText(model.getName());
 
                 viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Intent editCheckoutintent = new Intent(VendorHub.this, Vendor_Checkout.class);
-                        editCheckoutintent.putExtra("ID", viewHolder.itemTitle.getText().toString());
+                        editCheckoutintent.putExtra("ID", viewHolder.itemTitle.getText().toString().replace("Order ID: ", ""));
                         if(viewHolder.itemTitle.getText().toString() == null){
                             Log.d("Order ID", "Hello");
                         } else {

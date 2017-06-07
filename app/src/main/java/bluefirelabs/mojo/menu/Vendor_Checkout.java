@@ -1,13 +1,9 @@
 package bluefirelabs.mojo.menu;
 
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListAdapter;
@@ -26,7 +22,6 @@ import java.util.Map;
 import java.util.Set;
 
 import bluefirelabs.mojo.R;
-import bluefirelabs.mojo.handlers.adapters.Food_List;
 import database.DatabaseHelper;
 
 /**
@@ -68,15 +63,16 @@ public class Vendor_Checkout extends AppCompatActivity{
             noitems.setVisibility(View.VISIBLE);
         } */
 
-        //populateListView();
+        populateListView();
     }
 
     private void populateListView() {
         Log.d(TAG, "populateListView: Displaying data in the ListView");
 
         final ArrayList<String> listData = new ArrayList<>();
+        listData.clear();
 
-        Food_List model = new Food_List();
+
 
 
         final DatabaseReference reference = FirebaseDatabase.getInstance().getReference("uid/Starbucks/requests/" + orderId);
@@ -125,11 +121,12 @@ public class Vendor_Checkout extends AppCompatActivity{
         //create the list adapter and set the adapter
         ListAdapter adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, listData);
         mListView.setAdapter(adapter);
+        listData.clear();
 
 
         //set a listener for item clicks
         //this leads to the edit menu
-        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+       /* mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String name = parent.getItemAtPosition(position).toString();
@@ -151,8 +148,9 @@ public class Vendor_Checkout extends AppCompatActivity{
                             .setAction("Action", null).show();
                 }
             }
-        });
+        }); */
     }
+
 
     @Override
     protected void onResume() {
@@ -163,10 +161,10 @@ public class Vendor_Checkout extends AppCompatActivity{
         placeorder = (Button)findViewById(R.id.button_place_order);
         noitems = (TextView)findViewById(R.id.content_available_indicator);
 
-        Intent receivedIntent = getIntent();
+        //Intent receivedIntent = getIntent();
 
         //now get the orderID passed as an extra
-        orderId = receivedIntent.getExtras().getString("ID");
+        //orderId = receivedIntent.getExtras().getString("ID");
 
         //Cursor data = myDb.getAllData();
         /*
@@ -180,7 +178,6 @@ public class Vendor_Checkout extends AppCompatActivity{
             noitems.setVisibility(View.VISIBLE);
         } */
         populateListView();
-
         /*
         placeorder.setOnClickListener(new View.OnClickListener() {
             @Override

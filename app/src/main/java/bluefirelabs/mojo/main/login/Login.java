@@ -101,6 +101,7 @@ public class Login extends AppCompatActivity implements LoaderCallbacks<Cursor> 
         });
 
         firebaseAuth = FirebaseAuth.getInstance();
+        firebaseAuth.signOut();
 
             Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
             mEmailSignInButton.setOnClickListener(new OnClickListener() {
