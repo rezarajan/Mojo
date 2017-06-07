@@ -38,14 +38,17 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -59,12 +62,17 @@ import bluefirelabs.mojo.handlers.online.uploadImage;
 import bluefirelabs.mojo.main.login.Sign_In;
 import bluefirelabs.mojo.menu.Vendor_Checkout;
 
+// The callback interface
+interface MyCallback {
+    void callbackCall(String restaurant);
+}
+
 public class VendorHub extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener
         , bluefirelabs.mojo.fragments.vendor_currentinfo_fragment.currentinfoListener
         , restaurantlist_fragment.restaurantlistListener
-        , android.location.LocationListener {
-
+        , android.location.LocationListener
+        , MyCallback{
 
     LocationManager locationManager;
     String provider;
@@ -74,18 +82,45 @@ public class VendorHub extends AppCompatActivity
     TextView userEmail;
     FirebaseAuth firebaseAuth;
     private BroadcastReceiver broadcastReceiver;
+    private String UID = "";
+    public String restaurantName = "";
+
+    public void firebaseTask(final MyCallback myCallback) {
+        final DatabaseReference reference = FirebaseDatabase.getInstance().getReference("uid/"+UID+"/info");
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Map<String, Object> hopperValues = (Map<String, Object>) dataSnapshot.getValue();
+                //hopperValues.put("key", dataSnapshot.getKey().toString());
+                //Log.d("Values", dataSnapshot.getKey().toString());
+                Log.d("Values", dataSnapshot.getValue().toString());
+                restaurantName = (String) hopperValues.get("name"); //this directory only contains one item so it should not be a problem
+                RESTAURANT  = "uid/"+restaurantName+"/requests/";
+                Log.d("Restaurant", RESTAURANT);
+                myCallback.callbackCall(RESTAURANT);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    @Override
+    public void callbackCall(String restaurant) {
+        RESTAURANT = restaurant;
+    }
+
     //private String pushId;
     //public static List<Object> idList= new ArrayList<Object>();
 
     public static class RecyclerViewHolder extends RecyclerView.ViewHolder {
 
         private Context context;
-        public TextView itemTitle, itemDescription, itemName, itemCoke, itemSprite, itemCanadaDry, itemTotal;
+        public TextView itemTitle, itemDescription, itemName, itemTotal;
         public ImageView itemIcon;
         public Button btn_accept, btn_decline, btn_sending, btn_complete;
-
-        public List<Object> idList= new ArrayList<Object>();
-        private boolean sending = false;
 
         public RecyclerViewHolder(View itemView) {
             super(itemView);
@@ -303,12 +338,15 @@ public class VendorHub extends AppCompatActivity
         }
     }
 
-    public static final String RESTAURANT = "uid/Starbucks/requests/";
+    public static String RESTAURANT;
     private DatabaseReference mFirebaseDatabaseReference;
     private FirebaseRecyclerAdapter<Food_List, RecyclerViewHolder> mFirebaseAdapter;
 
     private RecyclerView mRestaurantRecyclerView;
     private LinearLayoutManager mLinearLayoutManager;
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -344,74 +382,70 @@ public class VendorHub extends AppCompatActivity
 
         firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser user = firebaseAuth.getCurrentUser();
+        UID = user.getUid();
 
-        userEmail = (TextView) header.findViewById(R.id.emailTxt);
-        userEmail.setText(user.getEmail());
-
-
-        mRestaurantRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        mLinearLayoutManager = new LinearLayoutManager(this);
-        mLinearLayoutManager.setStackFromEnd(true);
-
-
-        mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
-        mFirebaseAdapter = new FirebaseRecyclerAdapter<Food_List, VendorHub.RecyclerViewHolder>(
-                Food_List.class,
-                R.layout.vendor_card_layout,
-                VendorHub.RecyclerViewHolder.class,
-                mFirebaseDatabaseReference.child(RESTAURANT)
-        ) {
-            Map<String, Object> hopperValues;
-            Map<String, Object> itemValues;
-            int coke_cost, sprite_cost, canada_dry_cost, total_cost = 0;
-
+///////////////////////////
+        MyCallback myCallback = new MyCallback() {
             @Override
-            protected void populateViewHolder(final VendorHub.RecyclerViewHolder viewHolder, Food_List model, int position) {
-                viewHolder.itemTitle.setText("Order ID: " + model.getOrderid());
-                viewHolder.itemName.setText(model.getName());
+            public void callbackCall(String restaurant) {
+                RESTAURANT = restaurant;
+                Log.d("Restaurant Returned", RESTAURANT);
 
-                viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                mRestaurantRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+                mLinearLayoutManager = new LinearLayoutManager(VendorHub.this);
+                mLinearLayoutManager.setStackFromEnd(true);
+
+                mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
+                mFirebaseAdapter = new FirebaseRecyclerAdapter<Food_List, VendorHub.RecyclerViewHolder>(
+                        Food_List.class,
+                        R.layout.vendor_card_layout,
+                        VendorHub.RecyclerViewHolder.class,
+                        mFirebaseDatabaseReference.child(RESTAURANT)
+                ) {
+
                     @Override
-                    public void onClick(View v) {
-                        Intent editCheckoutintent = new Intent(VendorHub.this, Vendor_Checkout.class);
-                        editCheckoutintent.putExtra("ID", viewHolder.itemTitle.getText().toString().replace("Order ID: ", ""));
-                        if(viewHolder.itemTitle.getText().toString() == null){
-                            Log.d("Order ID", "Hello");
-                        } else {
-                            Log.d("Order ID", viewHolder.itemTitle.getText().toString());
-                        }
+                    protected void populateViewHolder(final VendorHub.RecyclerViewHolder viewHolder, Food_List model, int position) {
+                        viewHolder.itemTitle.setText("Order ID: " + model.getOrderid());
+                        viewHolder.itemName.setText(model.getName());
 
-                        startActivity(editCheckoutintent);
+                        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent editCheckoutintent = new Intent(VendorHub.this, Vendor_Checkout.class);
+                                editCheckoutintent.putExtra("ID", viewHolder.itemTitle.getText().toString().replace("Order ID: ", ""));
+                                if(viewHolder.itemTitle.getText().toString() == null){
+                                    Log.d("Order ID", "Hello");
+                                } else {
+                                    Log.d("Order ID", viewHolder.itemTitle.getText().toString());
+                                }
+
+                                startActivity(editCheckoutintent);
+                            }
+                        });
+                    }
+                };
+
+                mFirebaseAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver(){
+                    @Override
+                    public void onItemRangeInserted(int positionStart, int itemCount) {
+                        super.onItemRangeInserted(positionStart, itemCount);
+                        int restaurantCount = mFirebaseAdapter.getItemCount();
+                        int lastVisiblePosition = mLinearLayoutManager.findLastVisibleItemPosition();
+                        if(lastVisiblePosition == -1 || (positionStart >= (restaurantCount -1) && lastVisiblePosition == (positionStart -1))){
+                            mRestaurantRecyclerView.scrollToPosition(positionStart);
+                        }
                     }
                 });
-                //int i = 0;
-                //Log.d("Description: ", model.getOrderid());
-                //viewHolder.itemDescription.setText(model.getItems());
-                //viewHolder.itemCoke.setText("Coke: " + itemValues.get("Coke").toString());
-                //viewHolder.itemSprite.setText("Sprite: " + itemValues.get("Sprite").toString());
-                //viewHolder.itemCanadaDry.setText("Canada Dry: " + itemValues.get("Canada Dry").toString());
-                //viewHolder.itemIcon.setImageResource(R.drawable.restaurant_icon);
-                //viewHolder.idList.add(i, model.getOrderid());      //adds the OrderId's to an arraylsit so it can be accessed later for the "accept" update
-                //Log.d("IdList: ", (String) viewHolder.idList.get(i));
-                //i++;
+
+                mRestaurantRecyclerView.setLayoutManager(mLinearLayoutManager);
+                mRestaurantRecyclerView.setAdapter(mFirebaseAdapter);
             }
         };
 
-        mFirebaseAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver(){
-            @Override
-            public void onItemRangeInserted(int positionStart, int itemCount) {
-                super.onItemRangeInserted(positionStart, itemCount);
-                int restaurantCount = mFirebaseAdapter.getItemCount();
-                int lastVisiblePosition = mLinearLayoutManager.findLastVisibleItemPosition();
-                if(lastVisiblePosition == -1 || (positionStart >= (restaurantCount -1) && lastVisiblePosition == (positionStart -1))){
-                    mRestaurantRecyclerView.scrollToPosition(positionStart);
-                }
-            }
-        });
+        firebaseTask(myCallback);
 
-        mRestaurantRecyclerView.setLayoutManager(mLinearLayoutManager);
-        mRestaurantRecyclerView.setAdapter(mFirebaseAdapter);
-
+        userEmail = (TextView) header.findViewById(R.id.emailTxt);
+        userEmail.setText(user.getEmail());
 
         small_description = (TextView) findViewById(R.id.small_description_location);
 
