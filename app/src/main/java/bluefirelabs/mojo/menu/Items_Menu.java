@@ -44,9 +44,10 @@ public class Items_Menu extends AppCompatActivity {
         checkout_btn = (FloatingActionButton)findViewById(R.id.fabCheckout);
 
         Intent receivedIntent = getIntent();
-        category = receivedIntent.getStringExtra("Restaurant");
+        restaurant = receivedIntent.getStringExtra("Restaurant");
         category = receivedIntent.getStringExtra("Category");
-        Log.d("received", category);
+        Log.d("Received Restaurant", restaurant);
+        Log.d("Received Category", category);
         //conRef = receivedIntent.getStringExtra("Icon");
 
         ImageView restaurantIcon = (ImageView) findViewById(R.id.foodIcon);
@@ -85,7 +86,7 @@ public class Items_Menu extends AppCompatActivity {
         mLinearLayoutManager = new LinearLayoutManager(this);
         mLinearLayoutManager.setStackFromEnd(true);
 
-        mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference("menu/Starbucks/"+category+"/Items");
+        mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference("menu/"+restaurant+"/"+category+"/Items");
         mFirebaseAdapter = new FirebaseRecyclerAdapter<Food_List, FirebaseRecyclerAdapterItems.RecyclerViewHolder>(
                 Food_List.class,
                 R.layout.card_layout,

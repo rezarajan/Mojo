@@ -6,6 +6,8 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -80,12 +82,22 @@ public class Restaurant_Menu extends AppCompatActivity {
         ) {
 
             @Override
-            protected void populateViewHolder(FirebaseRecyclerAdapterMenu.RecyclerViewHolder viewHolder, Food_List model, int position) {
+            protected void populateViewHolder(final FirebaseRecyclerAdapterMenu.RecyclerViewHolder viewHolder, final Food_List model, int position) {
                 //Log.d("Description: ", model.getDescription());
                 //viewHolder.itemDescription.setText(model.getDescription());
                 //viewHolder.itemTitle.setText(model.getRestaurant());
                 viewHolder.itemDescription.setText(model.getType());
                 viewHolder.itemTitle.setText(model.getType());
+                viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(Restaurant_Menu.this, Items_Menu.class);
+                        intent.putExtra("Restaurant", restaurant);
+                        intent.putExtra("Category", model.getType());
+                        Log.d("Restaurant", restaurant);
+                        startActivity(intent);
+                    }
+                });
                 //viewHolder.itemIcon.setImageResource(R.drawable.restaurant_icon);
                // Picasso.with(getApplicationContext()).load(model.getIcon()).into(viewHolder.itemIcon);
             }
