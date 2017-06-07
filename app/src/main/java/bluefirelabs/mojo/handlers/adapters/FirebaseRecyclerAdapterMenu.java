@@ -52,6 +52,8 @@ public class FirebaseRecyclerAdapterMenu {
                             .setAction("Action", null).show();
 
                     Intent intent = new Intent(context, Items_Menu.class);
+                    //intent.putExtra("Restaurant", restaurant_menu.getRestaurant());
+                    intent.putExtra("Category", itemTitle.getText().toString());
                     context.startActivity(intent);
 
 

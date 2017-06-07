@@ -7,6 +7,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -29,7 +30,7 @@ public class Items_Menu extends AppCompatActivity {
     private RecyclerView mRestaurantRecyclerView;
     private LinearLayoutManager mLinearLayoutManager;
 
-    private String restaurant, iconRef;
+    private String restaurant, category, iconRef;
     FloatingActionButton checkout_btn;
     DatabaseHelper myDb;
 
@@ -43,14 +44,16 @@ public class Items_Menu extends AppCompatActivity {
         checkout_btn = (FloatingActionButton)findViewById(R.id.fabCheckout);
 
         Intent receivedIntent = getIntent();
-        restaurant = receivedIntent.getStringExtra("Restaurant");
-        iconRef = receivedIntent.getStringExtra("Icon");
+        category = receivedIntent.getStringExtra("Restaurant");
+        category = receivedIntent.getStringExtra("Category");
+        Log.d("received", category);
+        //conRef = receivedIntent.getStringExtra("Icon");
 
         ImageView restaurantIcon = (ImageView) findViewById(R.id.foodIcon);
         Picasso.with(Items_Menu.this).load(iconRef).into(restaurantIcon);
 
         CollapsingToolbarLayout collapsingToolbar = (CollapsingToolbarLayout)findViewById(R.id.collapsingToolbar);
-        collapsingToolbar.setTitle(restaurant);
+        collapsingToolbar.setTitle(category);
         myDb = new DatabaseHelper(this); //calls constructor from the database helper class
 
         checkout_btn.setOnClickListener(new View.OnClickListener() {
@@ -82,7 +85,7 @@ public class Items_Menu extends AppCompatActivity {
         mLinearLayoutManager = new LinearLayoutManager(this);
         mLinearLayoutManager.setStackFromEnd(true);
 
-        mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference("menu/Starbucks/Desserts/Items");
+        mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference("menu/Starbucks/"+category+"/Items");
         mFirebaseAdapter = new FirebaseRecyclerAdapter<Food_List, FirebaseRecyclerAdapterItems.RecyclerViewHolder>(
                 Food_List.class,
                 R.layout.card_layout,

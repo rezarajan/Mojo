@@ -22,14 +22,15 @@ public class Restaurant_Menu extends AppCompatActivity {
     RecyclerView recyclerView;
     RecyclerView.LayoutManager layoutManager;
     RecyclerView.Adapter adapter;
-    public static final String MENU = "menu/Starbucks";
+    private String MENU;
     private DatabaseReference mFirebaseDatabaseReference;
     private FirebaseRecyclerAdapter<Food_List, FirebaseRecyclerAdapterMenu.RecyclerViewHolder> mFirebaseAdapter;
 
     private RecyclerView mRestaurantRecyclerView;
     private LinearLayoutManager mLinearLayoutManager;
 
-    private String restaurant, iconRef;
+    public String restaurant, iconRef;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,13 +42,14 @@ public class Restaurant_Menu extends AppCompatActivity {
         Intent receivedIntent = getIntent();
         restaurant = receivedIntent.getStringExtra("Restaurant");
         iconRef = receivedIntent.getStringExtra("Icon");
-        iconRef = receivedIntent.getStringExtra("Icon");
+        MENU = "menu/"+restaurant;;
 
         ImageView restaurantIcon = (ImageView) findViewById(R.id.restaurant_icon);
         Picasso.with(Restaurant_Menu.this).load(iconRef).into(restaurantIcon);
 
         CollapsingToolbarLayout collapsingToolbar = (CollapsingToolbarLayout)findViewById(R.id.collapsingToolbar);
         collapsingToolbar.setTitle(restaurant);
+
 
         /*
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
