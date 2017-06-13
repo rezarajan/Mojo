@@ -252,6 +252,15 @@ exports.inprogressMonitor = functions.database.ref("inprogress/{vendoruid}/{push
 			result: "accepted",
 			orderid: status.orderid
 	});
+	/*refNode.child(status.runneruid).child(status.orderid).set({
+			customeruid: status.customeruid,
+			vendoruid: status.vendoruid,
+			runneruid: status.runneruid,
+			items: snapshot.val(),
+			result: "accepted",
+			orderid: status.orderid
+	}); */
+				//TODO: Use this to insert the runnerUID and then make a runnerUID monitor
 				//refNode.child(status.orderid).child("items").set(snapshot.val());
 			} else{
 				return;
@@ -278,6 +287,14 @@ exports.inprogressMonitor = functions.database.ref("inprogress/{vendoruid}/{push
 			result: "sending",
 			orderid: status.orderid
 	});
+	/*refNode.child(status.runneruid).child(status.orderid).set({
+			customeruid: status.customeruid,
+			vendoruid: status.vendoruid,
+			runneruid: status.runneruid,
+			items: snapshot.val(),
+			result: "sending",
+			orderid: status.orderid
+	}); */
 				//refNode.child(status.orderid).child("items").set(snapshot.val());
 			} else{
 				return;
@@ -304,6 +321,14 @@ exports.inprogressMonitor = functions.database.ref("inprogress/{vendoruid}/{push
 			result: "delivered",
 			orderid: status.orderid
 	});
+	/*refNode.child(status.runneruid).child(status.orderid).set({
+			customeruid: status.customeruid,
+			vendoruid: status.vendoruid,
+			runneruid: status.runneruid,
+			items: snapshot.val(),
+			result: "sending",
+			orderid: status.orderid
+	}); */
 				//refNode.child(status.orderid).child("items").set(snapshot.val());
 			} else{
 				return;
@@ -421,6 +446,7 @@ exports.sendingOrderMonitor = functions.database.ref("uid/{uid}/sending/{pushId}
 		
 		customeruid: status.customeruid,
         vendoruid: status.vendoruid,
+		//runneruid: status.runneruid,
 		message: status.result,
         sound: "default"
 		
@@ -456,6 +482,7 @@ exports.sendingOrderMonitor = functions.database.ref("uid/{uid}/sending/{pushId}
 			var userTokenid = userToken.user_token;
 			console.log("User Token: " + userTokenid);
 			return admin.messaging().sendToDevice(userTokenid, payload, options);		//using the user_token as the receiver
+			//return admin.messaging().sendToDevice(runneruserTokenid, payload, options);		//using the user_token as the receiver for the runner
 
 		});
 });
@@ -566,6 +593,7 @@ exports.deliveredOrderMonitor = functions.database.ref("uid/{uid}/delivered/{pus
 			var userTokenid = userToken.user_token;
 			console.log("User Token: " + userTokenid);
 			return admin.messaging().sendToDevice(userTokenid, payload, options);		//using the user_token as the receiver
+			//return admin.messaging().sendToDevice(vendoruserTokenid, payload, options);		//using the user_token as the receiver for the vendor
 
 		});
 });
