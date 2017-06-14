@@ -96,15 +96,17 @@ public class RunnerHub extends AppCompatActivity
             itemDescription = (TextView) itemView.findViewById(R.id.item_description);
             itemName = (TextView) itemView.findViewById(R.id.item_name);
             itemTotal = (TextView) itemView.findViewById(R.id.item_total_cost);
-
+            btn_accept = (Button) itemView.findViewById(R.id.button_accept);
+            btn_decline = (Button) itemView.findViewById(R.id.button_decline);
             btn_sending = (Button) itemView.findViewById(R.id.button_sending);
             btn_complete = (Button) itemView.findViewById(R.id.button_complete);
             context = itemView.getContext();
 
-            btn_sending.setVisibility(View.VISIBLE);
-            btn_sending.setText("Collect");
+            btn_accept.setVisibility(View.INVISIBLE);
             btn_decline.setVisibility(View.INVISIBLE);
+            btn_sending.setVisibility(View.VISIBLE);
             btn_complete.setVisibility(View.INVISIBLE);
+            btn_sending.setText("Collect");
         }
     }
 
@@ -203,6 +205,10 @@ public class RunnerHub extends AppCompatActivity
                         viewHolder.itemName.setText(model.getName());
 
                         final DatabaseReference reference1 = FirebaseDatabase.getInstance().getReference("requests");
+                        //viewHolder.btn_decline.setVisibility(View.INVISIBLE);
+                        //viewHolder.btn_sending.setVisibility(View.VISIBLE);
+                        //viewHolder.btn_complete.setVisibility(View.INVISIBLE);
+                        //viewHolder.btn_sending.setText("Collect");
 
                         viewHolder.btn_sending.setOnClickListener(new View.OnClickListener() {      //in this case it would be used as a button for the collected message
                             @Override

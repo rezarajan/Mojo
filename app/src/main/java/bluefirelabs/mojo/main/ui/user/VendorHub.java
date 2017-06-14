@@ -216,6 +216,11 @@ public class VendorHub extends AppCompatActivity
 
                         final DatabaseReference reference1 = FirebaseDatabase.getInstance().getReference("requests");
 
+                        viewHolder.btn_decline.setVisibility(View.VISIBLE);
+                        viewHolder.btn_accept.setVisibility(View.VISIBLE);
+                        viewHolder.btn_sending.setVisibility(View.INVISIBLE);
+                        viewHolder.btn_complete.setVisibility(View.INVISIBLE);
+
                         viewHolder.btn_accept.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
