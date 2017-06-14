@@ -51,11 +51,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         contentValues.put(COST, cost);
         contentValues.put(QUANTITY, quantity);
         long result = db.insert(TABLE_NAME, null, contentValues);
-        if(result == -1){
-            return false;
-        } else{
-            return true;
-        }
+        return result != -1;
     }
 
     public Cursor getAllData(){

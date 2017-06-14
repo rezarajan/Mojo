@@ -41,15 +41,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
 
-import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 import bluefirelabs.mojo.R;
@@ -62,8 +58,7 @@ import bluefirelabs.mojo.handlers.online.uploadImage;
 import bluefirelabs.mojo.main.login.Sign_In;
 import bluefirelabs.mojo.menu.Vendor_Checkout;
 
-
-public class VendorHub extends AppCompatActivity
+public class RunnerHub extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener
         , bluefirelabs.mojo.fragments.vendor_currentinfo_fragment.currentinfoListener
         , restaurantlist_fragment.restaurantlistListener
@@ -101,17 +96,14 @@ public class VendorHub extends AppCompatActivity
             itemDescription = (TextView) itemView.findViewById(R.id.item_description);
             itemName = (TextView) itemView.findViewById(R.id.item_name);
             itemTotal = (TextView) itemView.findViewById(R.id.item_total_cost);
-            btn_accept = (Button) itemView.findViewById(R.id.button_accept);
-            btn_decline = (Button) itemView.findViewById(R.id.button_decline);
+
             btn_sending = (Button) itemView.findViewById(R.id.button_sending);
             btn_complete = (Button) itemView.findViewById(R.id.button_complete);
             context = itemView.getContext();
 
-            //final DatabaseReference reference1 = FirebaseDatabase.getInstance().getReference("requests");
-
-            btn_decline.setVisibility(View.VISIBLE);
-            btn_accept.setVisibility(View.VISIBLE);
-            btn_sending.setVisibility(View.INVISIBLE);
+            btn_sending.setVisibility(View.VISIBLE);
+            btn_sending.setText("Collect");
+            btn_decline.setVisibility(View.INVISIBLE);
             btn_complete.setVisibility(View.INVISIBLE);
         }
     }
@@ -122,13 +114,11 @@ public class VendorHub extends AppCompatActivity
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Map<String, Object> hopperValues = (Map<String, Object>) dataSnapshot.getValue();
-                //hopperValues.put("key", dataSnapshot.getKey().toString());
-                //Log.d("Values", dataSnapshot.getKey().toString());
-                Log.d("Values", dataSnapshot.getValue().toString());
+                //Log.d("Values", dataSnapshot.getValue().toString());
                 restaurantName = (String) hopperValues.get("name"); //this directory only contains one item so it should not be a problem
-                RESTAURANT  = "uid/"+restaurantName+"/requests/";
+                RESTAURANT  = "uid/"+restaurantName+"/sending/";
                 Log.d("Restaurant", RESTAURANT);
-                myCallback.callbackCall(RESTAURANT);
+                myCallback.callbackCall(RESTAURANT);        //links the asynctask to the outer program via the interface, since asynctasks cannot delegate values
             }
 
             @Override
@@ -159,7 +149,7 @@ public class VendorHub extends AppCompatActivity
         setContentView(R.layout.activity_vendor_main_hub);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        FirebaseMessaging.getInstance().subscribeToTopic("Starbucks");
+        FirebaseMessaging.getInstance().subscribeToTopic("Runner");     //TODO: Remove this once the runner token system is set up as required
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -189,8 +179,6 @@ public class VendorHub extends AppCompatActivity
         FirebaseUser user = firebaseAuth.getCurrentUser();
         UID = user.getUid();
 
-///////////////////////////
-
         MyCallback myCallback = new MyCallback() {
             @Override
             public void callbackCall(String restaurant) {
@@ -198,131 +186,40 @@ public class VendorHub extends AppCompatActivity
                 Log.d("Restaurant Returned", RESTAURANT);
 
                 mRestaurantRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-                mLinearLayoutManager = new LinearLayoutManager(VendorHub.this);
+                mLinearLayoutManager = new LinearLayoutManager(RunnerHub.this);
                 mLinearLayoutManager.setStackFromEnd(true);
 
                 mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
-                mFirebaseAdapter = new FirebaseRecyclerAdapter<Food_List, VendorHub.RecyclerViewHolder>(
+                mFirebaseAdapter = new FirebaseRecyclerAdapter<Food_List, RunnerHub.RecyclerViewHolder>(
                         Food_List.class,
                         R.layout.vendor_card_layout,
-                        VendorHub.RecyclerViewHolder.class,
+                        RunnerHub.RecyclerViewHolder.class,
                         mFirebaseDatabaseReference.child(RESTAURANT)
                 ) {
 
                     @Override
-                    protected void populateViewHolder(final VendorHub.RecyclerViewHolder viewHolder, Food_List model, int position) {
+                    protected void populateViewHolder(final RunnerHub.RecyclerViewHolder viewHolder, Food_List model, int position) {
                         viewHolder.itemTitle.setText("Order ID: " + model.getOrderid());
                         viewHolder.itemName.setText(model.getName());
 
                         final DatabaseReference reference1 = FirebaseDatabase.getInstance().getReference("requests");
 
-                        viewHolder.btn_accept.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                reference1.orderByChild("orderid").equalTo(viewHolder.itemTitle.getText().toString().replace("Order ID: ", "")).addChildEventListener(new ChildEventListener() {
-                                    @Override
-                                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                                        DatabaseReference hopperRef = reference1.child(viewHolder.itemTitle.getText().toString().replace("Order ID: ", ""));     //uses the itemTitle, which is set to be the orderid, in order to get the order id on click of a specific card
-                                        Map<String, Object> hopperUpdates = new HashMap<String, Object>();
-                                        hopperUpdates.put("result", "accepted");
-                                        hopperRef.updateChildren(hopperUpdates);                                           //updates the child, without destroying, or overwriting all data
-                                    }
-
-                                    @Override
-                                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-                                    }
-
-                                    @Override
-                                    public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-                                    }
-
-                                    @Override
-                                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-                                    }
-
-                                    @Override
-                                    public void onCancelled(DatabaseError databaseError) {
-
-                                    }
-                                });
-                                viewHolder.btn_decline.setVisibility(View.INVISIBLE);
-                                viewHolder.btn_accept.setVisibility(View.INVISIBLE);
-                                viewHolder.btn_sending.setVisibility(View.VISIBLE);
-                            }
-                        });
-
-                        viewHolder.btn_decline.setOnClickListener(new View.OnClickListener() {
+                        viewHolder.btn_sending.setOnClickListener(new View.OnClickListener() {      //in this case it would be used as a button for the collected message
                             @Override
                             public void onClick(View v) {
                                 ///////////////////////////////////////////////////////////////////////////////////////////////////
                                 //This part of the code retrieved a specific part of the data from the firebase database
                                 //It bypasses the wildcard requirement by filtering for a specific child value in the
                                 //reference provided, which is requests in this case
-
-                                //reference1.orderByChild("orderid").equalTo(pushId).addChildEventListener(new ChildEventListener() {     //searches specifically for the orderid "-KlSF5GydNxjegYK--R2"
-                                reference1.orderByChild("orderid").equalTo(viewHolder.itemTitle.getText().toString().replace("Order ID: ", "")).addChildEventListener(new ChildEventListener() {
-                                    @Override
-                                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                                        //Map<String, Object> newPost = (Map<String, Object>) dataSnapshot.getValue();        //stores all the child data in a map
-                                        //Log.e("onChildAdded", dataSnapshot.toString());
-                                        //Log.e("orderid retrieved", newPost.get("orderid").toString());                      //searches the map newPost for the child "orderid" and then returns the value
-                                        //Log.e("idList Order", idList.get(position+1).toString());
-
-                                        //Log.e("idListTextView", itemTitle.getText().toString());
-                                        //DatabaseReference hopperRef = reference1.child(newPost.get("orderid").toString()); //this part adds a child reference to the orderid in requests. Remember, the parent is set up to be the orderid.
-                                        //DatabaseReference hopperRef = reference1.child(idList.get(position+1).toString());      //+1 becuase the position gives a value of 1 less than what is needed
-                                        DatabaseReference hopperRef = reference1.child(viewHolder.itemTitle.getText().toString().replace("Order ID: ", ""));     //uses the itemTitle, which is set to be the orderid, in order to get the order id on click of a specific card
-                                        Map<String, Object> hopperUpdates = new HashMap<String, Object>();
-                                        hopperUpdates.put("result", "declined");                                           //appends the key "result" a value of "accepted". This can be changed to suit
-                                        hopperRef.updateChildren(hopperUpdates);                                           //updates the child, without destroying, or overwriting all data
-                                    }
-
-                                    @Override
-                                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-                                    }
-
-                                    @Override
-                                    public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-                                    }
-
-                                    @Override
-                                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-                                    }
-
-                                    @Override
-                                    public void onCancelled(DatabaseError databaseError) {
-
-                                    }
-                                });
-                            }
-                        });
-
-                        viewHolder.btn_sending.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                ///////////////////////////////////////////////////////////////////////////////////////////////////
-                                //This part of the code retrieved a specific part of the data from the firebase database
-                                //It bypasses the wildcard requirement by filtering for a specific child value in the
-                                //reference provided, which is requests in this case
-
-                                //reference1.orderByChild("orderid").equalTo(pushId).addChildEventListener(new ChildEventListener() {     //searches specifically for the orderid "-KlSF5GydNxjegYK--R2"
                                 reference1.orderByChild("orderid").equalTo(viewHolder.itemTitle.getText().toString().replace("Order ID: ", "")).addChildEventListener(new ChildEventListener() {
                                     @Override
                                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                                         DatabaseReference hopperRef = reference1.child(viewHolder.itemTitle.getText().toString().replace("Order ID: ", ""));     //uses the itemTitle, which is set to be the orderid, in order to get the order id on click of a specific card
                                         Map<String, Object> hopperUpdates = new HashMap<String, Object>();
-                                        hopperUpdates.put("result", "sending");                                           //appends the key "result" a value of "accepted". This can be changed to suit
+                                        hopperUpdates.put("result", "collected");                                           //appends the key "result" a value of "accepted". This can be changed to suit
                                         hopperRef.updateChildren(hopperUpdates);                                           //updates the child, without destroying, or overwriting all data
                                         viewHolder.btn_sending.setVisibility(View.INVISIBLE);
-                                        //viewHolder.btn_complete.setVisibility(View.VISIBLE);
-                                        viewHolder.btn_decline.setVisibility(View.VISIBLE);
-                                        viewHolder.btn_accept.setVisibility(View.VISIBLE);
+                                        viewHolder.btn_complete.setVisibility(View.VISIBLE);
                                     }
 
                                     @Override
@@ -348,7 +245,7 @@ public class VendorHub extends AppCompatActivity
                             }
                         });
 
-                        /*viewHolder.btn_complete.setOnClickListener(new View.OnClickListener() {
+                        viewHolder.btn_complete.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -356,7 +253,6 @@ public class VendorHub extends AppCompatActivity
                                 //It bypasses the wildcard requirement by filtering for a specific child value in the
                                 //reference provided, which is requests in this case
 
-                                //reference1.orderByChild("orderid").equalTo(pushId).addChildEventListener(new ChildEventListener() {     //searches specifically for the orderid "-KlSF5GydNxjegYK--R2"
                                 reference1.orderByChild("orderid").equalTo(viewHolder.itemTitle.getText().toString().replace("Order ID: ", "")).addChildEventListener(new ChildEventListener() {
                                     @Override
                                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -365,9 +261,6 @@ public class VendorHub extends AppCompatActivity
                                         hopperUpdates.put("result", "delivered");                                           //appends the key "result" a value of "accepted". This can be changed to suit
                                         hopperRef.updateChildren(hopperUpdates);                                           //updates the child, without destroying, or overwriting all data
 
-                                        //btn_complete.setVisibility(View.INVISIBLE);
-                                        //btn_accept.setVisibility(View.VISIBLE);
-                                        //btn_decline.setVisibility(View.VISIBLE);
                                     }
 
                                     @Override
@@ -391,21 +284,20 @@ public class VendorHub extends AppCompatActivity
                                     }
                                 });
 
-                                viewHolder.btn_decline.setVisibility(View.VISIBLE);
-                                viewHolder.btn_accept.setVisibility(View.VISIBLE);
+                                viewHolder.btn_sending.setVisibility(View.VISIBLE);
                                 viewHolder.btn_complete.setVisibility(View.INVISIBLE);
                             }
-                        }); */
+                        });
 
 
 
                         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                             @Override
-                            public void onClick(View v) {
-                                Intent editCheckoutintent = new Intent(VendorHub.this, Vendor_Checkout.class);
+                            public void onClick(View v) {       //this shows the order items in this case for each order
+                                Intent editCheckoutintent = new Intent(RunnerHub.this, Vendor_Checkout.class);
                                 editCheckoutintent.putExtra("ID", viewHolder.itemTitle.getText().toString().replace("Order ID: ", ""));
                                 if(viewHolder.itemTitle.getText().toString() == null){
-                                    Log.d("Order ID", "Hello");
+                                    Log.d("Order ID", "null");
                                 } else {
                                     Log.d("Order ID", viewHolder.itemTitle.getText().toString());
                                 }
@@ -439,9 +331,6 @@ public class VendorHub extends AppCompatActivity
         userEmail.setText(user.getEmail());
 
         small_description = (TextView) findViewById(R.id.small_description_location);
-
-        //FirebaseApp.initializeApp(this);
-        //FirebaseMessaging.getInstance().subscribeToTopic("Notifications");
 
         /*Location Functions */
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -589,7 +478,7 @@ public class VendorHub extends AppCompatActivity
 
     private class GetAddress extends AsyncTask<String,Void,String> {
 
-        ProgressDialog dialog = new ProgressDialog(VendorHub.this);
+        ProgressDialog dialog = new ProgressDialog(RunnerHub.this);
 
         @Override
         protected void onPreExecute() {

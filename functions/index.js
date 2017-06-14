@@ -101,6 +101,7 @@ exports.requestsMonitor = functions.database.ref("requests/{pushId}/").onWrite((
 		refNode.child(status.vendoruid).child("requests").child(status.orderid).set({
 				customeruid: status.customeruid,
 				vendoruid: status.vendoruid,
+				//runneruid: status.runneruid,
 				name: userDataName,
 				items: snapshot.val(),
 				result: "asking",
@@ -122,7 +123,6 @@ exports.requestsMonitor = functions.database.ref("requests/{pushId}/").onWrite((
 		ref.child("items").once("value")
 		.then(function(snapshot) {
 			if(snapshot.val() !== null){
-		//the set uses the push key
 		//the set uses the push key
 		refNode.child(status.vendoruid).child(status.orderid).set({
 				customeruid: status.customeruid,
@@ -181,9 +181,40 @@ exports.requestsMonitor = functions.database.ref("requests/{pushId}/").onWrite((
 		refNode.child(status.vendoruid).child(status.orderid).set({
 				customeruid: status.customeruid,
 				vendoruid: status.vendoruid,
+				//runneruid: status.runneruid,
+				runneruid: "Runner",		//this is just for testing. TODO: create a method to correctly find a runner
 				items: snapshot.val(),
 				result: "sending",
 				orderid: status.orderid
+		});
+				//refNode.child(status.orderid).child("items").set(snapshot.val());
+			} else{
+				return;
+			}
+			
+	});
+
+	} else if (status.result === "collected"){	//if runner collects the order then send response to user and vendor
+		var db = admin.database();
+		var refNode = db.ref("inprogress/");	//changed the reference
+		var ref = db.ref("requests").child(status.orderid);
+		
+		ref.child("items").once("value")
+		.then(function(snapshot) {
+			if(snapshot.val() !== null){
+		//the set uses the push key
+		//the set uses the push key
+		refNode.child(status.vendoruid).child(status.orderid).set({
+				customeruid: status.customeruid,
+				vendoruid: status.vendoruid,
+				//runneruid: status.runneruid,		//since the runneruid has already been set to "Runner" in sending case
+				runneruid: "Runner",
+				items: snapshot.val(),
+				result: "collected",
+				orderid: status.orderid
+		});
+		ref.update({
+				runneruid: "Runner"
 		});
 				//refNode.child(status.orderid).child("items").set(snapshot.val());
 			} else{
@@ -205,7 +236,8 @@ exports.requestsMonitor = functions.database.ref("requests/{pushId}/").onWrite((
 		refNode.child(status.vendoruid).child(status.orderid).set({
 				customeruid: status.customeruid,
 				vendoruid: status.vendoruid,
-				items: snapshot.val(),
+				runneruid: status.runneruid,		//since the runneruid has already been set to "Runner" in sending case
+				items: snapshot.val(),		//gets the order items
 				result: "delivered",
 				orderid: status.orderid
 		});
@@ -252,6 +284,7 @@ exports.inprogressMonitor = functions.database.ref("inprogress/{vendoruid}/{push
 			result: "accepted",
 			orderid: status.orderid
 	});
+				//////DO NOT NEED
 	/*refNode.child(status.runneruid).child(status.orderid).set({
 			customeruid: status.customeruid,
 			vendoruid: status.vendoruid,
@@ -287,14 +320,48 @@ exports.inprogressMonitor = functions.database.ref("inprogress/{vendoruid}/{push
 			result: "sending",
 			orderid: status.orderid
 	});
-	/*refNode.child(status.runneruid).child(status.orderid).set({
+	refNode.child(status.runneruid).child("sending").child(status.orderid).set({
 			customeruid: status.customeruid,
 			vendoruid: status.vendoruid,
 			runneruid: status.runneruid,
 			items: snapshot.val(),
 			result: "sending",
 			orderid: status.orderid
-	}); */
+	});
+				//refNode.child(status.orderid).child("items").set(snapshot.val());
+			} else{
+				return;
+			}
+			
+	});
+		
+	} else if (status.result === "collected"){	//if runner collects the order then send response to user and vendor
+				ref.child("items").once("value")
+		.then(function(snapshot) {
+			if(snapshot.val() !== null){
+		//the set uses the push key
+	refNode.child(status.vendoruid).child("collected").child(status.orderid).set({
+			customeruid: status.customeruid,
+			vendoruid: status.vendoruid,
+			items: snapshot.val(),
+			result: "collected",
+			orderid: status.orderid
+	});
+	refNode.child(status.customeruid).child(status.orderid).set({
+			customeruid: status.customeruid,
+			vendoruid: status.vendoruid,
+			items: snapshot.val(),
+			result: "collected",
+			orderid: status.orderid
+	});
+	refNode.child(status.runneruid).child("collected").child(status.orderid).set({
+			customeruid: status.customeruid,
+			vendoruid: status.vendoruid,
+			runneruid: status.runneruid,
+			items: snapshot.val(),
+			result: "collected",
+			orderid: status.orderid
+	});
 				//refNode.child(status.orderid).child("items").set(snapshot.val());
 			} else{
 				return;
@@ -310,6 +377,7 @@ exports.inprogressMonitor = functions.database.ref("inprogress/{vendoruid}/{push
 	refNode.child(status.vendoruid).child("delivered").child(status.orderid).set({
 			customeruid: status.customeruid,
 			vendoruid: status.vendoruid,
+			runneruid: status.runneruid,
 			items: snapshot.val(),
 			result: "delivered",
 			orderid: status.orderid
@@ -317,18 +385,19 @@ exports.inprogressMonitor = functions.database.ref("inprogress/{vendoruid}/{push
 	refNode.child(status.customeruid).child(status.orderid).set({
 			customeruid: status.customeruid,
 			vendoruid: status.vendoruid,
+			runneruid: status.runneruid,
 			items: snapshot.val(),
 			result: "delivered",
 			orderid: status.orderid
 	});
-	/*refNode.child(status.runneruid).child(status.orderid).set({
+	refNode.child(status.runneruid).child("delivered").child(status.orderid).set({
 			customeruid: status.customeruid,
 			vendoruid: status.vendoruid,
 			runneruid: status.runneruid,
 			items: snapshot.val(),
-			result: "sending",
+			result: "delivered",
 			orderid: status.orderid
-	}); */
+	});
 				//refNode.child(status.orderid).child("items").set(snapshot.val());
 			} else{
 				return;
@@ -350,7 +419,7 @@ exports.requestOrderMonitor = functions.database.ref("uid/{uid}/requests/{pushId
     }
     const status = data.val();
 	
-	if(status != null){
+	if(status != null){		//to account for the deletion case
 		const payload = {
     data: {
         //title: 'Electricity Monitor - Power status changed',
@@ -392,6 +461,8 @@ exports.acceptedOrderMonitor = functions.database.ref("uid/{uid}/accepted/{pushI
     }
     const status = data.val();
 	
+	if(status != null){	
+	
 	const payload = {
     data: {
         //title: 'Electricity Monitor - Power status changed',
@@ -428,6 +499,9 @@ exports.acceptedOrderMonitor = functions.database.ref("uid/{uid}/accepted/{pushI
 			return admin.messaging().sendToDevice(userTokenid, payload, options);		//using the user_token as the receiver
 
 		});
+	} else {
+		return;
+	}
 });
 
 exports.sendingOrderMonitor = functions.database.ref("uid/{uid}/sending/{pushId}").onWrite((event) => {		//notifies user/vendor
@@ -437,6 +511,7 @@ exports.sendingOrderMonitor = functions.database.ref("uid/{uid}/sending/{pushId}
         return;
     }
     const status = data.val();
+	if(status != null){	
 	
 	const payload = {
     data: {
@@ -463,6 +538,7 @@ exports.sendingOrderMonitor = functions.database.ref("uid/{uid}/sending/{pushId}
 	
 	var db = admin.database();
 	var ref = db.ref().child("uid").child(status.vendoruid);
+
 	ref.orderByKey().equalTo(status.orderid).on("child_added", function(snapshot) {
 	console.log(snapshot.key);
 	//ref.child("requests").child(snapshot.key).remove();		//removes the order from requests after the restaurant has accepted it
@@ -479,12 +555,79 @@ exports.sendingOrderMonitor = functions.database.ref("uid/{uid}/sending/{pushId}
 		.then(function(dataSnapshot) {
 			// handle read data.
 			var userToken = dataSnapshot.val();
+			var userTokenid = userToken.user_token;		//gets the customer's user token
+			console.log("User Token: " + userTokenid);
+			return admin.messaging().sendToDevice(userTokenid, payload, options);		//using the user_token as the receiver
+			//return admin.messaging().sendToDevice(runneruserTokenid, payload, options);		//using the user_token as the receiver for the runner
+			return admin.messaging().sendToTopic("Runner", payload, options);		//this is a test topic for the runner until the actual runner user token is set up. Random sampling should be done to acquire this and then the information is set in the sending node for runnerUID.
+
+		});
+	} else{
+		return;
+	}
+});
+
+exports.collectedOrderMonitor = functions.database.ref("uid/{uid}/collected/{pushId}").onWrite((event) => {		//notifies user/vendor
+	const data = event.data;
+    console.log('Event triggered');
+    if (!data.changed()) {
+        return;
+    }
+    const status = data.val();
+	
+	if(status != null){	
+	const payload = {
+    data: {
+        //title: 'Electricity Monitor - Power status changed',
+        //body: 'Test',
+        //sound: "default"
+		
+		customeruid: status.customeruid,
+        vendoruid: status.vendoruid,
+		//runneruid: status.runneruid,
+		message: status.result,
+        sound: "default"
+		
+    }
+		
+    };
+
+    const options = {
+        priority: "high",
+        timeToLive: 60 * 60 * 24 //24 hours
+    };
+    console.log('Sending delivery notifications');
+    //return admin.messaging().sendToTopic("usertest", payload, options);
+	
+	var db = admin.database();
+	var ref = db.ref().child("uid").child(status.vendoruid);
+	ref.orderByKey().equalTo(status.orderid).on("child_added", function(snapshot) {		//for the vendor
+	console.log(snapshot.key);
+	//ref.child("requests").child(snapshot.key).remove();		//removes the order from requests after the restaurant has accepted it
+	ref.child("sending").child(snapshot.key).remove();		//removes the order from sending after the restaurant has accepted it
+		console.log('Vendor: Sending removed');
+
+});
+	
+	var database = admin.database().ref().child("orders").child(status.orderid);
+	//var userData;
+	var userToken;
+	var userTokenid;
+	
+	database.once('value')
+		.then(function(dataSnapshot) {
+			// handle read data.
+			var userToken = dataSnapshot.val();
 			var userTokenid = userToken.user_token;
 			console.log("User Token: " + userTokenid);
 			return admin.messaging().sendToDevice(userTokenid, payload, options);		//using the user_token as the receiver
 			//return admin.messaging().sendToDevice(runneruserTokenid, payload, options);		//using the user_token as the receiver for the runner
+			return admin.messaging().sendToTopic("Starbucks", payload, options);		//sends the notificaiton that the runner has collected the food to the restaurant. In this case, the test restaurant is Starbucks.
 
 		});
+	} else {
+		return;
+	}
 });
 
 exports.declinedOrderMonitor = functions.database.ref("uid/{uid}/declined/{pushId}").onWrite((event) => {		//notifies user/vendor
@@ -572,13 +715,30 @@ exports.deliveredOrderMonitor = functions.database.ref("uid/{uid}/delivered/{pus
 	
 	var db = admin.database();
 	var ref = db.ref().child("uid").child(status.vendoruid).child("requests");
-	var ref2 = db.ref().child("uid").child(status.vendoruid).child("sending");
+	var ref2 = db.ref().child("uid").child(status.vendoruid).child("accepted");
+	var ref3 = db.ref().child("uid").child(status.vendoruid).child("sending");
+	var ref4 = db.ref().child("uid").child(status.vendoruid).child("collected");
+	var ref5 = db.ref().child("uid").child(status.runneruid).child("sending");
+	var ref6 = db.ref().child("uid").child(status.runneruid).child("collected");
 	ref.orderByKey().equalTo(status.orderid).on("child_added", function(snapshot) {
+		//set up for the case of the vendoruid write, which then deletes the node and then the runneruid write which would then be null since the node has just been deleted
+		if(snapshot.key !== null){
 	console.log(snapshot.key);
 	ref.child(snapshot.key).remove();		//removes the order from sending after the restaurant has delivered it
-		console.log('Request removed');
+		console.log('Vendor: Request removed');
 	ref2.child(snapshot.key).remove();		//removes the order from sending after the restaurant has delivered it
-		console.log('Sending removed');
+		console.log('Vendor: Accepted removed');	
+	ref3.child(snapshot.key).remove();		//removes the order from sending after the restaurant has delivered it
+		console.log('Vendor: Sending removed');
+	ref4.child(snapshot.key).remove();		//removes the order from sending after the restaurant has delivered it
+		console.log('Vendor: Collected removed');
+	ref5.child(snapshot.key).remove();		//removes the order from sending after the restaurant has delivered it
+		console.log('Runner: Sending removed');
+	ref6.child(snapshot.key).remove();		//removes the order from sending after the restaurant has delivered it
+		console.log('Runner: Collected removed');
+		} else{
+			return;
+		}
 });
 	
 	var database = admin.database().ref().child("orders").child(status.orderid);
@@ -594,6 +754,7 @@ exports.deliveredOrderMonitor = functions.database.ref("uid/{uid}/delivered/{pus
 			console.log("User Token: " + userTokenid);
 			return admin.messaging().sendToDevice(userTokenid, payload, options);		//using the user_token as the receiver
 			//return admin.messaging().sendToDevice(vendoruserTokenid, payload, options);		//using the user_token as the receiver for the vendor
+			return admin.messaging().sendToTopic("Starbucks", payload, options);		//sends the notificaiton that the runner has delivered the food to the restaurant. In this case, the test restaurant is Starbucks.
 
 		});
 });

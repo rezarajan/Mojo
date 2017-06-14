@@ -153,6 +153,7 @@ public class Checkout extends AppCompatActivity{
                 notification.put("user_token", FirebaseInstanceId.getInstance().getToken());
                 notification.put("customeruid", user.getUid());
                 notification.put("vendoruid", "Starbucks");
+                //notification.put("runneruid", "Runner");
                 notification.put("postid", pushId);
 
                 //get the data and append to a list

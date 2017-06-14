@@ -282,10 +282,10 @@ public class Runner_Mapper extends AppCompatActivity implements OnMapReadyCallba
                     HashMap<String, String> point = path.get(j);
 
                     if (j == 0) {    // Get distance from the list
-                        distance = (String) point.get("distance");
+                        distance = point.get("distance");
                         continue;
                     } else if (j == 1) { // Get duration from the list
-                        duration = (String) point.get("duration");
+                        duration = point.get("duration");
                         continue;
                     }
 

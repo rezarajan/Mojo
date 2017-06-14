@@ -25,6 +25,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 import bluefirelabs.mojo.main.ui.user.MainHub;
 import bluefirelabs.mojo.R;
+import bluefirelabs.mojo.main.ui.user.RunnerHub;
 import bluefirelabs.mojo.main.ui.user.VendorHub;
 
 public class permission_location extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
@@ -88,6 +89,10 @@ public class permission_location extends AppCompatActivity implements GoogleApiC
         FirebaseUser user = firebaseAuth.getCurrentUser();
         if(user.getEmail().equals("vendor@gmail.com")){
             Intent intent = new Intent(permission_location.this, VendorHub.class);
+            startActivity(intent);
+            finish();
+        } else if(user.getEmail().equals("runner@gmail.com")){
+            Intent intent = new Intent(permission_location.this, RunnerHub.class);
             startActivity(intent);
             finish();
         } else {
