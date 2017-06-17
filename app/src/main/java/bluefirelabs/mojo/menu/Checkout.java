@@ -173,6 +173,7 @@ public class Checkout extends AppCompatActivity{
                     if (restaurant.equals(next_restaurant)) {
                         Log.d("Outcome", "same");
                         data.moveToPosition(position);
+                        Log.d("Using pushID", String.valueOf(pushId));
                         //get the value from the database in column
                         //then add it to the ArrayList
                         //listData.add(data.getString(2));
@@ -204,7 +205,7 @@ public class Checkout extends AppCompatActivity{
                         Log.d("Position", String.valueOf(position));
                         if (position == 0) {
                             data.moveToPosition(position);
-                            Log.d("Initial set", data.getString(1));
+                            Log.d("Initial set", data.getString(1) + " with pushID: " + String.valueOf(pushId));
                             //get the value from the database in column
                             //then add it to the ArrayList
                             //listData.add(data.getString(2));
@@ -217,8 +218,9 @@ public class Checkout extends AppCompatActivity{
 
                             reference.child(pushId).setValue(notification);
                             reference.child(pushId).child("items").setValue(itemListing);
-                            Log.d("Push ID", pushId.toString());
+                            //Log.d("Push ID", pushId.toString());
                             pushId = reference.push().getKey();     //sets a new push id for the different restaurant
+                            Log.d("Refreshing Push", pushId);
                         } else {
                             Log.d("Outcome", "different");
                             pushId = reference.push().getKey();     //sets a new push id for the different restaurant
