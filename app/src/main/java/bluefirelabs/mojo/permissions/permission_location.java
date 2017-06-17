@@ -87,7 +87,7 @@ public class permission_location extends AppCompatActivity implements GoogleApiC
     public void callNextActivity(){
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser user = firebaseAuth.getCurrentUser();
-        if(user.getEmail().equals("vendor@gmail.com")){
+        if (user.getEmail().equals("vendor@gmail.com") || user.getEmail().equals("mcdonalds@gmail.com")) {
             Intent intent = new Intent(permission_location.this, VendorHub.class);
             startActivity(intent);
             finish();
