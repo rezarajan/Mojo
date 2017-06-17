@@ -104,9 +104,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 
     public Cursor orderAlpha(){
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor res = db.rawQuery("SELECT "+ RESTAURANT
-                +" FROM "+ TABLE_NAME
-                +" ORDER BY "+ RESTAURANT +" COLLATE NOCASE;", null);
+        Cursor res = db.rawQuery("SELECT * FROM " + TABLE_NAME + " ORDER BY " + RESTAURANT + " ASC", null);
         return res;
     }
 }

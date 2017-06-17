@@ -150,28 +150,145 @@ public class Checkout extends AppCompatActivity{
                 Map notification = new HashMap<>();
                 Map itemListing = new HashMap<>();
 
-                notification.put("user_token", FirebaseInstanceId.getInstance().getToken());
-                notification.put("customeruid", user.getUid());
-                notification.put("vendoruid", "Starbucks");
-                //notification.put("runneruid", "Runner");
-                notification.put("postid", pushId);
 
                 //get the data and append to a list
-                Cursor data = myDb.getAllData();
+                //Cursor data = myDb.getAllData();
 
                 //order data alphabetically by restaurant name and append to a list
-                //Cursor data = myDb.orderAlpha();
+                Cursor data = myDb.orderAlpha();
 
                 ArrayList<String> listData = new ArrayList<>();
-                while(data.moveToNext()){
-                    //get the value from the database in column
-                    //then add it to the ArrayList
-                    listData.add(data.getString(2));
-                    itemListing.put(data.getString(2), data.getString(4));    //itemId, quantity
+                //ArrayList<String> listData_comparison = new ArrayList<>();
+                String restaurant, next_restaurant;
+
+                int count = data.getCount();
+
+                for (int position = 0; position + 1 < count; position++) {
+                    data.moveToPosition(position);
+                    restaurant = data.getString(1);     //gets the restaurant name
+                    data.moveToPosition(position + 1);
+                    next_restaurant = data.getString(1);
+                    Log.d("Comparison Parameters", restaurant + " : " + next_restaurant);
+
+                    if (restaurant.equals(next_restaurant)) {
+                        Log.d("Outcome", "same");
+                        data.moveToPosition(position);
+                        //get the value from the database in column
+                        //then add it to the ArrayList
+                        //listData.add(data.getString(2));
+                        notification.put("user_token", FirebaseInstanceId.getInstance().getToken());
+                        notification.put("customeruid", user.getUid());
+                        notification.put("vendoruid", data.getString(1));
+                        //notification.put("runneruid", "Runner");
+                        notification.put("postid", pushId);
+                        itemListing.put(data.getString(2), data.getString(4));    //itemId, quantity
+
+                        reference.child(pushId).setValue(notification);
+                        reference.child(pushId).child("items").setValue(itemListing);
+
+                        data.moveToPosition(position + 1);
+                        //get the value from the database in column
+                        //then add it to the ArrayList
+                        //listData.add(data.getString(2));
+                        notification.put("user_token", FirebaseInstanceId.getInstance().getToken());
+                        notification.put("customeruid", user.getUid());
+                        notification.put("vendoruid", data.getString(1));
+                        //notification.put("runneruid", "Runner");
+                        notification.put("postid", pushId);
+                        itemListing.put(data.getString(2), data.getString(4));    //itemId, quantity
+
+                        reference.child(pushId).setValue(notification);
+                        reference.child(pushId).child("items").setValue(itemListing);
+
+                    } else {
+                        Log.d("Position", String.valueOf(position));
+                        if (position == 0) {
+                            data.moveToPosition(position);
+                            Log.d("Initial set", data.getString(1));
+                            //get the value from the database in column
+                            //then add it to the ArrayList
+                            //listData.add(data.getString(2));
+                            notification.put("user_token", FirebaseInstanceId.getInstance().getToken());
+                            notification.put("customeruid", user.getUid());
+                            notification.put("vendoruid", data.getString(1));
+                            //notification.put("runneruid", "Runner");
+                            notification.put("postid", pushId);
+                            itemListing.put(data.getString(2), data.getString(4));    //itemId, quantity
+
+                            reference.child(pushId).setValue(notification);
+                            reference.child(pushId).child("items").setValue(itemListing);
+                            Log.d("Push ID", pushId.toString());
+                            pushId = reference.push().getKey();     //sets a new push id for the different restaurant
+                        } else {
+                            Log.d("Outcome", "different");
+                            pushId = reference.push().getKey();     //sets a new push id for the different restaurant
+                            Log.d("Setting new pushID", pushId);
+                            itemListing.clear();
+                            notification.clear();
+                            Log.d("New info set", data.getString(1));
+                            //get the value from the database in column
+                            //then add it to the ArrayList
+                            //listData.add(data.getString(2));
+                            notification.put("user_token", FirebaseInstanceId.getInstance().getToken());
+                            notification.put("customeruid", user.getUid());
+                            notification.put("vendoruid", data.getString(1));
+                            //notification.put("runneruid", "Runner");
+                            notification.put("postid", pushId);
+                            itemListing.put(data.getString(2), data.getString(4));    //itemId, quantity
+
+                            reference.child(pushId).setValue(notification);
+                            reference.child(pushId).child("items").setValue(itemListing);
+                        }
+                    }
+                    /*if(data.getString(1) == restaurant){        //comparing the next restaurant name to the current
+                        data.moveToPosition(position--);
+                        //get the value from the database in column
+                        //then add it to the ArrayList
+                        //listData.add(data.getString(2));
+                        notification.put("user_token", FirebaseInstanceId.getInstance().getToken());
+                        notification.put("customeruid", user.getUid());
+                        notification.put("vendoruid", data.getString(1));
+                        //notification.put("runneruid", "Runner");
+                        notification.put("postid", pushId);
+                        itemListing.put(data.getString(2), data.getString(4));    //itemId, quantity
+
+                        reference.child(pushId).setValue(notification);
+                        reference.child(pushId).child("items").setValue(itemListing);
+                    } else {
+                        pushId = reference.push().getKey();     //sets a new push id for the different restaurant
+                        Log.d("Setting new pushID", pushId);
+                        itemListing.clear();
+                        notification.clear();
+                    } */
                 }
 
-                reference.child(pushId).setValue(notification);
-                reference.child(pushId).child("items").setValue(itemListing);
+                /*
+                while(data.moveToNext()){
+                    restaurant = data.getString(1);     //gets the restaurant name
+                    position++;
+                        if(data.getString(1) == restaurant){        //comparing the next restaurant name to the current
+                            //get the value from the database in column
+                            //then add it to the ArrayList
+                            //listData.add(data.getString(2));
+                            notification.put("user_token", FirebaseInstanceId.getInstance().getToken());
+                            notification.put("customeruid", user.getUid());
+                            notification.put("vendoruid", data.getString(1));
+                            //notification.put("runneruid", "Runner");
+                            notification.put("postid", pushId);
+                            itemListing.put(data.getString(2), data.getString(4));    //itemId, quantity
+
+                            data.moveToPrevious();      //returns the data to the previous value for the next iteration
+                            reference.child(pushId).setValue(notification);
+                            reference.child(pushId).child("items").setValue(itemListing);
+                        } else {
+                            pushId = reference.push().getKey();     //sets a new push id for the different restaurant
+                            Log.d("Setting new pushID", pushId);
+                            itemListing.clear();
+                            notification.clear();
+                        }
+
+                        //Log.d("Data", data.getString(1));
+                } */
             }
         });
     }
