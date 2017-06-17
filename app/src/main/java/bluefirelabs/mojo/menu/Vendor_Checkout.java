@@ -136,7 +136,7 @@ public class Vendor_Checkout extends AppCompatActivity{
 
             }
         });
-        mListView.setAdapter(adapter);  //TODO: This is not displaying the items for some reason. Fix it
+        mListView.setAdapter(adapter);  //TODO: This is not displaying the items for some reason. Possibly change it to a firebaserecycleradapter
         listData.clear();
 
     }
