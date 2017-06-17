@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -48,7 +49,7 @@ public class Items_Menu extends AppCompatActivity {
         category = receivedIntent.getStringExtra("Category");
         Log.d("Received Restaurant", restaurant);
         Log.d("Received Category", category);
-        //conRef = receivedIntent.getStringExtra("Icon");
+        //IconRef = receivedIntent.getStringExtra("Icon");
 
         ImageView restaurantIcon = (ImageView) findViewById(R.id.foodIcon);
         Picasso.with(Items_Menu.this).load(iconRef).into(restaurantIcon);
@@ -95,7 +96,7 @@ public class Items_Menu extends AppCompatActivity {
         ) {
 
             @Override
-            protected void populateViewHolder(FirebaseRecyclerAdapterItems.RecyclerViewHolder viewHolder, Food_List model, int position) {
+            protected void populateViewHolder(final FirebaseRecyclerAdapterItems.RecyclerViewHolder viewHolder, Food_List model, int position) {
                 //Log.d("Description: ", model.getDescription());
                 //viewHolder.itemDescription.setText(model.getDescription());
                 //viewHolder.itemTitle.setText(model.getRestaurant());
@@ -103,6 +104,34 @@ public class Items_Menu extends AppCompatActivity {
                 viewHolder.itemTitle.setText(model.getName());
                 //viewHolder.itemIcon.setImageResource(R.drawable.restaurant_icon);
                // Picasso.with(getApplicationContext()).load(model.getIcon()).into(viewHolder.itemIcon);
+                viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        int position = viewHolder.getAdapterPosition();
+
+                        Snackbar.make(v, "Click detected on item " + position,
+                                Snackbar.LENGTH_LONG)
+                                .setAction("Action", null).show();
+
+
+                        boolean isInserted = myDb.insertData(restaurant,       //The restaurant name
+                                viewHolder.itemTitle.getText().toString(),     //The item name
+                                viewHolder.itemDescription.getText().toString().replace("$",""),       //The item cost
+                                "1");                                //Adds the item at at the specific position to the database
+                        //Default Quantity is 1
+
+                        Log.d("Adapted Restaurant", restaurant);
+                        if (isInserted == true) {
+                            Snackbar.make(v, "Data Inserted",
+                                    Snackbar.LENGTH_LONG)
+                                    .setAction("Action", null).show();
+                        } else {
+                            Snackbar.make(v, "Data not Inserted",
+                                    Snackbar.LENGTH_LONG)
+                                    .setAction("Action", null).show();
+                        }
+                    }
+                });
             }
         };
 

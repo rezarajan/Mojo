@@ -42,6 +42,7 @@ public class FirebaseRecyclerAdapterItems {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    /*
                     int position = getAdapterPosition();
 
                     Snackbar.make(v, "Click detected on item " + position,
@@ -49,10 +50,11 @@ public class FirebaseRecyclerAdapterItems {
                             .setAction("Action", null).show();
 
 
-                    boolean isInserted = myDb.insertData("Starbucks",
-                            itemTitle.getText().toString(),
-                            itemDescription.getText().toString().replace("$",""),
-                            "0");                                //Adds the item at at the specific position to the database
+                    boolean isInserted = myDb.insertData("Starbucks",       //TODO: Change this to the actual restaurant name
+                            itemTitle.getText().toString(),     //The item name
+                            itemDescription.getText().toString().replace("$",""),       //The item cost
+                            "1");                                //Adds the item at at the specific position to the database
+                                                                //Default Quantity is 1
 
                     if (isInserted == true) {
                         Snackbar.make(v, "Data Inserted",
@@ -62,7 +64,7 @@ public class FirebaseRecyclerAdapterItems {
                         Snackbar.make(v, "Data not Inserted",
                                 Snackbar.LENGTH_LONG)
                                 .setAction("Action", null).show();
-                    }
+                    } */
 
                     //Intent intent = new Intent(context, Item_Menu.class);
                     //context.startActivity(intent);

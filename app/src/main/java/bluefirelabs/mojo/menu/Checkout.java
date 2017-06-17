@@ -110,7 +110,7 @@ public class Checkout extends AppCompatActivity{
                     startActivity(editCheckoutintent);
 
                 } else {
-                    Snackbar.make(view, "No ID associated with that name",
+                    Snackbar.make(view, "No ID associated with that name",      //TODO: Change this to suit order quantity
                             Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
                 }
@@ -158,6 +158,9 @@ public class Checkout extends AppCompatActivity{
 
                 //get the data and append to a list
                 Cursor data = myDb.getAllData();
+
+                //order data alphabetically by restaurant name and append to a list
+                //Cursor data = myDb.orderAlpha();
 
                 ArrayList<String> listData = new ArrayList<>();
                 while(data.moveToNext()){

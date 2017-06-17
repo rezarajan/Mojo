@@ -101,4 +101,12 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         Log.d("DatabaseHelper: ", "updateQuantity: Setting quantity to: " + newQuantity);
         db.execSQL(query);
     }
+
+    public Cursor orderAlpha(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor res = db.rawQuery("SELECT "+ RESTAURANT
+                +" FROM "+ TABLE_NAME
+                +" ORDER BY "+ RESTAURANT +" COLLATE NOCASE;", null);
+        return res;
+    }
 }
