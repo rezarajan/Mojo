@@ -146,7 +146,6 @@ public class Vendor_Checkout extends AppCompatActivity{
     protected void onResume() {
         super.onResume();
         setContentView(R.layout.vendor_checkout_layout);
-        //myDb = new DatabaseHelper(this);
         mListView = (ListView)findViewById(R.id.listview_checkout);
         placeorder = (Button)findViewById(R.id.button_place_order);
         noitems = (TextView)findViewById(R.id.content_available_indicator);
