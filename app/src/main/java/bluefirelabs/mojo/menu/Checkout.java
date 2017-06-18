@@ -169,18 +169,27 @@ public class Checkout extends AppCompatActivity{
                 String restaurant, next_restaurant;
 
                 int count = data.getCount();
+                for (int position = 0; position < count; position++) {
+                    data.moveToPosition(position);
+                    Log.d("Database", data.getString(1));
 
-                for (int position = 0; position + 1 < count; position++) {
+                }
+
+                for (int position = 0; position < count; position++) {
                     data.moveToPosition(position);
                     restaurant = data.getString(1);     //gets the restaurant name
-                    data.moveToPosition(position + 1);
-                    next_restaurant = data.getString(1);
+                    //data.moveToPosition(position + 1);
+                    if (data.moveToNext() != false) {
+                        next_restaurant = data.getString(1);
+                    } else {
+                        next_restaurant = restaurant;
+                    }
                     Log.d("Comparison Parameters", restaurant + " : " + next_restaurant);
 
                     if (restaurant.equals(next_restaurant)) {
                         Log.d("Outcome", "same");
-                        itemListing.clear();
-                        notification.clear();
+                        //itemListing.clear();
+                        //notification.clear();
                         //this is done twice since for the case when the restaurants are different
                         //the former restaurant will not be added since it resorts to the else case
                         data.moveToPosition(position);
@@ -198,20 +207,21 @@ public class Checkout extends AppCompatActivity{
                         reference.child(pushId).setValue(notification);
                         reference.child(pushId).child("items").setValue(itemListing);
 
-                        data.moveToPosition(position + 1);
-                        //get the value from the database in column
-                        //then add it to the ArrayList
-                        //listData.add(data.getString(2));
-                        notification.put("user_token", FirebaseInstanceId.getInstance().getToken());
-                        notification.put("customeruid", user.getUid());
-                        notification.put("vendoruid", data.getString(1));
-                        //notification.put("runneruid", "Runner");
-                        notification.put("postid", pushId);
-                        itemListing.put(data.getString(2), data.getString(4));    //itemId, quantity
-
-                        reference.child(pushId).setValue(notification);
-                        reference.child(pushId).child("items").setValue(itemListing);
-                        Log.d("The items pushed for " + restaurant + " are", itemListing.toString());
+                        //data.moveToPosition(position + 1);
+                        if (data.moveToNext() != false) {
+                            //get the value from the database in column
+                            //then add it to the ArrayList
+                            //listData.add(data.getString(2));
+                            notification.put("user_token", FirebaseInstanceId.getInstance().getToken());
+                            notification.put("customeruid", user.getUid());
+                            notification.put("vendoruid", data.getString(1));
+                            //notification.put("runneruid", "Runner");
+                            notification.put("postid", pushId);
+                            itemListing.put(data.getString(2), data.getString(4));    //itemId, quantity
+                            reference.child(pushId).setValue(notification);
+                            reference.child(pushId).child("items").setValue(itemListing);
+                            Log.d("The items pushed for " + restaurant + " are", itemListing.toString());
+                        }
 
                     } else {
                         Log.d("Position", String.valueOf(position));
@@ -234,6 +244,8 @@ public class Checkout extends AppCompatActivity{
                             pushId = reference.push().getKey();     //sets a new push id for the different restaurant
                             Log.d("Refreshing Push", pushId);
                             Log.d("The items pushed for " + restaurant + " are", itemListing.toString());
+                            itemListing.clear();
+                            notification.clear();
                         } else {
                             Log.d("Outcome", "different");
                             pushId = reference.push().getKey();     //sets a new push id for the different restaurant
@@ -267,6 +279,8 @@ public class Checkout extends AppCompatActivity{
                 myDb.deleteAll();
                 populateListView();
                 Toast.makeText(getApplicationContext(), "Cart Cleared", Toast.LENGTH_SHORT).show();
+                placeorder.setVisibility(View.INVISIBLE);
+                cancelButton.setVisibility(View.INVISIBLE);
             }
         });
     }
