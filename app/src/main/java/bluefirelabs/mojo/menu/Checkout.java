@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -36,7 +37,7 @@ public class Checkout extends AppCompatActivity{
     private static final String TAG = "ListDataActivity";
     DatabaseHelper myDb;
     private ListView mListView;
-    private Button placeorder;
+    private Button placeorder, cancelButton;
     private TextView noitems;
     private String pushId;
 
@@ -46,16 +47,19 @@ public class Checkout extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.checkout_layout);
         mListView = (ListView)findViewById(R.id.listview_checkout);
+        cancelButton = (Button) findViewById(R.id.button_cancel);
         placeorder = (Button)findViewById(R.id.button_place_order);
         noitems = (TextView)findViewById(R.id.content_available_indicator);
         myDb = new DatabaseHelper(this);
         Cursor data = myDb.getAllData();
         if(data.getCount() > 0){
             placeorder.setVisibility(View.VISIBLE);
+            cancelButton.setVisibility(View.VISIBLE);
             mListView.setVisibility(View.VISIBLE);
             noitems.setVisibility(View.INVISIBLE);
         } else {
             placeorder.setVisibility(View.INVISIBLE);
+            cancelButton.setVisibility(View.INVISIBLE);
             mListView.setVisibility(View.INVISIBLE);
             noitems.setVisibility(View.VISIBLE);
         }
@@ -125,14 +129,17 @@ public class Checkout extends AppCompatActivity{
         myDb = new DatabaseHelper(this);
         mListView = (ListView)findViewById(R.id.listview_checkout);
         placeorder = (Button)findViewById(R.id.button_place_order);
+        cancelButton = (Button) findViewById(R.id.button_cancel);
         noitems = (TextView)findViewById(R.id.content_available_indicator);
         Cursor data = myDb.getAllData();
         if(data.getCount() > 0){
             placeorder.setVisibility(View.VISIBLE);
+            cancelButton.setVisibility(View.VISIBLE);
             mListView.setVisibility(View.VISIBLE);
             noitems.setVisibility(View.INVISIBLE);
         } else {
             placeorder.setVisibility(View.INVISIBLE);
+            cancelButton.setVisibility(View.INVISIBLE);
             mListView.setVisibility(View.INVISIBLE);
             noitems.setVisibility(View.VISIBLE);
         }
@@ -247,9 +254,19 @@ public class Checkout extends AppCompatActivity{
                             reference.child(pushId).setValue(notification);
                             reference.child(pushId).child("items").setValue(itemListing);
                             Log.d("The items pushed for " + next_restaurant + " are", itemListing.toString());
+                            Toast.makeText(getApplicationContext(), "Order Placed", Toast.LENGTH_SHORT).show();
                         }
                     }
                 }
+            }
+        });
+
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                myDb.deleteAll();
+                populateListView();
+                Toast.makeText(getApplicationContext(), "Cart Cleared", Toast.LENGTH_SHORT).show();
             }
         });
     }

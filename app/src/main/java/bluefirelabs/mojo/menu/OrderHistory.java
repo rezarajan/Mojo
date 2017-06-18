@@ -37,7 +37,7 @@ public class OrderHistory extends AppCompatActivity {
     DatabaseHelper myDb;
     private ListView mListView;
     private Button placeorder;
-    private TextView noitems, txtView;
+    private TextView noitems;
     private String orderId;
     Set keys, mainkey;
     public String restaurantName = "";

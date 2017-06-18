@@ -66,6 +66,11 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         return db.delete(TABLE_NAME, ITEM + " = ?", new String[] {TODELETE});
     }
 
+    public void deleteAll() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_NAME, null, null);
+    }
+
     public Cursor getItemID(String name){
         SQLiteDatabase db = this.getWritableDatabase();
         String query = "SELECT " + ID + " FROM " + TABLE_NAME + " WHERE " + ITEM + " = '" + name + "'";
