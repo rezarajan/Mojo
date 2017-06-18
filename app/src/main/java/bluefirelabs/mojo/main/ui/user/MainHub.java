@@ -48,6 +48,8 @@ import bluefirelabs.mojo.handlers.adapters.Food_List;
 import bluefirelabs.mojo.handlers.online.SharedPrefManager;
 import bluefirelabs.mojo.handlers.online.uploadImage;
 import bluefirelabs.mojo.main.login.Sign_In;
+import bluefirelabs.mojo.menu.OrderHistory;
+import bluefirelabs.mojo.menu.Receipt;
 
 public class MainHub extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener
@@ -217,7 +219,12 @@ public class MainHub extends AppCompatActivity
             Intent intent = new Intent(this, uploadImage.class);
             startActivity(intent);
 
-        } /* else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.nav_share) {
+            Intent intent = new Intent(this, OrderHistory.class);
+            startActivity(intent);
+        }
+
+        /* else if (id == R.id.nav_slideshow) {
 
         } else if (id == R.id.nav_manage) {
 
