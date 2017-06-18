@@ -51,11 +51,11 @@ public class Receipt extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.vendor_checkout_layout);
 
-        //Intent receivedIntent = getIntent();
+        Intent receivedIntent = getIntent();
 
         //now get the orderID passed as an extra
-        //orderId = receivedIntent.getExtras().getString("ID"); //NOTE: -1 is just the default value
-        //Log.d("Order ID Received", orderId);
+        orderId = receivedIntent.getExtras().getString("ID"); //NOTE: -1 is just the default value
+        Log.d("Order ID Received", orderId);
 
         mListView = (ListView) findViewById(R.id.listview_checkout);
         placeorder = (Button) findViewById(R.id.button_place_order);
@@ -96,7 +96,7 @@ public class Receipt extends AppCompatActivity {
                             keys = hopperValues.keySet();
 
                             for (String s : hopperValues.keySet()) {
-                                Log.d("hopperValues", "Key: " + s);
+                                Log.d("Receipt Items", "Key: " + s);
                                 listData.add(s);
                                 //itemTitle.setText(key.toString());
                                 mListView.setAdapter(adapter);
@@ -117,17 +117,17 @@ public class Receipt extends AppCompatActivity {
         FirebaseUser user = firebaseAuth.getCurrentUser();
         UID = user.getUid();
 
-        final DatabaseReference reference = FirebaseDatabase.getInstance().getReference("uid/" + UID + "/");
+        final DatabaseReference reference = FirebaseDatabase.getInstance().getReference("uid/" + UID + "/" + orderId + "/items/");
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Map<String, Object> hopperValues = (Map<String, Object>) dataSnapshot.getValue();
                 keys = hopperValues.keySet();
                 //hopperValues.put("key", dataSnapshot.getKey().toString());
-                //Log.d("Values", dataSnapshot.getKey().toString());
-                Log.d("Values", keys.toString());
-                RESTAURANT = "uid/" + UID;
-                myCallback.callbackCall(RESTAURANT);
+                //Log.d("Values", dataSnapshot.getValue().toString());
+                //Log.d("Receipt_Items", keys.toString());
+                //RESTAURANT = "uid/" + UID;
+                //myCallback.callbackCall(RESTAURANT);
                 /*for (String s : hopperValues.keySet()) {
                     Log.d("Values", s);
                     //DatabaseReference reference_order = FirebaseDatabase.getInstance().getReference("uid/"+UID+"/"+s);
@@ -138,9 +138,9 @@ public class Receipt extends AppCompatActivity {
                 //Map<String, Object> itemValues = (Map<String, Object>) hopperValues.get("items");
                 //Log.d("items", itemValues.toString());
                 //restaurantName = (String) hopperValues.get("items"); //this directory only contains one item so it should not be a problem
-                //RESTAURANT  = "uid/"+restaurantName+"/requests/";
+                RESTAURANT = "uid/" + UID + "/" + orderId + "/items/";
                 //Log.d("Restaurant", RESTAURANT);
-                //myCallback.callbackCall(RESTAURANT);
+                myCallback.callbackCall(RESTAURANT);
             }
 
             @Override

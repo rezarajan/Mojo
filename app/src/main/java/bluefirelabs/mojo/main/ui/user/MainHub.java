@@ -49,7 +49,6 @@ import bluefirelabs.mojo.handlers.online.SharedPrefManager;
 import bluefirelabs.mojo.handlers.online.uploadImage;
 import bluefirelabs.mojo.main.login.Sign_In;
 import bluefirelabs.mojo.menu.OrderHistory;
-import bluefirelabs.mojo.menu.Receipt;
 
 public class MainHub extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListAdapter;
@@ -36,7 +37,7 @@ public class OrderHistory extends AppCompatActivity {
     DatabaseHelper myDb;
     private ListView mListView;
     private Button placeorder;
-    private TextView noitems;
+    private TextView noitems, txtView;
     private String orderId;
     Set keys, mainkey;
     public String restaurantName = "";
@@ -99,13 +100,6 @@ public class OrderHistory extends AppCompatActivity {
                                 listData.add(s);
                                 //itemTitle.setText(key.toString());
                                 mListView.setAdapter(adapter);
-                                mListView.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        Intent intent = new Intent(OrderHistory.this, Receipt.class);
-                                        startActivity(intent);
-                                    }
-                                });
                             }
                         }
                     }
@@ -117,6 +111,15 @@ public class OrderHistory extends AppCompatActivity {
                 });
             }
         };
+
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(OrderHistory.this, Receipt.class);
+                intent.putExtra("ID", mListView.getItemAtPosition(position).toString());
+                startActivity(intent);
+            }
+        });
 
 
         firebaseAuth = FirebaseAuth.getInstance();
