@@ -79,6 +79,7 @@ public class OrderHistory extends AppCompatActivity {
                 reference.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
+                        listData.clear();
                         Map<String, Object> hopperValues = (Map<String, Object>) dataSnapshot.getValue();
                         //hopperValues.put("key", dataSnapshot.getKey().toString());
                         //Log.d("Values", dataSnapshot.getKey().toString());
@@ -96,10 +97,14 @@ public class OrderHistory extends AppCompatActivity {
                             keys = hopperValues.keySet();
 
                             for (String s : hopperValues.keySet()) {
-                                Log.d("hopperValues", "Key: " + s);
-                                listData.add(s);
-                                //itemTitle.setText(key.toString());
-                                mListView.setAdapter(adapter);
+                                if (s.equals("info")) {
+                                    return;
+                                } else {
+                                    Log.d("hopperValues", "Key: " + s);
+                                    listData.add(s);
+                                    //itemTitle.setText(key.toString());
+                                    mListView.setAdapter(adapter);
+                                }
                             }
                         }
                     }
