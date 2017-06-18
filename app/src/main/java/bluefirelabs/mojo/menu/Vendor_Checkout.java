@@ -69,7 +69,7 @@ public class Vendor_Checkout extends AppCompatActivity{
         final ArrayList<String> listData = new ArrayList<>();
         listData.clear();
         //create the list adapter and set the adapter
-        ListAdapter adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, listData);
+        final ListAdapter adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, listData);
 
         final MyCallback myCallback = new MyCallback() {
             @Override
@@ -81,7 +81,7 @@ public class Vendor_Checkout extends AppCompatActivity{
                         Map<String, Object> hopperValues = (Map<String, Object>) dataSnapshot.getValue();
                         //hopperValues.put("key", dataSnapshot.getKey().toString());
                         //Log.d("Values", dataSnapshot.getKey().toString());
-                        Log.d("Values from Checkout", dataSnapshot.getValue().toString());
+                        //Log.d("Values from Checkout", dataSnapshot.getValue().toString());
 
 
                         int total_cost = 0;
@@ -101,6 +101,7 @@ public class Vendor_Checkout extends AppCompatActivity{
                                 Log.d("itemValues", "Key: " + key + ", Value: " + value);
                                 listData.add(key + "    Amount: " + value);
                                 //itemTitle.setText(key.toString());
+                                mListView.setAdapter(adapter);  //TODO: This is not displaying the items for some reason. Possibly change it to a firebaserecycleradapter
 
                             }
                         }
@@ -136,7 +137,6 @@ public class Vendor_Checkout extends AppCompatActivity{
 
             }
         });
-        mListView.setAdapter(adapter);  //TODO: This is not displaying the items for some reason. Possibly change it to a firebaserecycleradapter
         listData.clear();
 
     }

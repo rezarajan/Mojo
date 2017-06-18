@@ -172,6 +172,10 @@ public class Checkout extends AppCompatActivity{
 
                     if (restaurant.equals(next_restaurant)) {
                         Log.d("Outcome", "same");
+                        itemListing.clear();
+                        notification.clear();
+                        //this is done twice since for the case when the restaurants are different
+                        //the former restaurant will not be added since it resorts to the else case
                         data.moveToPosition(position);
                         Log.d("Using pushID", String.valueOf(pushId));
                         //get the value from the database in column
@@ -200,10 +204,11 @@ public class Checkout extends AppCompatActivity{
 
                         reference.child(pushId).setValue(notification);
                         reference.child(pushId).child("items").setValue(itemListing);
+                        Log.d("The items pushed for " + restaurant + " are", itemListing.toString());
 
                     } else {
                         Log.d("Position", String.valueOf(position));
-                        if (position == 0) {
+                        if (position == 0) {        //for the initial case
                             data.moveToPosition(position);
                             Log.d("Initial set", data.getString(1) + " with pushID: " + String.valueOf(pushId));
                             //get the value from the database in column
@@ -221,6 +226,7 @@ public class Checkout extends AppCompatActivity{
                             //Log.d("Push ID", pushId.toString());
                             pushId = reference.push().getKey();     //sets a new push id for the different restaurant
                             Log.d("Refreshing Push", pushId);
+                            Log.d("The items pushed for " + restaurant + " are", itemListing.toString());
                         } else {
                             Log.d("Outcome", "different");
                             pushId = reference.push().getKey();     //sets a new push id for the different restaurant
@@ -240,57 +246,10 @@ public class Checkout extends AppCompatActivity{
 
                             reference.child(pushId).setValue(notification);
                             reference.child(pushId).child("items").setValue(itemListing);
+                            Log.d("The items pushed for " + next_restaurant + " are", itemListing.toString());
                         }
                     }
-                    /*if(data.getString(1) == restaurant){        //comparing the next restaurant name to the current
-                        data.moveToPosition(position--);
-                        //get the value from the database in column
-                        //then add it to the ArrayList
-                        //listData.add(data.getString(2));
-                        notification.put("user_token", FirebaseInstanceId.getInstance().getToken());
-                        notification.put("customeruid", user.getUid());
-                        notification.put("vendoruid", data.getString(1));
-                        //notification.put("runneruid", "Runner");
-                        notification.put("postid", pushId);
-                        itemListing.put(data.getString(2), data.getString(4));    //itemId, quantity
-
-                        reference.child(pushId).setValue(notification);
-                        reference.child(pushId).child("items").setValue(itemListing);
-                    } else {
-                        pushId = reference.push().getKey();     //sets a new push id for the different restaurant
-                        Log.d("Setting new pushID", pushId);
-                        itemListing.clear();
-                        notification.clear();
-                    } */
                 }
-
-                /*
-                while(data.moveToNext()){
-                    restaurant = data.getString(1);     //gets the restaurant name
-                    position++;
-                        if(data.getString(1) == restaurant){        //comparing the next restaurant name to the current
-                            //get the value from the database in column
-                            //then add it to the ArrayList
-                            //listData.add(data.getString(2));
-                            notification.put("user_token", FirebaseInstanceId.getInstance().getToken());
-                            notification.put("customeruid", user.getUid());
-                            notification.put("vendoruid", data.getString(1));
-                            //notification.put("runneruid", "Runner");
-                            notification.put("postid", pushId);
-                            itemListing.put(data.getString(2), data.getString(4));    //itemId, quantity
-
-                            data.moveToPrevious();      //returns the data to the previous value for the next iteration
-                            reference.child(pushId).setValue(notification);
-                            reference.child(pushId).child("items").setValue(itemListing);
-                        } else {
-                            pushId = reference.push().getKey();     //sets a new push id for the different restaurant
-                            Log.d("Setting new pushID", pushId);
-                            itemListing.clear();
-                            notification.clear();
-                        }
-
-                        //Log.d("Data", data.getString(1));
-                } */
             }
         });
     }
