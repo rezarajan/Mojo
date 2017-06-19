@@ -50,6 +50,7 @@ import java.util.Map;
 
 import bluefirelabs.mojo.R;
 import bluefirelabs.mojo.background_tasks.MyFirebaseInstanceIDService;
+import bluefirelabs.mojo.barcode.barcodeReader;
 import bluefirelabs.mojo.fragments.restaurantlist_fragment;
 import bluefirelabs.mojo.handlers.adapters.Food_List;
 import bluefirelabs.mojo.handlers.online.HttpDataHandler;
@@ -424,7 +425,11 @@ public class RunnerHub extends AppCompatActivity
             Intent intent = new Intent(this, uploadImage.class);
             startActivity(intent);
 
-        } /* else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.nav_send) {
+            Intent intent = new Intent(this, barcodeReader.class);
+            startActivity(intent);
+
+        }/* else if (id == R.id.nav_slideshow) {
         } else if (id == R.id.nav_manage) {
         } else if (id == R.id.nav_share) {
         } else if (id == R.id.nav_send) {

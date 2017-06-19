@@ -15,6 +15,7 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:allowBackup="true"
@@ -39,6 +40,9 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
+        <meta-data
+            android:name="com.google.android.gms.vision.DEPENDENCIES"
+            android:value="barcode" />
 
         <activity
             android:name=".main.login.Splash"
@@ -49,29 +53,35 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".permissions.permission_location"
+        <activity
+            android:name=".permissions.permission_location"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".main.login.Login"
+            android:configChanges="orientation"
             android:label="@string/title_activity_login"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".main.login.Sign_In"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".main.login.Sign_In"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".main.ui.maps.Runner_Mapper"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".main.ui.maps.Runner_Mapper"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".main.ui.maps.Vendor_Runner_Mapper"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".main.ui.maps.Vendor_Runner_Mapper"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".menu.Items_Menu"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".menu.Items_Menu"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".menu.Checkout"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".menu.Checkout"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".menu.OrderHistory"
             android:configChanges="orientation"
@@ -80,37 +90,50 @@
             android:name=".menu.Receipt"
             android:configChanges="orientation"
             android:screenOrientation="portrait" />
-        <activity android:name=".menu.Vendor_Checkout"
+        <activity
+            android:name=".menu.Vendor_Checkout"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".menu.Runner_Checkout"
             android:configChanges="orientation"
             android:screenOrientation="portrait" />
-        <activity android:name=".menu.editcheckout"
+        <activity
+            android:name=".menu.editcheckout"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".handlers.online.uploadImage"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".handlers.online.uploadImage"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".main.ui.user.VendorHub"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".main.ui.user.VendorHub"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".main.ui.user.RunnerHub"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".main.ui.user.RunnerHub"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".menu.Restaurant_Menu"
-            android:label="@string/title_activity_food_menu"
-            android:theme="@style/Theme.AppCompat.NoActionBar"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"/>
+            android:label="@string/title_activity_food_menu"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity
             android:name=".main.ui.user.MainHub"
-            android:label="@string/title_activity_main_hub"
-            android:theme="@style/Theme.AppCompat.NoActionBar"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"/>
+            android:label="@string/title_activity_main_hub"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+        <activity
+            android:name=".barcode.barcodeReader"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".barcode.barcodeScanner"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
 
         <service
             android:name=".background_tasks.MyFirebaseInstanceIDService"
@@ -119,14 +142,11 @@
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
-
-        <service
-            android:name=".background_tasks.MyFirebaseMessagingService">
+        <service android:name=".background_tasks.MyFirebaseMessagingService">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-
     </application>
 
 </manifest>
