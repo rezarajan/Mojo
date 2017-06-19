@@ -97,7 +97,6 @@ public class RunnerHub extends AppCompatActivity
             itemTitle = (TextView) itemView.findViewById(R.id.item_title);
             itemDescription = (TextView) itemView.findViewById(R.id.item_description);
             itemName = (TextView) itemView.findViewById(R.id.item_name);
-            itemTotal = (TextView) itemView.findViewById(R.id.item_total_cost);
             btn_accept = (Button) itemView.findViewById(R.id.button_accept);
             btn_decline = (Button) itemView.findViewById(R.id.button_decline);
             btn_sending = (Button) itemView.findViewById(R.id.button_sending);
@@ -107,7 +106,7 @@ public class RunnerHub extends AppCompatActivity
             btn_accept.setVisibility(View.INVISIBLE);
             btn_decline.setVisibility(View.INVISIBLE);
             btn_sending.setVisibility(View.INVISIBLE);
-            btn_complete.setVisibility(View.VISIBLE);
+            btn_complete.setVisibility(View.INVISIBLE);
             btn_sending.setText("Collect");
         }
     }
@@ -206,9 +205,9 @@ public class RunnerHub extends AppCompatActivity
                 ) {
 
                     @Override
-                    protected void populateViewHolder(final RunnerHub.RecyclerViewHolder viewHolder, Vendor_Order_List model, int position) {
+                    protected void populateViewHolder(final RunnerHub.RecyclerViewHolder viewHolder, final Vendor_Order_List model, int position) {
                         viewHolder.itemTitle.setText("Order ID: " + model.getOrderid());
-                        viewHolder.itemName.setText(model.getName());
+                        viewHolder.itemName.setText(model.getVendoruid());
 
                         final DatabaseReference reference1 = FirebaseDatabase.getInstance().getReference("requests");
                         //viewHolder.btn_decline.setVisibility(View.INVISIBLE);
@@ -257,6 +256,35 @@ public class RunnerHub extends AppCompatActivity
                             }
                         }); */
 
+                        /* reference1.orderByChild("orderid").equalTo(viewHolder.itemTitle.getText().toString().replace("Order ID: ", "")).addChildEventListener(new ChildEventListener() {
+                            @Override
+                            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                                if(model.getResult() != null && model.getResult().equals("collected")){
+                                    viewHolder.btn_complete.setVisibility(View.VISIBLE);
+                                }
+                            }
+
+                            @Override
+                            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                            }
+
+                            @Override
+                            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                            }
+
+                            @Override
+                            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        }); */
+
                         viewHolder.btn_complete.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -272,7 +300,6 @@ public class RunnerHub extends AppCompatActivity
                                         Map<String, Object> hopperUpdates = new HashMap<String, Object>();
                                         hopperUpdates.put("result", "delivered");                                           //appends the key "result" a value of "accepted". This can be changed to suit
                                         hopperRef.updateChildren(hopperUpdates);                                           //updates the child, without destroying, or overwriting all data
-
                                     }
 
                                     @Override

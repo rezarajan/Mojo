@@ -11,6 +11,8 @@ public class Vendor_Order_List {
     private String icon;
     private String orderid;
     private String name;
+    private String vendoruid;
+    private String result;
     private String type;
 
     public Vendor_Order_List() {
@@ -55,6 +57,22 @@ public class Vendor_Order_List {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getVendoruid() {
+        return vendoruid;
+    }
+
+    public String getResult() {
+        return result;
+    }
+
+    public void setResult(String result) {
+        this.result = result;
+    }
+
+    public void setVendoruid(String vendoruid) {
+        this.vendoruid = vendoruid;
     }
 
     public String getType() {

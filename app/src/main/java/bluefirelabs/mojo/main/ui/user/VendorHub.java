@@ -96,7 +96,6 @@ public class VendorHub extends AppCompatActivity
             itemTitle = (TextView) itemView.findViewById(R.id.item_title);
             itemDescription = (TextView) itemView.findViewById(R.id.item_description);
             itemName = (TextView) itemView.findViewById(R.id.item_name);
-            itemTotal = (TextView) itemView.findViewById(R.id.item_total_cost);
             btn_accept = (Button) itemView.findViewById(R.id.button_accept);
             btn_decline = (Button) itemView.findViewById(R.id.button_decline);
             btn_sending = (Button) itemView.findViewById(R.id.button_sending);
