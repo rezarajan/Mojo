@@ -164,6 +164,10 @@ public class RunnerHub extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        Menu menu = navigationView.getMenu();
+        MenuItem navSend = menu.findItem(R.id.nav_send);
+        navSend.setTitle("QR Scanner");
+
         View header=navigationView.getHeaderView(0);
 
         broadcastReceiver = new BroadcastReceiver() {
