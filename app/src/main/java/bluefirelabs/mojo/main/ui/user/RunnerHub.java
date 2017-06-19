@@ -52,7 +52,7 @@ import bluefirelabs.mojo.R;
 import bluefirelabs.mojo.background_tasks.MyFirebaseInstanceIDService;
 import bluefirelabs.mojo.barcode.barcodeReader;
 import bluefirelabs.mojo.fragments.restaurantlist_fragment;
-import bluefirelabs.mojo.handlers.adapters.Food_List;
+import bluefirelabs.mojo.handlers.adapters.Vendor_Order_List;
 import bluefirelabs.mojo.handlers.online.HttpDataHandler;
 import bluefirelabs.mojo.handlers.online.SharedPrefManager;
 import bluefirelabs.mojo.handlers.online.uploadImage;
@@ -106,8 +106,8 @@ public class RunnerHub extends AppCompatActivity
 
             btn_accept.setVisibility(View.INVISIBLE);
             btn_decline.setVisibility(View.INVISIBLE);
-            btn_sending.setVisibility(View.VISIBLE);
-            btn_complete.setVisibility(View.INVISIBLE);
+            btn_sending.setVisibility(View.INVISIBLE);
+            btn_complete.setVisibility(View.VISIBLE);
             btn_sending.setText("Collect");
         }
     }
@@ -139,7 +139,7 @@ public class RunnerHub extends AppCompatActivity
 
     public static String RESTAURANT;
     private DatabaseReference mFirebaseDatabaseReference;
-    private FirebaseRecyclerAdapter<Food_List, RecyclerViewHolder> mFirebaseAdapter;
+    private FirebaseRecyclerAdapter<Vendor_Order_List, RecyclerViewHolder> mFirebaseAdapter;
 
     private RecyclerView mRestaurantRecyclerView;
     private LinearLayoutManager mLinearLayoutManager;
@@ -198,25 +198,25 @@ public class RunnerHub extends AppCompatActivity
                 mLinearLayoutManager.setStackFromEnd(true);
 
                 mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
-                mFirebaseAdapter = new FirebaseRecyclerAdapter<Food_List, RunnerHub.RecyclerViewHolder>(
-                        Food_List.class,
+                mFirebaseAdapter = new FirebaseRecyclerAdapter<Vendor_Order_List, RunnerHub.RecyclerViewHolder>(
+                        Vendor_Order_List.class,
                         R.layout.vendor_card_layout,
                         RunnerHub.RecyclerViewHolder.class,
                         mFirebaseDatabaseReference.child(RESTAURANT)
                 ) {
 
                     @Override
-                    protected void populateViewHolder(final RunnerHub.RecyclerViewHolder viewHolder, Food_List model, int position) {
+                    protected void populateViewHolder(final RunnerHub.RecyclerViewHolder viewHolder, Vendor_Order_List model, int position) {
                         viewHolder.itemTitle.setText("Order ID: " + model.getOrderid());
                         viewHolder.itemName.setText(model.getName());
 
                         final DatabaseReference reference1 = FirebaseDatabase.getInstance().getReference("requests");
                         //viewHolder.btn_decline.setVisibility(View.INVISIBLE);
                         //viewHolder.btn_sending.setVisibility(View.VISIBLE);
-                        //viewHolder.btn_complete.setVisibility(View.INVISIBLE);
+                        viewHolder.btn_complete.setVisibility(View.VISIBLE);
                         //viewHolder.btn_sending.setText("Collect");
 
-                        viewHolder.btn_sending.setOnClickListener(new View.OnClickListener() {      //in this case it would be used as a button for the collected message
+                        /*viewHolder.btn_sending.setOnClickListener(new View.OnClickListener() {      //in this case it would be used as a button for the collected message
                             @Override
                             public void onClick(View v) {
                                 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -255,7 +255,7 @@ public class RunnerHub extends AppCompatActivity
                                     }
                                 });
                             }
-                        });
+                        }); */
 
                         viewHolder.btn_complete.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -296,7 +296,7 @@ public class RunnerHub extends AppCompatActivity
                                     }
                                 });
 
-                                viewHolder.btn_sending.setVisibility(View.VISIBLE);
+                                //viewHolder.btn_sending.setVisibility(View.VISIBLE);
                                 viewHolder.btn_complete.setVisibility(View.INVISIBLE);
                             }
                         });
