@@ -56,6 +56,7 @@ import bluefirelabs.mojo.handlers.online.HttpDataHandler;
 import bluefirelabs.mojo.handlers.online.SharedPrefManager;
 import bluefirelabs.mojo.handlers.online.uploadImage;
 import bluefirelabs.mojo.main.login.Sign_In;
+import bluefirelabs.mojo.menu.Runner_Checkout;
 import bluefirelabs.mojo.menu.Vendor_Checkout;
 
 public class RunnerHub extends AppCompatActivity
@@ -300,7 +301,7 @@ public class RunnerHub extends AppCompatActivity
                         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {       //this shows the order items in this case for each order
-                                Intent editCheckoutintent = new Intent(RunnerHub.this, Vendor_Checkout.class);
+                                Intent editCheckoutintent = new Intent(RunnerHub.this, Runner_Checkout.class);
                                 editCheckoutintent.putExtra("ID", viewHolder.itemTitle.getText().toString().replace("Order ID: ", ""));
                                 if(viewHolder.itemTitle.getText().toString() == null){
                                     Log.d("Order ID", "null");

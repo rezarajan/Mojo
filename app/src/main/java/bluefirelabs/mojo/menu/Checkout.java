@@ -156,6 +156,7 @@ public class Checkout extends AppCompatActivity{
 
                 Map notification = new HashMap<>();
                 Map itemListing = new HashMap<>();
+                Map costListing = new HashMap<>();
 
 
                 //get the data and append to a list
@@ -203,9 +204,11 @@ public class Checkout extends AppCompatActivity{
                         //notification.put("runneruid", "Runner");
                         notification.put("postid", pushId);
                         itemListing.put(data.getString(2), data.getString(4));    //itemId, quantity
+                        costListing.put(data.getString(2), data.getString(3));    //itemId, cost
 
                         reference.child(pushId).setValue(notification);
                         reference.child(pushId).child("items").setValue(itemListing);
+                        reference.child(pushId).child("cost").setValue(costListing);
 
                         //data.moveToPosition(position + 1);
                         if (data.moveToNext() != false) {
@@ -218,8 +221,10 @@ public class Checkout extends AppCompatActivity{
                             //notification.put("runneruid", "Runner");
                             notification.put("postid", pushId);
                             itemListing.put(data.getString(2), data.getString(4));    //itemId, quantity
+                            costListing.put(data.getString(2), data.getString(3));    //itemId, cost
                             reference.child(pushId).setValue(notification);
                             reference.child(pushId).child("items").setValue(itemListing);
+                            reference.child(pushId).child("cost").setValue(costListing);
                             Log.d("The items pushed for " + restaurant + " are", itemListing.toString());
                         }
 
@@ -237,20 +242,25 @@ public class Checkout extends AppCompatActivity{
                             //notification.put("runneruid", "Runner");
                             notification.put("postid", pushId);
                             itemListing.put(data.getString(2), data.getString(4));    //itemId, quantity
+                            costListing.put(data.getString(2), data.getString(3));    //itemId, cost
+
 
                             reference.child(pushId).setValue(notification);
                             reference.child(pushId).child("items").setValue(itemListing);
+                            reference.child(pushId).child("cost").setValue(costListing);
                             //Log.d("Push ID", pushId.toString());
                             pushId = reference.push().getKey();     //sets a new push id for the different restaurant
                             Log.d("Refreshing Push", pushId);
                             Log.d("The items pushed for " + restaurant + " are", itemListing.toString());
                             itemListing.clear();
+                            costListing.clear();
                             notification.clear();
                         } else {
                             Log.d("Outcome", "different");
                             pushId = reference.push().getKey();     //sets a new push id for the different restaurant
                             Log.d("Setting new pushID", pushId);
                             itemListing.clear();
+                            costListing.clear();
                             notification.clear();
                             Log.d("New info set", data.getString(1));
                             //get the value from the database in column
@@ -262,9 +272,12 @@ public class Checkout extends AppCompatActivity{
                             //notification.put("runneruid", "Runner");
                             notification.put("postid", pushId);
                             itemListing.put(data.getString(2), data.getString(4));    //itemId, quantity
+                            costListing.put(data.getString(2), data.getString(3));    //itemId, cost
+
 
                             reference.child(pushId).setValue(notification);
                             reference.child(pushId).child("items").setValue(itemListing);
+                            reference.child(pushId).child("cost").setValue(costListing);
                             Log.d("The items pushed for " + next_restaurant + " are", itemListing.toString());
                             Toast.makeText(getApplicationContext(), "Order Placed", Toast.LENGTH_SHORT).show();
                         }

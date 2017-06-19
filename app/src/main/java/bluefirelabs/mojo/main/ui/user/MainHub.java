@@ -218,7 +218,7 @@ public class MainHub extends AppCompatActivity
             Intent intent = new Intent(this, uploadImage.class);
             startActivity(intent);
 
-        } else if (id == R.id.nav_share) {
+        } else if (id == R.id.nav_send) {
             Intent intent = new Intent(this, OrderHistory.class);
             startActivity(intent);
         }

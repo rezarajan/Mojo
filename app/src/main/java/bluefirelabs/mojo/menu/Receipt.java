@@ -74,33 +74,61 @@ public class Receipt extends AppCompatActivity {
 
         final MyCallback myCallback = new MyCallback() {
             @Override
-            public void callbackCall(String restaurant) {
-                final DatabaseReference reference = FirebaseDatabase.getInstance().getReference(restaurant);
+            public void callbackCall(final String restaurant) {
+                final DatabaseReference reference = FirebaseDatabase.getInstance().getReference(restaurant + "/items/");
                 reference.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        Map<String, Object> hopperValues = (Map<String, Object>) dataSnapshot.getValue();
-                        //hopperValues.put("key", dataSnapshot.getKey().toString());
-                        //Log.d("Values", dataSnapshot.getKey().toString());
-                        //Log.d("Values from Checkout", dataSnapshot.getValue().toString());
+                        final Map<String, Object> hopperValues = (Map<String, Object>) dataSnapshot.getValue();
 
-
-                        int total_cost = 0;
+                        final Map<String, Object> singleitemCost = (Map<String, Object>) dataSnapshot.getValue();
+                        final Map<String, Object> finalitemCost = (Map<String, Object>) dataSnapshot.getValue();
 
                         if (hopperValues != null) {
-                            //Map<String, Object> orderID = (Map<String, Object>) hopperValues.get("items");
-                            //Log.d("orderID", orderID.toString());
 
-                            //Map<String, Object> itemValues = (Map<String, Object>) hopperValues.get("items");
 
                             keys = hopperValues.keySet();
 
                             for (String s : hopperValues.keySet()) {
                                 Log.d("Receipt Items", "Key: " + s);
+
                                 listData.add(s);
+                                listData.add("Quantity: " + hopperValues.get(s));
                                 //itemTitle.setText(key.toString());
-                                mListView.setAdapter(adapter);
+                                //mListView.setAdapter(adapter);
                             }
+                            final DatabaseReference reference = FirebaseDatabase.getInstance().getReference(restaurant + "/cost/");
+                            reference.addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    Map<String, Object> itemCost = (Map<String, Object>) dataSnapshot.getValue();
+
+                                    if (itemCost != null) {
+
+                                        keys = itemCost.keySet();
+                                        int total_cost = 0;
+
+
+                                        for (String s : itemCost.keySet()) {
+                                            singleitemCost.put(s, itemCost.get(s));
+                                            listData.add("(" + s + ") Cost: " + singleitemCost.get(s));        //TODO: Fix this to display this once after each item
+                                            //Log.d("Item Cost", String.valueOf(itemCost.get(s)));
+                                            //Log.d("Single Item Cost", String.valueOf(singleitemCost.get(s)));
+                                            finalitemCost.put(s, String.valueOf(Integer.parseInt(String.valueOf(itemCost.get(s))) * Integer.parseInt(String.valueOf(hopperValues.get(s)))));
+                                            //Log.d("Final Item Cost", String.valueOf(finalitemCost.get(s)));
+                                            listData.add("(" + s + ") Total: " + finalitemCost.get(s));
+                                            total_cost += Integer.parseInt(String.valueOf(finalitemCost.get(s)));
+                                        }
+                                        listData.add(String.valueOf("Total Cost: " + total_cost));
+                                    }
+                                    mListView.setAdapter(adapter);
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            });
                         }
                     }
 
@@ -117,29 +145,15 @@ public class Receipt extends AppCompatActivity {
         FirebaseUser user = firebaseAuth.getCurrentUser();
         UID = user.getUid();
 
-        final DatabaseReference reference = FirebaseDatabase.getInstance().getReference("uid/" + UID + "/" + orderId + "/items/");
-        reference.addValueEventListener(new ValueEventListener() {
+        final DatabaseReference reference_restaurantName = FirebaseDatabase.getInstance().getReference("uid/" + UID);
+        reference_restaurantName.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Map<String, Object> hopperValues = (Map<String, Object>) dataSnapshot.getValue();
-                keys = hopperValues.keySet();
-                //hopperValues.put("key", dataSnapshot.getKey().toString());
                 //Log.d("Values", dataSnapshot.getValue().toString());
-                //Log.d("Receipt_Items", keys.toString());
-                //RESTAURANT = "uid/" + UID;
-                //myCallback.callbackCall(RESTAURANT);
-                /*for (String s : hopperValues.keySet()) {
-                    Log.d("Values", s);
-                    //DatabaseReference reference_order = FirebaseDatabase.getInstance().getReference("uid/"+UID+"/"+s);
-                    //RESTAURANT = "uid/"+UID+"/"+s;
-                    RESTAURANT = "uid/"+UID;
-                    myCallback.callbackCall(RESTAURANT);
-                } */
-                //Map<String, Object> itemValues = (Map<String, Object>) hopperValues.get("items");
-                //Log.d("items", itemValues.toString());
-                //restaurantName = (String) hopperValues.get("items"); //this directory only contains one item so it should not be a problem
-                RESTAURANT = "uid/" + UID + "/" + orderId + "/items/";
-                //Log.d("Restaurant", RESTAURANT);
+                //restaurantName = (String) hopperValues.get("name"); //this directory only contains one item so it should not be a problem
+                RESTAURANT = "uid/" + UID + "/" + orderId;
+                Log.d("Values from Checkout", RESTAURANT);
                 myCallback.callbackCall(RESTAURANT);
             }
 

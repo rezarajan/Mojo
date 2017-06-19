@@ -65,6 +65,18 @@ exports.orderMonitor = functions.database.ref("orders/{pushId}/").onWrite((event
 			}
 			
 	});
+	ref.child("cost").once("value")
+		.then(function(snapshot) {
+			if(snapshot.val() !== null){
+				//the push creates the request id
+				refNode.child(status.postid).update({
+				cost: snapshot.val()
+				});
+			} else{
+				return;
+			}
+			
+	});
 	} else {
 		return;
 	}
@@ -111,6 +123,19 @@ exports.requestsMonitor = functions.database.ref("requests/{pushId}/").onWrite((
 			} else{
 				return;
 			}
+			});
+			
+		ref.child("cost").once("value")
+		.then(function(snapshot) {
+			if(snapshot.val() !== null){
+		//the set uses the push key
+		refNode.child(status.vendoruid).child("requests").child(status.orderid).update({
+				cost: snapshot.val()
+		});
+				//refNode.child(status.orderid).child("items").set(snapshot.val());
+			} else{
+				return;
+			}
 			
 	});
 
@@ -130,6 +155,18 @@ exports.requestsMonitor = functions.database.ref("requests/{pushId}/").onWrite((
 				items: snapshot.val(),
 				result: "accepted",
 				orderid: status.orderid
+		});
+				//refNode.child(status.orderid).child("items").set(snapshot.val());
+			} else{
+				return;
+			}
+		});
+		ref.child("cost").once("value")
+		.then(function(snapshot) {
+			if(snapshot.val() !== null){
+		//the set uses the push key
+		refNode.child(status.vendoruid).child("requests").child(status.orderid).update({
+				cost: snapshot.val()
 		});
 				//refNode.child(status.orderid).child("items").set(snapshot.val());
 			} else{
@@ -165,6 +202,22 @@ exports.requestsMonitor = functions.database.ref("requests/{pushId}/").onWrite((
 			} else{
 				return;
 			}
+		});
+			
+		ref.child("cost").once("value")
+		.then(function(snapshot) {
+			if(snapshot.val() !== null){
+		//the set uses the push key
+		refNode.child(status.vendoruid).child("declined").child(status.orderid).update({		//vendoruid
+				cost: snapshot.val()
+		});
+		refNode.child(status.customeruid).child(status.orderid).update({		//customeruid
+				cost: snapshot.val()
+		});
+				//refNode.child(status.orderid).child("items").set(snapshot.val());
+			} else{
+				return;
+			}
 			
 	});
 
@@ -186,6 +239,20 @@ exports.requestsMonitor = functions.database.ref("requests/{pushId}/").onWrite((
 				items: snapshot.val(),
 				result: "sending",
 				orderid: status.orderid
+		});
+				//refNode.child(status.orderid).child("items").set(snapshot.val());
+			} else{
+				return;
+			}
+		});
+			
+		ref.child("cost").once("value")
+		.then(function(snapshot) {
+			if(snapshot.val() !== null){
+		//the set uses the push key
+		//the set uses the push key
+		refNode.child(status.vendoruid).child(status.orderid).update({
+				items: snapshot.val()
 		});
 				//refNode.child(status.orderid).child("items").set(snapshot.val());
 			} else{
@@ -220,6 +287,18 @@ exports.requestsMonitor = functions.database.ref("requests/{pushId}/").onWrite((
 			} else{
 				return;
 			}
+		});	
+		ref.child("cost").once("value")
+		.then(function(snapshot) {
+			if(snapshot.val() !== null){
+		//the set uses the push key
+		//the set uses the push key
+		refNode.child(status.vendoruid).child(status.orderid).update({
+				cost: snapshot.val()
+		});
+			} else{
+				return;
+			}
 			
 	});
 
@@ -247,8 +326,21 @@ exports.requestsMonitor = functions.database.ref("requests/{pushId}/").onWrite((
 			}
 			
 	});
+	ref.child("cost").once("value")
+		.then(function(snapshot) {
+			if(snapshot.val() !== null){
+		//the set uses the push key
+		//the set uses the push key
+		refNode.child(status.vendoruid).child(status.orderid).update({
+				cost: snapshot.val()
+		});
+			} else{
+				return;
+			}
 
+	});
 	}
+			  
 	});
 
 });
@@ -266,7 +358,7 @@ exports.inprogressMonitor = functions.database.ref("inprogress/{vendoruid}/{push
 	var ref = db.ref("requests").child(status.orderid);
 	
 	if (status.result === "accepted"){	//if vendor accepts the order then send response to user
-				ref.child("items").once("value")
+	ref.child("items").once("value")
 		.then(function(snapshot) {
 			if(snapshot.val() !== null){
 		//the set uses the push key
@@ -300,9 +392,24 @@ exports.inprogressMonitor = functions.database.ref("inprogress/{vendoruid}/{push
 			}
 			
 	});
+	ref.child("cost").once("value")
+		.then(function(snapshot) {
+			if(snapshot.val() !== null){
+		//the set uses the push key
+	refNode.child(status.vendoruid).child("accepted").child(status.orderid).update({
+			cost: snapshot.val()
+	});
+	refNode.child(status.customeruid).child(status.orderid).update({
+			cost: snapshot.val()
+	});
+			} else{
+				return;
+			}
+			
+	});
 		
 	} else if (status.result === "sending"){	//if vendor accepts the order then send response to user
-				ref.child("items").once("value")
+	ref.child("items").once("value")
 		.then(function(snapshot) {
 			if(snapshot.val() !== null){
 		//the set uses the push key
@@ -334,9 +441,27 @@ exports.inprogressMonitor = functions.database.ref("inprogress/{vendoruid}/{push
 			}
 			
 	});
+	ref.child("cost").once("value")
+		.then(function(snapshot) {
+			if(snapshot.val() !== null){
+		//the set uses the push key
+	refNode.child(status.vendoruid).child("sending").child(status.orderid).update({
+			cost: snapshot.val()
+	});
+	refNode.child(status.customeruid).child(status.orderid).update({
+			cost: snapshot.val()
+	});
+	refNode.child(status.runneruid).child("sending").child(status.orderid).update({
+			cost: snapshot.val()
+	});
+			} else{
+				return;
+			}
+			
+	});
 		
 	} else if (status.result === "collected"){	//if runner collects the order then send response to user and vendor
-				ref.child("items").once("value")
+	ref.child("items").once("value")
 		.then(function(snapshot) {
 			if(snapshot.val() !== null){
 		//the set uses the push key
@@ -369,8 +494,27 @@ exports.inprogressMonitor = functions.database.ref("inprogress/{vendoruid}/{push
 			
 	});
 		
+	ref.child("cost").once("value")
+		.then(function(snapshot) {
+			if(snapshot.val() !== null){
+		//the set uses the push key
+	refNode.child(status.vendoruid).child("collected").child(status.orderid).update({
+			cost: snapshot.val()
+	});
+	refNode.child(status.customeruid).child(status.orderid).update({
+			cost: snapshot.val()
+	});
+	refNode.child(status.runneruid).child("collected").child(status.orderid).update({
+			cost: snapshot.val()
+	});
+			} else{
+				return;
+			}
+			
+	});
+		
 	} else if (status.result === "delivered"){	//if vendor accepts the order then send response to user
-				ref.child("items").once("value")
+	ref.child("items").once("value")
 		.then(function(snapshot) {
 			if(snapshot.val() !== null){
 		//the set uses the push key
@@ -399,6 +543,24 @@ exports.inprogressMonitor = functions.database.ref("inprogress/{vendoruid}/{push
 			orderid: status.orderid
 	});
 				//refNode.child(status.orderid).child("items").set(snapshot.val());
+			} else{
+				return;
+			}
+			
+	});
+	ref.child("cost").once("value")
+		.then(function(snapshot) {
+			if(snapshot.val() !== null){
+		//the set uses the push key
+	refNode.child(status.vendoruid).child("delivered").child(status.orderid).update({
+			cost: snapshot.val()
+	});
+	refNode.child(status.customeruid).child(status.orderid).update({
+			cost: snapshot.val()
+	});
+	refNode.child(status.runneruid).child("delivered").child(status.orderid).update({
+			cost: snapshot.val()
+	});
 			} else{
 				return;
 			}

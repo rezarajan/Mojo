@@ -98,7 +98,6 @@ public class OrderHistory extends AppCompatActivity {
 
                             for (String s : hopperValues.keySet()) {
                                 if (s.equals("info")) {
-                                    return;
                                 } else {
                                     Log.d("hopperValues", "Key: " + s);
                                     listData.add(s);

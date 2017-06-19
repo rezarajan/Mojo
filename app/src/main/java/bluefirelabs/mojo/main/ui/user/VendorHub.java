@@ -41,21 +41,17 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
 
-import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 import bluefirelabs.mojo.R;
 import bluefirelabs.mojo.background_tasks.MyFirebaseInstanceIDService;
 import bluefirelabs.mojo.fragments.restaurantlist_fragment;
-import bluefirelabs.mojo.handlers.adapters.Food_List;
+import bluefirelabs.mojo.handlers.adapters.Vendor_Order_List;
 import bluefirelabs.mojo.handlers.online.HttpDataHandler;
 import bluefirelabs.mojo.handlers.online.SharedPrefManager;
 import bluefirelabs.mojo.handlers.online.uploadImage;
@@ -145,7 +141,7 @@ public class VendorHub extends AppCompatActivity
 
     public static String RESTAURANT;
     private DatabaseReference mFirebaseDatabaseReference;
-    private FirebaseRecyclerAdapter<Food_List, RecyclerViewHolder> mFirebaseAdapter;
+    private FirebaseRecyclerAdapter<Vendor_Order_List, RecyclerViewHolder> mFirebaseAdapter;
 
     private RecyclerView mRestaurantRecyclerView;
     private LinearLayoutManager mLinearLayoutManager;
@@ -202,15 +198,15 @@ public class VendorHub extends AppCompatActivity
                 mLinearLayoutManager.setStackFromEnd(true);
 
                 mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
-                mFirebaseAdapter = new FirebaseRecyclerAdapter<Food_List, VendorHub.RecyclerViewHolder>(
-                        Food_List.class,
+                mFirebaseAdapter = new FirebaseRecyclerAdapter<Vendor_Order_List, VendorHub.RecyclerViewHolder>(
+                        Vendor_Order_List.class,
                         R.layout.vendor_card_layout,
                         VendorHub.RecyclerViewHolder.class,
                         mFirebaseDatabaseReference.child(RESTAURANT)
                 ) {
 
                     @Override
-                    protected void populateViewHolder(final VendorHub.RecyclerViewHolder viewHolder, Food_List model, int position) {
+                    protected void populateViewHolder(final VendorHub.RecyclerViewHolder viewHolder, Vendor_Order_List model, int position) {
                         viewHolder.itemTitle.setText("Order ID: " + model.getOrderid());
                         viewHolder.itemName.setText(model.getName());
 

@@ -19,7 +19,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -30,7 +29,7 @@ import database.DatabaseHelper;
  * Created by Reza Rajan on 2017-05-24.
  */
 
-public class Vendor_Checkout extends AppCompatActivity{
+public class Runner_Checkout extends AppCompatActivity {
 
     private static final String TAG = "ListDataActivity";
     DatabaseHelper myDb;
@@ -56,9 +55,9 @@ public class Vendor_Checkout extends AppCompatActivity{
         orderId = receivedIntent.getExtras().getString("ID"); //NOTE: -1 is just the default value
         Log.d("Order ID Received", orderId);
 
-        mListView = (ListView)findViewById(R.id.listview_checkout);
-        placeorder = (Button)findViewById(R.id.button_place_order);
-        noitems = (TextView)findViewById(R.id.content_available_indicator);
+        mListView = (ListView) findViewById(R.id.listview_checkout);
+        placeorder = (Button) findViewById(R.id.button_place_order);
+        noitems = (TextView) findViewById(R.id.content_available_indicator);
 
         populateListView();
     }
@@ -151,7 +150,7 @@ public class Vendor_Checkout extends AppCompatActivity{
                 Map<String, Object> hopperValues = (Map<String, Object>) dataSnapshot.getValue();
                 //Log.d("Values", dataSnapshot.getValue().toString());
                 restaurantName = (String) hopperValues.get("name"); //this directory only contains one item so it should not be a problem
-                RESTAURANT = "uid/" + restaurantName + "/requests/" + orderId;
+                RESTAURANT = "uid/" + restaurantName + "/sending/" + orderId;
                 Log.d("Values from Checkout", RESTAURANT);
                 myCallback.callbackCall(RESTAURANT);
             }
@@ -170,9 +169,9 @@ public class Vendor_Checkout extends AppCompatActivity{
     protected void onResume() {
         super.onResume();
         setContentView(R.layout.vendor_checkout_layout);
-        mListView = (ListView)findViewById(R.id.listview_checkout);
-        placeorder = (Button)findViewById(R.id.button_place_order);
-        noitems = (TextView)findViewById(R.id.content_available_indicator);
+        mListView = (ListView) findViewById(R.id.listview_checkout);
+        placeorder = (Button) findViewById(R.id.button_place_order);
+        noitems = (TextView) findViewById(R.id.content_available_indicator);
         populateListView();
     }
 }
