@@ -50,6 +50,7 @@ import java.util.Map;
 
 import bluefirelabs.mojo.R;
 import bluefirelabs.mojo.background_tasks.MyFirebaseInstanceIDService;
+import bluefirelabs.mojo.barcode.barcodeGenerator;
 import bluefirelabs.mojo.fragments.restaurantlist_fragment;
 import bluefirelabs.mojo.handlers.adapters.Vendor_Order_List;
 import bluefirelabs.mojo.handlers.online.HttpDataHandler;
@@ -215,6 +216,7 @@ public class VendorHub extends AppCompatActivity
                         viewHolder.btn_accept.setVisibility(View.VISIBLE);
                         viewHolder.btn_sending.setVisibility(View.INVISIBLE);
                         viewHolder.btn_complete.setVisibility(View.INVISIBLE);
+                        viewHolder.btn_complete.setText("Generate QR");
 
                         viewHolder.btn_accept.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -320,9 +322,9 @@ public class VendorHub extends AppCompatActivity
                                         hopperUpdates.put("result", "sending");                                           //appends the key "result" a value of "accepted". This can be changed to suit
                                         hopperRef.updateChildren(hopperUpdates);                                           //updates the child, without destroying, or overwriting all data
                                         viewHolder.btn_sending.setVisibility(View.INVISIBLE);
-                                        //viewHolder.btn_complete.setVisibility(View.VISIBLE);
-                                        viewHolder.btn_decline.setVisibility(View.VISIBLE);
-                                        viewHolder.btn_accept.setVisibility(View.VISIBLE);
+                                        viewHolder.btn_complete.setVisibility(View.VISIBLE);
+                                        //viewHolder.btn_decline.setVisibility(View.INVISIBLE);
+                                        //viewHolder.btn_accept.setVisibility(View.INVISIBLE);
                                     }
 
                                     @Override
@@ -345,6 +347,23 @@ public class VendorHub extends AppCompatActivity
 
                                     }
                                 });
+
+                                viewHolder.btn_sending.setVisibility(View.INVISIBLE);
+                                viewHolder.btn_complete.setVisibility(View.VISIBLE);
+                            }
+                        });
+
+                        viewHolder.btn_complete.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(VendorHub.this, barcodeGenerator.class);
+                                intent.putExtra("ID", viewHolder.itemTitle.getText().toString().replace("Order ID: ", ""));
+                                startActivity(intent);
+
+                                //viewHolder.btn_sending.setVisibility(View.INVISIBLE);
+                                viewHolder.btn_complete.setVisibility(View.INVISIBLE);
+                                viewHolder.btn_decline.setVisibility(View.VISIBLE);
+                                viewHolder.btn_accept.setVisibility(View.VISIBLE);
                             }
                         });
 

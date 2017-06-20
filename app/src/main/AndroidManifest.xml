@@ -147,6 +147,8 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+
+        <activity android:name=".barcode.barcodeGenerator"></activity>
     </application>
 
 </manifest>
