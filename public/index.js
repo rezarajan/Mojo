@@ -22,12 +22,13 @@ function submitClick() {
 	var itemType = itemtype.value;
 	var itemName = itemname.value;
 	var itemCost = itemcost.value;
+	var itemCostNumber = parseFloat(itemCost);
 	firebaseRef.child("menu").child(resName).child(itemType).child("Items").child(itemName).set({
 		Quantity : 100,
-		cost : itemCost,
+		cost : itemCostNumber,
 		name : itemName
 	});
-	firebaseRef.child("menu").child(resName).child("type").set(itemType);
+	firebaseRef.child("menu").child(resName).child(itemType).child("type").set(itemType);
 	//firebaseRef.child("Test").set(resName);
 	
 }
