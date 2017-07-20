@@ -13,7 +13,7 @@ public class Splash extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //Thread to services while app is starting
+        //Thread to load services while app is starting
         Thread loadServices = new Thread() {
 
             @Override

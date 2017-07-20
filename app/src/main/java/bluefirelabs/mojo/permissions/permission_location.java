@@ -23,7 +23,7 @@ import com.google.android.gms.location.LocationServices;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import bluefirelabs.mojo.main.ui.user.MainHub;
+import bluefirelabs.mojo.main.ui.user.UserHub;
 import bluefirelabs.mojo.R;
 import bluefirelabs.mojo.main.ui.user.RunnerHub;
 import bluefirelabs.mojo.main.ui.user.VendorHub;
@@ -96,7 +96,7 @@ public class permission_location extends AppCompatActivity implements GoogleApiC
             startActivity(intent);
             finish();
         } else {
-            Intent intent = new Intent(permission_location.this, MainHub.class);
+            Intent intent = new Intent(permission_location.this, UserHub.class);
             startActivity(intent);
             finish();
         }

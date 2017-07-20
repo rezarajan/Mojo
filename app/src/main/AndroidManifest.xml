@@ -121,7 +121,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity
-            android:name=".main.ui.user.MainHub"
+            android:name=".main.ui.user.UserHub"
             android:configChanges="orientation"
             android:label="@string/title_activity_main_hub"
             android:screenOrientation="portrait"
@@ -148,7 +148,15 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".barcode.barcodeGenerator"></activity>
+        <activity android:name=".barcode.barcodeGenerator" />
+        <activity
+            android:name=".handlers.online.Payments"
+            android:label="@string/title_activity_payments"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+        <activity
+            android:name=".handlers.online.Main2Activity"
+            android:label="@string/title_activity_main2"
+            android:theme="@style/Theme.AppCompat.NoActionBar"></activity>
     </application>
 
 </manifest>

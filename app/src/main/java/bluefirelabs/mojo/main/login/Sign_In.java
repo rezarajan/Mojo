@@ -43,6 +43,16 @@ public class Sign_In extends AppCompatActivity {
                 }
             }); */
 
+            TextView sign_up = (TextView) findViewById(R.id.sign_up);
+
+            sign_up.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(Sign_In.this, Login.class);
+                    startActivity(intent);
+                }
+            });
+
             TextView sign_in = (TextView) findViewById(R.id.sign_in);
 
             sign_in.setOnClickListener(new View.OnClickListener() {

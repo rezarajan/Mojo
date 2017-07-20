@@ -8,7 +8,7 @@ import com.google.firebase.messaging.RemoteMessage;
 
 import java.util.Map;
 
-import bluefirelabs.mojo.main.ui.user.MainHub;
+import bluefirelabs.mojo.main.ui.user.UserHub;
 import bluefirelabs.mojo.handlers.online.MyNotificationManager;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
@@ -78,12 +78,12 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     private void showNotification(Map<String, String> payload) {
         MyNotificationManager myNotificationManager = new MyNotificationManager(getApplicationContext());
-        myNotificationManager.showNotification(payload.get("vendoruid"), payload.get("message"), new Intent(getApplicationContext(), MainHub.class));     //what happens when the notification is clicked
+        myNotificationManager.showNotification(payload.get("vendoruid"), payload.get("message"), new Intent(getApplicationContext(), UserHub.class));     //what happens when the notification is clicked
                                                                                                                                                   //TODO: Add more variables such as imageUrl for a custom notificatoin view
     }
 
     public void notifyUser(String from, String notification){
         MyNotificationManager myNotificationManager = new MyNotificationManager(getApplicationContext());
-        myNotificationManager.showNotification(from, notification, new Intent(getApplicationContext(), MainHub.class));     //what happens when the notification is clicked
+        myNotificationManager.showNotification(from, notification, new Intent(getApplicationContext(), UserHub.class));     //what happens when the notification is clicked
     }
 }

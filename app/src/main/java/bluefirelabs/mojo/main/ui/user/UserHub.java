@@ -45,12 +45,13 @@ import bluefirelabs.mojo.fragments.restaurantlist_fragment;
 import bluefirelabs.mojo.handlers.adapters.FirebaseRecyclerAdapterRestaurants;
 import bluefirelabs.mojo.handlers.online.HttpDataHandler;
 import bluefirelabs.mojo.handlers.adapters.Food_List;
+import bluefirelabs.mojo.handlers.online.Payments;
 import bluefirelabs.mojo.handlers.online.SharedPrefManager;
 import bluefirelabs.mojo.handlers.online.uploadImage;
 import bluefirelabs.mojo.main.login.Sign_In;
 import bluefirelabs.mojo.menu.OrderHistory;
 
-public class MainHub extends AppCompatActivity
+public class UserHub extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener
         , bluefirelabs.mojo.fragments.currentinfo_fragment.currentinfoListener
         , restaurantlist_fragment.restaurantlistListener
@@ -221,6 +222,9 @@ public class MainHub extends AppCompatActivity
         } else if (id == R.id.nav_send) {
             Intent intent = new Intent(this, OrderHistory.class);
             startActivity(intent);
+        } else if (id == R.id.nav_settings) {
+            Intent intent = new Intent(this, Payments.class);
+            startActivity(intent);
         }
 
         /* else if (id == R.id.nav_slideshow) {
@@ -288,7 +292,7 @@ public class MainHub extends AppCompatActivity
 
     private class GetAddress extends AsyncTask<String,Void,String> {
 
-        ProgressDialog dialog = new ProgressDialog(MainHub.this);
+        ProgressDialog dialog = new ProgressDialog(UserHub.this);
 
         @Override
         protected void onPreExecute() {
