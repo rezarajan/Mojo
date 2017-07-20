@@ -28,6 +28,7 @@ const stripe = require('stripe')(functions.config().stripe.token),
             // If the result is successful, write it back to the database
             return event.data.adminRef.set(response);
           }, error => {
+            console.log('Error');
           }
         );
       });
@@ -54,6 +55,7 @@ const stripe = require('stripe')(functions.config().stripe.token),
         }).then(response => {
             return event.data.adminRef.parent.set(response);
           }, error => {
+            console.log('Error');
         });
       });
 

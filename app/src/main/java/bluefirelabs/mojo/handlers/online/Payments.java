@@ -38,7 +38,7 @@ public class Payments extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
-                Card cardToSave = mCardInputWidget.getCard();
+                final Card cardToSave = mCardInputWidget.getCard();
                 if (cardToSave == null) {
                     //mErrorDialogHandler.showError("Invalid Card Data");
                     Snackbar.make(view, "Invalid Card Data", Snackbar.LENGTH_LONG)
@@ -59,14 +59,20 @@ public class Payments extends AppCompatActivity {
                                 new TokenCallback() {
                                     public void onSuccess(Token token) {
                                         // Send token to your server
-                                        Log.d("token", token.getId());
+                                        Log.d("token", token.getCard().toString());
 
                                         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
                                         FirebaseUser user = firebaseAuth.getCurrentUser();
                                         String uid = user.getUid();
                                         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("/stripe_customers/" + uid + "/sources");
                                         String pushId = reference.push().getKey();     //String
-                                        reference.child(pushId).child("token").setValue(token);
+                                        //reference.child(pushId).child("token").setValue(token.getCard());
+                                        card.put("object", "card");
+                                        card.put("exp_month", cardToSave.getExpMonth());
+                                        card.put("exp_year", cardToSave.getExpYear());
+                                        card.put("number", cardToSave.getNumber());
+                                        card.put("cvc", cardToSave.getCVC());
+                                        reference.child(pushId).child("token").updateChildren(card);
 
                                     }
                                     public void onError(Exception error) {
