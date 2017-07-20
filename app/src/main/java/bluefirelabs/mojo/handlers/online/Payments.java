@@ -33,7 +33,7 @@ public class Payments extends AppCompatActivity {
         final CardInputWidget mCardInputWidget = (CardInputWidget) findViewById(R.id.card_input_widget);
 
         final Map card = new HashMap<>();
-
+ 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         FloatingActionButton pay = (FloatingActionButton) findViewById(R.id.pay);
         fab.setOnClickListener(new View.OnClickListener() {
