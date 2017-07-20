@@ -4,6 +4,70 @@ const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 admin.initializeApp(functions.config().firebase);
 
+const stripe = require('stripe')(functions.config().stripe.token),
+      currency = functions.config().stripe.currency || 'USD';
+
+      // [START chargecustomer]
+      // Charge the Stripe customer whenever an amount is written to the Realtime database
+      exports.createStripeCharge = functions.database.ref('/stripe_customers/{userId}/charges/{id}').onWrite(event => {
+        const val = event.data.val();
+        // This onWrite will trigger whenever anything is written to the path, so
+        // noop if the charge was deleted, errored out, or the Stripe API returned a result (id exists)
+        if (val === null || val.id || val.error) return null;
+        // Look up the Stripe customer id written in createStripeCustomer
+        return admin.database().ref(`/stripe_customers/${event.params.userId}/customer_id`).once('value').then(snapshot => {
+          return snapshot.val();
+        }).then(customer => {
+          // Create a charge using the pushId as the idempotency key, protecting against double charges
+          const amount = val.amount;
+          const idempotency_key = event.params.id;
+          let charge = {amount, currency, customer};
+          if (val.source !== null) charge.source = val.source;
+          return stripe.charges.create(charge, {idempotency_key});
+        }).then(response => {
+            // If the result is successful, write it back to the database
+            return event.data.adminRef.set(response);
+          }, error => {
+          }
+        );
+      });
+      // [END chargecustomer]]
+
+      // When a user is created, register them with Stripe
+      exports.createStripeCustomer = functions.auth.user().onCreate(event => {
+        const data = event.data;
+        return stripe.customers.create({
+          email: data.email
+        }).then(customer => {
+          return admin.database().ref(`/stripe_customers/${data.uid}/customer_id`).set(customer.id);
+        });
+      });
+
+      // Add a payment source (card) for a user by writing a stripe payment source token to Realtime database
+      exports.addPaymentSource = functions.database.ref('/stripe_customers/{userId}/sources/{pushId}/token').onWrite(event => {
+        const source = event.data.val();
+        if (source === null) return null;
+        return admin.database().ref(`/stripe_customers/${event.params.userId}/customer_id`).once('value').then(snapshot => {
+          return snapshot.val();
+        }).then(customer => {
+          return stripe.customers.createSource(customer, {source});
+        }).then(response => {
+            return event.data.adminRef.parent.set(response);
+          }, error => {
+        });
+      });
+
+      // When a user deletes their account, clean up after them
+      exports.cleanupUser = functions.auth.user().onDelete(event => {
+        return admin.database().ref(`/stripe_customers/${event.data.uid}`).once('value').then(snapshot => {
+          return snapshot.val();
+        }).then(customer => {
+          return stripe.customers.del(customer);
+        }).then(() => {
+          return admin.database().ref(`/stripe_customers/${event.data.uid}`).remove();
+        });
+      });
+
 
 /*exports.sendPowerNotification = functions.database.ref("Notifications/{pushId}/").onWrite((event) => {
     const data = event.data;
@@ -12,20 +76,20 @@ admin.initializeApp(functions.config().firebase);
         return;
     }
     const status = data.val();
-	
+
     //const onOff =  status ? "on": "off";
-	
+
 	var db = admin.database();
 	var refNode = db.ref("orders");
 	refNode.push();
 	var postId = refNode.push().key;
-	
+
 	refNode.child(postId).set({
 		customeruid: status.customeruid,
 		vendoruid: status.vendoruid,
 		items: status.items,
 		postid: postId
-		
+
 		//alanisawesome: {
 		//date_of_birth: "June 23, 1912",
 		//full_name: "Alan Turing"
@@ -41,9 +105,9 @@ exports.orderMonitor = functions.database.ref("orders/{pushId}/").onWrite((event
         return;
     }
     const status = data.val();
-	
+
 	var db = admin.database();
-	
+
 	if(status !== null){
 	var ref = db.ref("orders").child(status.postid);
 	var refNode = db.ref("requests");
@@ -63,7 +127,7 @@ exports.orderMonitor = functions.database.ref("orders/{pushId}/").onWrite((event
 			} else{
 				return;
 			}
-			
+
 	});
 	ref.child("cost").once("value")
 		.then(function(snapshot) {
@@ -75,7 +139,7 @@ exports.orderMonitor = functions.database.ref("orders/{pushId}/").onWrite((event
 			} else{
 				return;
 			}
-			
+
 	});
 	} else {
 		return;
@@ -105,7 +169,7 @@ exports.requestsMonitor = functions.database.ref("requests/{pushId}/").onWrite((
 		var db = admin.database();
 		var refNode = db.ref("uid/");
 		var ref = db.ref("requests").child(status.orderid);
-		
+
 		ref.child("items").once("value")
 		.then(function(snapshot) {
 			if(snapshot.val() !== null){
@@ -124,7 +188,7 @@ exports.requestsMonitor = functions.database.ref("requests/{pushId}/").onWrite((
 				return;
 			}
 			});
-			
+
 		ref.child("cost").once("value")
 		.then(function(snapshot) {
 			if(snapshot.val() !== null){
@@ -136,7 +200,7 @@ exports.requestsMonitor = functions.database.ref("requests/{pushId}/").onWrite((
 			} else{
 				return;
 			}
-			
+
 	});
 
 
@@ -144,7 +208,7 @@ exports.requestsMonitor = functions.database.ref("requests/{pushId}/").onWrite((
 		var db = admin.database();
 		var refNode = db.ref("inprogress/");	//changed the reference
 		var ref = db.ref("requests").child(status.orderid);
-		
+
 		ref.child("items").once("value")
 		.then(function(snapshot) {
 			if(snapshot.val() !== null){
@@ -172,14 +236,14 @@ exports.requestsMonitor = functions.database.ref("requests/{pushId}/").onWrite((
 			} else{
 				return;
 			}
-			
+
 	});
 
 	} else if (status.result === "declined"){									//if the vendor declines the order then send response to user
 		var db = admin.database();
 		var refNode = db.ref("uid/");
 		var ref = db.ref("requests").child(status.orderid);
-		
+
 		ref.child("items").once("value")
 		.then(function(snapshot) {
 			if(snapshot.val() !== null){
@@ -188,7 +252,7 @@ exports.requestsMonitor = functions.database.ref("requests/{pushId}/").onWrite((
 				customeruid: status.customeruid,
 				vendoruid: status.vendoruid,
 				items: snapshot.val(),
-				result: "declined",		//this is the only value we have to change after the first if		
+				result: "declined",		//this is the only value we have to change after the first if
 				orderid: status.orderid
 		});
 		refNode.child(status.customeruid).child(status.orderid).set({		//customeruid
@@ -203,7 +267,7 @@ exports.requestsMonitor = functions.database.ref("requests/{pushId}/").onWrite((
 				return;
 			}
 		});
-			
+
 		ref.child("cost").once("value")
 		.then(function(snapshot) {
 			if(snapshot.val() !== null){
@@ -218,14 +282,14 @@ exports.requestsMonitor = functions.database.ref("requests/{pushId}/").onWrite((
 			} else{
 				return;
 			}
-			
+
 	});
 
 	} else if (status.result === "sending"){	//if vendor accepts the order then send response to user
 		var db = admin.database();
 		var refNode = db.ref("inprogress/");	//changed the reference
 		var ref = db.ref("requests").child(status.orderid);
-		
+
 		ref.child("items").once("value")
 		.then(function(snapshot) {
 			if(snapshot.val() !== null){
@@ -245,7 +309,7 @@ exports.requestsMonitor = functions.database.ref("requests/{pushId}/").onWrite((
 				return;
 			}
 		});
-			
+
 		ref.child("cost").once("value")
 		.then(function(snapshot) {
 			if(snapshot.val() !== null){
@@ -258,14 +322,14 @@ exports.requestsMonitor = functions.database.ref("requests/{pushId}/").onWrite((
 			} else{
 				return;
 			}
-			
+
 	});
 
 	} else if (status.result === "collected"){	//if runner collects the order then send response to user and vendor
 		var db = admin.database();
 		var refNode = db.ref("inprogress/");	//changed the reference
 		var ref = db.ref("requests").child(status.orderid);
-		
+
 		ref.child("items").once("value")
 		.then(function(snapshot) {
 			if(snapshot.val() !== null){
@@ -287,7 +351,7 @@ exports.requestsMonitor = functions.database.ref("requests/{pushId}/").onWrite((
 			} else{
 				return;
 			}
-		});	
+		});
 		ref.child("cost").once("value")
 		.then(function(snapshot) {
 			if(snapshot.val() !== null){
@@ -299,14 +363,14 @@ exports.requestsMonitor = functions.database.ref("requests/{pushId}/").onWrite((
 			} else{
 				return;
 			}
-			
+
 	});
 
 	} else if (status.result === "delivered"){	//if vendor accepts the order then send response to user
 		var db = admin.database();
 		var refNode = db.ref("inprogress/");	//changed the reference
 		var ref = db.ref("requests").child(status.orderid);
-		
+
 		ref.child("items").once("value")
 		.then(function(snapshot) {
 			if(snapshot.val() !== null){
@@ -324,7 +388,7 @@ exports.requestsMonitor = functions.database.ref("requests/{pushId}/").onWrite((
 			} else{
 				return;
 			}
-			
+
 	});
 	ref.child("cost").once("value")
 		.then(function(snapshot) {
@@ -340,7 +404,7 @@ exports.requestsMonitor = functions.database.ref("requests/{pushId}/").onWrite((
 
 	});
 	}
-			  
+
 	});
 
 });
@@ -352,11 +416,11 @@ exports.inprogressMonitor = functions.database.ref("inprogress/{vendoruid}/{push
         return;
     }
     const status = data.val();
-	
+
 	var db = admin.database();
 	var refNode = db.ref("uid/");
 	var ref = db.ref("requests").child(status.orderid);
-	
+
 	if (status.result === "accepted"){	//if vendor accepts the order then send response to user
 	ref.child("items").once("value")
 		.then(function(snapshot) {
@@ -390,7 +454,7 @@ exports.inprogressMonitor = functions.database.ref("inprogress/{vendoruid}/{push
 			} else{
 				return;
 			}
-			
+
 	});
 	ref.child("cost").once("value")
 		.then(function(snapshot) {
@@ -405,9 +469,9 @@ exports.inprogressMonitor = functions.database.ref("inprogress/{vendoruid}/{push
 			} else{
 				return;
 			}
-			
+
 	});
-		
+
 	} else if (status.result === "sending"){	//if vendor accepts the order then send response to user
 	ref.child("items").once("value")
 		.then(function(snapshot) {
@@ -439,7 +503,7 @@ exports.inprogressMonitor = functions.database.ref("inprogress/{vendoruid}/{push
 			} else{
 				return;
 			}
-			
+
 	});
 	ref.child("cost").once("value")
 		.then(function(snapshot) {
@@ -457,9 +521,9 @@ exports.inprogressMonitor = functions.database.ref("inprogress/{vendoruid}/{push
 			} else{
 				return;
 			}
-			
+
 	});
-		
+
 	} else if (status.result === "collected"){	//if runner collects the order then send response to user and vendor
 	ref.child("items").once("value")
 		.then(function(snapshot) {
@@ -491,9 +555,9 @@ exports.inprogressMonitor = functions.database.ref("inprogress/{vendoruid}/{push
 			} else{
 				return;
 			}
-			
+
 	});
-		
+
 	ref.child("cost").once("value")
 		.then(function(snapshot) {
 			if(snapshot.val() !== null){
@@ -510,9 +574,9 @@ exports.inprogressMonitor = functions.database.ref("inprogress/{vendoruid}/{push
 			} else{
 				return;
 			}
-			
+
 	});
-		
+
 	} else if (status.result === "delivered"){	//if vendor accepts the order then send response to user
 	ref.child("items").once("value")
 		.then(function(snapshot) {
@@ -546,7 +610,7 @@ exports.inprogressMonitor = functions.database.ref("inprogress/{vendoruid}/{push
 			} else{
 				return;
 			}
-			
+
 	});
 	ref.child("cost").once("value")
 		.then(function(snapshot) {
@@ -564,11 +628,11 @@ exports.inprogressMonitor = functions.database.ref("inprogress/{vendoruid}/{push
 			} else{
 				return;
 			}
-			
+
 	});
-		
+
 	}
-	
+
 
 
 });
@@ -580,7 +644,7 @@ exports.requestOrderMonitor = functions.database.ref("uid/{uid}/requests/{pushId
         return;
     }
     const status = data.val();
-	
+
 	if(status != null){		//to account for the deletion case
 		const payload = {
     data: {
@@ -592,9 +656,9 @@ exports.requestOrderMonitor = functions.database.ref("uid/{uid}/requests/{pushId
         vendoruid: status.vendoruid,
 		message: status.result,
         sound: "default"
-		
+
     }
-		
+
     };
 
     const options = {
@@ -603,15 +667,15 @@ exports.requestOrderMonitor = functions.database.ref("uid/{uid}/requests/{pushId
     };
     console.log('Sending requests notifications');
     //return admin.messaging().sendToTopic("usertest", payload, options);
-	
+
 	console.log("Vendor: " + status.vendoruid);
 	return admin.messaging().sendToTopic(status.vendoruid, payload, options);		//using the vendoruid as the topic
 	}
 	else{
 		return;
 	}
-	
-	
+
+
 
 });
 
@@ -622,22 +686,22 @@ exports.acceptedOrderMonitor = functions.database.ref("uid/{uid}/accepted/{pushI
         return;
     }
     const status = data.val();
-	
-	if(status != null){	
-	
+
+	if(status != null){
+
 	const payload = {
     data: {
         //title: 'Electricity Monitor - Power status changed',
         //body: 'Test',
         //sound: "default"
-		
+
 		customeruid: status.customeruid,
         vendoruid: status.vendoruid,
 		message: status.result,
         sound: "default"
-		
+
     }
-		
+
     };
 
     const options = {
@@ -646,12 +710,12 @@ exports.acceptedOrderMonitor = functions.database.ref("uid/{uid}/accepted/{pushI
     };
     console.log('Sending accepted notifications');
     //return admin.messaging().sendToTopic("usertest", payload, options);
-	
+
 	var database = admin.database().ref().child("orders").child(status.orderid);
 	//var userData;
 	var userToken;
 	var userTokenid;
-	
+
 	database.once('value')
 		.then(function(dataSnapshot) {
 			// handle read data.
@@ -673,22 +737,22 @@ exports.sendingOrderMonitor = functions.database.ref("uid/{uid}/sending/{pushId}
         return;
     }
     const status = data.val();
-	if(status != null){	
-	
+	if(status != null){
+
 	const payload = {
     data: {
         //title: 'Electricity Monitor - Power status changed',
         //body: 'Test',
         //sound: "default"
-		
+
 		customeruid: status.customeruid,
         vendoruid: status.vendoruid,
 		//runneruid: status.runneruid,
 		message: status.result,
         sound: "default"
-		
+
     }
-		
+
     };
 
     const options = {
@@ -697,7 +761,7 @@ exports.sendingOrderMonitor = functions.database.ref("uid/{uid}/sending/{pushId}
     };
     console.log('Sending delivery notifications');
     //return admin.messaging().sendToTopic("usertest", payload, options);
-	
+
 	var db = admin.database();
 	var ref = db.ref().child("uid").child(status.vendoruid);
 
@@ -707,12 +771,12 @@ exports.sendingOrderMonitor = functions.database.ref("uid/{uid}/sending/{pushId}
 	ref.child("accepted").child(snapshot.key).remove();		//removes the order from accepted after the restaurant has accepted it
 
 });
-	
+
 	var database = admin.database().ref().child("orders").child(status.orderid);
 	//var userData;
 	var userToken;
 	var userTokenid;
-	
+
 	database.once('value')
 		.then(function(dataSnapshot) {
 			// handle read data.
@@ -736,22 +800,22 @@ exports.collectedOrderMonitor = functions.database.ref("uid/{uid}/collected/{pus
         return;
     }
     const status = data.val();
-	
-	if(status != null){	
+
+	if(status != null){
 	const payload = {
     data: {
         //title: 'Electricity Monitor - Power status changed',
         //body: 'Test',
         //sound: "default"
-		
+
 		customeruid: status.customeruid,
         vendoruid: status.vendoruid,
 		//runneruid: status.runneruid,
 		message: status.result,
         sound: "default"
-		
+
     }
-		
+
     };
 
     const options = {
@@ -760,7 +824,7 @@ exports.collectedOrderMonitor = functions.database.ref("uid/{uid}/collected/{pus
     };
     console.log('Sending delivery notifications');
     //return admin.messaging().sendToTopic("usertest", payload, options);
-	
+
 	var db = admin.database();
 	var ref = db.ref().child("uid").child(status.vendoruid);
 	ref.orderByKey().equalTo(status.orderid).on("child_added", function(snapshot) {		//for the vendor
@@ -770,12 +834,12 @@ exports.collectedOrderMonitor = functions.database.ref("uid/{uid}/collected/{pus
 		console.log('Vendor: Sending removed');
 
 });
-	
+
 	var database = admin.database().ref().child("orders").child(status.orderid);
 	//var userData;
 	var userToken;
 	var userTokenid;
-	
+
 	database.once('value')
 		.then(function(dataSnapshot) {
 			// handle read data.
@@ -799,20 +863,20 @@ exports.declinedOrderMonitor = functions.database.ref("uid/{uid}/declined/{pushI
         return;
     }
     const status = data.val();
-	
+
 	const payload = {
     data: {
         //title: 'Electricity Monitor - Power status changed',
         //body: 'Test',
         //sound: "default"
-		
+
 		customeruid: status.customeruid,
         vendoruid: status.vendoruid,
 		message: status.result,
         sound: "default"
-		
+
     }
-		
+
     };
 
     const options = {
@@ -821,19 +885,19 @@ exports.declinedOrderMonitor = functions.database.ref("uid/{uid}/declined/{pushI
     };
     console.log('Sending delivery notifications');
     //return admin.messaging().sendToTopic("usertest", payload, options);
-	
+
 	var db = admin.database();
 	var ref = db.ref().child("uid").child(status.vendoruid).child("requests");
 	ref.orderByKey().equalTo(status.orderid).on("child_added", function(snapshot) {
 	console.log(snapshot.key);
 	ref.child(snapshot.key).remove();		//removes the order from requests after the restaurant has accepted it
 });
-	
+
 	var database = admin.database().ref().child("orders").child(status.orderid);
 	//var userData;
 	var userToken;
 	var userTokenid;
-	
+
 	database.once('value')
 		.then(function(dataSnapshot) {
 			// handle read data.
@@ -852,20 +916,20 @@ exports.deliveredOrderMonitor = functions.database.ref("uid/{uid}/delivered/{pus
         return;
     }
     const status = data.val();
-	
+
 	const payload = {
     data: {
         //title: 'Electricity Monitor - Power status changed',
         //body: 'Test',
         //sound: "default"
-		
+
 		customeruid: status.customeruid,
         vendoruid: status.vendoruid,
 		message: status.result,
         sound: "default"
-		
+
     }
-		
+
     };
 
     const options = {
@@ -874,7 +938,7 @@ exports.deliveredOrderMonitor = functions.database.ref("uid/{uid}/delivered/{pus
     };
     console.log('Sending delivery notifications');
     //return admin.messaging().sendToTopic("usertest", payload, options);
-	
+
 	var db = admin.database();
 	var ref = db.ref().child("uid").child(status.vendoruid).child("requests");
 	var ref2 = db.ref().child("uid").child(status.vendoruid).child("accepted");
@@ -889,7 +953,7 @@ exports.deliveredOrderMonitor = functions.database.ref("uid/{uid}/delivered/{pus
 	ref.child(snapshot.key).remove();		//removes the order from sending after the restaurant has delivered it
 		console.log('Vendor: Request removed');
 	ref2.child(snapshot.key).remove();		//removes the order from sending after the restaurant has delivered it
-		console.log('Vendor: Accepted removed');	
+		console.log('Vendor: Accepted removed');
 	ref3.child(snapshot.key).remove();		//removes the order from sending after the restaurant has delivered it
 		console.log('Vendor: Sending removed');
 	ref4.child(snapshot.key).remove();		//removes the order from sending after the restaurant has delivered it
@@ -902,12 +966,12 @@ exports.deliveredOrderMonitor = functions.database.ref("uid/{uid}/delivered/{pus
 			return;
 		}
 });
-	
+
 	var database = admin.database().ref().child("orders").child(status.orderid);
 	//var userData;
 	var userToken;
 	var userTokenid;
-	
+
 	database.once('value')
 		.then(function(dataSnapshot) {
 			// handle read data.
