@@ -9,7 +9,7 @@ const stripe = require('stripe')(functions.config().stripe.token),
 
       // [START chargecustomer]
       // Charge the Stripe customer whenever an amount is written to the Realtime database
-      exports.createStripeCharge = functions.database.ref('/stripe_customers/{userId}/charges/{id}').onWrite(event => {
+      exports.createStripeCharge = functions.database.ref('/stripe_customers/{userId}/charges/{pushId}').onWrite(event => {
         const val = event.data.val();
         // This onWrite will trigger whenever anything is written to the path, so
         // noop if the charge was deleted, errored out, or the Stripe API returned a result (id exists)
