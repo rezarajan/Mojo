@@ -175,7 +175,8 @@ public class Checkout extends AppCompatActivity{
                 for (int position = 0; position < count; position++) {
                     data.moveToPosition(position);
                     Log.d("Database", data.getString(1));
-					total_cost+=data.getString(3); //adding the cost of each item
+                    Log.d("Cost", data.getString(1));
+					total_cost+=Integer.parseInt(data.getString(3))*Integer.parseInt(data.getString(4)); //adding the cost of each item multiplied by the quantity
 
                 }
 
@@ -289,14 +290,12 @@ public class Checkout extends AppCompatActivity{
 				
 				final Map card = new HashMap<>();
 
-                FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-                FirebaseUser user = firebaseAuth.getCurrentUser();
                 String uid = user.getUid();
 				reference = FirebaseDatabase.getInstance().getReference("/stripe_customers/" + uid + "/charges");
                 String pushId = reference.push().getKey();     //String
                 //reference.child(pushId).child("token").setValue(token.getCard());
                 //card.put("amount", 100);
-				card.put(“amount”, total_cost*100); //cost for Stripe is given in cents so multiply by 100 to get the dollar value
+				card.put("amount", total_cost*100); //cost for Stripe is given in cents so multiply by 100 to get the dollar value
                 reference.child(pushId).setValue(card);
             }
         });
