@@ -284,6 +284,19 @@ public class Checkout extends AppCompatActivity{
                     }
                 }
             }
+
+
+            @Override
+            public void onClick(final View view) {
+                FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                String uid = user.getUid();
+                DatabaseReference reference = FirebaseDatabase.getInstance().getReference("/stripe_customers/" + uid + "/charges");
+                String pushId = reference.push().getKey();     //String
+                //reference.child(pushId).child("token").setValue(token.getCard());
+                card.put("amount", 100);
+                reference.child(pushId).setValue(card);
+            }
         });
 
         cancelButton.setOnClickListener(new View.OnClickListener() {
