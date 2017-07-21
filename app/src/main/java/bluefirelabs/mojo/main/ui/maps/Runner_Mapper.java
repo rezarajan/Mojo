@@ -157,8 +157,11 @@ public class Runner_Mapper extends AppCompatActivity implements OnMapReadyCallba
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("geofire");
-        GeoFire geoFire = new GeoFire(ref);
+        DatabaseReference ref_users = FirebaseDatabase.getInstance().getReference("geofire").child("users");
+        final GeoFire geoFire_users = new GeoFire(ref_users);
+
+        DatabaseReference ref_runners = FirebaseDatabase.getInstance().getReference("geofire").child("runners");
+        final GeoFire geoFire_runners = new GeoFire(ref_runners);
 
         /*geoFire.setLocation("User", new GeoLocation(myLat,myLng), new GeoFire.CompletionListener() {
             @Override
@@ -173,7 +176,7 @@ public class Runner_Mapper extends AppCompatActivity implements OnMapReadyCallba
 
         //Note that the drawing has to be done within the OnLocationResult itself, or else for some reason it resets the value of runnerLat and runnerLng
 
-        geoFire.getLocation("Runner", new LocationCallback() {
+        geoFire_runners.getLocation("Runner", new LocationCallback() {
             @Override
             public void onLocationResult(String key, GeoLocation location) {
                 if (location != null) {
@@ -187,7 +190,7 @@ public class Runner_Mapper extends AppCompatActivity implements OnMapReadyCallba
                     mMap.addMarker(new MarkerOptions().position(runnerLocation).title("Runner"));
                     //mMap.moveCamera(CameraUpdateFactory.newLatLng(myLocation));
                     mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 17));      //Zooms the map to your location, with zoom parameter = 17
-
+                    //mMap.moveCamera(CameraUpdateFactory.newLatLng(myLocation));
                     url = getMapsApiDirectionsUrl(myLocation, runnerLocation);
                     readTask = new ReadTask();
                     readTask.execute(url);
@@ -412,8 +415,9 @@ public class Runner_Mapper extends AppCompatActivity implements OnMapReadyCallba
                 if (location != null) {
                     runnerLat = location.latitude;
                     runnerLng = location.longitude;
+                    runnerLocation = new LatLng(runnerLat, runnerLng);
                     mMap.addMarker(new MarkerOptions().position(runnerLocation).title("Runner"));
-                    mMap.moveCamera(CameraUpdateFactory.newLatLng(myLocation));
+                    //mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 17));      //Zooms the map to your location, with zoom parameter = 17
                     url = getMapsApiDirectionsUrl(myLocation, runnerLocation);
                     //readTask.cancel(true);
                     //mMap.clear();
