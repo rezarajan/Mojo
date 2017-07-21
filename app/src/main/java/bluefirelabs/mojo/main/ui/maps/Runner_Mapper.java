@@ -18,6 +18,8 @@ import android.widget.Toast;
 
 import com.firebase.geofire.GeoFire;
 import com.firebase.geofire.GeoLocation;
+import com.firebase.geofire.GeoQuery;
+import com.firebase.geofire.GeoQueryEventListener;
 import com.firebase.geofire.LocationCallback;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -26,6 +28,8 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -91,36 +95,55 @@ public class Runner_Mapper extends AppCompatActivity implements OnMapReadyCallba
             Log.d("Location", String.valueOf(myLat) + "," + String.valueOf(myLng));
 
             DatabaseReference ref = FirebaseDatabase.getInstance().getReference("geofire");
-            GeoFire geoFire = new GeoFire(ref);
+            final GeoFire geoFire = new GeoFire(ref);
 
-            geoFire.setLocation("User", new GeoLocation(myLat,myLng), new GeoFire.CompletionListener() {
-                @Override
-                public void onComplete(String key, DatabaseError error) {
-                    if (error != null) {
-                        System.err.println("There was an error saving the location to GeoFire: " + error);
-                    } else {
-                        System.out.println("Location saved on server successfully!");
+            FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+
+            String uid = "";
+            if(firebaseAuth.getCurrentUser() != null){
+                uid = firebaseAuth.getCurrentUser().getUid();
+
+                geoFire.setLocation(uid, new GeoLocation(myLat,myLng), new GeoFire.CompletionListener() {
+                    @Override
+                    public void onComplete(String key, DatabaseError error) {
+                        if (error != null) {
+                            System.err.println("There was an error saving the location to GeoFire: " + error);
+                        } else {
+                            System.out.println("Location saved on server successfully!");
+                        }
                     }
-                }
-            });
+                });
 
-            geoFire.getLocation("Runner", new LocationCallback() {
-                @Override
-                public void onLocationResult(String key, GeoLocation location) {
-                    if (location != null) {
-                        runnerLat = location.latitude;
-                        runnerLng = location.longitude;
-                        System.out.println(String.format("The location for key %s is [%f,%f]", key, location.latitude, location.longitude));
-                    } else {
-                        System.out.println(String.format("There is no location for key %s in GeoFire", key));
+
+                GeoQuery geoQuery = geoFire.queryAtLocation(new GeoLocation(myLat, myLng), 5);
+
+                geoQuery.addGeoQueryEventListener(new GeoQueryEventListener() {
+                    @Override
+                    public void onKeyEntered(String key, GeoLocation location) {
+                        System.out.println(String.format("Key %s entered the search area at [%f,%f]", key, location.latitude, location.longitude));
                     }
-                }
 
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    System.err.println("There was an error getting the GeoFire location: " + databaseError);
-                }
-            });
+                    @Override
+                    public void onKeyExited(String key) {
+                        System.out.println(String.format("Key %s is no longer in the search area", key));
+                    }
+
+                    @Override
+                    public void onKeyMoved(String key, GeoLocation location) {
+                        System.out.println(String.format("Key %s moved within the search area to [%f,%f]", key, location.latitude, location.longitude));
+                    }
+
+                    @Override
+                    public void onGeoQueryReady() {
+                        System.out.println("All initial data has been loaded and events have been fired!");
+                    }
+
+                    @Override
+                    public void onGeoQueryError(DatabaseError error) {
+                        System.err.println("There was an error with this query: " + error);
+                    }
+                });
+            }
 
 
 
@@ -134,7 +157,7 @@ public class Runner_Mapper extends AppCompatActivity implements OnMapReadyCallba
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("geofire");
         GeoFire geoFire = new GeoFire(ref);
 
-        geoFire.setLocation("User", new GeoLocation(myLat,myLng), new GeoFire.CompletionListener() {
+        /*geoFire.setLocation("User", new GeoLocation(myLat,myLng), new GeoFire.CompletionListener() {
             @Override
             public void onComplete(String key, DatabaseError error) {
                 if (error != null) {
@@ -143,7 +166,7 @@ public class Runner_Mapper extends AppCompatActivity implements OnMapReadyCallba
                     System.out.println("Location saved on server successfully!");
                 }
             }
-        });
+        }); */
 
         //Note that the drawing has to be done within the OnLocationResult itself, or else for some reason it resets the value of runnerLat and runnerLng
 
@@ -356,15 +379,23 @@ public class Runner_Mapper extends AppCompatActivity implements OnMapReadyCallba
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("geofire");
         GeoFire geoFire = new GeoFire(ref);
 
-        geoFire.setLocation("User", new GeoLocation(myLat,myLng), new GeoFire.CompletionListener() {
-            @Override
-            public void onComplete(String key, DatabaseError error) {
-                if (error != null) {
-                    System.err.println("There was an error saving the location to GeoFire: " + error);
-                } else {
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+
+        String uid = "";
+        if(firebaseAuth.getCurrentUser() != null) {
+            uid = firebaseAuth.getCurrentUser().getUid();
+
+            geoFire.setLocation(uid, new GeoLocation(myLat, myLng), new GeoFire.CompletionListener() {
+                @Override
+                public void onComplete(String key, DatabaseError error) {
+                    if (error != null) {
+                        System.err.println("There was an error saving the location to GeoFire: " + error);
+                    } else {
+                        System.out.println("Location saved on server successfully!");
+                    }
                 }
-            }
-        });
+            });
+        }
 
         geoFire.getLocation("Runner", new LocationCallback() {
             @Override
