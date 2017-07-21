@@ -404,8 +404,9 @@ public class Runner_Mapper extends AppCompatActivity implements OnMapReadyCallba
             });
         }
 
-        geoFire_runners.getLocation("Runner", new LocationCallback() {      //TODO: Set up infrastructure for runner locations to send out
-                                                                            //delivery signals
+        //TODO: Set up infrastructure for runner locations to send out delivery signals
+
+        geoFire_runners.getLocation("Runner", new LocationCallback() {
             @Override
             public void onLocationResult(String key, GeoLocation location) {
                 if (location != null) {
