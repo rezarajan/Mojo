@@ -91,10 +91,13 @@ public class Vendor_Runner_Mapper extends AppCompatActivity implements OnMapRead
             myLng = myLocation.getLongitude();
             Log.d("Location", String.valueOf(myLat) + "," + String.valueOf(myLng));
 
-            DatabaseReference ref = FirebaseDatabase.getInstance().getReference("geofire");
-            GeoFire geoFire = new GeoFire(ref);
+            DatabaseReference ref_users = FirebaseDatabase.getInstance().getReference("geofire").child("users");
+            final GeoFire geoFire_users = new GeoFire(ref_users);
 
-            geoFire.setLocation("Runner", new GeoLocation(myLat,myLng), new GeoFire.CompletionListener() {
+            DatabaseReference ref_runners = FirebaseDatabase.getInstance().getReference("geofire").child("runners");
+            final GeoFire geoFire_runners = new GeoFire(ref_runners);
+
+            geoFire_runners.setLocation("Runner", new GeoLocation(myLat,myLng), new GeoFire.CompletionListener() {
                 @Override
                 public void onComplete(String key, DatabaseError error) {
                     if (error != null) {
@@ -105,7 +108,8 @@ public class Vendor_Runner_Mapper extends AppCompatActivity implements OnMapRead
                 }
             });
 
-            geoFire.getLocation("User", new LocationCallback() {
+            //TODO: Replace user with the user's UID
+            geoFire_users.getLocation("User", new LocationCallback() {
                 @Override
                 public void onLocationResult(String key, GeoLocation location) {
                     if (location != null) {
@@ -132,10 +136,13 @@ public class Vendor_Runner_Mapper extends AppCompatActivity implements OnMapRead
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("geofire");
-        GeoFire geoFire = new GeoFire(ref);
+        DatabaseReference ref_users = FirebaseDatabase.getInstance().getReference("geofire").child("users");
+        final GeoFire geoFire_users = new GeoFire(ref_users);
 
-        geoFire.setLocation("Runner", new GeoLocation(myLat,myLng), new GeoFire.CompletionListener() {
+        DatabaseReference ref_runners = FirebaseDatabase.getInstance().getReference("geofire").child("runners");
+        final GeoFire geoFire_runners = new GeoFire(ref_runners);
+
+        geoFire_runners.setLocation("Runner", new GeoLocation(myLat,myLng), new GeoFire.CompletionListener() {
             @Override
             public void onComplete(String key, DatabaseError error) {
                 if (error != null) {
@@ -148,7 +155,8 @@ public class Vendor_Runner_Mapper extends AppCompatActivity implements OnMapRead
 
         //Note that the drawing has to be done within the OnLocationResult itself, or else for some reason it resets the value of runnerLat and runnerLng
 
-        geoFire.getLocation("User", new LocationCallback() {
+        //TODO: Replace user with the user's UID
+        geoFire_users.getLocation("User", new LocationCallback() {
             @Override
             public void onLocationResult(String key, GeoLocation location) {
                 if (location != null) {
@@ -354,10 +362,13 @@ public class Vendor_Runner_Mapper extends AppCompatActivity implements OnMapRead
         myLat = location.getLatitude();
         myLng = location.getLongitude();
 
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("geofire");
-        GeoFire geoFire = new GeoFire(ref);
+        DatabaseReference ref_users = FirebaseDatabase.getInstance().getReference("geofire").child("users");
+        final GeoFire geoFire_users = new GeoFire(ref_users);
 
-        geoFire.setLocation("Runner", new GeoLocation(myLat,myLng), new GeoFire.CompletionListener() {
+        DatabaseReference ref_runners = FirebaseDatabase.getInstance().getReference("geofire").child("runners");
+        final GeoFire geoFire_runners = new GeoFire(ref_runners);
+
+        geoFire_runners.setLocation("Runner", new GeoLocation(myLat,myLng), new GeoFire.CompletionListener() {
             @Override
             public void onComplete(String key, DatabaseError error) {
                 if (error != null) {
@@ -367,7 +378,7 @@ public class Vendor_Runner_Mapper extends AppCompatActivity implements OnMapRead
             }
         });
 
-        geoFire.getLocation("User", new LocationCallback() {
+        geoFire_users.getLocation("User", new LocationCallback() {
             @Override
             public void onLocationResult(String key, GeoLocation location) {
                 if (location != null) {
