@@ -2,6 +2,8 @@ package bluefirelabs.mojo.handlers.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -15,6 +17,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.io.ByteArrayOutputStream;
 import java.util.Map;
 
 import bluefirelabs.mojo.R;
@@ -56,43 +59,28 @@ public class FirebaseRecyclerAdapterRestaurants {
 
         }
         public void getter_restaurants(){
-            final DatabaseReference reference1 = FirebaseDatabase.getInstance().getReference("listing");
-            reference1.orderByChild("restaurant").equalTo(itemTitle.getText().toString()).addChildEventListener(new ChildEventListener() {
-                @Override
-                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                    Map<String, Object> hopperValues = (Map<String, Object>) dataSnapshot.getValue();
-                    //hopperValues.put("key", dataSnapshot.getKey().toString());
-                    //Log.d("Values", dataSnapshot.getKey().toString());
-                    //Log.d("Values", dataSnapshot.getValue().toString());
+
+            Intent intent = new Intent(context, Restaurant_Menu.class);
+            //intent.putExtra("Restaurant", itemTitle.getText().toString());
+
+            itemIcon.buildDrawingCache();
+            Bitmap image= itemIcon.getDrawingCache();
+
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            image.compress(Bitmap.CompressFormat.PNG, 100, stream);
+            byte[] bytes = stream.toByteArray();
+            Log.d("DrawingCache", "built");
+
+            //intent.putExtra("imagebitmap", image);
+
+            Bundle extras = new Bundle();
+            extras.putByteArray("BMP", bytes);
+            extras.putString("Restaurant", itemTitle.getText().toString());
+            intent.putExtras(extras);
+            context.startActivity(intent);
 
 
-                    Intent intent = new Intent(context, Restaurant_Menu.class);
-                    intent.putExtra("Restaurant", itemTitle.getText().toString());
-                    intent.putExtra("Icon", hopperValues.get("icon").toString());
-                    Log.d("icon", hopperValues.get("icon").toString());
-                    context.startActivity(intent);
-                }
 
-                @Override
-                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-                }
-
-                @Override
-                public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-                }
-
-                @Override
-                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
         }
 
     }

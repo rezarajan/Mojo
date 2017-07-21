@@ -28,9 +28,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.firebase.geofire.GeoFire;
+import com.firebase.geofire.GeoLocation;
+import com.firebase.geofire.GeoQuery;
+import com.firebase.geofire.GeoQueryEventListener;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
@@ -126,9 +131,6 @@ public class UserHub extends AppCompatActivity
         userEmail.setText(user.getEmail());
 
 
-       populateView();
-
-
         small_description = (TextView) findViewById(R.id.small_description_location);
 
         //FirebaseApp.initializeApp(this);
@@ -155,6 +157,58 @@ public class UserHub extends AppCompatActivity
         }
 
         new GetAddress().execute(String.format("%.4f,%.4f",lat,lng));
+
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("geofire");
+        final GeoFire geoFire = new GeoFire(ref);
+
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+
+        String uid = "";
+        if(firebaseAuth.getCurrentUser() != null){
+            uid = firebaseAuth.getCurrentUser().getUid();
+
+            geoFire.setLocation(uid, new GeoLocation(lat, lng), new GeoFire.CompletionListener() {
+                @Override
+                public void onComplete(String key, DatabaseError error) {
+                    if (error != null) {
+                        System.err.println("There was an error saving the location to GeoFire: " + error);
+                    } else {
+                        System.out.println("Location saved on server successfully!");
+                    }
+                }
+            });
+
+
+            GeoQuery geoQuery = geoFire.queryAtLocation(new GeoLocation(lat, lng), 5);
+
+            geoQuery.addGeoQueryEventListener(new GeoQueryEventListener() {
+                @Override
+                public void onKeyEntered(String key, GeoLocation location) {
+                    System.out.println(String.format("Key %s entered the search area at [%f,%f]", key, location.latitude, location.longitude));
+                    populateView(key);
+                }
+
+                @Override
+                public void onKeyExited(String key) {
+                    System.out.println(String.format("Key %s is no longer in the search area", key));
+                }
+
+                @Override
+                public void onKeyMoved(String key, GeoLocation location) {
+                    System.out.println(String.format("Key %s moved within the search area to [%f,%f]", key, location.latitude, location.longitude));
+                }
+
+                @Override
+                public void onGeoQueryReady() {
+                    System.out.println("All initial data has been loaded and events have been fired!");
+                }
+
+                @Override
+                public void onGeoQueryError(DatabaseError error) {
+                    System.err.println("There was an error with this query: " + error);
+                }
+            });
+        }
     }
 
     @Override
@@ -338,7 +392,7 @@ public class UserHub extends AppCompatActivity
         }
     }
 
-    public void populateView(){
+    public void populateView(String venue){
         mRestaurantRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         mLinearLayoutManager = new LinearLayoutManager(this);
         mLinearLayoutManager.setStackFromEnd(true);
@@ -348,7 +402,7 @@ public class UserHub extends AppCompatActivity
                 Food_List.class,
                 R.layout.card_layout,
                 FirebaseRecyclerAdapterRestaurants.RecyclerViewHolder.class,
-                mFirebaseDatabaseReference.child(RESTAURANT)
+                mFirebaseDatabaseReference.child(RESTAURANT).child(venue)
         ) {
 
             @Override

@@ -1,6 +1,8 @@
 package bluefirelabs.mojo.menu;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -18,6 +20,8 @@ import com.squareup.picasso.Picasso;
 import bluefirelabs.mojo.R;
 import bluefirelabs.mojo.handlers.adapters.FirebaseRecyclerAdapterMenu;
 import bluefirelabs.mojo.handlers.adapters.Food_List;
+
+import static android.R.attr.data;
 
 public class Restaurant_Menu extends AppCompatActivity {
 
@@ -41,13 +45,24 @@ public class Restaurant_Menu extends AppCompatActivity {
         //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         //toolbar.setTitle("Menu");
 
-        Intent receivedIntent = getIntent();
-        restaurant = receivedIntent.getStringExtra("Restaurant");
-        iconRef = receivedIntent.getStringExtra("Icon");
+        //Intent receivedIntent = getIntent();
+        //restaurant = receivedIntent.getStringExtra("Restaurant");
+        Bundle extras = getIntent().getExtras();
+        //Bitmap bmp = (Bitmap) extras.getParcelable("imagebitmap");
+        restaurant = extras.getString("Restaurant");
+
         MENU = "menu/"+restaurant;
 
         ImageView restaurantIcon = (ImageView) findViewById(R.id.restaurant_icon);
-        Picasso.with(Restaurant_Menu.this).load(iconRef).into(restaurantIcon);
+        //Picasso.with(Restaurant_Menu.this).load(iconRef).into(restaurantIcon);
+
+        //restaurantIcon.setImageBitmap(bmp);
+
+        byte[] bytes = extras.getByteArray("BMP");
+        Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+        restaurantIcon.setImageBitmap(bmp);
+
+        Log.d("Extras", "imported");
 
         CollapsingToolbarLayout collapsingToolbar = (CollapsingToolbarLayout)findViewById(R.id.collapsingToolbar);
         collapsingToolbar.setTitle(restaurant);
