@@ -4,7 +4,8 @@
     ".write": "auth != null",
     
     "geofire": {
-      // Allow only users to read the GeoFire index
+      "$key": {
+       // Allow only users to read the GeoFire index
       ".read": "auth != null",
 
       // Index each location's geohash for faster querying
@@ -16,7 +17,7 @@
         ".write": "auth != null",
 
         // Key validation
-        ".validate": "newData.hasChildren(['g', 'l']) && newData.getPriority().length <= 22 && newData.getPriority().length > 0",
+        ".validate": "newData.hasChildren(['g','l']) && newData.getPriority().length <= 22 && newData.getPriority().length > 0",
 
         // Geohash validation
         "g": {
@@ -41,35 +42,37 @@
           ".validate": false
         }
       }
+      }
+
     },
-	  
-	"orders":{
-	  // Allow only users to read the GeoFire index
+    
+  "orders":{
+    // Allow only users to read the GeoFire index
       ".read": "auth != null",
-	  
-	  // Index user, vendor and order data for faster querying
-	  ".indexOn": ["postid"]
+    
+    // Index user, vendor and order data for faster querying
+    ".indexOn": ["postid"]
   },
-	"requests":{
-	  // Allow only users to read the GeoFire index
+  "requests":{
+    // Allow only users to read the GeoFire index
       ".read": "auth != null",
-	  
-	  // Index user, vendor and order data for faster querying
-	  ".indexOn": ["result"]
+    
+    // Index user, vendor and order data for faster querying
+    ".indexOn": ["result"]
   },
     "inprogress":{
-	  // Allow only users to read the GeoFire index
+    // Allow only users to read the GeoFire index
       ".read": "auth != null",
-	  
-	  // Index user, vendor and order data for faster querying
-	  ".indexOn": ["result"]
+    
+    // Index user, vendor and order data for faster querying
+    ".indexOn": ["result"]
   },
-	"uid":{
-	  // Allow only users to read the GeoFire index
+  "uid":{
+    // Allow only users to read the GeoFire index
       ".read": "auth != null",
-	  
-	  // Index user, vendor and order data for faster querying
-	  ".indexOn": ["result"]
+    
+    // Index user, vendor and order data for faster querying
+    ".indexOn": ["result"]
   }  
   }
 }

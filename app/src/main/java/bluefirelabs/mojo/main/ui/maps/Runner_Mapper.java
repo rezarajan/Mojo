@@ -94,8 +94,11 @@ public class Runner_Mapper extends AppCompatActivity implements OnMapReadyCallba
             myLng = myLocation.getLongitude();
             Log.d("Location", String.valueOf(myLat) + "," + String.valueOf(myLng));
 
-            DatabaseReference ref = FirebaseDatabase.getInstance().getReference("geofire");
-            final GeoFire geoFire = new GeoFire(ref);
+            DatabaseReference ref_users = FirebaseDatabase.getInstance().getReference("geofire").child("users");
+            final GeoFire geoFire_users = new GeoFire(ref_users);
+
+            DatabaseReference ref_venues = FirebaseDatabase.getInstance().getReference("geofire").child("venues");
+            final GeoFire geoFire_venues = new GeoFire(ref_venues);
 
             FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
 
@@ -103,7 +106,7 @@ public class Runner_Mapper extends AppCompatActivity implements OnMapReadyCallba
             if(firebaseAuth.getCurrentUser() != null){
                 uid = firebaseAuth.getCurrentUser().getUid();
 
-                geoFire.setLocation(uid, new GeoLocation(myLat,myLng), new GeoFire.CompletionListener() {
+                geoFire_users.setLocation(uid, new GeoLocation(myLat,myLng), new GeoFire.CompletionListener() {
                     @Override
                     public void onComplete(String key, DatabaseError error) {
                         if (error != null) {
@@ -115,7 +118,7 @@ public class Runner_Mapper extends AppCompatActivity implements OnMapReadyCallba
                 });
 
 
-                GeoQuery geoQuery = geoFire.queryAtLocation(new GeoLocation(myLat, myLng), 5);
+                GeoQuery geoQuery = geoFire_venues.queryAtLocation(new GeoLocation(myLat, myLng), 5);
 
                 geoQuery.addGeoQueryEventListener(new GeoQueryEventListener() {
                     @Override
@@ -376,8 +379,12 @@ public class Runner_Mapper extends AppCompatActivity implements OnMapReadyCallba
         myLat = location.getLatitude();
         myLng = location.getLongitude();
 
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("geofire");
-        GeoFire geoFire = new GeoFire(ref);
+        DatabaseReference ref_users = FirebaseDatabase.getInstance().getReference("geofire").child("users");
+        final GeoFire geoFire_users = new GeoFire(ref_users);
+
+        DatabaseReference ref_runners = FirebaseDatabase.getInstance().getReference("geofire").child("runners");
+        final GeoFire geoFire_runners = new GeoFire(ref_runners);
+
 
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
 
@@ -385,7 +392,7 @@ public class Runner_Mapper extends AppCompatActivity implements OnMapReadyCallba
         if(firebaseAuth.getCurrentUser() != null) {
             uid = firebaseAuth.getCurrentUser().getUid();
 
-            geoFire.setLocation(uid, new GeoLocation(myLat, myLng), new GeoFire.CompletionListener() {
+            geoFire_users.setLocation(uid, new GeoLocation(myLat, myLng), new GeoFire.CompletionListener() {
                 @Override
                 public void onComplete(String key, DatabaseError error) {
                     if (error != null) {
@@ -397,7 +404,8 @@ public class Runner_Mapper extends AppCompatActivity implements OnMapReadyCallba
             });
         }
 
-        geoFire.getLocation("Runner", new LocationCallback() {
+        geoFire_runners.getLocation("Runner", new LocationCallback() {      //TODO: Set up infrastructure for runner locations to send out
+                                                                            //delivery signals
             @Override
             public void onLocationResult(String key, GeoLocation location) {
                 if (location != null) {

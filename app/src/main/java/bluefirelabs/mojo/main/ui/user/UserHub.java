@@ -158,8 +158,11 @@ public class UserHub extends AppCompatActivity
 
         new GetAddress().execute(String.format("%.4f,%.4f",lat,lng));
 
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("geofire");
-        final GeoFire geoFire = new GeoFire(ref);
+        DatabaseReference ref_users = FirebaseDatabase.getInstance().getReference("geofire").child("users");
+        final GeoFire geoFire_users = new GeoFire(ref_users);
+
+        DatabaseReference ref_venues = FirebaseDatabase.getInstance().getReference("geofire").child("venues");
+        final GeoFire geoFire_venues = new GeoFire(ref_venues);
 
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
 
@@ -167,7 +170,7 @@ public class UserHub extends AppCompatActivity
         if(firebaseAuth.getCurrentUser() != null){
             uid = firebaseAuth.getCurrentUser().getUid();
 
-            geoFire.setLocation(uid, new GeoLocation(lat, lng), new GeoFire.CompletionListener() {
+            geoFire_users.setLocation(uid, new GeoLocation(lat, lng), new GeoFire.CompletionListener() {
                 @Override
                 public void onComplete(String key, DatabaseError error) {
                     if (error != null) {
@@ -178,8 +181,8 @@ public class UserHub extends AppCompatActivity
                 }
             });
 
-
-            GeoQuery geoQuery = geoFire.queryAtLocation(new GeoLocation(lat, lng), 5);
+            //Querying for nearby venues
+            GeoQuery geoQuery = geoFire_venues.queryAtLocation(new GeoLocation(lat, lng), 5);
 
             geoQuery.addGeoQueryEventListener(new GeoQueryEventListener() {
                 @Override
