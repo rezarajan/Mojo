@@ -172,13 +172,13 @@ exports.requestsMonitor = functions.database.ref("requests/{pushId}/").onWrite((
       if(status.result === "transient"){		//if transient then send to the uid node for target user response
       var db = admin.database();
       var refNode = db.ref("uid/");
-      var ref = db.ref("requests").child(status.orderid);
+      var ref = db.ref("requests").child(status.postid);
 
       ref.child("items").once("value")
       .then(function(snapshot) {
         if(snapshot.val() !== null){
       //the set uses the push key
-      refNode.child(status.customeruid_to).child("gifts").child(status.orderid).set({
+      refNode.child(status.customeruid_to).child("gifts").child(status.postid).set({
           customeruid_to: status.customeruid_to,
           customeruid_from: status.customeruid_from,
           vendoruid: status.vendoruid,
@@ -186,7 +186,7 @@ exports.requestsMonitor = functions.database.ref("requests/{pushId}/").onWrite((
           name: userDataName,
           items: snapshot.val(),
           result: "transient",
-          orderid: status.orderid
+          orderid: status.postid
       });
           //refNode.child(status.orderid).child("items").set(snapshot.val());
         } else{
@@ -198,7 +198,7 @@ exports.requestsMonitor = functions.database.ref("requests/{pushId}/").onWrite((
       .then(function(snapshot) {
         if(snapshot.val() !== null){
       //the set uses the push key
-      refNode.child(status.customeruid_to).child("gifts").child(status.orderid).update({
+      refNode.child(status.customeruid_to).child("gifts").child(status.postid).update({
           cost: snapshot.val()
       });
           //refNode.child(status.orderid).child("items").set(snapshot.val());
@@ -734,7 +734,7 @@ exports.giftsOrderMonitor = functions.database.ref("uid/{uid}/gifts/{pushId}").o
 if(status.result === "asking"){		//if asking then send to the uid node for vendor response
   		var db = admin.database();
   		var refNode = db.ref("uid/");
-  		var ref = db.ref("requests").child(status.orderid);
+  		var ref = db.ref("orders").child(status.orderid);
 
   		//the set uses the push key
   		ref.set({
@@ -743,10 +743,42 @@ if(status.result === "asking"){		//if asking then send to the uid node for vendo
   				vendoruid: status.vendoruid,
   				//runneruid: status.runneruid,
   				//items: snapshot.val(),
-  				result: "asking",
-  				orderid: status.orderid
+  				postid: status.orderid
   		});
   				//refNode.child(status.orderid).child("items").set(snapshot.val());
+
+          refNode.child(status.customeruid_to).child("gifts").child(status.orderid).child("items").once("value")
+            .then(function(snapshot) {
+              if(snapshot.val() !== null){
+                //the push creates the request id
+                ref.set({
+                customeruid_to: status.customeruid_to,
+                customeruid_from: status.customeruid_from,
+                vendoruid: status.vendoruid,
+                items: snapshot.val(),
+                //result: "asking",				//sends to the requests node with parameter asking //orderMonitor handles the result node
+                //result: "transient",				//sends to the requests node with parameter transient for gifted food from others
+                postid: status.orderid
+                });
+                //refNode.child(status.postid).child("items").set(snapshot.val());
+              } else{
+                return;
+              }
+
+          });
+
+          refNode.child(status.customeruid_to).child("gifts").child(status.orderid).child("cost").once("value")
+            .then(function(snapshot) {
+              if(snapshot.val() !== null){
+                //the push creates the request id
+                ref.update({
+                cost: snapshot.val()
+                });
+              } else{
+                return;
+              }
+
+          });
 
 
   } else if(status.result === "declined"){		//if asking then send to the uid node for vendor response
@@ -765,8 +797,39 @@ if(status.result === "asking"){		//if asking then send to the uid node for vendo
     				orderid: status.orderid
     		});
     				//refNode.child(status.orderid).child("items").set(snapshot.val());
+            refNode.child(status.customeruid_to).child("gifts").child(status.orderid).child("items").once("value")
+              .then(function(snapshot) {
+                if(snapshot.val() !== null){
+                  //the push creates the request id
+                  refNode.child(status.postid).set({
+                  customeruid_to: status.customeruid_to,
+                  customeruid_from: status.customeruid_from,
+                  vendoruid: status.vendoruid,
+                  items: snapshot.val(),
+                  //result: "asking",				//sends to the requests node with parameter asking //orderMonitor handles the result node
+                  //result: "transient",				//sends to the requests node with parameter transient for gifted food from others
+                  orderid: status.orderid
+                  });
+                  //refNode.child(status.postid).child("items").set(snapshot.val());
+                } else{
+                  return;
+                }
 
-    			}
+            });
+
+            refNode.child(status.customeruid_to).child("gifts").child(status.orderid).child("cost").once("value")
+              .then(function(snapshot) {
+                if(snapshot.val() !== null){
+                  //the push creates the request id
+                  ref.update({
+                  cost: snapshot.val()
+                  });
+                } else{
+                  return;
+                }
+
+            });
+  }
 
 
 
