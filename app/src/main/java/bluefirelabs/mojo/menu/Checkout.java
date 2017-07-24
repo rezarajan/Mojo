@@ -203,7 +203,8 @@ public class Checkout extends AppCompatActivity{
                         //then add it to the ArrayList
                         //listData.add(data.getString(2));
                         notification.put("user_token", FirebaseInstanceId.getInstance().getToken());
-                        notification.put("customeruid", user.getUid());
+                        notification.put("customeruid_to", user.getUid());
+                        notification.put("customeruid_from", "none");
                         notification.put("vendoruid", data.getString(1));
                         //notification.put("runneruid", "Runner");
                         notification.put("postid", pushId);
@@ -220,7 +221,8 @@ public class Checkout extends AppCompatActivity{
                             //then add it to the ArrayList
                             //listData.add(data.getString(2));
                             notification.put("user_token", FirebaseInstanceId.getInstance().getToken());
-                            notification.put("customeruid", user.getUid());
+                            notification.put("customeruid_to", user.getUid());
+                            notification.put("customeruid_from", "none");
                             notification.put("vendoruid", data.getString(1));
                             //notification.put("runneruid", "Runner");
                             notification.put("postid", pushId);
@@ -241,7 +243,8 @@ public class Checkout extends AppCompatActivity{
                             //then add it to the ArrayList
                             //listData.add(data.getString(2));
                             notification.put("user_token", FirebaseInstanceId.getInstance().getToken());
-                            notification.put("customeruid", user.getUid());
+                            notification.put("customeruid_to", user.getUid());
+                            notification.put("customeruid_from", "none");
                             notification.put("vendoruid", data.getString(1));
                             //notification.put("runneruid", "Runner");
                             notification.put("postid", pushId);
@@ -271,7 +274,8 @@ public class Checkout extends AppCompatActivity{
                             //then add it to the ArrayList
                             //listData.add(data.getString(2));
                             notification.put("user_token", FirebaseInstanceId.getInstance().getToken());
-                            notification.put("customeruid", user.getUid());
+                            notification.put("customeruid_to", user.getUid());
+                            notification.put("customeruid_from", "none");
                             notification.put("vendoruid", data.getString(1));
                             //notification.put("runneruid", "Runner");
                             notification.put("postid", pushId);

@@ -123,8 +123,8 @@ exports.orderMonitor = functions.database.ref("orders/{pushId}/").onWrite((event
         customeruid_from: status.customeruid_from,
 				vendoruid: status.vendoruid,
 				items: snapshot.val(),
-				//result: "asking",				//sends to the requests node with parameter asking
-        result: "transient",				//sends to the requests node with parameter transient for gifted food from others
+				result: "asking",				//sends to the requests node with parameter asking
+        //result: "transient",				//sends to the requests node with parameter transient for gifted food from others
 				orderid: status.postid
 				});
 				//refNode.child(status.postid).child("items").set(snapshot.val());
@@ -219,7 +219,7 @@ exports.requestsMonitor = functions.database.ref("requests/{pushId}/").onWrite((
 			if(snapshot.val() !== null){
 		//the set uses the push key
 		refNode.child(status.vendoruid).child("requests").child(status.orderid).set({
-				customeruid: status.customeruid,
+				customeruid: status.customeruid_to,
 				vendoruid: status.vendoruid,
 				//runneruid: status.runneruid,
 				name: userDataName,
@@ -258,7 +258,7 @@ exports.requestsMonitor = functions.database.ref("requests/{pushId}/").onWrite((
 			if(snapshot.val() !== null){
 		//the set uses the push key
 		refNode.child(status.vendoruid).child(status.orderid).set({
-				customeruid: status.customeruid,
+				customeruid: status.customeruid_to,
 				vendoruid: status.vendoruid,
 				items: snapshot.val(),
 				result: "accepted",
@@ -273,7 +273,7 @@ exports.requestsMonitor = functions.database.ref("requests/{pushId}/").onWrite((
 		.then(function(snapshot) {
 			if(snapshot.val() !== null){
 		//the set uses the push key
-		refNode.child(status.vendoruid).child("requests").child(status.orderid).update({
+		refNode.child(status.vendoruid).child(status.orderid).update({
 				cost: snapshot.val()
 		});
 				//refNode.child(status.orderid).child("items").set(snapshot.val());
@@ -293,14 +293,14 @@ exports.requestsMonitor = functions.database.ref("requests/{pushId}/").onWrite((
 			if(snapshot.val() !== null){
 		//the set uses the push key
 		refNode.child(status.vendoruid).child("declined").child(status.orderid).set({		//vendoruid
-				customeruid: status.customeruid,
+				customeruid: status.customeruid_to,
 				vendoruid: status.vendoruid,
 				items: snapshot.val(),
 				result: "declined",		//this is the only value we have to change after the first if
 				orderid: status.orderid
 		});
-		refNode.child(status.customeruid).child(status.orderid).set({		//customeruid
-				customeruid: status.customeruid,
+		refNode.child(status.customeruid_to).child(status.orderid).set({		//customeruid
+				customeruid: status.customeruid_to,
 				vendoruid: status.vendoruid,
 				items: snapshot.val(),
 				result: "declined",
@@ -319,7 +319,7 @@ exports.requestsMonitor = functions.database.ref("requests/{pushId}/").onWrite((
 		refNode.child(status.vendoruid).child("declined").child(status.orderid).update({		//vendoruid
 				cost: snapshot.val()
 		});
-		refNode.child(status.customeruid).child(status.orderid).update({		//customeruid
+		refNode.child(status.customeruid_to).child(status.orderid).update({		//customeruid
 				cost: snapshot.val()
 		});
 				//refNode.child(status.orderid).child("items").set(snapshot.val());
@@ -340,7 +340,7 @@ exports.requestsMonitor = functions.database.ref("requests/{pushId}/").onWrite((
 		//the set uses the push key
 		//the set uses the push key
 		refNode.child(status.vendoruid).child(status.orderid).set({
-				customeruid: status.customeruid,
+				customeruid: status.customeruid_to,
 				vendoruid: status.vendoruid,
 				//runneruid: status.runneruid,
 				runneruid: "Runner",		//this is just for testing. TODO: create a method to correctly find a runner
@@ -380,7 +380,7 @@ exports.requestsMonitor = functions.database.ref("requests/{pushId}/").onWrite((
 		//the set uses the push key
 		//the set uses the push key
 		refNode.child(status.vendoruid).child(status.orderid).set({
-				customeruid: status.customeruid,
+				customeruid: status.customeruid_to,
 				vendoruid: status.vendoruid,
 				//runneruid: status.runneruid,		//since the runneruid has already been set to "Runner" in sending case
 				runneruid: "Runner",
@@ -421,7 +421,7 @@ exports.requestsMonitor = functions.database.ref("requests/{pushId}/").onWrite((
 		//the set uses the push key
 		//the set uses the push key
 		refNode.child(status.vendoruid).child(status.orderid).set({
-				customeruid: status.customeruid,
+				customeruid: status.customeruid_to,
 				vendoruid: status.vendoruid,
 				runneruid: status.runneruid,		//since the runneruid has already been set to "Runner" in sending case
 				items: snapshot.val(),		//gets the order items
@@ -997,7 +997,7 @@ exports.declinedOrderMonitor = functions.database.ref("uid/{uid}/declined/{pushI
         //sound: "default"
 
 		customeruid: status.customeruid,
-        vendoruid: status.vendoruid,
+    vendoruid: status.vendoruid,
 		message: status.result,
         sound: "default"
 
