@@ -181,6 +181,7 @@ exports.requestsMonitor = functions.database.ref("requests/{pushId}/").onWrite((
       refNode.child(status.customeruid_to).child("gifts").child(status.postid).set({
           customeruid_to: status.customeruid_to,
           customeruid_from: status.customeruid_from,
+          user_token: status.user_token,
           vendoruid: status.vendoruid,
           //runneruid: status.runneruid,
           name: userDataName,
@@ -754,6 +755,7 @@ if(status.result === "asking"){		//if asking then send to the uid node for vendo
                 ref.set({
                 customeruid_to: status.customeruid_to,
                 customeruid_from: status.customeruid_from,
+                user_token: status.user_token,
                 vendoruid: status.vendoruid,
                 items: snapshot.val(),
                 //result: "asking",				//sends to the requests node with parameter asking //orderMonitor handles the result node
