@@ -118,7 +118,7 @@ public class Gifts extends AppCompatActivity
                 Map<String, Object> hopperValues = (Map<String, Object>) dataSnapshot.getValue();
                 //hopperValues.put("key", dataSnapshot.getKey().toString());
                 //Log.d("Values", dataSnapshot.getKey().toString());
-                Log.d("Values", dataSnapshot.getValue().toString());
+                //Log.d("Values", dataSnapshot.getValue().toString());
                 //restaurantName = (String) hopperValues.get("name"); //this directory only contains one item so it should not be a problem
                 RESTAURANT  = "uid/"+UID+"/gifts";
                 Log.d("Restaurant", RESTAURANT);
