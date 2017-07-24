@@ -119,10 +119,12 @@ exports.orderMonitor = functions.database.ref("orders/{pushId}/").onWrite((event
 			if(snapshot.val() !== null){
 				//the push creates the request id
 				refNode.child(status.postid).set({
-				customeruid: status.customeruid,
+				customeruid_to: status.customeruid_to,
+        customeruid_from: status.customeruid_from,
 				vendoruid: status.vendoruid,
 				items: snapshot.val(),
-				result: "asking",				//sends to the requests node with parameter asking
+				//result: "asking",				//sends to the requests node with parameter asking
+        result: "transient",				//sends to the requests node with parameter transient for gifted food from others
 				orderid: status.postid
 				});
 				//refNode.child(status.postid).child("items").set(snapshot.val());
@@ -156,7 +158,7 @@ exports.requestsMonitor = functions.database.ref("requests/{pushId}/").onWrite((
     }
     const status = data.val();
 	//var venduid = status.vendoruid;
-	var database = admin.database().ref().child("uid").child(status.customeruid).child("info");
+	var database = admin.database().ref().child("uid").child(status.customeruid_to).child("info");
 	//var userData;
 	var userData;
 	var userDataName;
@@ -167,7 +169,47 @@ exports.requestsMonitor = functions.database.ref("requests/{pushId}/").onWrite((
 			var userDataName = userData.name;
 			console.log("User Data: " + userDataName);
 			//return userDataName;
-		if(status.result === "asking"){		//if asking then send to the uid node for vendor response
+      if(status.result === "transient"){		//if transient then send to the uid node for target user response
+      var db = admin.database();
+      var refNode = db.ref("uid/");
+      var ref = db.ref("requests").child(status.orderid);
+
+      ref.child("items").once("value")
+      .then(function(snapshot) {
+        if(snapshot.val() !== null){
+      //the set uses the push key
+      refNode.child(status.customeruid_to).child("gifts").child(status.orderid).set({
+          customeruid_to: status.customeruid_to,
+          customeruid_from: status.customeruid_from,
+          vendoruid: status.vendoruid,
+          //runneruid: status.runneruid,
+          name: userDataName,
+          items: snapshot.val(),
+          result: "transient",
+          orderid: status.orderid
+      });
+          //refNode.child(status.orderid).child("items").set(snapshot.val());
+        } else{
+          return;
+        }
+        });
+
+      ref.child("cost").once("value")
+      .then(function(snapshot) {
+        if(snapshot.val() !== null){
+      //the set uses the push key
+      refNode.child(status.customeruid_to).child("gifts").child(status.orderid).update({
+          cost: snapshot.val()
+      });
+          //refNode.child(status.orderid).child("items").set(snapshot.val());
+        } else{
+          return;
+        }
+
+    });
+
+
+  } else if(status.result === "asking"){		//if asking then send to the uid node for vendor response
 		var db = admin.database();
 		var refNode = db.ref("uid/");
 		var ref = db.ref("requests").child(status.orderid);
@@ -655,7 +697,7 @@ exports.requestOrderMonitor = functions.database.ref("uid/{uid}/requests/{pushId
         //sound: "default"
 
 		customeruid: status.customeruid,
-        vendoruid: status.vendoruid,
+    vendoruid: status.vendoruid,
 		message: status.result,
         sound: "default"
 
@@ -672,6 +714,88 @@ exports.requestOrderMonitor = functions.database.ref("uid/{uid}/requests/{pushId
 
 	console.log("Vendor: " + status.vendoruid);
 	return admin.messaging().sendToTopic(status.vendoruid, payload, options);		//using the vendoruid as the topic
+	}
+	else{
+		return;
+	}
+
+
+
+});
+
+exports.giftsOrderMonitor = functions.database.ref("uid/{uid}/gifts/{pushId}").onWrite((event) => {		//notifies user/vendor
+	const data = event.data;
+    console.log('Event triggered');
+    if (!data.changed()) {
+        return;
+    }
+    const status = data.val();
+
+if(status.result === "asking"){		//if asking then send to the uid node for vendor response
+  		var db = admin.database();
+  		var refNode = db.ref("uid/");
+  		var ref = db.ref("requests").child(status.orderid);
+
+  		//the set uses the push key
+  		ref.set({
+  				customeruid_to: status.customeruid_to,
+          customeruid_from: status.customeruid_from,
+  				vendoruid: status.vendoruid,
+  				//runneruid: status.runneruid,
+  				//items: snapshot.val(),
+  				result: "asking",
+  				orderid: status.orderid
+  		});
+  				//refNode.child(status.orderid).child("items").set(snapshot.val());
+
+
+  } else if(status.result === "declined"){		//if asking then send to the uid node for vendor response
+    		var db = admin.database();
+    		var refNode = db.ref("uid/");
+    		var ref = db.ref("requests").child(status.orderid);
+
+    		//the set uses the push key
+    		ref.set({
+          customeruid_to: status.customeruid_to,
+          customeruid_from: status.customeruid_from,
+    				vendoruid: status.vendoruid,
+    				//runneruid: status.runneruid,
+    				//items: snapshot.val(),
+    				result: "declined",
+    				orderid: status.orderid
+    		});
+    				//refNode.child(status.orderid).child("items").set(snapshot.val());
+
+    			}
+
+
+
+	if(status != null){		//to account for the deletion case
+		const payload = {
+    data: {
+        //title: 'Electricity Monitor - Power status changed',
+        //body: 'Test',
+        //sound: "default"
+
+		//customeruid_to: status.customeruid_to,
+    //customeruid_from: status.customeruid_from,
+    vendoruid: status.vendoruid,
+		message: status.result,
+        sound: "default"
+
+    }
+
+    };
+
+    const options = {
+        priority: "high",
+        timeToLive: 60 * 60 * 24 //24 hours
+    };
+    console.log('Sending requests notifications');
+    //return admin.messaging().sendToTopic("usertest", payload, options);
+
+	console.log("Recipient: " + status.customeruid_to);
+	return admin.messaging().sendToTopic(status.customeruid_to, payload, options);		//using the vendoruid as the topic
 	}
 	else{
 		return;
@@ -698,7 +822,7 @@ exports.acceptedOrderMonitor = functions.database.ref("uid/{uid}/accepted/{pushI
         //sound: "default"
 
 		customeruid: status.customeruid,
-        vendoruid: status.vendoruid,
+    vendoruid: status.vendoruid,
 		message: status.result,
         sound: "default"
 
@@ -748,7 +872,7 @@ exports.sendingOrderMonitor = functions.database.ref("uid/{uid}/sending/{pushId}
         //sound: "default"
 
 		customeruid: status.customeruid,
-        vendoruid: status.vendoruid,
+    vendoruid: status.vendoruid,
 		//runneruid: status.runneruid,
 		message: status.result,
         sound: "default"

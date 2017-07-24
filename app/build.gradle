@@ -41,6 +41,7 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'org.jetbrains:annotations-java5:15.0'
     compile 'com.journeyapps:zxing-android-embedded:3.5.0'
+    compile 'com.android.support:palette-v7:23.1.1'
     testCompile 'junit:junit:4.12'
 }
 

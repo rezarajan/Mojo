@@ -134,6 +134,14 @@
             android:name=".barcode.barcodeScanner"
             android:configChanges="orientation"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".carousellayout.MainActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".main.ui.user.Gifts"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
 
         <service
             android:name=".background_tasks.MyFirebaseInstanceIDService"
@@ -153,10 +161,6 @@
             android:name=".handlers.online.Payments"
             android:label="@string/title_activity_payments"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
-        <activity
-            android:name=".handlers.online.Main2Activity"
-            android:label="@string/title_activity_main2"
-            android:theme="@style/Theme.AppCompat.NoActionBar"></activity>
     </application>
 
 </manifest>

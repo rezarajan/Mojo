@@ -282,6 +282,9 @@ public class UserHub extends AppCompatActivity
         } else if (id == R.id.nav_settings) {
             Intent intent = new Intent(this, Payments.class);
             startActivity(intent);
+        } else if (id == R.id.nav_gifts) {
+            Intent intent = new Intent(this, Gifts.class);
+            startActivity(intent);
         }
 
         /* else if (id == R.id.nav_slideshow) {
@@ -399,6 +402,9 @@ public class UserHub extends AppCompatActivity
         mRestaurantRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         mLinearLayoutManager = new LinearLayoutManager(this);
         mLinearLayoutManager.setStackFromEnd(true);
+
+        FirebaseUser user = firebaseAuth.getCurrentUser();
+        Log.d("UID", user.getUid());
 
         mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
         mFirebaseAdapter = new FirebaseRecyclerAdapter<Food_List, FirebaseRecyclerAdapterRestaurants.RecyclerViewHolder>(

@@ -11,6 +11,9 @@
         <item
             android:id="@+id/nav_settings"
             android:title="Payments" />
+        <item
+            android:id="@+id/nav_gifts"
+            android:title="Gifts" />
     </group>
 
     <item android:title="Communicate">
