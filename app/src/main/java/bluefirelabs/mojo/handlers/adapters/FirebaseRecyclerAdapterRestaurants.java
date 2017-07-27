@@ -11,14 +11,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-
 import java.io.ByteArrayOutputStream;
-import java.util.Map;
 
 import bluefirelabs.mojo.R;
 import bluefirelabs.mojo.menu.Restaurant_Menu;
@@ -61,7 +54,7 @@ public class FirebaseRecyclerAdapterRestaurants {
         public void getter_restaurants(){
 
             Intent intent = new Intent(context, Restaurant_Menu.class);
-            //intent.putExtra("Restaurant", itemTitle.getText().toString());
+            intent.putExtra("Restaurant", itemTitle.getText().toString());
 
             itemIcon.buildDrawingCache();
             Bitmap image= itemIcon.getDrawingCache();
@@ -71,14 +64,13 @@ public class FirebaseRecyclerAdapterRestaurants {
             byte[] bytes = stream.toByteArray();
             Log.d("DrawingCache", "built");
 
-            //intent.putExtra("imagebitmap", image);
+            intent.putExtra("imagebitmap", image);
 
             Bundle extras = new Bundle();
             extras.putByteArray("BMP", bytes);
             extras.putString("Restaurant", itemTitle.getText().toString());
             intent.putExtras(extras);
             context.startActivity(intent);
-
 
 
         }

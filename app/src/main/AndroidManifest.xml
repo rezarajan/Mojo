@@ -151,6 +151,11 @@
             android:configChanges="orientation"
             android:screenOrientation="portrait" />
 
+        <activity
+            android:name=".main.ui.user.UserHub_carousel"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+
         <service
             android:name=".background_tasks.MyFirebaseInstanceIDService"
             android:exported="false">

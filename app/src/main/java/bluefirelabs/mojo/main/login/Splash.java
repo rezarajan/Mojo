@@ -4,8 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-import bluefirelabs.mojo.main.transition.MainActivity;
-
 /**
  * Created by Reza Rajan on 2017-05-13.
  */
@@ -29,7 +27,8 @@ public class Splash extends AppCompatActivity {
 
                     //Start a new intent
                     //Intent intent = new Intent(Splash.this, Sign_In.class);
-                    Intent intent = new Intent(Splash.this, MainActivity.class);
+                    //Intent intent = new Intent(Splash.this, MainActivity.class);
+                    Intent intent = new Intent(Splash.this, Sign_In.class);
                     startActivity(intent);
                     finish();
                 }
