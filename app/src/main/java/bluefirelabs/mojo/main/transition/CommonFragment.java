@@ -8,11 +8,23 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.util.Pair;
+import android.support.v4.view.ViewCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RatingBar;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
+
+import java.util.Map;
 
 import bluefirelabs.mojo.R;
 
@@ -36,7 +48,11 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
         DragLayout dragLayout = (DragLayout) rootView.findViewById(R.id.drag_layout);
         imageView = (ImageView) dragLayout.findViewById(R.id.image);
         //ImageLoader.getInstance().displayImage(imageUrl, imageView);
-        imageView.setImageResource(R.drawable.image1);
+        Picasso.with(getContext()).load(imageUrl).into(imageView);
+        //Log.d("View Bound", imageUrl);
+        //
+
+        //imageView.setImageResource(R.drawable.image1);
         address1 = dragLayout.findViewById(R.id.address1);
         address2 = dragLayout.findViewById(R.id.address2);
         address3 = dragLayout.findViewById(R.id.address3);
@@ -76,5 +92,6 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
 
     public void bindData(String imageUrl) {
         this.imageUrl = imageUrl;
+        Log.d("imageUrl", imageUrl);
     }
 }

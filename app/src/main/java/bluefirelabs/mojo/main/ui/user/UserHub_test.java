@@ -52,7 +52,7 @@ public class UserHub_test extends FragmentActivity {
     private View positionView;
     private ViewPager viewPager;
     private List<CommonFragment> fragments = new ArrayList<>(); // 供ViewPager使用
-    //private final String[] imageArray = {"assets://image1.jpg", "assets://image2.jpg", "assets://image3.jpg", "assets://image4.jpg", "assets://image5.jpg"};
+    //private final String[] imageArray = {"https://api.just-eat.ca/images/en-CA/cuisine/Indian/banner?width=1024&quality=50", "https://api.just-eat.ca/images/en-CA/cuisine/Indian/banner?width=1024&quality=50", "https://api.just-eat.ca/images/en-CA/cuisine/Indian/banner?width=1024&quality=50", "https://api.just-eat.ca/images/en-CA/cuisine/Indian/banner?width=1024&quality=50", "https://api.just-eat.ca/images/en-CA/cuisine/Indian/banner?width=1024&quality=50", "https://api.just-eat.ca/images/en-CA/cuisine/Indian/banner?width=1024&quality=50"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,7 +119,7 @@ public class UserHub_test extends FragmentActivity {
                 final DatabaseReference reference = FirebaseDatabase.getInstance().getReference(restaurant).child("venue");
                 reference.addValueEventListener(new ValueEventListener() {
                     @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
+                    public void onDataChange(final DataSnapshot dataSnapshot) {
                         final Map<String, Object> hopperValues = (Map<String, Object>) dataSnapshot.getValue();
 
                         //Log.d("Size", String.valueOf(hopperValues.size()));
@@ -127,6 +127,7 @@ public class UserHub_test extends FragmentActivity {
                         if (hopperValues != null) {
 
                             Log.d("Size", String.valueOf(hopperValues.size()));
+                            Log.d("Keys", String.valueOf(hopperValues.keySet()));
 
                             // 2. viewPager添加adapter
                             for (int i = 0; i < hopperValues.size(); i++) {       //This is the list of menu items
@@ -135,23 +136,14 @@ public class UserHub_test extends FragmentActivity {
                             }
 
 
-                            //keys = hopperValues.keySet();
-
-                            /*for (String s : hopperValues.) {
-                                Log.d("Receipt Items", "Key: " + s);
-
-                                listData.add(s);
-                                //listData.add("Quantity: " + hopperValues.get(s));
-                                //itemTitle.setText(key.toString());
-                                //mListView.setAdapter(adapter);
-                            } */
-
-
                             viewPager.setAdapter(new FragmentStatePagerAdapter(getSupportFragmentManager()) {
                                 @Override
                                 public Fragment getItem(int position) {
+                                    final Map<String, Object> restaurantIcons = (Map<String, Object>) dataSnapshot.getValue();
                                     CommonFragment fragment = fragments.get(position % 10);
-                                    //fragment.bindData(imageArray[position % imageArray.length]);
+                                    Log.d("Position", String.valueOf(position));
+
+                                    fragment.bindData(dataSnapshot.child("id" + String.valueOf(position)).child("icon").getValue().toString());
                                     return fragment;
                                 }
 

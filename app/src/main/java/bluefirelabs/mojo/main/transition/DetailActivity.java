@@ -3,8 +3,12 @@ package bluefirelabs.mojo.main.transition;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewCompat;
+import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -12,8 +16,22 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
+import android.widget.TextView;
+
+import com.google.android.gms.fitness.data.Value;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
+
+import java.util.Map;
 
 import bluefirelabs.mojo.R;
+import bluefirelabs.mojo.main.transition.MyCallback;
 
 
 /**
@@ -42,7 +60,7 @@ public class DetailActivity extends FragmentActivity {
 
     private LinearLayout listContainer;
     private static final String[] headStrs = {HEAD1_TRANSITION_NAME, HEAD2_TRANSITION_NAME, HEAD3_TRANSITION_NAME, HEAD4_TRANSITION_NAME};
-    private static final int[] imageIds = {R.drawable.image1, R.drawable.image1, R.drawable.image1, R.drawable.image1};
+    //private static final int[] imageIds = {R.drawable.image1, R.drawable.image1, R.drawable.image1, R.drawable.image1};
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -67,6 +85,7 @@ public class DetailActivity extends FragmentActivity {
 
         String imageUrl = getIntent().getStringExtra(EXTRA_IMAGE_URL);
         //ImageLoader.getInstance().displayImage(imageUrl, imageView);
+        Picasso.with(getApplicationContext()).load(imageUrl).into(imageView);
 
         ViewCompat.setTransitionName(imageView, IMAGE_TRANSITION_NAME);
         ViewCompat.setTransitionName(address1, ADDRESS1_TRANSITION_NAME);
@@ -79,10 +98,15 @@ public class DetailActivity extends FragmentActivity {
         dealListView();
     }
 
-    private void dealListView() {       //TODO: Firebase Menu Items will go here
-        LayoutInflater layoutInflater = LayoutInflater.from(this);
+    public void firebaseTask(final MyCallback myCallback) {
 
-        for (int i = 0; i < 20; i++) {
+        myCallback.callbackCall("listing");
+    }
+
+    private void dealListView() {       //TODO: Firebase Menu Items will go here
+        final LayoutInflater layoutInflater = LayoutInflater.from(this);
+
+       /* for (int i = 0; i < 20; i++) {
             View childView = layoutInflater.inflate(R.layout.detail_list_item, null);
             listContainer.addView(childView);
             ImageView headView = (ImageView) childView.findViewById(R.id.head);
@@ -90,6 +114,102 @@ public class DetailActivity extends FragmentActivity {
                 headView.setImageResource(imageIds[i % imageIds.length]);
                 ViewCompat.setTransitionName(headView, headStrs[i]);
             }
-        }
+        } */
+
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        firebaseAuth = FirebaseAuth.getInstance();
+
+        final MyCallback myCallback = new MyCallback() {
+            @Override
+            public void callbackCall(final String restaurant) {
+                final DatabaseReference reference = FirebaseDatabase.getInstance().getReference(restaurant).child("venue");
+                reference.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        final Map<String, Object> hopperValues = (Map<String, Object>) dataSnapshot.getValue();
+
+                        //Log.d("Size", String.valueOf(hopperValues.size()));
+
+                        if (hopperValues != null) {
+                            Log.d("HopperValues", hopperValues.toString());
+                            Log.d("Size", String.valueOf(hopperValues.size()));
+
+                            //Log.d("icons", hopperValues.get("icon").toString());
+
+
+                            // 2. viewPager添加adapter
+                            /*for (int i = 0; i < hopperValues.size(); i++) {       //This is the list of menu items
+                                // 预先准备10个fragment
+                                fragments.add(new CommonFragment());
+                            } */
+
+
+                            //keys = hopperValues.keySet();
+
+                            for (String s : hopperValues.keySet()) {
+                                Log.d("List Item", "Key: " + s);
+
+
+                                final DatabaseReference reference = FirebaseDatabase.getInstance().getReference(restaurant).child("venue").child(s);
+                                reference.addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        Map<String, Object> icon = (Map<String, Object>) dataSnapshot.getValue();
+
+
+                                        if (icon != null) {
+
+                                            Log.d("icon", icon.get("icon").toString());
+
+                                        }
+
+                                    }
+
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+
+                                    }
+                                });
+
+                                //listData.add("Quantity: " + hopperValues.get(s));
+                                //itemTitle.setText(key.toString());
+                                //mListView.setAdapter(adapter);
+                            }
+
+                            for (DataSnapshot restaurantInfo : dataSnapshot.getChildren()) {
+
+                                Log.d("Info", restaurantInfo.child("icon").getValue().toString());
+                                //Picasso.with(getApplicationContext()).load(restaurantInfo.child("icon").getValue().toString()).into(imageView);
+                                for (int i = 0; i < 3; i++) {
+                                    View childView = layoutInflater.inflate(R.layout.detail_list_item, null);
+                                    listContainer.addView(childView);
+                                    ImageView headView = (ImageView) childView.findViewById(R.id.head);
+                                    //if (i < headStrs.length) {
+
+                                    Picasso.with(getApplicationContext()).load(restaurantInfo.child("icon").getValue().toString()).into(headView);
+                                    //headView.setImageResource(imageIds[i % imageIds.length]);
+
+                                    ViewCompat.setTransitionName(headView, headStrs[i]);
+                                    //}
+                                }
+                            }
+
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+            }
+        };
+
+        firebaseTask(myCallback);
+
+
+
+
+
     }
 }
