@@ -29,6 +29,9 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+        //This sets up the view: inflates the general layout and then assigns the specific entities
+
         View rootView = inflater.inflate(R.layout.fragment_common, null);
         DragLayout dragLayout = (DragLayout) rootView.findViewById(R.id.drag_layout);
         imageView = (ImageView) dragLayout.findViewById(R.id.image);

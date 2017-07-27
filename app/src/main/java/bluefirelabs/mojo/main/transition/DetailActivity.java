@@ -79,7 +79,7 @@ public class DetailActivity extends FragmentActivity {
         dealListView();
     }
 
-    private void dealListView() {
+    private void dealListView() {       //TODO: Firebase Menu Items will go here
         LayoutInflater layoutInflater = LayoutInflater.from(this);
 
         for (int i = 0; i < 20; i++) {
