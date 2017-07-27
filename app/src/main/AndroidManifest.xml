@@ -142,6 +142,14 @@
             android:name=".main.ui.user.Gifts"
             android:configChanges="orientation"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".main.transition.MainActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".main.transition.DetailActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
 
         <service
             android:name=".background_tasks.MyFirebaseInstanceIDService"
