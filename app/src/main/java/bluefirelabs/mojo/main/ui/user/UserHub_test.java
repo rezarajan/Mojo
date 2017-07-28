@@ -1,12 +1,15 @@
 package bluefirelabs.mojo.main.ui.user;
 
+import android.animation.ArgbEvaluator;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.RecyclerView;
+import android.support.v7.graphics.Palette;
 import android.text.Html;
 import android.util.Log;
 import android.view.View;
@@ -24,6 +27,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -35,13 +39,17 @@ import bluefirelabs.mojo.handlers.adapters.FirebaseRecyclerAdapterRestaurants;
 import bluefirelabs.mojo.handlers.adapters.Food_List;
 import bluefirelabs.mojo.main.transition.CommonFragment;
 import bluefirelabs.mojo.main.transition.CustPagerTransformer;
-import bluefirelabs.mojo.menu.*;
 
 
 /**
  * Created by xmuSistone on 2016/9/18.
  */
 public class UserHub_test extends FragmentActivity {
+
+
+    ArgbEvaluator argbEvaluator;
+    int defaultColor = 0x000000;
+    int vibrantColor = -1, mutedColor = -1;
 
     FirebaseAuth firebaseAuth;
     public static final String RESTAURANT = "listing";
@@ -66,6 +74,8 @@ public class UserHub_test extends FragmentActivity {
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
+
+        argbEvaluator = new ArgbEvaluator();
         positionView = findViewById(R.id.position_view);
         dealStatusBar(); // 调整状态栏高度
 
@@ -83,23 +93,11 @@ public class UserHub_test extends FragmentActivity {
     public void firebaseTask(final MyCallback myCallback) {
 
         myCallback.callbackCall("listing");
-       /* final DatabaseReference reference = FirebaseDatabase.getInstance().getReference("uid/"+UID+"/info");
-        reference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                //Map<String, Object> hopperValues = (Map<String, Object>) dataSnapshot.getValue();
-                //Log.d("Values", dataSnapshot.getValue().toString());
-                /restaurantName = (String) hopperValues.get("name"); //this directory only contains one item so it should not be a problem
-                //RESTAURANT  = "uid/"+restaurantName+"/sending/";
-                //Log.d("Restaurant", RESTAURANT);
-                //myCallback.callbackCall(RESTAURANT);        //links the asynctask to the outer program via the interface, since asynctasks cannot delegate values
-            }
+    }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+    public void backgroundChanger(final MyCallback_2 myCallback_2, String imageURL) {
 
-            }
-        }); */
+        myCallback_2.callbackCall(imageURL);
     }
 
     private void fillViewPager() {
@@ -111,6 +109,55 @@ public class UserHub_test extends FragmentActivity {
 
         firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser user = firebaseAuth.getCurrentUser();
+
+
+
+        MyCallback_2 myCallback_2 = new MyCallback_2() {
+
+            public void setColors_fromCallback(Bitmap bitmap) {
+                if (vibrantColor == -1 && mutedColor == -1) {
+                    //Bitmap bitmap = BitmapFactory.decodeResource(getResources(), image);
+                    Palette.from(bitmap).generate(new Palette.PaletteAsyncListener() {
+                        @Override
+                        public void onGenerated(Palette palette) {
+                            vibrantColor = palette.getVibrantColor(defaultColor);
+                            mutedColor = palette.getMutedColor(defaultColor);
+                            //obj.colorFetched(position, vibrantColor, mutedColor);
+                            viewPager.setBackgroundColor(vibrantColor);
+                        }
+                    });
+                } else {
+                    viewPager.setBackgroundColor(vibrantColor);
+                }
+            }
+
+            @Override
+            public void callbackCall(String imageURL) {
+                Picasso.with(getApplicationContext())
+                        .load(imageURL)
+                        .into(new Target() {
+                            @Override
+                            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                                setColors_fromCallback(bitmap);
+                            }
+
+                            @Override
+                            public void onBitmapFailed(Drawable errorDrawable) {
+
+                            }
+
+
+                            @Override
+                            public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+                            }
+                        });
+            }
+
+        };
+
+
+        //---------------------------------------------------------------------------------//
 
 
         final MyCallback myCallback = new MyCallback() {
@@ -143,7 +190,9 @@ public class UserHub_test extends FragmentActivity {
                                     CommonFragment fragment = fragments.get(position % 10);
                                     Log.d("Position", String.valueOf(position));
 
+
                                     fragment.bindData(dataSnapshot.child("id" + String.valueOf(position)).child("icon").getValue().toString());
+                                    //backgroundChanger(myCallback_2, dataSnapshot.child("id" + String.valueOf(position)).child("icon").getValue().toString());
                                     return fragment;
                                 }
 
@@ -158,6 +207,89 @@ public class UserHub_test extends FragmentActivity {
                             viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
                                 @Override
                                 public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+                                    //backgroundChanger(myCallback_2, fragments.get(position%10).dataReturn());
+                                    //Log.d("URL", fragments.get(position%10).dataReturn());
+
+
+                                    Picasso.with(getApplicationContext())
+                                            .load(fragments.get(position%10).dataReturn())
+                                            .into(new Target() {
+                                                @Override
+                                                public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                                                    //Log.d("Setting Colour for", fragments.get(position%10).dataReturn());
+                                                    Log.d("Changing", "activated 1");
+
+                                                        //Bitmap bitmap = BitmapFactory.decodeResource(getResources(), image);
+                                                        Palette.from(bitmap).generate(new Palette.PaletteAsyncListener() {
+                                                            @Override
+                                                            public void onGenerated(Palette palette) {
+                                                                vibrantColor = palette.getVibrantColor(defaultColor);
+                                                                mutedColor = palette.getMutedColor(defaultColor);
+                                                                Log.d("Changing", "activated 2");
+                                                                //obj.colorFetched(position, vibrantColor, mutedColor);
+                                                                viewPager.setBackgroundColor(vibrantColor);
+                                                            }
+                                                        });
+                                                        /*Palette palette;
+                                                        palette = Palette.from(bitmap).generate();
+                                                        vibrantColor = palette.getVibrantColor(defaultColor);
+                                                        mutedColor = palette.getMutedColor(defaultColor);
+                                                        Log.d("Changing", "activated 2");
+                                                        //obj.colorFetched(position, vibrantColor, mutedColor);
+                                                        viewPager.setBackgroundColor(vibrantColor);
+                                                        */
+
+                                                }
+
+                                                @Override
+                                                public void onBitmapFailed(Drawable errorDrawable) {
+
+                                                }
+
+
+                                                @Override
+                                                public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+                                                }
+                                            });
+
+                                        Log.d("Test", fragments.get(position%10).dataReturn());
+
+
+                                    //TODO: Add the bitmap colour url to firebase
+
+                                    /* if (position < hopperValues.size() - 1) {                                               //animates the colour
+                                        viewPager.setBackgroundColor((Integer) argbEvaluator.evaluate(positionOffset,
+                                                Color.BLACK, Color.BLUE));
+                                    } */
+
+                                    /*
+                                    if(position == 1){
+                                        viewPager.setBackgroundColor(Color.CYAN);
+                                    } else {
+                                        Picasso.with(getApplicationContext())
+                                                .load(fragments.get(position%10).dataReturn())
+                                                .into(new Target() {
+                                                    @Override
+                                                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                                                        setColors(bitmap);
+                                                    }
+
+                                                    @Override
+                                                    public void onBitmapFailed(Drawable errorDrawable) {
+
+                                                    }
+
+
+                                                    @Override
+                                                    public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+                                                    }
+                                                });
+                                    } */
+
+
                                 }
 
                                 @Override
@@ -224,5 +356,22 @@ public class UserHub_test extends FragmentActivity {
         return statusBarHeight;
     }
 
+    public void setColors(Bitmap bitmap) {
+        if (vibrantColor == -1 && mutedColor == -1) {
+            //Bitmap bitmap = BitmapFactory.decodeResource(getResources(), image);
+            Palette.from(bitmap).generate(new Palette.PaletteAsyncListener() {
+                @Override
+                public void onGenerated(Palette palette) {
+                    vibrantColor = palette.getVibrantColor(defaultColor);
+                    mutedColor = palette.getMutedColor(defaultColor);
+                    Log.d("Changing", "activated");
+                    //obj.colorFetched(position, vibrantColor, mutedColor);
+                    viewPager.setBackgroundColor(vibrantColor);
+                }
+            });
+        } else {
+            viewPager.setBackgroundColor(vibrantColor);
+        }
+    }
 
 }

@@ -2,13 +2,14 @@ package bluefirelabs.mojo.main.transition;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.util.Pair;
-import android.support.v4.view.ViewCompat;
+import android.support.v7.graphics.Palette;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,15 +17,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
-
-import java.util.Map;
 
 import bluefirelabs.mojo.R;
 
@@ -32,11 +25,16 @@ import bluefirelabs.mojo.R;
  * Created by xmuSistone on 2016/9/18.
  */
 public class CommonFragment extends Fragment implements DragLayout.GotoDetailListener {
+    DragLayout dragLayout;
     private ImageView imageView;
     private View address1, address2, address3, address4, address5;
     private RatingBar ratingBar;
     private View head1, head2, head3, head4;
     private String imageUrl;
+
+    int defaultColor = 0x000000;
+    int vibrantColor = -1, mutedColor = -1;
+    int position;
 
     @Nullable
     @Override
@@ -45,12 +43,40 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
         //This sets up the view: inflates the general layout and then assigns the specific entities
 
         View rootView = inflater.inflate(R.layout.fragment_common, null);
-        DragLayout dragLayout = (DragLayout) rootView.findViewById(R.id.drag_layout);
+        dragLayout = (DragLayout) rootView.findViewById(R.id.drag_layout);
         imageView = (ImageView) dragLayout.findViewById(R.id.image);
         //ImageLoader.getInstance().displayImage(imageUrl, imageView);
         Picasso.with(getContext()).load(imageUrl).into(imageView);
         //Log.d("View Bound", imageUrl);
-        //
+
+
+
+
+        //Use this to det dragLayout background colour
+        /*Picasso.with(getContext())
+                .load(imageUrl)
+                .into(new Target() {
+                    @Override
+                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                        setColors(bitmap);
+                    }
+
+                    @Override
+                    public void onBitmapFailed(Drawable errorDrawable) {
+
+                    }
+
+
+                    @Override
+                    public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+                    }
+                }); */
+
+
+        //setColors(imageView.getImageAlpha());
+        //setColors(R.mipmap.ic_launcher_round);
+
 
         //imageView.setImageResource(R.drawable.image1);
         address1 = dragLayout.findViewById(R.id.address1);
@@ -94,4 +120,27 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
         this.imageUrl = imageUrl;
         Log.d("imageUrl", imageUrl);
     }
+
+    public String dataReturn () {
+        Log.d("Return", this.imageUrl);
+        return this.imageUrl;
+    }
+
+    public void setColors(Bitmap bitmap) {
+        if (vibrantColor == -1 && mutedColor == -1) {
+            //Bitmap bitmap = BitmapFactory.decodeResource(getResources(), image);
+            Palette.from(bitmap).generate(new Palette.PaletteAsyncListener() {
+                @Override
+                public void onGenerated(Palette palette) {
+                    vibrantColor = palette.getVibrantColor(defaultColor);
+                    mutedColor = palette.getMutedColor(defaultColor);
+                    //obj.colorFetched(position, vibrantColor, mutedColor);
+                    dragLayout.setBackgroundColor(vibrantColor);
+                }
+            });
+        } else {
+            dragLayout.setBackgroundColor(vibrantColor);
+        }
+    }
+
 }
