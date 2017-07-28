@@ -127,6 +127,12 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity
+            android:name=".main.ui.user.UserHub_test"
+            android:configChanges="orientation"
+            android:label="@string/title_activity_main_hub"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+        <activity
             android:name=".barcode.barcodeReader"
             android:configChanges="orientation"
             android:screenOrientation="portrait" />

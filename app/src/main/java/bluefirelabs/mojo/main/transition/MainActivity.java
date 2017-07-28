@@ -64,9 +64,9 @@ public class MainActivity extends FragmentActivity {
         viewPager.setPageTransformer(false, new CustPagerTransformer(this));
 
         // 2. viewPager添加adapter
-        for (int i = 0; i < 5; i++) {       //This is the list of menu items
+        for (int i = 0; i < 5; i++) {       //TODO: Add menu items here
             // 预先准备10个fragment
-            fragments.add(new CommonFragment());
+            fragments.add(new CommonFragment());        //adds the fragment for each item.
         }
 
         viewPager.setAdapter(new FragmentStatePagerAdapter(getSupportFragmentManager()) {

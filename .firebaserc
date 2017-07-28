@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "mojo-611fa"
+    "default": "mojo-611fa",
+    "mojo": "mojo-611fa"
   }
 }
