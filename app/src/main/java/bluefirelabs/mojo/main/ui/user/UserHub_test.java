@@ -51,6 +51,8 @@ public class UserHub_test extends FragmentActivity {
     int defaultColor = 0x000000;
     int vibrantColor = -1, mutedColor = -1;
 
+    boolean firstTime = true;
+
     FirebaseAuth firebaseAuth;
     public static final String RESTAURANT = "listing";
     private DatabaseReference mFirebaseDatabaseReference;
@@ -112,51 +114,6 @@ public class UserHub_test extends FragmentActivity {
 
 
 
-        MyCallback_2 myCallback_2 = new MyCallback_2() {
-
-            public void setColors_fromCallback(Bitmap bitmap) {
-                if (vibrantColor == -1 && mutedColor == -1) {
-                    //Bitmap bitmap = BitmapFactory.decodeResource(getResources(), image);
-                    Palette.from(bitmap).generate(new Palette.PaletteAsyncListener() {
-                        @Override
-                        public void onGenerated(Palette palette) {
-                            vibrantColor = palette.getVibrantColor(defaultColor);
-                            mutedColor = palette.getMutedColor(defaultColor);
-                            //obj.colorFetched(position, vibrantColor, mutedColor);
-                            viewPager.setBackgroundColor(vibrantColor);
-                        }
-                    });
-                } else {
-                    viewPager.setBackgroundColor(vibrantColor);
-                }
-            }
-
-            @Override
-            public void callbackCall(String imageURL) {
-                Picasso.with(getApplicationContext())
-                        .load(imageURL)
-                        .into(new Target() {
-                            @Override
-                            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                                setColors_fromCallback(bitmap);
-                            }
-
-                            @Override
-                            public void onBitmapFailed(Drawable errorDrawable) {
-
-                            }
-
-
-                            @Override
-                            public void onPrepareLoad(Drawable placeHolderDrawable) {
-
-                            }
-                        });
-            }
-
-        };
-
-
         //---------------------------------------------------------------------------------//
 
 
@@ -193,52 +150,41 @@ public class UserHub_test extends FragmentActivity {
 
                                     fragment.bindData(dataSnapshot.child("id" + String.valueOf(position)).child("icon").getValue().toString());
                                     //backgroundChanger(myCallback_2, dataSnapshot.child("id" + String.valueOf(position)).child("icon").getValue().toString());
-                                    return fragment;
-                                }
-
-                                @Override
-                                public int getCount() {
-                                    return hopperValues.size();
-                                }       //This is the number of restaurants
-                            });
-
-
-                            // 3. viewPager滑动时，调整指示器
-                            viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-                                @Override
-                                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-                                    //backgroundChanger(myCallback_2, fragments.get(position%10).dataReturn());
-                                    //Log.d("URL", fragments.get(position%10).dataReturn());
-
 
                                     Picasso.with(getApplicationContext())
-                                            .load(fragments.get(position%10).dataReturn())
+                                            .load(fragments.get((position)%10).dataReturn())
                                             .into(new Target() {
                                                 @Override
                                                 public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
                                                     //Log.d("Setting Colour for", fragments.get(position%10).dataReturn());
                                                     Log.d("Changing", "activated 1");
 
-                                                        //Bitmap bitmap = BitmapFactory.decodeResource(getResources(), image);
-                                                        Palette.from(bitmap).generate(new Palette.PaletteAsyncListener() {
+                                                    //Bitmap bitmap = BitmapFactory.decodeResource(getResources(), image);
+                                                        /*Palette.from(bitmap).generate(new Palette.PaletteAsyncListener() {
                                                             @Override
                                                             public void onGenerated(Palette palette) {
-                                                                vibrantColor = palette.getVibrantColor(defaultColor);
-                                                                mutedColor = palette.getMutedColor(defaultColor);
+                                                                mutedColor = palette.getVibrantColor(defaultColor);
+                                                                //mutedColor = palette.getMutedColor(defaultColor);
                                                                 Log.d("Changing", "activated 2");
                                                                 //obj.colorFetched(position, vibrantColor, mutedColor);
-                                                                viewPager.setBackgroundColor(vibrantColor);
+                                                                //viewPager.setBackgroundColor(vibrantColor);
+
+
                                                             }
-                                                        });
-                                                        /*Palette palette;
-                                                        palette = Palette.from(bitmap).generate();
-                                                        vibrantColor = palette.getVibrantColor(defaultColor);
-                                                        mutedColor = palette.getMutedColor(defaultColor);
-                                                        Log.d("Changing", "activated 2");
-                                                        //obj.colorFetched(position, vibrantColor, mutedColor);
-                                                        viewPager.setBackgroundColor(vibrantColor);
-                                                        */
+                                                        }); */
+                                                    Palette palette;
+                                                    palette = Palette.from(bitmap).generate();
+                                                    mutedColor = palette.getVibrantColor(defaultColor);
+                                                    //mutedColor = palette.getMutedColor(defaultColor);
+
+                                                    if (firstTime) {
+                                                        viewPager.setBackgroundColor(mutedColor);
+                                                        firstTime = false;
+                                                    }
+                                                    Log.d("Changing", "activated 2");
+                                                    //obj.colorFetched(position, vibrantColor, mutedColor);
+                                                    //viewPager.setBackgroundColor(vibrantColor);
+
 
                                                 }
 
@@ -254,12 +200,130 @@ public class UserHub_test extends FragmentActivity {
                                                 }
                                             });
 
-                                        Log.d("Test", fragments.get(position%10).dataReturn());
+                                    return fragment;
+                                }
+
+                                @Override
+                                public int getCount() {
+                                    return hopperValues.size();
+                                }       //This is the number of restaurants
+                            });
+
+
+                            // 3. viewPager滑动时，调整指示器
+                            viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                                @Override
+                                public void onPageScrolled(final int position, final float positionOffset, int positionOffsetPixels) {
+
+                                    //backgroundChanger(myCallback_2, fragments.get(position%10).dataReturn());
+                                    //Log.d("URL", fragments.get(position%10).dataReturn());
+
+
+                                    if (position < hopperValues.size() - 1) {
+                                        Picasso.with(getApplicationContext())
+                                            .load(fragments.get((position)%10).dataReturn())
+                                            .into(new Target() {
+                                                @Override
+                                                public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                                                    //Log.d("Setting Colour for", fragments.get(position%10).dataReturn());
+                                                    Log.d("Changing", "activated 1");
+
+                                                        //Bitmap bitmap = BitmapFactory.decodeResource(getResources(), image);
+                                                        /*Palette.from(bitmap).generate(new Palette.PaletteAsyncListener() {
+                                                            @Override
+                                                            public void onGenerated(Palette palette) {
+                                                                mutedColor = palette.getVibrantColor(defaultColor);
+                                                                //mutedColor = palette.getMutedColor(defaultColor);
+                                                                Log.d("Changing", "activated 2");
+                                                                //obj.colorFetched(position, vibrantColor, mutedColor);
+                                                                //viewPager.setBackgroundColor(vibrantColor);
+
+
+                                                            }
+                                                        }); */
+                                                        Palette palette;
+                                                        palette = Palette.from(bitmap).generate();
+                                                        mutedColor = palette.getVibrantColor(defaultColor);
+                                                        //mutedColor = palette.getMutedColor(defaultColor);
+                                                        Log.d("Changing", "activated 2");
+                                                        //obj.colorFetched(position, vibrantColor, mutedColor);
+                                                        //viewPager.setBackgroundColor(vibrantColor);
+
+
+                                                }
+
+                                                @Override
+                                                public void onBitmapFailed(Drawable errorDrawable) {
+
+                                                }
+
+
+                                                @Override
+                                                public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+                                                }
+                                            });
+
+                                    int position_increment = position + 1;
+
+                                    Picasso.with(getApplicationContext())
+                                            .load(fragments.get(position_increment%10).dataReturn())
+                                            .into(new Target() {
+                                                @Override
+                                                public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                                                    //Log.d("Setting Colour for", fragments.get(position%10).dataReturn());
+                                                    Log.d("Changing", "activated 3");
+
+                                                    //Bitmap bitmap = BitmapFactory.decodeResource(getResources(), image);
+                                                    /*Palette.from(bitmap).generate(new Palette.PaletteAsyncListener() {
+                                                        @Override
+                                                        public void onGenerated(Palette palette) {
+                                                            vibrantColor = palette.getVibrantColor(defaultColor);
+
+                                                            Log.d("Changing", "activated 4");
+                                                            //obj.colorFetched(position, vibrantColor, mutedColor);
+                                                            //viewPager.setBackgroundColor(vibrantColor);
+
+                                                        }
+                                                    }); */
+                                                        Palette palette;
+                                                        palette = Palette.from(bitmap).generate();
+                                                        vibrantColor = palette.getVibrantColor(defaultColor);
+                                                        //mutedColor = palette.getMutedColor(defaultColor);
+                                                        Log.d("Changing", "activated 4");
+                                                        //obj.colorFetched(position, vibrantColor, mutedColor);
+                                                        //viewPager.setBackgroundColor(vibrantColor);
+
+
+                                                }
+
+                                                @Override
+                                                public void onBitmapFailed(Drawable errorDrawable) {
+
+                                                }
+
+
+                                                @Override
+                                                public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+                                                }
+                                            });
+
+
+
+                                                                                //animates the colour
+                                        viewPager.setBackgroundColor((Integer) argbEvaluator.evaluate(positionOffset,
+                                                mutedColor, vibrantColor));
+
+                                        Log.d("Icon Links", fragments.get(position%10).dataReturn());
+                                    }
+
+
 
 
                                     //TODO: Add the bitmap colour url to firebase
 
-                                    /* if (position < hopperValues.size() - 1) {                                               //animates the colour
+                                     /*if (position < hopperValues.size() - 1) {                                               //animates the colour
                                         viewPager.setBackgroundColor((Integer) argbEvaluator.evaluate(positionOffset,
                                                 Color.BLACK, Color.BLUE));
                                     } */
@@ -354,24 +418,6 @@ public class UserHub_test extends FragmentActivity {
             e1.printStackTrace();
         }
         return statusBarHeight;
-    }
-
-    public void setColors(Bitmap bitmap) {
-        if (vibrantColor == -1 && mutedColor == -1) {
-            //Bitmap bitmap = BitmapFactory.decodeResource(getResources(), image);
-            Palette.from(bitmap).generate(new Palette.PaletteAsyncListener() {
-                @Override
-                public void onGenerated(Palette palette) {
-                    vibrantColor = palette.getVibrantColor(defaultColor);
-                    mutedColor = palette.getMutedColor(defaultColor);
-                    Log.d("Changing", "activated");
-                    //obj.colorFetched(position, vibrantColor, mutedColor);
-                    viewPager.setBackgroundColor(vibrantColor);
-                }
-            });
-        } else {
-            viewPager.setBackgroundColor(vibrantColor);
-        }
     }
 
 }
