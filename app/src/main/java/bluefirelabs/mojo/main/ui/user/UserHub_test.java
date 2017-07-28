@@ -174,7 +174,7 @@ public class UserHub_test extends FragmentActivity {
                                                         }); */
                                                     Palette palette;
                                                     palette = Palette.from(bitmap).generate();
-                                                    mutedColor = palette.getVibrantColor(defaultColor);
+                                                    mutedColor = palette.getDarkVibrantColor(defaultColor);
                                                     //mutedColor = palette.getMutedColor(defaultColor);
 
                                                     if (firstTime) {
@@ -243,7 +243,7 @@ public class UserHub_test extends FragmentActivity {
                                                         }); */
                                                         Palette palette;
                                                         palette = Palette.from(bitmap).generate();
-                                                        mutedColor = palette.getVibrantColor(defaultColor);
+                                                        mutedColor = palette.getDarkVibrantColor(defaultColor);
                                                         //mutedColor = palette.getMutedColor(defaultColor);
                                                         Log.d("Changing", "activated 2");
                                                         //obj.colorFetched(position, vibrantColor, mutedColor);
@@ -288,7 +288,7 @@ public class UserHub_test extends FragmentActivity {
                                                     }); */
                                                         Palette palette;
                                                         palette = Palette.from(bitmap).generate();
-                                                        vibrantColor = palette.getVibrantColor(defaultColor);
+                                                        vibrantColor = palette.getDarkVibrantColor(defaultColor);
                                                         //mutedColor = palette.getMutedColor(defaultColor);
                                                         Log.d("Changing", "activated 4");
                                                         //obj.colorFetched(position, vibrantColor, mutedColor);
