@@ -62,16 +62,11 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
                     public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
                         setColors(bitmap);
                     }
-
                     @Override
                     public void onBitmapFailed(Drawable errorDrawable) {
-
                     }
-
-
                     @Override
                     public void onPrepareLoad(Drawable placeHolderDrawable) {
-
                     }
                 }); */
 

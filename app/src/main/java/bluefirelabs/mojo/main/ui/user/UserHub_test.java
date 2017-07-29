@@ -58,7 +58,7 @@ public class UserHub_test extends FragmentActivity {
     private DatabaseReference mFirebaseDatabaseReference;
     private FirebaseRecyclerAdapter<Food_List, FirebaseRecyclerAdapterRestaurants.RecyclerViewHolder> mFirebaseAdapter;
 
-    private TextView indicatorTv;
+    private TextView indicatorTv, restaurantName_indicator;
     private View positionView;
     private ViewPager viewPager;
     private List<CommonFragment> fragments = new ArrayList<>(); // 供ViewPager使用
@@ -68,6 +68,9 @@ public class UserHub_test extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
+
+        restaurantName_indicator = (TextView) findViewById(R.id.restaurantName_indicator);
+
 
         // 1. 沉浸式状态栏
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
@@ -97,9 +100,9 @@ public class UserHub_test extends FragmentActivity {
         myCallback.callbackCall("listing");
     }
 
-    public void backgroundChanger(final MyCallback_2 myCallback_2, String imageURL) {
+    public void setRestaurantName(final MyCallback_2 myCallback_2, String restaurantName) {
 
-        myCallback_2.callbackCall(imageURL);
+        myCallback_2.callbackCall(restaurantName);
     }
 
     private void fillViewPager() {
@@ -111,6 +114,14 @@ public class UserHub_test extends FragmentActivity {
 
         firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser user = firebaseAuth.getCurrentUser();
+
+        final MyCallback_2 myCallback_2 = new MyCallback_2() {
+            @Override
+            public void callbackCall(String restaurantName) {
+                restaurantName_indicator.setText(restaurantName);
+
+            }
+        };
 
 
 
@@ -152,8 +163,12 @@ public class UserHub_test extends FragmentActivity {
                                             dataSnapshot.child("id" + String.valueOf(position)).child("description").getValue().toString(),
                                             dataSnapshot.child("id" + String.valueOf(position)).child("restaurant").getValue().toString()
                                     );
+
+
                                     //backgroundChanger(myCallback_2, dataSnapshot.child("id" + String.valueOf(position)).child("icon").getValue().toString());
 
+
+                                    /* First Time colour palette set */
                                     Picasso.with(getApplicationContext())
                                             .load(fragments.get((position)%10).dataReturn())
                                             .into(new Target() {
@@ -171,8 +186,6 @@ public class UserHub_test extends FragmentActivity {
                                                                 Log.d("Changing", "activated 2");
                                                                 //obj.colorFetched(position, vibrantColor, mutedColor);
                                                                 //viewPager.setBackgroundColor(vibrantColor);
-
-
                                                             }
                                                         }); */
                                                     Palette palette;
@@ -221,15 +234,17 @@ public class UserHub_test extends FragmentActivity {
                                     //backgroundChanger(myCallback_2, fragments.get(position%10).dataReturn());
                                     //Log.d("URL", fragments.get(position%10).dataReturn());
 
+                                    //sets the restaurant name
+                                    setRestaurantName(myCallback_2, dataSnapshot.child("id" + String.valueOf(position)).child("restaurant").getValue().toString().toUpperCase());
 
                                     if (position < hopperValues.size() - 1) {
                                         Picasso.with(getApplicationContext())
-                                            .load(fragments.get((position)%10).dataReturn())
-                                            .into(new Target() {
-                                                @Override
-                                                public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                                                    //Log.d("Setting Colour for", fragments.get(position%10).dataReturn());
-                                                    Log.d("Changing", "activated 1");
+                                                .load(fragments.get((position)%10).dataReturn())
+                                                .into(new Target() {
+                                                    @Override
+                                                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                                                        //Log.d("Setting Colour for", fragments.get(position%10).dataReturn());
+                                                        Log.d("Changing", "activated 1");
 
                                                         //Bitmap bitmap = BitmapFactory.decodeResource(getResources(), image);
                                                         /*Palette.from(bitmap).generate(new Palette.PaletteAsyncListener() {
@@ -240,8 +255,6 @@ public class UserHub_test extends FragmentActivity {
                                                                 Log.d("Changing", "activated 2");
                                                                 //obj.colorFetched(position, vibrantColor, mutedColor);
                                                                 //viewPager.setBackgroundColor(vibrantColor);
-
-
                                                             }
                                                         }); */
                                                         Palette palette;
@@ -253,40 +266,38 @@ public class UserHub_test extends FragmentActivity {
                                                         //viewPager.setBackgroundColor(vibrantColor);
 
 
-                                                }
+                                                    }
 
-                                                @Override
-                                                public void onBitmapFailed(Drawable errorDrawable) {
+                                                    @Override
+                                                    public void onBitmapFailed(Drawable errorDrawable) {
 
-                                                }
+                                                    }
 
 
-                                                @Override
-                                                public void onPrepareLoad(Drawable placeHolderDrawable) {
+                                                    @Override
+                                                    public void onPrepareLoad(Drawable placeHolderDrawable) {
 
-                                                }
-                                            });
+                                                    }
+                                                });
 
-                                    int position_increment = position + 1;
+                                        int position_increment = position + 1;
 
-                                    Picasso.with(getApplicationContext())
-                                            .load(fragments.get(position_increment%10).dataReturn())
-                                            .into(new Target() {
-                                                @Override
-                                                public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                                                    //Log.d("Setting Colour for", fragments.get(position%10).dataReturn());
-                                                    Log.d("Changing", "activated 3");
+                                        Picasso.with(getApplicationContext())
+                                                .load(fragments.get(position_increment%10).dataReturn())
+                                                .into(new Target() {
+                                                    @Override
+                                                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                                                        //Log.d("Setting Colour for", fragments.get(position%10).dataReturn());
+                                                        Log.d("Changing", "activated 3");
 
-                                                    //Bitmap bitmap = BitmapFactory.decodeResource(getResources(), image);
+                                                        //Bitmap bitmap = BitmapFactory.decodeResource(getResources(), image);
                                                     /*Palette.from(bitmap).generate(new Palette.PaletteAsyncListener() {
                                                         @Override
                                                         public void onGenerated(Palette palette) {
                                                             vibrantColor = palette.getVibrantColor(defaultColor);
-
                                                             Log.d("Changing", "activated 4");
                                                             //obj.colorFetched(position, vibrantColor, mutedColor);
                                                             //viewPager.setBackgroundColor(vibrantColor);
-
                                                         }
                                                     }); */
                                                         Palette palette;
@@ -298,23 +309,23 @@ public class UserHub_test extends FragmentActivity {
                                                         //viewPager.setBackgroundColor(vibrantColor);
 
 
-                                                }
+                                                    }
 
-                                                @Override
-                                                public void onBitmapFailed(Drawable errorDrawable) {
+                                                    @Override
+                                                    public void onBitmapFailed(Drawable errorDrawable) {
 
-                                                }
-
-
-                                                @Override
-                                                public void onPrepareLoad(Drawable placeHolderDrawable) {
-
-                                                }
-                                            });
+                                                    }
 
 
+                                                    @Override
+                                                    public void onPrepareLoad(Drawable placeHolderDrawable) {
 
-                                                                                //animates the colour
+                                                    }
+                                                });
+
+
+
+                                        //animates the colour
                                         viewPager.setBackgroundColor((Integer) argbEvaluator.evaluate(positionOffset,
                                                 mutedColor, vibrantColor));
 
@@ -342,16 +353,11 @@ public class UserHub_test extends FragmentActivity {
                                                     public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
                                                         setColors(bitmap);
                                                     }
-
                                                     @Override
                                                     public void onBitmapFailed(Drawable errorDrawable) {
-
                                                     }
-
-
                                                     @Override
                                                     public void onPrepareLoad(Drawable placeHolderDrawable) {
-
                                                     }
                                                 });
                                     } */
@@ -361,7 +367,7 @@ public class UserHub_test extends FragmentActivity {
 
                                 @Override
                                 public void onPageSelected(int position) {
-                                    updateIndicatorTv();
+                                    //updateIndicatorTv();
                                 }
 
                                 @Override
@@ -370,7 +376,7 @@ public class UserHub_test extends FragmentActivity {
                                 }
                             });
 
-                            updateIndicatorTv();
+                           //updateIndicatorTv();
                         }
                     }
 
