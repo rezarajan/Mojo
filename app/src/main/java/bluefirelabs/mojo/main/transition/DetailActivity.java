@@ -1,10 +1,13 @@
 package bluefirelabs.mojo.main.transition;
 
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewCompat;
+import android.support.v7.graphics.Palette;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +25,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import java.util.Map;
 
@@ -36,8 +40,11 @@ public class DetailActivity extends FragmentActivity {
     public static final String EXTRA_IMAGE_URL = "detailImageUrl";
     public static final String EXTRA_RESTAURANT_DETAILS = "detailRestaurant";
     public static final String EXTRA_RESTAURANT_NAME = "restaurantName";
+    public static final String EXTRA_RESTAURANT_COLOR = "restaurantColor";
 
     String imageUrl, restaurant_description, restaurantName;
+    Integer mutedColor;
+    int defaultColor = 0x000000;
 
     public static final String IMAGE_TRANSITION_NAME = "transitionImage";
     public static final String ADDRESS1_TRANSITION_NAME = "address1";
@@ -74,6 +81,7 @@ public class DetailActivity extends FragmentActivity {
         address5 = findViewById(R.id.address5);
         ratingBar = (RatingBar) findViewById(R.id.rating);
         listContainer = (LinearLayout) findViewById(R.id.detail_list_container);
+        final LinearLayout linearLayout = (LinearLayout) findViewById(R.id.detail_list_layout);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             Window window = getWindow();
@@ -85,9 +93,62 @@ public class DetailActivity extends FragmentActivity {
         imageUrl = getIntent().getStringExtra(EXTRA_IMAGE_URL);
         restaurant_description = getIntent().getStringExtra(EXTRA_RESTAURANT_DETAILS);
         restaurantName = getIntent().getStringExtra(EXTRA_RESTAURANT_NAME);
+        //mutedColor = getIntent().getIntExtra(EXTRA_RESTAURANT_COLOR, 0);
+        Log.d("Colour", String.valueOf(mutedColor));
         //ImageLoader.getInstance().displayImage(imageUrl, imageView);
         address4.setText(restaurant_description);
         Picasso.with(getApplicationContext()).load(imageUrl).into(imageView);
+
+
+        Picasso.with(getApplicationContext())
+                .load(imageUrl)
+                .into(new Target() {
+                    @Override
+                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                        //Log.d("Setting Colour for", fragments.get(position%10).dataReturn());
+                        Log.d("Changing", "activated 1");
+
+                        //Bitmap bitmap = BitmapFactory.decodeResource(getResources(), image);
+                                                        /*Palette.from(bitmap).generate(new Palette.PaletteAsyncListener() {
+                                                            @Override
+                                                            public void onGenerated(Palette palette) {
+                                                                mutedColor = palette.getVibrantColor(defaultColor);
+                                                                //mutedColor = palette.getMutedColor(defaultColor);
+                                                                Log.d("Changing", "activated 2");
+                                                                //obj.colorFetched(position, vibrantColor, mutedColor);
+                                                                //viewPager.setBackgroundColor(vibrantColor);
+                                                            }
+                                                        }); */
+                        Palette palette;
+                        palette = Palette.from(bitmap).generate();
+                        mutedColor = palette.getDarkVibrantColor(defaultColor);
+                        //mutedColor = palette.getMutedColor(defaultColor);
+
+                        /* Setting the colours of the detail view based on the icon clicked */
+
+                        //listContainer.setBackgroundColor(mutedColor);       //Sets the colour for one item of the detail list
+                        linearLayout.setBackgroundColor(mutedColor);        //Sets the colour for the entire detail list
+                        Log.d("Muted Color Status", "Activated");
+
+
+                        //obj.colorFetched(position, vibrantColor, mutedColor);
+                        //viewPager.setBackgroundColor(vibrantColor);
+
+
+                    }
+
+                    @Override
+                    public void onBitmapFailed(Drawable errorDrawable) {
+
+                    }
+
+
+                    @Override
+                    public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+                    }
+                });
+
 
         ViewCompat.setTransitionName(imageView, IMAGE_TRANSITION_NAME);
         ViewCompat.setTransitionName(address1, ADDRESS1_TRANSITION_NAME);

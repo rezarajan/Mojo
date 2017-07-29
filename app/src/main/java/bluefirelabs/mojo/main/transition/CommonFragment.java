@@ -33,6 +33,7 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
     private RatingBar ratingBar;
     private View head1, head2, head3, head4;
     private String imageUrl, description, restaurantName;
+    private Integer restaurantColor;
 
     int defaultColor = 0x000000;
     int vibrantColor = -1, mutedColor = -1;
@@ -114,6 +115,7 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
         intent.putExtra(DetailActivity.EXTRA_IMAGE_URL, imageUrl);
         intent.putExtra(DetailActivity.EXTRA_RESTAURANT_DETAILS, description);
         intent.putExtra(DetailActivity.EXTRA_RESTAURANT_NAME, restaurantName);
+        intent.putExtra(DetailActivity.EXTRA_RESTAURANT_COLOR, restaurantColor);
         ActivityCompat.startActivity(activity, intent, options.toBundle());
     }
 
@@ -127,6 +129,10 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
     public String dataReturn () {
         Log.d("Return", this.imageUrl);
         return this.imageUrl;
+    }
+
+    public void bindColor (Integer restaurantColor){
+        this.restaurantColor = restaurantColor;
     }
 
     public void setColors(Bitmap bitmap) {
