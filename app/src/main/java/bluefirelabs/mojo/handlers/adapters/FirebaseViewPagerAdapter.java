@@ -7,8 +7,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import bluefirelabs.mojo.R;
-
 /**
  * Created by Reza Rajan on 2017-06-06.
  */
@@ -27,7 +25,7 @@ public class FirebaseViewPagerAdapter {
 
             //itemIcon = (ImageView) itemView.findViewById(R.id.item_icon);
             //itemTitle = (TextView) itemView.findViewById(R.id.item_title);
-            itemDescription = (TextView) itemView.findViewById(R.id.address1);
+            //itemDescription = (TextView) itemView.findViewById(R.id.address1);
             context = itemView.getContext();
 
             itemView.setOnClickListener(new View.OnClickListener() {

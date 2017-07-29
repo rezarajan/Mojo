@@ -77,9 +77,9 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
 
 
         //imageView.setImageResource(R.drawable.image1);
-        address1 = dragLayout.findViewById(R.id.address1);
-        address2 = dragLayout.findViewById(R.id.address2);
-        address3 = dragLayout.findViewById(R.id.address3);
+        //address1 = dragLayout.findViewById(R.id.address1);
+        //address2 = dragLayout.findViewById(R.id.address2);
+        //address3 = dragLayout.findViewById(R.id.address3);
         address4 = (TextView) dragLayout.findViewById(R.id.address4);          //Restaurant Type
         address5 = dragLayout.findViewById(R.id.address5);
         ratingBar = (RatingBar) dragLayout.findViewById(R.id.rating);
@@ -100,9 +100,9 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
         Activity activity = (Activity) getContext();
         ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity,
                 new Pair(imageView, DetailActivity.IMAGE_TRANSITION_NAME),
-                new Pair(address1, DetailActivity.ADDRESS1_TRANSITION_NAME),
-                new Pair(address2, DetailActivity.ADDRESS2_TRANSITION_NAME),
-                new Pair(address3, DetailActivity.ADDRESS3_TRANSITION_NAME),
+                //new Pair(address1, DetailActivity.ADDRESS1_TRANSITION_NAME),
+                //new Pair(address2, DetailActivity.ADDRESS2_TRANSITION_NAME),
+                //new Pair(address3, DetailActivity.ADDRESS3_TRANSITION_NAME),
                 new Pair(address4, DetailActivity.ADDRESS4_TRANSITION_NAME),
                 new Pair(address5, DetailActivity.ADDRESS5_TRANSITION_NAME),
                 new Pair(ratingBar, DetailActivity.RATINGBAR_TRANSITION_NAME),

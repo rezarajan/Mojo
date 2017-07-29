@@ -63,6 +63,7 @@ public class DetailActivity extends FragmentActivity {
     private TextView address4;
     private ImageView imageView;
     private RatingBar ratingBar;
+    private LinearLayout accent_layout;
 
     private LinearLayout listContainer;
     private static final String[] headStrs = {HEAD1_TRANSITION_NAME, HEAD2_TRANSITION_NAME, HEAD3_TRANSITION_NAME, HEAD4_TRANSITION_NAME};
@@ -71,17 +72,25 @@ public class DetailActivity extends FragmentActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                    WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        }
+
         setContentView(R.layout.activity_detail);
 
         imageView = (ImageView) findViewById(R.id.image);
-        address1 = findViewById(R.id.address1);
-        address2 = findViewById(R.id.address2);
-        address3 = findViewById(R.id.address3);
+        //address1 = findViewById(R.id.address1);
+        //address2 = findViewById(R.id.address2);
+        //address3 = findViewById(R.id.address3);
         address4 = (TextView) findViewById(R.id.address4);
         address5 = findViewById(R.id.address5);
         ratingBar = (RatingBar) findViewById(R.id.rating);
         listContainer = (LinearLayout) findViewById(R.id.detail_list_container);
-        final LinearLayout linearLayout = (LinearLayout) findViewById(R.id.detail_list_layout);
+        accent_layout = (LinearLayout) findViewById(R.id.accent_layout);
+        //final LinearLayout linearLayout = (LinearLayout) findViewById(R.id.detail_list_layout);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             Window window = getWindow();
@@ -127,7 +136,8 @@ public class DetailActivity extends FragmentActivity {
                         /* Setting the colours of the detail view based on the icon clicked */
 
                         //listContainer.setBackgroundColor(mutedColor);       //Sets the colour for one item of the detail list
-                        linearLayout.setBackgroundColor(mutedColor);        //Sets the colour for the entire detail list
+                        //linearLayout.setBackgroundColor(mutedColor);        //Sets the colour for the entire detail list
+                        accent_layout.setBackgroundColor(mutedColor);        //Sets the colour for the frame (accents)
                         Log.d("Muted Color Status", "Activated");
 
 
@@ -151,9 +161,9 @@ public class DetailActivity extends FragmentActivity {
 
 
         ViewCompat.setTransitionName(imageView, IMAGE_TRANSITION_NAME);
-        ViewCompat.setTransitionName(address1, ADDRESS1_TRANSITION_NAME);
-        ViewCompat.setTransitionName(address2, ADDRESS2_TRANSITION_NAME);
-        ViewCompat.setTransitionName(address3, ADDRESS3_TRANSITION_NAME);
+        //ViewCompat.setTransitionName(address1, ADDRESS1_TRANSITION_NAME);
+        //ViewCompat.setTransitionName(address2, ADDRESS2_TRANSITION_NAME);
+        //ViewCompat.setTransitionName(address3, ADDRESS3_TRANSITION_NAME);
         ViewCompat.setTransitionName(address4, ADDRESS4_TRANSITION_NAME);
         ViewCompat.setTransitionName(address5, ADDRESS5_TRANSITION_NAME);
         ViewCompat.setTransitionName(ratingBar, RATINGBAR_TRANSITION_NAME);
