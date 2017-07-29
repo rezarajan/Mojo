@@ -3,11 +3,8 @@ package bluefirelabs.mojo.main.transition;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewCompat;
-import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,9 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import com.google.android.gms.fitness.data.Value;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -31,7 +26,6 @@ import com.squareup.picasso.Picasso;
 import java.util.Map;
 
 import bluefirelabs.mojo.R;
-import bluefirelabs.mojo.main.transition.MyCallback;
 
 
 /**
@@ -40,6 +34,7 @@ import bluefirelabs.mojo.main.transition.MyCallback;
 public class DetailActivity extends FragmentActivity {
 
     public static final String EXTRA_IMAGE_URL = "detailImageUrl";
+    public static final String EXTRA_RESTAURANT_DETAILS = "detailRestaurant";
 
     public static final String IMAGE_TRANSITION_NAME = "transitionImage";
     public static final String ADDRESS1_TRANSITION_NAME = "address1";
@@ -54,7 +49,8 @@ public class DetailActivity extends FragmentActivity {
     public static final String HEAD3_TRANSITION_NAME = "head3";
     public static final String HEAD4_TRANSITION_NAME = "head4";
 
-    private View address1, address2, address3, address4, address5;
+    private View address1, address2, address3, address5;
+    private TextView address4;
     private ImageView imageView;
     private RatingBar ratingBar;
 
@@ -71,7 +67,7 @@ public class DetailActivity extends FragmentActivity {
         address1 = findViewById(R.id.address1);
         address2 = findViewById(R.id.address2);
         address3 = findViewById(R.id.address3);
-        address4 = findViewById(R.id.address4);
+        address4 = (TextView) findViewById(R.id.address4);
         address5 = findViewById(R.id.address5);
         ratingBar = (RatingBar) findViewById(R.id.rating);
         listContainer = (LinearLayout) findViewById(R.id.detail_list_container);
@@ -84,7 +80,9 @@ public class DetailActivity extends FragmentActivity {
         }
 
         String imageUrl = getIntent().getStringExtra(EXTRA_IMAGE_URL);
+        String restaurant_description = getIntent().getStringExtra(EXTRA_RESTAURANT_DETAILS);
         //ImageLoader.getInstance().displayImage(imageUrl, imageView);
+        address4.setText(restaurant_description);
         Picasso.with(getApplicationContext()).load(imageUrl).into(imageView);
 
         ViewCompat.setTransitionName(imageView, IMAGE_TRANSITION_NAME);
@@ -180,10 +178,16 @@ public class DetailActivity extends FragmentActivity {
 
                                 Log.d("Info", restaurantInfo.child("icon").getValue().toString());
                                 //Picasso.with(getApplicationContext()).load(restaurantInfo.child("icon").getValue().toString()).into(imageView);
-                                for (int i = 0; i < 3; i++) {
+                                /*for (int i = 0; i < 3; i++) {
                                     View childView = layoutInflater.inflate(R.layout.detail_list_item, null);
+
+
+
                                     listContainer.addView(childView);
                                     ImageView headView = (ImageView) childView.findViewById(R.id.head);
+                                    TextView item_details = (TextView) childView.findViewById(R.id.item_dets);
+
+                                    item_details.setText(restaurantInfo.child("description").getValue().toString());
                                     //if (i < headStrs.length) {
 
                                     Picasso.with(getApplicationContext()).load(restaurantInfo.child("icon").getValue().toString()).into(headView);
@@ -191,7 +195,25 @@ public class DetailActivity extends FragmentActivity {
 
                                     ViewCompat.setTransitionName(headView, headStrs[i]);
                                     //}
-                                }
+                                } */
+
+                                View childView = layoutInflater.inflate(R.layout.detail_list_item, null);
+
+
+
+                                listContainer.addView(childView);
+                                ImageView headView = (ImageView) childView.findViewById(R.id.head);
+                                TextView item_details = (TextView) childView.findViewById(R.id.item_dets);
+
+                                item_details.setText(restaurantInfo.child("description").getValue().toString());
+                                //if (i < headStrs.length) {
+
+                                Picasso.with(getApplicationContext()).load(restaurantInfo.child("icon").getValue().toString()).into(headView);
+                                //headView.setImageResource(imageIds[i % imageIds.length]);
+
+                                /* for (int i = 0; i < 3; i++) {
+                                    ViewCompat.setTransitionName(headView, headStrs[i]);        //This transitions the four icons on the card view
+                                } */
                             }
 
                         }

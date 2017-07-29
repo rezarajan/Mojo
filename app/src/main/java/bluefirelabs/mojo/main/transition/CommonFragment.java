@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RatingBar;
+import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
@@ -27,10 +28,11 @@ import bluefirelabs.mojo.R;
 public class CommonFragment extends Fragment implements DragLayout.GotoDetailListener {
     DragLayout dragLayout;
     private ImageView imageView;
-    private View address1, address2, address3, address4, address5;
+    private View address1, address2, address3, address5;
+    private TextView address4;
     private RatingBar ratingBar;
     private View head1, head2, head3, head4;
-    private String imageUrl;
+    private String imageUrl, description;
 
     int defaultColor = 0x000000;
     int vibrantColor = -1, mutedColor = -1;
@@ -82,9 +84,11 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
         address1 = dragLayout.findViewById(R.id.address1);
         address2 = dragLayout.findViewById(R.id.address2);
         address3 = dragLayout.findViewById(R.id.address3);
-        address4 = dragLayout.findViewById(R.id.address4);
+        address4 = (TextView) dragLayout.findViewById(R.id.address4);          //Restaurant Type
         address5 = dragLayout.findViewById(R.id.address5);
         ratingBar = (RatingBar) dragLayout.findViewById(R.id.rating);
+
+        address4.setText(description);
 
         head1 = dragLayout.findViewById(R.id.head1);
         head2 = dragLayout.findViewById(R.id.head2);
@@ -113,11 +117,13 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
         );
         Intent intent = new Intent(activity, DetailActivity.class);
         intent.putExtra(DetailActivity.EXTRA_IMAGE_URL, imageUrl);
+        intent.putExtra(DetailActivity.EXTRA_RESTAURANT_DETAILS, description);
         ActivityCompat.startActivity(activity, intent, options.toBundle());
     }
 
-    public void bindData(String imageUrl) {
+    public void bindData(String imageUrl, String description) {
         this.imageUrl = imageUrl;
+        this.description = description;
         Log.d("imageUrl", imageUrl);
     }
 
