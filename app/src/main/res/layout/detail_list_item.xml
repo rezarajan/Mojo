@@ -21,22 +21,22 @@
             android:src="@drawable/ic_material_product_icon_192pxxhdpi" />
 
         <TextView
+            android:id="@+id/item_dets"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="Peter Allan"
             android:textColor="#111"
             android:textSize="16sp" />
 
         <TextView
+            android:id="@+id/item_cost"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginRight="20dp"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="Feb 14th"
             android:textColor="#aaa"
             android:textSize="12sp" />
 
@@ -50,13 +50,12 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/item_dets"
+        android:id="@+id/item_quantity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:lineSpacingExtra="6dp"
         android:maxLines="3"
-        android:text="The federal beach atc requires states that receive funding to develop a risk-baseed beach evaluation and classification plan and apply it to the big environment..."
         android:textSize="13sp" />
 
 

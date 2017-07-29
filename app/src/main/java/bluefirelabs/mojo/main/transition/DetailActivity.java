@@ -35,6 +35,9 @@ public class DetailActivity extends FragmentActivity {
 
     public static final String EXTRA_IMAGE_URL = "detailImageUrl";
     public static final String EXTRA_RESTAURANT_DETAILS = "detailRestaurant";
+    public static final String EXTRA_RESTAURANT_NAME = "restaurantName";
+
+    String imageUrl, restaurant_description, restaurantName;
 
     public static final String IMAGE_TRANSITION_NAME = "transitionImage";
     public static final String ADDRESS1_TRANSITION_NAME = "address1";
@@ -79,8 +82,9 @@ public class DetailActivity extends FragmentActivity {
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
 
-        String imageUrl = getIntent().getStringExtra(EXTRA_IMAGE_URL);
-        String restaurant_description = getIntent().getStringExtra(EXTRA_RESTAURANT_DETAILS);
+        imageUrl = getIntent().getStringExtra(EXTRA_IMAGE_URL);
+        restaurant_description = getIntent().getStringExtra(EXTRA_RESTAURANT_DETAILS);
+        restaurantName = getIntent().getStringExtra(EXTRA_RESTAURANT_NAME);
         //ImageLoader.getInstance().displayImage(imageUrl, imageView);
         address4.setText(restaurant_description);
         Picasso.with(getApplicationContext()).load(imageUrl).into(imageView);
@@ -98,21 +102,11 @@ public class DetailActivity extends FragmentActivity {
 
     public void firebaseTask(final MyCallback myCallback) {
 
-        myCallback.callbackCall("listing");
+        myCallback.callbackCall("menu");
     }
 
     private void dealListView() {       //TODO: Firebase Menu Items will go here
         final LayoutInflater layoutInflater = LayoutInflater.from(this);
-
-       /* for (int i = 0; i < 20; i++) {
-            View childView = layoutInflater.inflate(R.layout.detail_list_item, null);
-            listContainer.addView(childView);
-            ImageView headView = (ImageView) childView.findViewById(R.id.head);
-            if (i < headStrs.length) {
-                headView.setImageResource(imageIds[i % imageIds.length]);
-                ViewCompat.setTransitionName(headView, headStrs[i]);
-            }
-        } */
 
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
@@ -120,44 +114,70 @@ public class DetailActivity extends FragmentActivity {
         final MyCallback myCallback = new MyCallback() {
             @Override
             public void callbackCall(final String restaurant) {
-                final DatabaseReference reference = FirebaseDatabase.getInstance().getReference(restaurant).child("venue");
+                final DatabaseReference reference = FirebaseDatabase.getInstance().getReference(restaurant).child(restaurantName);
                 reference.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         final Map<String, Object> hopperValues = (Map<String, Object>) dataSnapshot.getValue();
 
-                        //Log.d("Size", String.valueOf(hopperValues.size()));
 
                         if (hopperValues != null) {
                             Log.d("HopperValues", hopperValues.toString());
                             Log.d("Size", String.valueOf(hopperValues.size()));
 
-                            //Log.d("icons", hopperValues.get("icon").toString());
 
-
-                            // 2. viewPager添加adapter
-                            /*for (int i = 0; i < hopperValues.size(); i++) {       //This is the list of menu items
-                                // 预先准备10个fragment
-                                fragments.add(new CommonFragment());
-                            } */
-
-
-                            //keys = hopperValues.keySet();
-
-                            for (String s : hopperValues.keySet()) {
+                            for (final String s : hopperValues.keySet()) {
                                 Log.d("List Item", "Key: " + s);
 
 
-                                final DatabaseReference reference = FirebaseDatabase.getInstance().getReference(restaurant).child("venue").child(s);
+                                final DatabaseReference reference = FirebaseDatabase.getInstance().getReference(restaurant).child(restaurantName).child(s).child("Items");
                                 reference.addValueEventListener(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(DataSnapshot dataSnapshot) {
-                                        Map<String, Object> icon = (Map<String, Object>) dataSnapshot.getValue();
+                                        final Map<String, Object> items = (Map<String, Object>) dataSnapshot.getValue();
 
 
-                                        if (icon != null) {
+                                        if (items != null) {
 
-                                            Log.d("icon", icon.get("icon").toString());
+                                            for (String itemKey : items.keySet()) {
+
+                                                final DatabaseReference reference = FirebaseDatabase.getInstance().getReference(restaurant).child(restaurantName).child(s).child("Items").child(itemKey);
+                                                reference.addValueEventListener(new ValueEventListener() {
+                                                    @Override
+                                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                                        Map<String, Object> item_information = (Map<String, Object>) dataSnapshot.getValue();
+
+
+                                                        if (item_information != null) {
+
+                                                            View childView = layoutInflater.inflate(R.layout.detail_list_item, null);
+                                                            listContainer.addView(childView);
+
+                                                            ImageView headView = (ImageView) childView.findViewById(R.id.head);
+                                                            TextView item_details = (TextView) childView.findViewById(R.id.item_dets);
+                                                            final TextView item_cost = (TextView) childView.findViewById(R.id.item_cost);
+                                                            final TextView item_quantity = (TextView) childView.findViewById(R.id.item_quantity);
+
+                                                            item_details.setText(item_information.get("name").toString());
+                                                            String cost = "$" + item_information.get("cost").toString();
+                                                            item_cost.setText(cost);
+                                                            item_quantity.setText(item_information.get("Quantity").toString());
+
+                                                            //Picasso.with(getApplicationContext()).load(restaurantInfo.child("icon").getValue().toString()).into(headView);        //TODO: Use the vector logos here
+
+                                                        }
+
+                                                    }
+
+                                                    @Override
+                                                    public void onCancelled(DatabaseError databaseError) {
+
+                                                    }
+                                                });
+                                            }
+
+
+
 
                                         }
 
@@ -168,52 +188,6 @@ public class DetailActivity extends FragmentActivity {
 
                                     }
                                 });
-
-                                //listData.add("Quantity: " + hopperValues.get(s));
-                                //itemTitle.setText(key.toString());
-                                //mListView.setAdapter(adapter);
-                            }
-
-                            for (DataSnapshot restaurantInfo : dataSnapshot.getChildren()) {
-
-                                Log.d("Info", restaurantInfo.child("icon").getValue().toString());
-                                //Picasso.with(getApplicationContext()).load(restaurantInfo.child("icon").getValue().toString()).into(imageView);
-                                /*for (int i = 0; i < 3; i++) {
-                                    View childView = layoutInflater.inflate(R.layout.detail_list_item, null);
-
-
-
-                                    listContainer.addView(childView);
-                                    ImageView headView = (ImageView) childView.findViewById(R.id.head);
-                                    TextView item_details = (TextView) childView.findViewById(R.id.item_dets);
-
-                                    item_details.setText(restaurantInfo.child("description").getValue().toString());
-                                    //if (i < headStrs.length) {
-
-                                    Picasso.with(getApplicationContext()).load(restaurantInfo.child("icon").getValue().toString()).into(headView);
-                                    //headView.setImageResource(imageIds[i % imageIds.length]);
-
-                                    ViewCompat.setTransitionName(headView, headStrs[i]);
-                                    //}
-                                } */
-
-                                View childView = layoutInflater.inflate(R.layout.detail_list_item, null);
-
-
-
-                                listContainer.addView(childView);
-                                ImageView headView = (ImageView) childView.findViewById(R.id.head);
-                                TextView item_details = (TextView) childView.findViewById(R.id.item_dets);
-
-                                item_details.setText(restaurantInfo.child("description").getValue().toString());
-                                //if (i < headStrs.length) {
-
-                                Picasso.with(getApplicationContext()).load(restaurantInfo.child("icon").getValue().toString()).into(headView);
-                                //headView.setImageResource(imageIds[i % imageIds.length]);
-
-                                /* for (int i = 0; i < 3; i++) {
-                                    ViewCompat.setTransitionName(headView, headStrs[i]);        //This transitions the four icons on the card view
-                                } */
                             }
 
                         }
@@ -229,9 +203,7 @@ public class DetailActivity extends FragmentActivity {
 
         firebaseTask(myCallback);
 
-
-
-
-
     }
+
+
 }

@@ -32,7 +32,7 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
     private TextView address4;
     private RatingBar ratingBar;
     private View head1, head2, head3, head4;
-    private String imageUrl, description;
+    private String imageUrl, description, restaurantName;
 
     int defaultColor = 0x000000;
     int vibrantColor = -1, mutedColor = -1;
@@ -118,12 +118,14 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
         Intent intent = new Intent(activity, DetailActivity.class);
         intent.putExtra(DetailActivity.EXTRA_IMAGE_URL, imageUrl);
         intent.putExtra(DetailActivity.EXTRA_RESTAURANT_DETAILS, description);
+        intent.putExtra(DetailActivity.EXTRA_RESTAURANT_NAME, restaurantName);
         ActivityCompat.startActivity(activity, intent, options.toBundle());
     }
 
-    public void bindData(String imageUrl, String description) {
+    public void bindData(String imageUrl, String description, String restaurantName) {
         this.imageUrl = imageUrl;
         this.description = description;
+        this.restaurantName = restaurantName;
         Log.d("imageUrl", imageUrl);
     }
 

@@ -148,7 +148,10 @@ public class UserHub_test extends FragmentActivity {
                                     Log.d("Position", String.valueOf(position));
 
 
-                                    fragment.bindData(dataSnapshot.child("id" + String.valueOf(position)).child("icon").getValue().toString(), dataSnapshot.child("id" + String.valueOf(position)).child("description").getValue().toString());
+                                    fragment.bindData(dataSnapshot.child("id" + String.valueOf(position)).child("icon").getValue().toString(),
+                                            dataSnapshot.child("id" + String.valueOf(position)).child("description").getValue().toString(),
+                                            dataSnapshot.child("id" + String.valueOf(position)).child("restaurant").getValue().toString()
+                                    );
                                     //backgroundChanger(myCallback_2, dataSnapshot.child("id" + String.valueOf(position)).child("icon").getValue().toString());
 
                                     Picasso.with(getApplicationContext())
