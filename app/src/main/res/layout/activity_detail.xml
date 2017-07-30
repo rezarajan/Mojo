@@ -57,13 +57,20 @@
 
             </LinearLayout>
 
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true" />
 
-            <LinearLayout
+
+
+<!--            <LinearLayout
                 android:id="@+id/detail_list_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:background="@color/white"/>
+                android:background="@color/white"/>-->
 
         </LinearLayout>
 

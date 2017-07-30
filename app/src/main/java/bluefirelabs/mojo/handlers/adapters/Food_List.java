@@ -12,6 +12,7 @@ public class Food_List {
     private String orderid;
     private String name;
     private String type;
+    private String quantity;
     private long cost;
 
     public Food_List(){
@@ -64,6 +65,14 @@ public class Food_List {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(String quantity) {
+        this.quantity = quantity;
     }
 
     public long getCost() {
