@@ -1,5 +1,6 @@
 package bluefirelabs.mojo.main.transition;
 
+import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
@@ -9,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewCompat;
+import android.support.v4.widget.CompoundButtonCompat;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -569,6 +571,35 @@ public class DetailActivity extends FragmentActivity {
                                                             CheckBox checkbox = (CheckBox) childView.findViewById(R.id.checkb);
 
 
+
+                                                            ColorStateList colorStateList = new ColorStateList(
+                                                                    new int[][]{
+                                                                            new int[]{-android.R.attr.state_checked}, // unchecked
+                                                                            new int[]{android.R.attr.state_checked} , // checked
+                                                                    },
+                                                                    new int[] {
+
+
+                                                                            getResources().getColor(R.color.colorPrimary),     //unchecked
+                                                                            //getResources().getColor(R.color.colorPrimary),
+                                                                            mutedColor,                                        //checked
+
+
+                                                                    }
+                                                            );
+
+
+
+                                                            CompoundButtonCompat.setButtonTintList(checkbox, colorStateList);
+
+
+
+
+
+                                                            /*AppCompatCheckBox checkbox = (AppCompatCheckBox) childView.findViewById(R.id.checkb);
+                                                            checkbox.setSupportButtonTintList(colorStateList);*/
+
+
                                                             checkbox.setOnClickListener(new View.OnClickListener() {
                                                                 @Override
                                                                 public void onClick(View v) {
@@ -621,7 +652,7 @@ public class DetailActivity extends FragmentActivity {
 
 
 
-                                                            childView.setOnClickListener(new View.OnClickListener() {
+/*                                                            childView.setOnClickListener(new View.OnClickListener() {
                                                                 @Override
                                                                 public void onClick(View v) {
                                                                     Snackbar.make(v, item_details.getText() + " added to Cart",
@@ -654,7 +685,7 @@ public class DetailActivity extends FragmentActivity {
 
 
                                                                 }
-                                                            });
+                                                            });*/
 
                                                         }
 

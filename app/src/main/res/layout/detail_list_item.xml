@@ -33,6 +33,23 @@
                 android:layout_alignParentStart="true"
                 android:layout_centerVertical="true" />
 
+<!--            <CheckBox
+                android:id="@+id/checkb"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:button="@drawable/custom_checkbox"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:theme="@style/MyCheckBox"/>-->
+
+<!--            <android.support.v7.widget.AppCompatCheckBox
+                android:id="@+id/checkb"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:button="@drawable/custom_checkbox"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true" />-->
+
             <TextView
                 android:id="@+id/item_dets"
                 android:layout_width="200dp"
