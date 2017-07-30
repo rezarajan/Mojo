@@ -48,6 +48,7 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
         View rootView = inflater.inflate(R.layout.fragment_common, null);
         dragLayout = (DragLayout) rootView.findViewById(R.id.drag_layout);
         imageView = (ImageView) dragLayout.findViewById(R.id.image);
+        //imageView = (CircleImageView) dragLayout.findViewById(R.id.image);
         //ImageLoader.getInstance().displayImage(imageUrl, imageView);
         Picasso.with(getContext()).load(imageUrl).into(imageView);
         //Log.d("View Bound", imageUrl);
@@ -103,9 +104,9 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
                 //new Pair(address1, DetailActivity.ADDRESS1_TRANSITION_NAME),
                 //new Pair(address2, DetailActivity.ADDRESS2_TRANSITION_NAME),
                 //new Pair(address3, DetailActivity.ADDRESS3_TRANSITION_NAME),
-                new Pair(address4, DetailActivity.ADDRESS4_TRANSITION_NAME),
-                new Pair(address5, DetailActivity.ADDRESS5_TRANSITION_NAME),
-                new Pair(ratingBar, DetailActivity.RATINGBAR_TRANSITION_NAME),
+                //new Pair(address4, DetailActivity.ADDRESS4_TRANSITION_NAME),
+               // new Pair(address5, DetailActivity.ADDRESS5_TRANSITION_NAME),
+                //new Pair(ratingBar, DetailActivity.RATINGBAR_TRANSITION_NAME),
                 new Pair(head1, DetailActivity.HEAD1_TRANSITION_NAME),
                 new Pair(head2, DetailActivity.HEAD2_TRANSITION_NAME),
                 new Pair(head3, DetailActivity.HEAD3_TRANSITION_NAME),

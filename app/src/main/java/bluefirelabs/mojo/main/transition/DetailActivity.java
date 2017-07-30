@@ -68,8 +68,10 @@ public class DetailActivity extends FragmentActivity {
     private View address1, address2, address3, address5;
     private TextView address4;
     private ImageView imageView;
+    //private CircleImageView imageView;
     private RatingBar ratingBar;
-    private LinearLayout accent_layout;
+    //private LinearLayout accent_layout;
+    private View accent_layout;
 
     private FirebaseRecyclerAdapter<Food_List, FirebaseRecyclerAdapterItems_new.RecyclerViewHolder> mFirebaseAdapter;
 
@@ -94,14 +96,16 @@ public class DetailActivity extends FragmentActivity {
         setContentView(R.layout.activity_detail);
 
         imageView = (ImageView) findViewById(R.id.image);
+        //imageView = (CircleImageView) findViewById(R.id.image);
         //address1 = findViewById(R.id.address1);
         //address2 = findViewById(R.id.address2);
         //address3 = findViewById(R.id.address3);
-        address4 = (TextView) findViewById(R.id.address4);
-        address5 = findViewById(R.id.address5);
-        ratingBar = (RatingBar) findViewById(R.id.rating);
+        //address4 = (TextView) findViewById(R.id.address4);
+        //address5 = findViewById(R.id.address5);
+        //ratingBar = (RatingBar) findViewById(R.id.rating);
         //listContainer = (LinearLayout) findViewById(R.id.detail_list_container);
-        accent_layout = (LinearLayout) findViewById(R.id.accent_layout);
+        //accent_layout = (LinearLayout) findViewById(R.id.accent_layout);
+        accent_layout = (View) findViewById(R.id.accent_layout);
         //final LinearLayout linearLayout = (LinearLayout) findViewById(R.id.detail_list_layout);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
@@ -117,7 +121,7 @@ public class DetailActivity extends FragmentActivity {
         //mutedColor = getIntent().getIntExtra(EXTRA_RESTAURANT_COLOR, 0);
         Log.d("Colour", String.valueOf(mutedColor));
         //ImageLoader.getInstance().displayImage(imageUrl, imageView);
-        address4.setText(restaurant_description);
+        //address4.setText(restaurant_description);
         Picasso.with(getApplicationContext()).load(imageUrl).into(imageView);
 
 
@@ -176,9 +180,9 @@ public class DetailActivity extends FragmentActivity {
         //ViewCompat.setTransitionName(address1, ADDRESS1_TRANSITION_NAME);
         //ViewCompat.setTransitionName(address2, ADDRESS2_TRANSITION_NAME);
         //ViewCompat.setTransitionName(address3, ADDRESS3_TRANSITION_NAME);
-        ViewCompat.setTransitionName(address4, ADDRESS4_TRANSITION_NAME);
-        ViewCompat.setTransitionName(address5, ADDRESS5_TRANSITION_NAME);
-        ViewCompat.setTransitionName(ratingBar, RATINGBAR_TRANSITION_NAME);
+        //ViewCompat.setTransitionName(address4, ADDRESS4_TRANSITION_NAME);
+        //ViewCompat.setTransitionName(address5, ADDRESS5_TRANSITION_NAME);
+        //ViewCompat.setTransitionName(ratingBar, RATINGBAR_TRANSITION_NAME);
 
 
 
