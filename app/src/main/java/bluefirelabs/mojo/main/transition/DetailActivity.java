@@ -3,6 +3,7 @@ package bluefirelabs.mojo.main.transition;
 import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -281,6 +282,17 @@ public class DetailActivity extends FragmentActivity {
         mRestaurantRecyclerView.setNestedScrollingEnabled(false);*/
         dealListView();
     }
+
+
+
+    public static int getComplementaryColor(int colorToInvert) {
+        float[] hsv = new float[3];
+        Color.RGBToHSV(Color.red(colorToInvert), Color.green(colorToInvert),
+                Color.blue(colorToInvert), hsv);
+        hsv[0] = (hsv[0] + 180) % 360;
+        return Color.HSVToColor(hsv);
+    }
+
 
     public void firebaseTask(final MyCallback myCallback) {
 
@@ -571,6 +583,7 @@ public class DetailActivity extends FragmentActivity {
                                                             CheckBox checkbox = (CheckBox) childView.findViewById(R.id.checkb);
 
 
+                                                            /*Finding the complementary color for muted color and setting it as the color for the checkbox */
 
                                                             ColorStateList colorStateList = new ColorStateList(
                                                                     new int[][]{
@@ -580,9 +593,10 @@ public class DetailActivity extends FragmentActivity {
                                                                     new int[] {
 
 
-                                                                            getResources().getColor(R.color.colorPrimary),     //unchecked
-                                                                            //getResources().getColor(R.color.colorPrimary),
-                                                                            mutedColor,                                        //checked
+                                                                            //getResources().getColor(R.color.colorPrimary),     //unchecked
+                                                                            //getResources().getColor(R.color.colorPrimary),     //checked
+                                                                            getComplementaryColor(mutedColor), //unchecked
+                                                                            getComplementaryColor(mutedColor),      //checked
 
 
                                                                     }
