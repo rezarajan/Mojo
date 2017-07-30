@@ -5,6 +5,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.graphics.Palette;
@@ -545,8 +546,8 @@ public class DetailActivity extends FragmentActivity {
                                                             View childView = layoutInflater.inflate(R.layout.detail_list_item, null);
                                                             listContainer.addView(childView);
 
-                                                            ImageView headView = (ImageView) childView.findViewById(R.id.head);
-                                                            TextView item_details = (TextView) childView.findViewById(R.id.item_dets);
+                                                            //ImageView headView = (ImageView) childView.findViewById(R.id.head);
+                                                            final TextView item_details = (TextView) childView.findViewById(R.id.item_dets);
                                                             final TextView item_cost = (TextView) childView.findViewById(R.id.item_cost);
                                                             final TextView item_quantity = (TextView) childView.findViewById(R.id.item_quantity);
 
@@ -556,6 +557,15 @@ public class DetailActivity extends FragmentActivity {
                                                             item_quantity.setText(item_information.get("Quantity").toString());
 
                                                             //Picasso.with(getApplicationContext()).load(restaurantInfo.child("icon").getValue().toString()).into(headView);        //TODO: Use the vector logos here
+
+                                                            childView.setOnClickListener(new View.OnClickListener() {
+                                                                @Override
+                                                                public void onClick(View v) {
+                                                                    Snackbar.make(v, item_details.getText() + " added to Cart",
+                                                                            Snackbar.LENGTH_LONG)
+                                                                            .setAction("Action", null).show();
+                                                                }
+                                                            });
 
                                                         }
 

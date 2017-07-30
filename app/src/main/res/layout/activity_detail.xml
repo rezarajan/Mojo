@@ -26,6 +26,8 @@
                 android:layout_height="200dp"
                 android:layout_gravity="center"
                 android:scaleType="centerCrop"
+
+                android:paddingTop="30dp"
                 android:id="@+id/image"/>
 
 <!--            <LinearLayout
