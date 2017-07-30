@@ -5,7 +5,6 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.graphics.Palette;
@@ -19,6 +18,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -70,8 +70,10 @@ public class DetailActivity extends FragmentActivity {
     private ImageView imageView;
     //private CircleImageView imageView;
     private RatingBar ratingBar;
-    //private LinearLayout accent_layout;
+    private LinearLayout detail_layout;
     private View accent_layout;
+    LinearLayout linearLayout;
+    RelativeLayout detail_item;
 
     private FirebaseRecyclerAdapter<Food_List, FirebaseRecyclerAdapterItems_new.RecyclerViewHolder> mFirebaseAdapter;
 
@@ -103,10 +105,12 @@ public class DetailActivity extends FragmentActivity {
         //address4 = (TextView) findViewById(R.id.address4);
         //address5 = findViewById(R.id.address5);
         //ratingBar = (RatingBar) findViewById(R.id.rating);
-        //listContainer = (LinearLayout) findViewById(R.id.detail_list_container);
+        listContainer = (LinearLayout) findViewById(R.id.detail_list_container);
         //accent_layout = (LinearLayout) findViewById(R.id.accent_layout);
-        accent_layout = (View) findViewById(R.id.accent_layout);
-        //final LinearLayout linearLayout = (LinearLayout) findViewById(R.id.detail_list_layout);
+        detail_layout = (LinearLayout) findViewById(R.id.detail_background);
+        detail_item = (RelativeLayout) findViewById(R.id.detail_card_layout);
+        accent_layout = (View) findViewById(R.id.accent_layout);        //separator colour
+        linearLayout = (LinearLayout) findViewById(R.id.detail_list_layout);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             Window window = getWindow();
@@ -151,9 +155,10 @@ public class DetailActivity extends FragmentActivity {
 
                         /* Setting the colours of the detail view based on the icon clicked */
 
-                        //listContainer.setBackgroundColor(mutedColor);       //Sets the colour for one item of the detail list
-                        //linearLayout.setBackgroundColor(mutedColor);        //Sets the colour for the entire detail list
-                        accent_layout.setBackgroundColor(mutedColor);        //Sets the colour for the frame (accents)
+                        listContainer.setBackgroundColor(mutedColor);       //Sets the colour for one item of the detail list
+                        linearLayout.setBackgroundColor(mutedColor);        //Sets the colour for the entire detail list
+                        //accent_layout.setBackgroundColor(mutedColor);        //Sets the colour for the separator
+                        detail_layout.setBackgroundColor(mutedColor);        //Sets the colour for the frame (accents)
                         Log.d("Muted Color Status", "Activated");
 
 
@@ -187,7 +192,7 @@ public class DetailActivity extends FragmentActivity {
 
 
 
-        mRestaurantRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+/*        mRestaurantRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         mLinearLayoutManager = new LinearLayoutManager(getApplicationContext());
         mLinearLayoutManager.setStackFromEnd(true);
 
@@ -226,7 +231,7 @@ public class DetailActivity extends FragmentActivity {
 
 
 
-/*                                                                //adding the item to the database for checkout
+*//*                                                                //adding the item to the database for checkout
                                                                 boolean isInserted = myDb.insertData(restaurant,       //The restaurant name
                                                                         viewHolder.itemTitle.getText().toString(),     //The item name
                                                                         viewHolder.itemDescription.getText().toString().replace("$",""),       //The item cost
@@ -242,7 +247,7 @@ public class DetailActivity extends FragmentActivity {
                                                                     Snackbar.make(v, "Data not Inserted",
                                                                             Snackbar.LENGTH_LONG)
                                                                             .setAction("Action", null).show();
-                                                                }*/
+                                                                }*//*
                     }
                 });
             }
@@ -264,8 +269,8 @@ public class DetailActivity extends FragmentActivity {
 
         mRestaurantRecyclerView.setLayoutManager(mLinearLayoutManager);
         mRestaurantRecyclerView.setAdapter(mFirebaseAdapter);
-        mRestaurantRecyclerView.setNestedScrollingEnabled(false);
-        //dealListView();
+        mRestaurantRecyclerView.setNestedScrollingEnabled(false);*/
+        dealListView();
     }
 
     public void firebaseTask(final MyCallback myCallback) {
@@ -273,7 +278,7 @@ public class DetailActivity extends FragmentActivity {
         myCallback.callbackCall("menu");
     }
 
-    private void dealListView() {       //TODO: Firebase Menu Items will go here
+/*    private void dealListView() {       //TODO: Firebase Menu Items will go here
         final LayoutInflater layoutInflater = LayoutInflater.from(this);
 
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
@@ -349,7 +354,7 @@ public class DetailActivity extends FragmentActivity {
 
 
 
-        /*                                                        //adding the item to the database for checkout
+        *//*                                                        //adding the item to the database for checkout
                                                                 boolean isInserted = myDb.insertData(restaurant,       //The restaurant name
                                                                         viewHolder.itemTitle.getText().toString(),     //The item name
                                                                         viewHolder.itemDescription.getText().toString().replace("$",""),       //The item cost
@@ -365,7 +370,7 @@ public class DetailActivity extends FragmentActivity {
                                                                     Snackbar.make(v, "Data not Inserted",
                                                                             Snackbar.LENGTH_LONG)
                                                                             .setAction("Action", null).show();
-                                                                }*/
+                                                                }*//*
                                             }
                                         });
                                     }
@@ -396,7 +401,7 @@ public class DetailActivity extends FragmentActivity {
 
 
 
-/*                                final DatabaseReference reference = FirebaseDatabase.getInstance().getReference(restaurant).child(restaurantName).child(s).child("Items");
+*//*                                final DatabaseReference reference = FirebaseDatabase.getInstance().getReference(restaurant).child(restaurantName).child(s).child("Items");
                                 reference.addValueEventListener(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(DataSnapshot dataSnapshot) {
@@ -418,7 +423,7 @@ public class DetailActivity extends FragmentActivity {
 
                                                         if (item_information != null) {
 
-*//*                                                            View childView = layoutInflater.inflate(R.layout.detail_list_item, null);
+*//**//*                                                            View childView = layoutInflater.inflate(R.layout.detail_list_item, null);
                                                             listContainer.addView(childView);
 
                                                             ImageView headView = (ImageView) childView.findViewById(R.id.head);
@@ -440,7 +445,7 @@ public class DetailActivity extends FragmentActivity {
                                                                             Snackbar.LENGTH_LONG)
                                                                             .setAction("Action", null).show();
                                                                 }
-                                                            });*//*
+                                                            });*//**//*
 
 
                                                         }
@@ -466,12 +471,116 @@ public class DetailActivity extends FragmentActivity {
                                     public void onCancelled(DatabaseError databaseError) {
 
                                     }
-                                });*/
+                                });*//*
 
 
 
                             }
 
+
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+            }
+        };
+
+        firebaseTask(myCallback);
+
+    }*/
+
+
+
+
+
+    private void dealListView() {       //TODO: Firebase Menu Items will go here
+        final LayoutInflater layoutInflater = LayoutInflater.from(this);
+
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        firebaseAuth = FirebaseAuth.getInstance();
+
+        final MyCallback myCallback = new MyCallback() {
+            @Override
+            public void callbackCall(final String restaurant) {
+                final DatabaseReference reference = FirebaseDatabase.getInstance().getReference(restaurant).child(restaurantName);
+                reference.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        final Map<String, Object> hopperValues = (Map<String, Object>) dataSnapshot.getValue();
+
+
+                        if (hopperValues != null) {
+                            Log.d("HopperValues", hopperValues.toString());
+                            Log.d("Size", String.valueOf(hopperValues.size()));
+
+
+                            for (final String s : hopperValues.keySet()) {
+                                Log.d("List Item", "Key: " + s);
+
+
+                                final DatabaseReference reference = FirebaseDatabase.getInstance().getReference(restaurant).child(restaurantName).child(s).child("Items");
+                                reference.addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        final Map<String, Object> items = (Map<String, Object>) dataSnapshot.getValue();
+
+
+                                        if (items != null) {
+
+                                            for (String itemKey : items.keySet()) {
+
+                                                final DatabaseReference reference = FirebaseDatabase.getInstance().getReference(restaurant).child(restaurantName).child(s).child("Items").child(itemKey);
+                                                reference.addValueEventListener(new ValueEventListener() {
+                                                    @Override
+                                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                                        Map<String, Object> item_information = (Map<String, Object>) dataSnapshot.getValue();
+
+
+                                                        if (item_information != null) {
+
+                                                            View childView = layoutInflater.inflate(R.layout.detail_list_item, null);
+                                                            listContainer.addView(childView);
+
+                                                            ImageView headView = (ImageView) childView.findViewById(R.id.head);
+                                                            TextView item_details = (TextView) childView.findViewById(R.id.item_dets);
+                                                            final TextView item_cost = (TextView) childView.findViewById(R.id.item_cost);
+                                                            final TextView item_quantity = (TextView) childView.findViewById(R.id.item_quantity);
+
+                                                            item_details.setText(item_information.get("name").toString());
+                                                            String cost = "$" + item_information.get("cost").toString();
+                                                            item_cost.setText(cost);
+                                                            item_quantity.setText(item_information.get("Quantity").toString());
+
+                                                            //Picasso.with(getApplicationContext()).load(restaurantInfo.child("icon").getValue().toString()).into(headView);        //TODO: Use the vector logos here
+
+                                                        }
+
+                                                    }
+
+                                                    @Override
+                                                    public void onCancelled(DatabaseError databaseError) {
+
+                                                    }
+                                                });
+                                            }
+
+
+
+
+                                        }
+
+                                    }
+
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+
+                                    }
+                                });
+                            }
 
                         }
                     }
