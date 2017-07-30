@@ -128,7 +128,7 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
     }
 
     public String dataReturn () {
-        Log.d("Return", this.imageUrl);
+        //Log.d("Return", this.imageUrl);
         return this.imageUrl;
     }
 

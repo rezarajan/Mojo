@@ -563,6 +563,63 @@ public class DetailActivity extends FragmentActivity {
 
                                                             //Picasso.with(getApplicationContext()).load(restaurantInfo.child("icon").getValue().toString()).into(headView);        //TODO: Use the vector logos here
 
+
+                                                            //TODO: Get the checkboxes to add/delete the data from the database
+/*                                                            CheckBox checkbox = (CheckBox) findViewById(R.id.checkb);
+
+
+                                                            checkbox.setOnClickListener(new View.OnClickListener() {
+                                                                @Override
+                                                                public void onClick(View v) {
+                                                                    CheckBox checkbox = (CheckBox) v;
+                                                                    if(checkbox.isChecked()){
+                                                                        Snackbar.make(v, item_details.getText() + " added to Cart",
+                                                                                Snackbar.LENGTH_LONG)
+                                                                                .setAction("Action", null).show();
+
+                                                                        //adding the item to the database for checkout
+                                                                        boolean isInserted = myDb.insertData(restaurantName,       //The restaurant name
+                                                                                item_details.getText().toString(),     //The item name
+                                                                                item_cost.getText().toString().replace("$",""),       //The item cost
+                                                                                "1");                                //Adds the item at at the specific position to the database
+                                                                        //Default Quantity is 1
+
+                                                                        Log.d("Adapted Restaurant", restaurantName);
+                                                                        if (isInserted == true) {
+                                                                            Snackbar.make(v, item_details.getText() + " added to Cart",
+                                                                                    Snackbar.LENGTH_LONG)
+                                                                                    .setAction("Action", null).show();
+                                                                        } else {
+                                                                            Snackbar.make(v, "Error adding item to cart",
+                                                                                    Snackbar.LENGTH_LONG)
+                                                                                    .setAction("Action", null).show();
+                                                                        }
+
+
+                                                                    } else {
+                                                                        Cursor data = myDb.getItemID(item_details.getText().toString());        //gets the primary key associated with the item name
+                                                                        int itemID = -1;
+                                                                        while(data.moveToNext()){
+                                                                            itemID = data.getInt(0);
+                                                                        }
+                                                                        if(itemID > 0){
+
+                                                                            myDb.deleteName(itemID, item_details.getText().toString());     //The item name and ID are used to delete the item on checkbox unchecked
+
+                                                                            Snackbar.make(v, item_details.getText() + " removed from Cart",
+                                                                                    Snackbar.LENGTH_LONG)
+                                                                                    .setAction("Action", null).show();
+
+                                                                        }
+
+
+                                                                    }
+                                                                }
+                                                            });*/
+
+
+
+
                                                             childView.setOnClickListener(new View.OnClickListener() {
                                                                 @Override
                                                                 public void onClick(View v) {
@@ -586,7 +643,7 @@ public class DetailActivity extends FragmentActivity {
                                                                                 Snackbar.LENGTH_LONG)
                                                                                 .setAction("Action", null).show();
                                                                     } else {
-                                                                        Snackbar.make(v, "Error adding item to cart",
+                                                                        Snackbar.make(v, "Data not Inserted",
                                                                                 Snackbar.LENGTH_LONG)
                                                                                 .setAction("Action", null).show();
                                                                     }
