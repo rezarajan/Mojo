@@ -37,6 +37,7 @@ import java.util.Map;
 import bluefirelabs.mojo.R;
 import bluefirelabs.mojo.handlers.adapters.FirebaseRecyclerAdapterItems_new;
 import bluefirelabs.mojo.handlers.adapters.Food_List;
+import database.DatabaseHelper;
 
 
 /**
@@ -76,6 +77,8 @@ public class DetailActivity extends FragmentActivity {
     LinearLayout linearLayout;
     RelativeLayout detail_item;
 
+    DatabaseHelper myDb;
+
     private FirebaseRecyclerAdapter<Food_List, FirebaseRecyclerAdapterItems_new.RecyclerViewHolder> mFirebaseAdapter;
 
     private RecyclerView mRestaurantRecyclerView;
@@ -97,6 +100,7 @@ public class DetailActivity extends FragmentActivity {
         }
 
         setContentView(R.layout.activity_detail);
+        myDb = new DatabaseHelper(this); //calls constructor from the database helper class
 
         imageView = (ImageView) findViewById(R.id.image);
         //imageView = (CircleImageView) findViewById(R.id.image);
@@ -554,7 +558,8 @@ public class DetailActivity extends FragmentActivity {
                                                             item_details.setText(item_information.get("name").toString());
                                                             String cost = "$" + item_information.get("cost").toString();
                                                             item_cost.setText(cost);
-                                                            item_quantity.setText(item_information.get("Quantity").toString());
+                                                            //item_quantity.setText(item_information.get("Quantity").toString());
+                                                            item_quantity.setText("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua");
 
                                                             //Picasso.with(getApplicationContext()).load(restaurantInfo.child("icon").getValue().toString()).into(headView);        //TODO: Use the vector logos here
 
@@ -564,6 +569,32 @@ public class DetailActivity extends FragmentActivity {
                                                                     Snackbar.make(v, item_details.getText() + " added to Cart",
                                                                             Snackbar.LENGTH_LONG)
                                                                             .setAction("Action", null).show();
+
+
+
+
+                                                                    //adding the item to the database for checkout
+                                                                    boolean isInserted = myDb.insertData(restaurant,       //The restaurant name
+                                                                            item_details.getText().toString(),     //The item name
+                                                                            item_cost.getText().toString().replace("$",""),       //The item cost
+                                                                            "1");                                //Adds the item at at the specific position to the database
+                                                                    //Default Quantity is 1
+
+                                                                    Log.d("Adapted Restaurant", restaurant);
+                                                                    if (isInserted == true) {
+                                                                        Snackbar.make(v, item_details.getText() + " added to Cart",
+                                                                                Snackbar.LENGTH_LONG)
+                                                                                .setAction("Action", null).show();
+                                                                    } else {
+                                                                        Snackbar.make(v, "Error adding item to cart",
+                                                                                Snackbar.LENGTH_LONG)
+                                                                                .setAction("Action", null).show();
+                                                                    }
+
+
+
+
+
                                                                 }
                                                             });
 
