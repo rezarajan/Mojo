@@ -1,5 +1,6 @@
 package bluefirelabs.mojo.main.transition;
 
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -16,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
@@ -544,7 +546,6 @@ public class DetailActivity extends FragmentActivity {
                                                     public void onDataChange(DataSnapshot dataSnapshot) {
                                                         Map<String, Object> item_information = (Map<String, Object>) dataSnapshot.getValue();
 
-
                                                         if (item_information != null) {
 
                                                             View childView = layoutInflater.inflate(R.layout.detail_list_item, null);
@@ -565,7 +566,7 @@ public class DetailActivity extends FragmentActivity {
 
 
                                                             //TODO: Get the checkboxes to add/delete the data from the database
-/*                                                            CheckBox checkbox = (CheckBox) findViewById(R.id.checkb);
+                                                            CheckBox checkbox = (CheckBox) childView.findViewById(R.id.checkb);
 
 
                                                             checkbox.setOnClickListener(new View.OnClickListener() {
@@ -615,7 +616,7 @@ public class DetailActivity extends FragmentActivity {
 
                                                                     }
                                                                 }
-                                                            });*/
+                                                            });
 
 
 
