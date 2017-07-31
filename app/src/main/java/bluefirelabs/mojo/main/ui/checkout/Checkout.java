@@ -16,7 +16,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 import bluefirelabs.mojo.R;
 import database.DatabaseHelper;
@@ -32,6 +34,7 @@ public class Checkout extends FragmentActivity {
     private TextView item_subtotal_value, item_tax_value, item_total_value;     //extended base wrapper for the main view
 
     View accentLayout, restaurant_separator;
+    private String pushId;
 
 
 
@@ -62,6 +65,13 @@ public class Checkout extends FragmentActivity {
 
         ////////////////////////////////////////////////////////////////////////////////////
 
+        //The main layout items
+        item_subtotal_value = (TextView) findViewById(R.id.item_subtotal_value);
+        item_tax_value = (TextView) findViewById(R.id.item_tax_value);
+        item_total_value = (TextView) findViewById(R.id.item_total_value);
+
+
+        /////////////////////////////////////////////////////////////////////////////////////
 
 
 
@@ -92,32 +102,42 @@ public class Checkout extends FragmentActivity {
     }
 
     private void populateListView() {
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("orders");
+        FirebaseUser user = firebaseAuth.getCurrentUser();
+        pushId = reference.push().getKey();     //String
+
+
+        Map notification = new HashMap<>();
+        Map itemListing = new HashMap<>();
+        Map costListing = new HashMap<>();
+
+        Double total_cost = 0.00;
+
+        //order data alphabetically by restaurant name and append to a list
+        Cursor data = myDb.orderAlpha();
+
+        String restaurant, next_restaurant;     //to compare data for different restaurants
+
+        int count = data.getCount();
+        for (int position = 0; position < count; position++) {
+            data.moveToPosition(position);
+            Log.d("Database", data.getString(1));
+            Log.d("Cost", data.getString(3));
+            total_cost += Double.parseDouble(data.getString(3)) * Double.parseDouble(data.getString(4)) * 1.00; //adding the cost of each item multiplied by the quantity and *1.00 to keep it a double
+
+
+            item_subtotal_value.setText("$" + String.valueOf(total_cost));      //setting the subtotal value on the main layout
+        }
+
 
 
         listContainer = (LinearLayout) findViewById(R.id.checkout_list_container);
 
-
-
-        final LayoutInflater layoutInflater = LayoutInflater.from(this);
-        View childView = layoutInflater.inflate(R.layout.checkout_item, null);
-
-        listContainer.addView(childView);
-
-
-
-        //The checkout item contents
-        restaurant_name = (TextView) childView.findViewById(R.id.restaurant_name);
-        item_quantity = (TextView) childView.findViewById(R.id.item_quantity);
-        item_dets = (TextView) childView.findViewById(R.id.item_dets);
-        item_cost = (TextView) childView.findViewById(R.id.item_cost);
-        item_description = (TextView) childView.findViewById(R.id.item_description);
-
-
-
         Log.d("Checkout", "populating items");
 
         //get the data and append to a list
-        Cursor data = myDb.getAllData();
+        //Cursor data = myDb.getAllData();
 
         ArrayList<String> itemnameData = new ArrayList<>();
         while(data.moveToNext()){
@@ -130,6 +150,18 @@ public class Checkout extends FragmentActivity {
         Iterator<String> iterator = itemnameData.iterator();
 
         for(int i = 0; i < itemnameData.size(); i++){
+            final LayoutInflater layoutInflater = LayoutInflater.from(this);
+            View childView = layoutInflater.inflate(R.layout.checkout_item, null);
+            listContainer.addView(childView);
+
+
+
+            //The checkout item contents
+            restaurant_name = (TextView) childView.findViewById(R.id.restaurant_name);
+            item_quantity = (TextView) childView.findViewById(R.id.item_quantity);
+            item_dets = (TextView) childView.findViewById(R.id.item_dets);
+            item_cost = (TextView) childView.findViewById(R.id.item_cost);
+            item_description = (TextView) childView.findViewById(R.id.item_description);
             item_dets.setText(itemnameData.get(i));
             System.out.println(itemnameData.get(i));
         }
