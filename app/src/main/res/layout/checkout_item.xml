@@ -29,8 +29,8 @@
             android:layout_gravity="center"
             android:paddingLeft="30dp"
             android:paddingTop="8dp"
-            android:text=""
-            android:textColor="#000000"
+            android:text="Restaurant"
+            android:textColor="@color/black"
             android:textSize="18dp"
             android:fontFamily="sans-serif-condensed" />
 

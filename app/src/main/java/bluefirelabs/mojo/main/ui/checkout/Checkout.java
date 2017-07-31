@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -29,6 +30,8 @@ public class Checkout extends FragmentActivity {
     DatabaseHelper myDb;
     private LinearLayout listContainer;
     private RelativeLayout detail_card_layout;
+
+    private ImageView image;
 
     private TextView restaurant_name, item_quantity, item_dets, item_cost, item_description; //checkout item view
     private TextView item_subtotal, item_tax, item_total;           //base wrapper for the main view
@@ -120,7 +123,7 @@ public class Checkout extends FragmentActivity {
         String previousPlaceholder_Cost = "";
         String previousPlaceholder_Description = "";
 
-        Double total_cost = 0.00;
+        Double subtotalCost = 0.00;
 
         //order data alphabetically by restaurant name and append to a list
         Cursor data = myDb.orderAlpha();
@@ -132,17 +135,16 @@ public class Checkout extends FragmentActivity {
             data.moveToPosition(position);
             Log.d("Database", data.getString(1));
             Log.d("Cost", data.getString(3));
-            total_cost += Double.parseDouble(data.getString(3)) * Double.parseDouble(data.getString(4)) * 1.00; //adding the cost of each item multiplied by the quantity and *1.00 to keep it a double
+            subtotalCost+= Double.parseDouble(data.getString(3)) * Double.parseDouble(data.getString(4)) * 1.00; //adding the cost of each item multiplied by the quantity and *1.00 to keep it a double
         }
 
-        total_cost = Math.round(total_cost*100.0)/100.0;
 
-        String subtotal = "$" + String.valueOf(total_cost);
+        String subtotal = "$" + String.valueOf(df.format(subtotalCost));
         item_subtotal_value.setText(subtotal);      //setting the subtotal value on the main layout
 
 
-        Double finalCost = total_cost + Double.parseDouble(item_tax_value.getText().toString().replace("$", ""));
-        String total = "$" + String.valueOf(finalCost);
+        Double finalCost = subtotalCost + Double.parseDouble(item_tax_value.getText().toString().replace("$", ""));
+        String total = "$" + String.valueOf(df.format(finalCost));
         item_total_value.setText(total);      //setting the subtotal value on the main layout
 
 
@@ -200,6 +202,11 @@ public class Checkout extends FragmentActivity {
             item_cost = (TextView) childView.findViewById(R.id.item_cost);
             item_description = (TextView) childView.findViewById(R.id.item_description);
 
+            restaurant_separator = (View) childView.findViewById(R.id.restaurant_separator);
+            restaurant_name = (TextView) childView.findViewById(R.id.restaurant_name);
+
+            image = (ImageView) childView.findViewById(R.id.image);
+
             //////////////////////////////////////////////////////////////////////////////////
 
 /*
@@ -213,6 +220,7 @@ public class Checkout extends FragmentActivity {
 
             data.moveToPosition(position);
             restaurant = data.getString(1);     //gets the restaurant name
+            restaurant_name.setText(restaurant);
 
 
 
@@ -225,6 +233,7 @@ public class Checkout extends FragmentActivity {
             Log.d("Comparison Parameters", restaurant + " : " + next_restaurant);
 
             if (restaurant.equals(next_restaurant)) {
+                restaurant_name.setText(restaurant);
                 Log.d("Outcome", "same");
                 //itemListing.clear();
                 //notification.clear();
@@ -273,10 +282,12 @@ public class Checkout extends FragmentActivity {
                 reference.child(pushId).child("cost").setValue(costListing);
 */
                 //data.moveToPosition(position + 1);
-                if (data.moveToNext()) {
+                if (data.moveToNext()) {        //Deals with the first and other items, and the first and other items after restaurant switch
                     //get the value from the database in column
                     //then add it to the ArrayList
                     //listData.add(data.getString(2));
+
+
                     data.moveToPosition(position);
                     notification.put("user_token", FirebaseInstanceId.getInstance().getToken());
                     notification.put("customeruid_to", user.getUid());
@@ -291,16 +302,22 @@ public class Checkout extends FragmentActivity {
                     Log.d("Activated", "1");
 
 
+                    restaurant_name.setText(restaurant);
+
                     item_dets.setText(data.getString(2));
                     item_quantity.setText(data.getString(4));
-                    item_cost.setText("$" + data.getString(3));
+                    String cost = "$" + String.valueOf(df.format(Double.parseDouble(data.getString(3))));       //Displays with double decimals
+                    item_cost.setText(cost);
 
                     reference.child(pushId).setValue(notification);
                     reference.child(pushId).child("items").setValue(itemListing);
                     reference.child(pushId).child("cost").setValue(costListing);
                     Log.d("The items pushed for " + restaurant + " are", itemListing.toString());
                     System.out.println("Moving to next");
-                } else {
+/*                    restaurant_separator.setVisibility(View.GONE);
+                    restaurant_name.setVisibility(View.GONE);
+                    image.setVisibility(View.GONE);*/
+                } else {        //Deals with the last item, or item after restaurant switch
                     data.moveToPosition(position);
 
                     listContainer.addView(childView);
@@ -308,7 +325,12 @@ public class Checkout extends FragmentActivity {
 
                     item_dets.setText(data.getString(2));
                     item_quantity.setText(data.getString(4));
-                    item_cost.setText("$" + data.getString(3));
+                    String cost = "$" + String.valueOf(df.format(Double.parseDouble(data.getString(3))));       //Displays with double decimals
+                    item_cost.setText(cost);
+                    restaurant_separator.setVisibility(View.VISIBLE);
+                    restaurant_name.setVisibility(View.VISIBLE);
+                    image.setVisibility(View.VISIBLE);
+                    restaurant_name.setText(restaurant);
                 }
 
 
@@ -335,7 +357,8 @@ public class Checkout extends FragmentActivity {
 
                     item_dets.setText(data.getString(2));
                     item_quantity.setText(data.getString(4));
-                    item_cost.setText("$" + data.getString(3));
+                    String cost = "$" + String.valueOf(df.format(Double.parseDouble(data.getString(3))));       //Displays with double decimals
+                    item_cost.setText(cost);
 
                     /*reference.child(pushId).setValue(notification);
                     reference.child(pushId).child("items").setValue(itemListing);
@@ -347,7 +370,7 @@ public class Checkout extends FragmentActivity {
                     itemListing.clear();
                     costListing.clear();
                     notification.clear();
-                } else {
+                } else {        //Deals with the item just before restaurant switch
                     Log.d("Outcome", "different");
                     pushId = reference.push().getKey();     //sets a new push id for the different restaurant
                     Log.d("Setting new pushID", pushId);
@@ -376,9 +399,11 @@ public class Checkout extends FragmentActivity {
                     listContainer.addView(childView);
                     Log.d("Activated", "3");
 
+                    restaurant_name.setText(restaurant);
                     item_dets.setText(data.getString(2));
                     item_quantity.setText(data.getString(4));
-                    item_cost.setText("$" + data.getString(3));
+                    String cost = "$" + String.valueOf(df.format(Double.parseDouble(data.getString(3))));       //Displays with double decimals
+                    item_cost.setText(cost);
                     //System.out.println(data.getString(2));
 
 
@@ -387,6 +412,9 @@ public class Checkout extends FragmentActivity {
                     reference.child(pushId).child("cost").setValue(costListing);*/
                     Log.d("The items pushed for " + next_restaurant + " are", itemListing.toString());
                     Toast.makeText(getApplicationContext(), "Order Placed", Toast.LENGTH_SHORT).show();
+                    restaurant_separator.setVisibility(View.GONE);
+                    restaurant_name.setVisibility(View.GONE);
+                    image.setVisibility(View.GONE);
                 }
             }
         }
