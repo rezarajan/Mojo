@@ -7,8 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import bluefirelabs.mojo.handlers.adapters.FirebaseRecyclerAdapterItems;
-
 /**
  * Created by Reza Rajan on 2017-05-24.
  */
@@ -17,11 +15,11 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 
     public static final String DATABASE_NAME = "checkout.db";
     public static final String TABLE_NAME = "checkout_table";
-    public static final String ID = "ID";       //column 1
-    public static final String RESTAURANT = "MENU";       //column 2
-    public static final String ITEM = "ITEM";       //column 3
-    public static final String COST = "COST";       //column 4
-    public static final String QUANTITY = "QUANTITY";       //column 5
+    public static final String ID = "ID";       //column 1      //String 0
+    public static final String RESTAURANT = "MENU";       //column 2    //String 1
+    public static final String ITEM = "ITEM";       //column 3      //String 2
+    public static final String COST = "COST";       //column 4      //String 3
+    public static final String QUANTITY = "QUANTITY";       //column 5      //String 4
 
 
     public DatabaseHelper(Context context) {

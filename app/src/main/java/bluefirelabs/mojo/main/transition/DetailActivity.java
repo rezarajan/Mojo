@@ -43,7 +43,6 @@ import java.util.Map;
 import bluefirelabs.mojo.R;
 import bluefirelabs.mojo.handlers.adapters.FirebaseRecyclerAdapterItems_new;
 import bluefirelabs.mojo.handlers.adapters.Food_List;
-import bluefirelabs.mojo.menu.Checkout;
 import database.DatabaseHelper;
 
 
@@ -216,7 +215,8 @@ public class DetailActivity extends FragmentActivity {
         checkout_icon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(DetailActivity.this, Checkout.class);            //Goes to checkout
+                //Intent intent = new Intent(DetailActivity.this, Checkout.class);            //Goes to checkout
+                Intent intent = new Intent(DetailActivity.this, bluefirelabs.mojo.main.ui.checkout.Checkout.class);            //Goes to checkout
                 startActivity(intent);
             }
         });
