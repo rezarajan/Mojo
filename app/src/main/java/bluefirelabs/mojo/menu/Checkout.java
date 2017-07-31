@@ -202,9 +202,9 @@ public class Checkout extends AppCompatActivity{
                                     restaurant = data.getString(1);     //gets the restaurant name
                                     //data.moveToPosition(position + 1);
                                     if (data.moveToNext() != false) {
-                                        next_restaurant = data.getString(1);
+                                        next_restaurant = data.getString(1);       //comparing the next restaurant
                                     } else {
-                                        next_restaurant = restaurant;
+                                        next_restaurant = restaurant;       //case for the last item in the list
                                     }
                                     Log.d("Comparison Parameters", restaurant + " : " + next_restaurant);
 
