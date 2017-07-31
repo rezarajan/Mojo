@@ -98,9 +98,10 @@ public class Checkout extends AppCompatActivity{
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String name = parent.getItemAtPosition(position).toString();
+                String sanitizedItem = name.replace("'", "''") ; //looks for any "'" in the item name (like S'Mores) so that the DatabaseHelper can properly query it
                 Log.d(TAG, "onItemClicked: You clicked on: " + name);
 
-                Cursor data = myDb.getItemID(name);
+                Cursor data = myDb.getItemID(sanitizedItem);
                 int itemID = -1;
                 while(data.moveToNext()){
                     itemID = data.getInt(0);

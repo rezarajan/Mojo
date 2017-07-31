@@ -97,6 +97,24 @@ public class DetailActivity extends FragmentActivity {
     private static final String[] headStrs = {HEAD1_TRANSITION_NAME, HEAD2_TRANSITION_NAME, HEAD3_TRANSITION_NAME, HEAD4_TRANSITION_NAME};
     //private static final int[] imageIds = {R.drawable.image1, R.drawable.image1, R.drawable.image1, R.drawable.image1};
 
+
+
+     //dealListView() is only done in the onResume state since when the app is started the activity is preloaded as well
+    //This ensures that the items are not loaded twice
+    @Override
+    protected void onResume() {
+        super.onResume();          //Ensures that the animations remain constant
+        listContainer.removeAllViews();     //clears the previous set of items to refresh if the user makes a change at checkout
+        dealListView();     //reloads all the views
+    }
+
+/*    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.d("Activity", "paused");
+        listContainer.removeAllViews();     //clears the previous set of items to refresh if the user makes a change at checkout
+    }*/
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -198,7 +216,7 @@ public class DetailActivity extends FragmentActivity {
         checkout_icon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(DetailActivity.this, Checkout.class);
+                Intent intent = new Intent(DetailActivity.this, Checkout.class);            //Goes to checkout
                 startActivity(intent);
             }
         });
@@ -212,7 +230,7 @@ public class DetailActivity extends FragmentActivity {
         //ViewCompat.setTransitionName(address5, ADDRESS5_TRANSITION_NAME);
         //ViewCompat.setTransitionName(ratingBar, RATINGBAR_TRANSITION_NAME);
 
-        dealListView();
+        //dealListView();
     }
 
 
@@ -507,6 +525,7 @@ public class DetailActivity extends FragmentActivity {
 
 
                                                             View childView = layoutInflater.inflate(R.layout.detail_list_item, null);
+
                                                             listContainer.addView(childView);
 
                                                             //ImageView headView = (ImageView) childView.findViewById(R.id.head);
@@ -566,6 +585,29 @@ public class DetailActivity extends FragmentActivity {
 
 
 
+                                                         String sanitizedItem = item_details.getText().toString().replace("'", "''");        //looks for any "'" in the item name (like S'Mores) so that the DatabaseHelper can properly query it
+                                                         Cursor data = myDb.getItemID(sanitizedItem);        //gets the primary key associated with the item name
+                                                            int itemID = -1;
+                                                            while(data.moveToNext()){
+                                                                itemID = data.getInt(0);
+                                                            }
+                                                            if(itemID > 0){
+
+      /*                                                         myDb.deleteName(itemID, sanitizedItem);     //The item name and ID are used to delete the item on checkbox unchecked
+
+                                                                Snackbar.make(childView, item_details.getText() + " removed from Cart",
+                                                                        Snackbar.LENGTH_LONG)
+                                                                        .setAction("Action", null).show();*/
+
+                                                                checkbox.setChecked(true);
+                                                                Log.d(item_details.getText().toString(), "checked");
+
+                                                            } else {
+                                                                checkbox.setChecked(false);
+                                                            }
+
+
+
 
 
                                                             /*AppCompatCheckBox checkbox = (AppCompatCheckBox) childView.findViewById(R.id.checkb);
@@ -601,14 +643,16 @@ public class DetailActivity extends FragmentActivity {
 
 
                                                                     } else {
-                                                                        Cursor data = myDb.getItemID(item_details.getText().toString());        //gets the primary key associated with the item name
+
+                                                                        String sanitizedItem = item_details.getText().toString().replace("'", "''");        //looks for any "'" in the item name (like S'Mores) so that the DatabaseHelper can properly query it
+                                                                        Cursor data = myDb.getItemID(sanitizedItem);        //gets the primary key associated with the item name
                                                                         int itemID = -1;
                                                                         while(data.moveToNext()){
                                                                             itemID = data.getInt(0);
                                                                         }
                                                                         if(itemID > 0){
 
-                                                                            myDb.deleteName(itemID, item_details.getText().toString());     //The item name and ID are used to delete the item on checkbox unchecked
+                                                                            myDb.deleteName(itemID, sanitizedItem);     //The item name and ID are used to delete the item on checkbox unchecked
 
                                                                             Snackbar.make(v, item_details.getText() + " removed from Cart",
                                                                                     Snackbar.LENGTH_LONG)

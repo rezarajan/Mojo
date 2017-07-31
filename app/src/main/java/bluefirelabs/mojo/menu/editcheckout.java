@@ -53,8 +53,9 @@ public class editcheckout extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 String item = editable_item.getText().toString();
-                if(!item.equals("")){
-                    myDb.updateQuantity(item, selectedID);
+                String sanitizedItem = item.replace("'", "''") ;     //looks for any "'" in the item name (like S'Mores) so that the DatabaseHelper can properly query it
+                if(!sanitizedItem.equals("")){
+                    myDb.updateQuantity(sanitizedItem, selectedID);
                 } else{
                     Snackbar.make(v, "Please enter a quantity",
                             Snackbar.LENGTH_LONG)
@@ -67,8 +68,9 @@ public class editcheckout extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 String item = editable_item.getText().toString();
-                if(!item.equals("")){
-                    myDb.deleteName(selectedID, selectedName);
+                String sanitizedItem = item.replace("'", "''");     //looks for any "'" in the item name (like S'Mores) so that the DatabaseHelper can properly query it
+                if(!sanitizedItem.equals("")){
+                    myDb.deleteName(selectedID, sanitizedItem);
                     editable_item.setText("");
                     Snackbar.make(v, "Deleted",
                             Snackbar.LENGTH_LONG)
