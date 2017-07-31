@@ -1,12 +1,11 @@
-package bluefirelabs.mojo.handlers.online;
+package bluefirelabs.mojo.main.ui.payments;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
+import android.widget.Button;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -34,9 +33,11 @@ public class Payments extends AppCompatActivity {
 
         final Map card = new HashMap<>();
  
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        FloatingActionButton pay = (FloatingActionButton) findViewById(R.id.pay);
-        fab.setOnClickListener(new View.OnClickListener() {
+        /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton pay = (FloatingActionButton) findViewById(R.id.pay);*/
+
+        Button pay = (Button) findViewById(R.id.pay);
+        pay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
                 final Card cardToSave = mCardInputWidget.getCard();

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/detail_list_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -119,8 +120,32 @@
                     android:fontFamily="sans-serif-lif" />
 
 
-
             </RelativeLayout>
+
+            <com.stripe.android.view.CardInputWidget
+                android:id="@+id/card_input_widget"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="30dp"
+                android:background="@color/cardview_dark_background"/>
+
+
+            <!--    <android.support.design.widget.FloatingActionButton
+                    android:id="@+id/pay"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|end"
+                    android:layout_margin="@dimen/fab_margin"
+                    app:srcCompat="@android:drawable/ic_dialog_email" />-->
+
+            <Button
+                android:id="@+id/pay"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="bottom|end"
+                android:layout_margin="@dimen/fab_margin"
+                android:background="@drawable/checkout_icon" />
+
 
         </LinearLayout>
 

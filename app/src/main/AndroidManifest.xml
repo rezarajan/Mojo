@@ -176,7 +176,7 @@
 
         <activity android:name=".barcode.barcodeGenerator" />
         <activity
-            android:name=".handlers.online.Payments"
+            android:name=".main.ui.payments.Payments"
             android:label="@string/title_activity_payments"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity android:name=".menu.gift_order" />

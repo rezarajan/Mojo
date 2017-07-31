@@ -2,10 +2,12 @@ package bluefirelabs.mojo.main.ui.checkout;
 
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -17,6 +19,11 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.stripe.android.Stripe;
+import com.stripe.android.TokenCallback;
+import com.stripe.android.model.Card;
+import com.stripe.android.model.Token;
+import com.stripe.android.view.CardInputWidget;
 
 import java.text.DecimalFormat;
 import java.util.HashMap;
@@ -103,7 +110,77 @@ public class Checkout extends FragmentActivity {
         //pushId = reference.push().getKey();     //String
 
         populateListView();
+        processPayments();
     }
+
+
+
+
+    private void processPayments(){
+        final CardInputWidget mCardInputWidget = (CardInputWidget) findViewById(R.id.card_input_widget);
+
+        final Map card = new HashMap<>();
+
+
+        Button pay = (Button) findViewById(R.id.pay);
+        pay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View view) {
+                final Card cardToSave = mCardInputWidget.getCard();
+                if (cardToSave == null) {
+                    //mErrorDialogHandler.showError("Invalid Card Data");
+                    Snackbar.make(view, "Invalid Card Data", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                } else {
+                    cardToSave.validateNumber();
+                    cardToSave.validateCVC();
+                    if(!cardToSave.validateCard()) {
+                        Snackbar.make(view, "Card Data Invalid", Snackbar.LENGTH_LONG)
+                                .setAction("Action", null).show();
+                    } else {
+                        Snackbar.make(view, "Card Data Valid", Snackbar.LENGTH_LONG)
+                                .setAction("Action", null).show();
+
+                        Stripe stripe = new Stripe(view.getContext(), getResources().getString(R.string.stripe_key));      //TODO: Change this to the official product public key
+                        stripe.createToken(
+                                cardToSave,
+                                new TokenCallback() {
+                                    public void onSuccess(Token token) {
+                                        // Send token to your server
+                                        Log.d("token", token.getCard().toString());
+
+                                        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+                                        FirebaseUser user = firebaseAuth.getCurrentUser();
+                                        String uid = user.getUid();
+                                        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("/stripe_customers/" + uid + "/sources");
+                                        String pushId = reference.push().getKey();     //String
+                                        //reference.child(pushId).child("token").setValue(token.getCard());
+                                        card.put("object", "card");
+                                        card.put("exp_month", cardToSave.getExpMonth());
+                                        card.put("exp_year", cardToSave.getExpYear());
+                                        card.put("number", cardToSave.getNumber());
+                                        card.put("cvc", cardToSave.getCVC());
+                                        reference.child(pushId).child("token").updateChildren(card);
+
+                                        Snackbar.make(view, "Payment Successful", Snackbar.LENGTH_LONG)
+                                                .setAction("Action", null).show();
+
+                                    }
+                                    public void onError(Exception error) {
+                                        // Show localized error message
+                                        Snackbar.make(view, error.getLocalizedMessage(), Snackbar.LENGTH_LONG)
+                                                .setAction("Action", null).show();
+                                    }
+                                }
+                        );
+
+                    }
+                }
+            }
+        });
+    }
+
+
 
     private void populateListView() {
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
@@ -460,242 +537,7 @@ public class Checkout extends FragmentActivity {
     }
 
 
-/*    @Override
-    protected void onResume() {
-        super.onResume();
-        setContentView(R.layout.checkout_layout);
 
-        final LayoutInflater layoutInflater = LayoutInflater.from(this);
-        View childView = layoutInflater.inflate(R.layout.checkout_item, null);
-
-        listContainer.addView(childView);
-
-
-
-        //The checkout item contents
-        restaurant_name = (TextView) childView.findViewById(R.id.restaurant_name);
-        item_quantity = (TextView) childView.findViewById(R.id.item_quantity);
-        item_dets = (TextView) childView.findViewById(R.id.item_dets);
-        item_cost = (TextView) childView.findViewById(R.id.item_cost);
-        item_description = (TextView) childView.findViewById(R.id.item_description);
-
-
-        ////////////////////////////////////////////////////////////////////////////////////
-
-
-        myDb = new DatabaseHelper(this);
-
-        Cursor data = myDb.getAllData();
-        if(data.getCount() > 0){
-*//*            placeorder.setVisibility(View.VISIBLE);
-            cancelButton.setVisibility(View.VISIBLE);
-            mListView.setVisibility(View.VISIBLE);
-            noitems.setVisibility(View.INVISIBLE);*//*
-        } else {
-*//*            placeorder.setVisibility(View.INVISIBLE);
-            cancelButton.setVisibility(View.INVISIBLE);
-            mListView.setVisibility(View.INVISIBLE);
-            noitems.setVisibility(View.VISIBLE);*//*
-        }
-        populateListView();
-        placeorder.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                CharSequence options[] = new CharSequence[] {"Place Order", "Gift"};
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(bluefirelabs.mojo.menu.Checkout.this);
-                builder.setTitle("Checkout");
-                builder.setItems(options, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int position_option) {
-                        // the user clicked on options[position_option]
-
-                        if(position_option == 0) {
-
-                            //for(int i = 0; i<=99; i++){       //this is a test loop to place 100 orders
-                            Log.d("Button clicked", "Placing order");
-
-                            FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-                            DatabaseReference reference = FirebaseDatabase.getInstance().getReference("orders");
-                            FirebaseUser user = firebaseAuth.getCurrentUser();
-                            pushId = reference.push().getKey();     //String
-
-
-                            Map notification = new HashMap<>();
-                            Map itemListing = new HashMap<>();
-                            Map costListing = new HashMap<>();
-
-                            Double total_cost = 0.00;
-
-
-                            //get the data and append to a list
-                            //Cursor data = myDb.getAllData();
-
-                            //order data alphabetically by restaurant name and append to a list
-                            Cursor data = myDb.orderAlpha();
-
-                            ArrayList<String> listData = new ArrayList<>();
-                            //ArrayList<String> listData_comparison = new ArrayList<>();
-                            String restaurant, next_restaurant;
-
-                            int count = data.getCount();
-                            for (int position = 0; position < count; position++) {
-                                data.moveToPosition(position);
-                                Log.d("Database", data.getString(1));
-                                Log.d("Cost", data.getString(3));
-                                total_cost += Double.parseDouble(data.getString(3)) * Double.parseDouble(data.getString(4)) * 1.00; //adding the cost of each item multiplied by the quantity and *1.00 to keep it a double
-
-                            }
-
-                            for (int position = 0; position < count; position++) {
-                                data.moveToPosition(position);
-                                restaurant = data.getString(1);     //gets the restaurant name
-                                //data.moveToPosition(position + 1);
-                                if (data.moveToNext() != false) {
-                                    next_restaurant = data.getString(1);
-                                } else {
-                                    next_restaurant = restaurant;
-                                }
-                                Log.d("Comparison Parameters", restaurant + " : " + next_restaurant);
-
-                                if (restaurant.equals(next_restaurant)) {
-                                    Log.d("Outcome", "same");
-                                    //itemListing.clear();
-                                    //notification.clear();
-                                    //this is done twice since for the case when the restaurants are different
-                                    //the former restaurant will not be added since it resorts to the else case
-                                    data.moveToPosition(position);
-                                    Log.d("Using pushID", String.valueOf(pushId));
-                                    //get the value from the database in column
-                                    //then add it to the ArrayList
-                                    //listData.add(data.getString(2));
-                                    notification.put("user_token", FirebaseInstanceId.getInstance().getToken());
-                                    notification.put("customeruid_to", user.getUid());
-                                    notification.put("customeruid_from", "none");
-                                    notification.put("vendoruid", data.getString(1));
-                                    //notification.put("runneruid", "Runner");
-                                    notification.put("postid", pushId);
-                                    itemListing.put(data.getString(2), data.getString(4));    //itemId, quantity
-                                    costListing.put(data.getString(2), data.getString(3));    //itemId, cost
-
-                                    reference.child(pushId).setValue(notification);
-                                    reference.child(pushId).child("items").setValue(itemListing);
-                                    reference.child(pushId).child("cost").setValue(costListing);
-
-                                    //data.moveToPosition(position + 1);
-                                    if (data.moveToNext() != false) {
-                                        //get the value from the database in column
-                                        //then add it to the ArrayList
-                                        //listData.add(data.getString(2));
-                                        notification.put("user_token", FirebaseInstanceId.getInstance().getToken());
-                                        notification.put("customeruid_to", user.getUid());
-                                        notification.put("customeruid_from", "none");
-                                        notification.put("vendoruid", data.getString(1));
-                                        //notification.put("runneruid", "Runner");
-                                        notification.put("postid", pushId);
-                                        itemListing.put(data.getString(2), data.getString(4));    //itemId, quantity
-                                        costListing.put(data.getString(2), data.getString(3));    //itemId, cost
-                                        reference.child(pushId).setValue(notification);
-                                        reference.child(pushId).child("items").setValue(itemListing);
-                                        reference.child(pushId).child("cost").setValue(costListing);
-                                        Log.d("The items pushed for " + restaurant + " are", itemListing.toString());
-                                    }
-
-                                } else {
-                                    Log.d("Position", String.valueOf(position));
-                                    if (position == 0) {        //for the initial case
-                                        data.moveToPosition(position);
-                                        Log.d("Initial set", data.getString(1) + " with pushID: " + String.valueOf(pushId));
-                                        //get the value from the database in column
-                                        //then add it to the ArrayList
-                                        //listData.add(data.getString(2));
-                                        notification.put("user_token", FirebaseInstanceId.getInstance().getToken());
-                                        notification.put("customeruid_to", user.getUid());
-                                        notification.put("customeruid_from", "none");
-                                        notification.put("vendoruid", data.getString(1));
-                                        //notification.put("runneruid", "Runner");
-                                        notification.put("postid", pushId);
-                                        itemListing.put(data.getString(2), data.getString(4));    //itemId, quantity
-                                        costListing.put(data.getString(2), data.getString(3));    //itemId, cost
-
-
-                                        reference.child(pushId).setValue(notification);
-                                        reference.child(pushId).child("items").setValue(itemListing);
-                                        reference.child(pushId).child("cost").setValue(costListing);
-                                        //Log.d("Push ID", pushId.toString());
-                                        pushId = reference.push().getKey();     //sets a new push id for the different restaurant
-                                        Log.d("Refreshing Push", pushId);
-                                        Log.d("The items pushed for " + restaurant + " are", itemListing.toString());
-                                        itemListing.clear();
-                                        costListing.clear();
-                                        notification.clear();
-                                    } else {
-                                        Log.d("Outcome", "different");
-                                        pushId = reference.push().getKey();     //sets a new push id for the different restaurant
-                                        Log.d("Setting new pushID", pushId);
-                                        itemListing.clear();
-                                        costListing.clear();
-                                        notification.clear();
-                                        Log.d("New info set", data.getString(1));
-                                        //get the value from the database in column
-                                        //then add it to the ArrayList
-                                        //listData.add(data.getString(2));
-                                        notification.put("user_token", FirebaseInstanceId.getInstance().getToken());
-                                        notification.put("customeruid_to", user.getUid());
-                                        notification.put("customeruid_from", "none");
-                                        notification.put("vendoruid", data.getString(1));
-                                        //notification.put("runneruid", "Runner");
-                                        notification.put("postid", pushId);
-                                        itemListing.put(data.getString(2), data.getString(4));    //itemId, quantity
-                                        costListing.put(data.getString(2), data.getString(3));    //itemId, cost
-
-
-                                        reference.child(pushId).setValue(notification);
-                                        reference.child(pushId).child("items").setValue(itemListing);
-                                        reference.child(pushId).child("cost").setValue(costListing);
-                                        Log.d("The items pushed for " + next_restaurant + " are", itemListing.toString());
-                                        Toast.makeText(getApplicationContext(), "Order Placed", Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            }
-
-                            final Map card = new HashMap<>();
-
-                            String uid = user.getUid();
-                            reference = FirebaseDatabase.getInstance().getReference("/stripe_customers/" + uid + "/charges");
-                            String pushId = reference.push().getKey();     //String
-                            //reference.child(pushId).child("token").setValue(token.getCard());
-                            //card.put("amount", 100);
-                            card.put("amount", total_cost * 100); //cost for Stripe is given in cents so multiply by 100 to get the dollar value
-                            reference.child(pushId).setValue(card);
-                            //}
-
-
-                        } else {
-                            Intent intent = new Intent(bluefirelabs.mojo.menu.Checkout.this, gift_order.class);
-                            startActivity(intent);
-                        }
-                    }
-                });
-                builder.show();
-
-
-
-            }
-        });
-
-        cancelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                myDb.deleteAll();
-                populateListView();
-                Toast.makeText(getApplicationContext(), "Cart Cleared", Toast.LENGTH_SHORT).show();
-                placeorder.setVisibility(View.INVISIBLE);
-                cancelButton.setVisibility(View.INVISIBLE);
-            }
-        });
-    }*/
 
 
 }

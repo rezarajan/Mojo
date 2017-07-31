@@ -28,4 +28,6 @@
 
     <string name="action_settings">Settings</string>
     <string name="title_activity_payments">Payments</string>
+
+    <string name="stripe_key">"pk_test_MKkfFv08ZZK0p6I2Uk6lVpaY</string>
 </resources>
