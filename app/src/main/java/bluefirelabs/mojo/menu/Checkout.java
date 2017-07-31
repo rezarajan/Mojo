@@ -175,7 +175,7 @@ public class Checkout extends AppCompatActivity{
                                 Map itemListing = new HashMap<>();
                                 Map costListing = new HashMap<>();
 
-                                int total_cost = 0;
+                                Double total_cost = 0.00;
 
 
                                 //get the data and append to a list
@@ -192,8 +192,8 @@ public class Checkout extends AppCompatActivity{
                                 for (int position = 0; position < count; position++) {
                                     data.moveToPosition(position);
                                     Log.d("Database", data.getString(1));
-                                    Log.d("Cost", data.getString(1));
-                                    total_cost += Integer.parseInt(data.getString(3)) * Integer.parseInt(data.getString(4)); //adding the cost of each item multiplied by the quantity
+                                    Log.d("Cost", data.getString(3));
+                                    total_cost += Double.parseDouble(data.getString(3)) * Double.parseDouble(data.getString(4)) * 1.00; //adding the cost of each item multiplied by the quantity and *1.00 to keep it a double
 
                                 }
 

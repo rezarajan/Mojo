@@ -93,7 +93,7 @@ public class UserHub_test extends FragmentActivity implements android.location.L
     private View positionView;
     private ViewPager viewPager;
     private List<CommonFragment> fragments = new ArrayList<>(); // 供ViewPager使用
-    //private final String[] imageArray = {"https://api.just-eat.ca/images/en-CA/cuisine/Indian/banner?width=1024&quality=50", "https://api.just-eat.ca/images/en-CA/cuisine/Indian/banner?width=1024&quality=50", "https://api.just-eat.ca/images/en-CA/cuisine/Indian/banner?width=1024&quality=50", "https://api.just-eat.ca/images/en-CA/cuisine/Indian/banner?width=1024&quality=50", "https://api.just-eat.ca/images/en-CA/cuisine/Indian/banner?width=1024&quality=50", "https://api.just-eat.ca/images/en-CA/cuisine/Indian/banner?width=1024&quality=50"};
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -216,7 +216,10 @@ public class UserHub_test extends FragmentActivity implements android.location.L
                 //FirebaseMessaging.getInstance().subscribeToTopic("Notifications");
 
         /*Location Functions */
-                if (ActivityCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.checkSelfPermission(getApplicationContext(),
+                        android.Manifest.permission.ACCESS_FINE_LOCATION)
+                        != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplicationContext(),
+                        android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
                     ActivityCompat.requestPermissions(UserHub_test.this, new String[]{
                             android.Manifest.permission.ACCESS_COARSE_LOCATION,
@@ -607,7 +610,10 @@ public class UserHub_test extends FragmentActivity implements android.location.L
         locationManager.requestLocationUpdates(provider, 400, 1, this);
 
 
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this,
+                android.Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
+                android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
             return;
         }
@@ -675,7 +681,8 @@ public class UserHub_test extends FragmentActivity implements android.location.L
             try{
                 JSONObject jsonObject = new JSONObject(s);
 
-                String address = ((JSONArray)jsonObject.get("results")).getJSONObject(0).get("formatted_address").toString();
+                String address = ((JSONArray)jsonObject.get("results")).getJSONObject(0)
+                        .get("formatted_address").toString();
                 Log.d("Address", address);
                 //small_description.setText(address);
 
