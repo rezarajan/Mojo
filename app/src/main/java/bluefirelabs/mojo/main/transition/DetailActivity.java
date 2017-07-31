@@ -1,5 +1,6 @@
 package bluefirelabs.mojo.main.transition;
 
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -42,6 +43,7 @@ import java.util.Map;
 import bluefirelabs.mojo.R;
 import bluefirelabs.mojo.handlers.adapters.FirebaseRecyclerAdapterItems_new;
 import bluefirelabs.mojo.handlers.adapters.Food_List;
+import bluefirelabs.mojo.menu.Checkout;
 import database.DatabaseHelper;
 
 
@@ -74,10 +76,11 @@ public class DetailActivity extends FragmentActivity {
 
     private View address1, address2, address3, address5;
     private TextView address4;
-    private ImageView imageView;
+    private ImageView imageView, checkout_icon;
     //private CircleImageView imageView;
     private RatingBar ratingBar;
-    private LinearLayout detail_layout;
+    //private LinearLayout detail_layout;
+    private RelativeLayout detail_layout;
     private View accent_layout;
     LinearLayout linearLayout;
     RelativeLayout detail_item;
@@ -116,8 +119,10 @@ public class DetailActivity extends FragmentActivity {
         //address5 = findViewById(R.id.address5);
         //ratingBar = (RatingBar) findViewById(R.id.rating);
         listContainer = (LinearLayout) findViewById(R.id.detail_list_container);
+        checkout_icon = (ImageView) findViewById(R.id.checkout_icon);
         //accent_layout = (LinearLayout) findViewById(R.id.accent_layout);
-        detail_layout = (LinearLayout) findViewById(R.id.detail_background);
+        //detail_layout = (LinearLayout) findViewById(R.id.detail_background);
+        detail_layout = (RelativeLayout) findViewById(R.id.detail_background);
         detail_item = (RelativeLayout) findViewById(R.id.detail_card_layout);
         accent_layout = (View) findViewById(R.id.accent_layout);        //separator colour
         linearLayout = (LinearLayout) findViewById(R.id.detail_list_layout);
@@ -189,6 +194,14 @@ public class DetailActivity extends FragmentActivity {
 
                     }
                 });
+
+        checkout_icon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(DetailActivity.this, Checkout.class);
+                startActivity(intent);
+            }
+        });
 
 
         ViewCompat.setTransitionName(imageView, IMAGE_TRANSITION_NAME);
