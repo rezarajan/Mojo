@@ -156,7 +156,6 @@
             android:name=".main.transition.DetailActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".main.ui.user.UserHub_carousel"
             android:configChanges="orientation"
@@ -180,7 +179,8 @@
             android:name=".handlers.online.Payments"
             android:label="@string/title_activity_payments"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
-        <activity android:name=".menu.gift_order"></activity>
+        <activity android:name=".menu.gift_order" />
+        <activity android:name=".main.ui.checkout.Checkout"></activity>
     </application>
 
 </manifest>

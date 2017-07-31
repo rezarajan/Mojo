@@ -199,87 +199,6 @@ public class DetailActivity extends FragmentActivity {
         //ViewCompat.setTransitionName(address5, ADDRESS5_TRANSITION_NAME);
         //ViewCompat.setTransitionName(ratingBar, RATINGBAR_TRANSITION_NAME);
 
-
-
-
-/*        mRestaurantRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        mLinearLayoutManager = new LinearLayoutManager(getApplicationContext());
-        mLinearLayoutManager.setStackFromEnd(true);
-
-
-
-
-        final DatabaseReference mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference("menu").child("Starbucks").child("Espresso & Cold Brew").child("Items");
-        mFirebaseAdapter = new FirebaseRecyclerAdapter<Food_List, FirebaseRecyclerAdapterItems_new.RecyclerViewHolder>(
-                Food_List.class,
-                R.layout.detail_list_item,
-                FirebaseRecyclerAdapterItems_new.RecyclerViewHolder.class,
-                mFirebaseDatabaseReference
-        ) {
-
-            @Override
-            protected void populateViewHolder(final FirebaseRecyclerAdapterItems_new.RecyclerViewHolder viewHolder, Food_List model, int position) {
-
-                // Log.d("Name", model.getName());
-                //Log.d("Description: ", model.getDescription());
-                //viewHolder.itemDescription.setText(model.getDescription());
-                //viewHolder.itemTitle.setText(model.getRestaurant());
-                viewHolder.item_details.setText(model.getName());
-                viewHolder.item_cost.setText("$" + String.valueOf(model.getCost()));
-                viewHolder.item_quantity.setText(model.getQuantity());
-
-                //viewHolder.itemIcon.setImageResource(R.drawable.restaurant_icon);
-                // Picasso.with(getApplicationContext()).load(model.getIcon()).into(viewHolder.itemIcon);
-                viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        int position = viewHolder.getAdapterPosition();
-
-                        Snackbar.make(v, "Click detected on item " + position,
-                                Snackbar.LENGTH_LONG)
-                                .setAction("Action", null).show();
-
-
-
-*//*                                                                //adding the item to the database for checkout
-                                                                boolean isInserted = myDb.insertData(restaurant,       //The restaurant name
-                                                                        viewHolder.itemTitle.getText().toString(),     //The item name
-                                                                        viewHolder.itemDescription.getText().toString().replace("$",""),       //The item cost
-                                                                        "1");                                //Adds the item at at the specific position to the database
-                                                                //Default Quantity is 1
-
-                                                                Log.d("Adapted Restaurant", restaurant);
-                                                                if (isInserted == true) {
-                                                                    Snackbar.make(v, "Data Inserted",
-                                                                            Snackbar.LENGTH_LONG)
-                                                                            .setAction("Action", null).show();
-                                                                } else {
-                                                                    Snackbar.make(v, "Data not Inserted",
-                                                                            Snackbar.LENGTH_LONG)
-                                                                            .setAction("Action", null).show();
-                                                                }*//*
-                    }
-                });
-            }
-        };
-
-
-
-        mFirebaseAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver(){
-            @Override
-            public void onItemRangeInserted(int positionStart, int itemCount) {
-                super.onItemRangeInserted(positionStart, itemCount);
-                int restaurantCount = mFirebaseAdapter.getItemCount();
-                int lastVisiblePosition = mLinearLayoutManager.findLastVisibleItemPosition();
-                if(lastVisiblePosition == -1 || (positionStart >= (restaurantCount -1) && lastVisiblePosition == (positionStart -1))){
-                    mRestaurantRecyclerView.scrollToPosition(positionStart);
-                }
-            }
-        });
-
-        mRestaurantRecyclerView.setLayoutManager(mLinearLayoutManager);
-        mRestaurantRecyclerView.setAdapter(mFirebaseAdapter);
-        mRestaurantRecyclerView.setNestedScrollingEnabled(false);*/
         dealListView();
     }
 
@@ -543,6 +462,10 @@ public class DetailActivity extends FragmentActivity {
                                 Log.d("List Item", "Key: " + s);
 
 
+
+
+
+
                                 final DatabaseReference reference = FirebaseDatabase.getInstance().getReference(restaurant).child(restaurantName).child(s).child("Items");
                                 reference.addValueEventListener(new ValueEventListener() {
                                     @Override
@@ -552,7 +475,14 @@ public class DetailActivity extends FragmentActivity {
 
                                         if (items != null) {
 
-                                            for (String itemKey : items.keySet()) {
+                                            Map.Entry<String, Object> entry = items.entrySet().iterator().next();
+
+                                            final String itemKeyInitial = entry.getKey();       //Setting up the identifier for the first item on the list to compare and set header
+                                            Log.d("Initial key", itemKeyInitial);
+
+                                            for (final String itemKey : items.keySet()) {
+
+
 
                                                 final DatabaseReference reference = FirebaseDatabase.getInstance().getReference(restaurant).child(restaurantName).child(s).child("Items").child(itemKey);
                                                 reference.addValueEventListener(new ValueEventListener() {
@@ -562,17 +492,32 @@ public class DetailActivity extends FragmentActivity {
 
                                                         if (item_information != null) {
 
+
                                                             View childView = layoutInflater.inflate(R.layout.detail_list_item, null);
                                                             listContainer.addView(childView);
 
                                                             //ImageView headView = (ImageView) childView.findViewById(R.id.head);
+                                                            final TextView item_name = (TextView) childView.findViewById(R.id.item_type);
                                                             final TextView item_details = (TextView) childView.findViewById(R.id.item_dets);
                                                             final TextView item_cost = (TextView) childView.findViewById(R.id.item_cost);
                                                             final TextView item_quantity = (TextView) childView.findViewById(R.id.item_quantity);
 
+
                                                             item_details.setText(item_information.get("name").toString());
                                                             String cost = "$" + item_information.get("cost").toString();
                                                             item_cost.setText(cost);
+
+
+                                                            if(item_details.getText().equals(itemKeyInitial)){      //Comparing the first value for each item type to set the header for the different category
+                                                                //item_name.setVisibility(childView.GONE);        //Sets the view for item type to gone for the actual food items
+                                                                item_name.setText(s);        //Sets the view for item type to gone for the actual food items
+
+                                                            } else {
+                                                                item_name.setVisibility(childView.GONE);        //Sets the view for item type to gone for the actual food items
+
+                                                            }
+
+
                                                             //item_quantity.setText(item_information.get("Quantity").toString());
                                                             item_quantity.setText("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua");
 
