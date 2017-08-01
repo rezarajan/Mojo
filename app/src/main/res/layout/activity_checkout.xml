@@ -117,34 +117,109 @@
                     android:text="$2.00"
                     android:textColor="#000000"
                     android:textSize="18sp"
-                    android:fontFamily="sans-serif-lif" />
+                    android:fontFamily="sans-serif-light" />
 
 
             </RelativeLayout>
 
-            <com.stripe.android.view.CardInputWidget
-                android:id="@+id/card_input_widget"
-                android:layout_width="match_parent"
+
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="30dp"
-                android:background="@color/cardview_dark_background"/>
+                android:layout_marginLeft="8dp"
+                android:textColor="@color/black"
+                android:textSize="24sp"
+                android:fontFamily="sans-serif-light"
+                android:text="Payment"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="#cfcfd6"
+                android:padding="0dp"
+                android:layout_margin="8dp"
+                android:id="@+id/payment_separator" />
+
+            <RadioGroup
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/default_payment"
+                        android:buttonTint="@color/black"
+                        android:checked="true"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="4dp"
+                        android:layout_toEndOf="@id/default_payment"
+                        android:layout_alignBaseline="@id/default_payment"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        android:fontFamily="sans-serif"
+                        android:text="Use default payment source"/>
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/add_payment"
+                        android:layout_below="@id/default_payment"
+                        android:layout_marginTop="10dp"
+                        android:buttonTint="@color/black"
+                        android:checked="false"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toEndOf="@id/add_payment"
+                        android:layout_alignBaseline="@id/add_payment"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        android:fontFamily="sans-serif"
+                        android:text="Add payment source"/>
+
+                    <com.stripe.android.view.CardInputWidget
+                        android:id="@+id/card_input_widget"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/add_payment"
+                        android:layout_centerHorizontal="true"
+                        android:layout_margin="10dp"
+                        android:paddingLeft="20dp"
+                        android:paddingRight="20dp"
+                        android:background="@color/cardview_dark_background"/>
 
 
-            <!--    <android.support.design.widget.FloatingActionButton
-                    android:id="@+id/pay"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom|end"
-                    android:layout_margin="@dimen/fab_margin"
-                    app:srcCompat="@android:drawable/ic_dialog_email" />-->
+                    <!--    <android.support.design.widget.FloatingActionButton
+                            android:id="@+id/pay"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="bottom|end"
+                            android:layout_margin="@dimen/fab_margin"
+                            app:srcCompat="@android:drawable/ic_dialog_email" />-->
 
-            <Button
-                android:id="@+id/pay"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_gravity="bottom|end"
-                android:layout_margin="@dimen/fab_margin"
-                android:background="@drawable/checkout_icon" />
+                    <Button
+                        android:id="@+id/pay"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_gravity="bottom|end"
+                        android:layout_below="@id/card_input_widget"
+                        android:layout_alignParentEnd="true"
+                        android:layout_margin="@dimen/fab_margin"
+                        android:background="@drawable/checkout_icon" />
+
+                </RelativeLayout>
+            </RadioGroup>
+
+
+
 
 
         </LinearLayout>

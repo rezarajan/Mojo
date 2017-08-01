@@ -10,9 +10,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -48,6 +48,8 @@ public class Checkout extends FragmentActivity {
     View accentLayout, restaurant_separator;
     private String pushId;
 
+    private RadioButton defaultPayment, addPayment;
+
 
 
 
@@ -55,6 +57,9 @@ public class Checkout extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_checkout);
+
+        defaultPayment = (RadioButton) findViewById(R.id.default_payment);
+        addPayment = (RadioButton) findViewById(R.id.add_payment);
 
 /*        listContainer = (LinearLayout) findViewById(R.id.checkout_list_container);
 
@@ -260,7 +265,7 @@ public class Checkout extends FragmentActivity {
                     reference.child(pushId).child("items").setValue(itemListing);
                     reference.child(pushId).child("cost").setValue(costListing);
                     Log.d("The items pushed for " + next_restaurant + " are", itemListing.toString());
-                    Toast.makeText(getApplicationContext(), "Order Placed", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getApplicationContext(), "Order Placed", Toast.LENGTH_SHORT).show();
                 }
             }
         }
@@ -277,6 +282,8 @@ public class Checkout extends FragmentActivity {
 
         myDb.deleteAll();       //clears the database of current items
         //}
+
+        finish();
     }
 
 
@@ -286,62 +293,91 @@ public class Checkout extends FragmentActivity {
         final Map card = new HashMap<>();
 
 
+        defaultPayment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addPayment.setChecked(false);
+            }
+        });
+
+        addPayment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                defaultPayment.setChecked(false);
+            }
+        });
+
         Button pay = (Button) findViewById(R.id.pay);
         pay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
-                final Card cardToSave = mCardInputWidget.getCard();
-                if (cardToSave == null) {
-                    //mErrorDialogHandler.showError("Invalid Card Data");
-                    Snackbar.make(view, "Invalid Card Data", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
-                } else {
-                    cardToSave.validateNumber();
-                    cardToSave.validateCVC();
-                    if(!cardToSave.validateCard()) {
-                        Snackbar.make(view, "Card Data Invalid", Snackbar.LENGTH_LONG)
+
+
+                if(addPayment.isChecked()){
+                    final Card cardToSave = mCardInputWidget.getCard();
+                    if (cardToSave == null) {
+                        //mErrorDialogHandler.showError("Invalid Card Data");
+                        Snackbar.make(view, "Invalid Card Data", Snackbar.LENGTH_LONG)
                                 .setAction("Action", null).show();
                     } else {
-                        Snackbar.make(view, "Card Data Valid", Snackbar.LENGTH_LONG)
-                                .setAction("Action", null).show();
+                        cardToSave.validateNumber();
+                        cardToSave.validateCVC();
+                        if(!cardToSave.validateCard()) {
+                            Snackbar.make(view, "Card Data Invalid", Snackbar.LENGTH_LONG)
+                                    .setAction("Action", null).show();
+                        } else {
+                            Snackbar.make(view, "Card Data Valid", Snackbar.LENGTH_LONG)
+                                    .setAction("Action", null).show();
 
-                        Stripe stripe = new Stripe(view.getContext(), getResources().getString(R.string.stripe_key));      //TODO: Change this to the official product public key
-                        stripe.createToken(
-                                cardToSave,
-                                new TokenCallback() {
-                                    public void onSuccess(Token token) {
-                                        // Send token to your server
-                                        Log.d("token", token.getCard().toString());
+                            Stripe stripe = new Stripe(view.getContext(), getResources().getString(R.string.stripe_key));      //TODO: Change this to the official product public key
+                            stripe.createToken(
+                                    cardToSave,
+                                    new TokenCallback() {
+                                        public void onSuccess(Token token) {
+                                            // Send token to your server
+                                            Log.d("token", token.getCard().toString());
 
-                                        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-                                        FirebaseUser user = firebaseAuth.getCurrentUser();
-                                        String uid = user.getUid();
-                                        Log.d("UID for Payment", uid);
-                                        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("/stripe_customers/" + uid + "/sources");
-                                        String pushId = reference.push().getKey();     //String
-                                        //reference.child(pushId).child("token").setValue(token.getCard());
-                                        card.put("object", "card");
-                                        card.put("exp_month", cardToSave.getExpMonth());
-                                        card.put("exp_year", cardToSave.getExpYear());
-                                        card.put("number", cardToSave.getNumber());
-                                        card.put("cvc", cardToSave.getCVC());
-                                        getPaymentsReady();
-                                        reference.child(pushId).child("token").updateChildren(card);
+                                            FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+                                            FirebaseUser user = firebaseAuth.getCurrentUser();
+                                            String uid = user.getUid();
+                                            Log.d("UID for Payment", uid);
+                                            DatabaseReference reference = FirebaseDatabase.getInstance().getReference("/stripe_customers/" + uid + "/sources");
+                                            String pushId = reference.push().getKey();     //String
+                                            //reference.child(pushId).child("token").setValue(token.getCard());
+                                            card.put("object", "card");
+                                            card.put("exp_month", cardToSave.getExpMonth());
+                                            card.put("exp_year", cardToSave.getExpYear());
+                                            card.put("number", cardToSave.getNumber());
+                                            card.put("cvc", cardToSave.getCVC());
 
-                                        Snackbar.make(view, "Payment Successful", Snackbar.LENGTH_LONG)
-                                                .setAction("Action", null).show();
 
+                                            //creates a new source before payment
+                                            reference.child(pushId).child("token").updateChildren(card);
+
+
+                                            getPaymentsReady();
+
+                                            Snackbar.make(view, "Payment Successful", Snackbar.LENGTH_LONG)
+                                                    .setAction("Action", null).show();
+
+                                        }
+                                        public void onError(Exception error) {
+                                            // Show localized error message
+                                            Snackbar.make(view, error.getLocalizedMessage(), Snackbar.LENGTH_LONG)
+                                                    .setAction("Action", null).show();
+                                        }
                                     }
-                                    public void onError(Exception error) {
-                                        // Show localized error message
-                                        Snackbar.make(view, error.getLocalizedMessage(), Snackbar.LENGTH_LONG)
-                                                .setAction("Action", null).show();
-                                    }
-                                }
-                        );
+                            );
 
+                        }
                     }
+
                 }
+
+                else {
+                    getPaymentsReady();
+                }
+
             }
         });
     }
