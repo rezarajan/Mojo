@@ -1,6 +1,193 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
 
-</LinearLayout>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    card_view:cardBackgroundColor="@android:color/transparent"
+    card_view:cardElevation="0dp">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:scaleType="centerCrop"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="14dp"
+                android:layout_marginEnd="14dp"
+                android:layout_alignParentStart="true"
+                android:id="@+id/image"
+                android:src="@drawable/ic_mojo_logo" />
+
+            <TextView
+                android:id="@+id/orderid"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_toEndOf="@id/image"
+                android:layout_alignBottom="@id/image"
+                android:paddingTop="8dp"
+                android:text="Order ID"
+                android:textColor="@color/white"
+                android:textSize="24sp"
+                android:fontFamily="sans-serif-condensed" />
+
+            <TextView
+                android:id="@+id/restaurant_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_alignStart="@id/orderid"
+                android:layout_below="@id/orderid"
+                android:paddingBottom="8dp"
+                android:text="Restaurant"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:fontFamily="sans-serif-condensed" />
+
+
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="2dp"
+                android:layout_alignStart="@id/restaurant_name"
+                android:layout_below="@id/restaurant_name"
+                android:background="#cfcfd6"
+                android:padding="0dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:id="@+id/restaurant_separator" />
+
+        </RelativeLayout>
+
+
+
+
+
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/detail_card_layout"
+            android:paddingLeft="30dp"
+            android:paddingBottom="20dp"
+            android:paddingRight="30dp">
+
+            <!--            <ImageView
+                            android:id="@+id/head"
+                            android:layout_width="35dp"
+                            android:layout_height="35dp"
+                            android:layout_alignParentTop="true"
+                            android:layout_alignParentLeft="true"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/ic_material_product_icon_192pxxhdpi" />-->
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:scaleType="centerCrop"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="14dp"
+                android:layout_marginEnd="14dp"
+                android:layout_alignParentStart="true"
+                android:id="@+id/status_initial_icon"
+                android:src="@drawable/ic_mojo_logo" />
+
+
+            <!--            <CheckBox
+                            android:id="@+id/checkb"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:button="@drawable/custom_checkbox"
+                            android:layout_alignParentStart="true"
+                            android:layout_centerVertical="true"
+                            android:theme="@style/MyCheckBox"/>-->
+
+            <!--            <android.support.v7.widget.AppCompatCheckBox
+                            android:id="@+id/checkb"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:button="@drawable/custom_checkbox"
+                            android:layout_alignParentStart="true"
+                            android:layout_centerVertical="true" />-->
+
+            <TextView
+                android:id="@+id/status_initial"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@id/status_initial_icon"
+                android:layout_toEndOf="@id/status_initial_icon"
+                android:paddingStart="10dp"
+                android:paddingTop="20dp"
+                android:text="Item"
+                android:textColor="@color/white"
+                android:textSize="18dp"
+                android:fontFamily="sans-serif-condensed"
+                />
+
+            <!--            <TextView
+                            android:id="@+id/item_description"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/item_cost"
+                            android:layout_alignStart="@id/item_dets"
+                            android:paddingBottom="8dp"
+                            android:paddingLeft="30dp"
+                            android:paddingTop="4dp"
+                            android:text=""
+                            android:textColor="#000000"
+                            android:textSize="12dp"
+                            android:fontFamily="sans-serif"  />-->
+
+            <TextView
+                android:id="@+id/status_initial_time"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/status_initial"
+                android:layout_alignStart="@id/status_initial"
+                android:paddingBottom="8dp"
+                android:paddingStart="10dp"
+                android:paddingTop="4dp"
+                android:text="Description"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                android:fontFamily="sans-serif"  />
+
+            <!--            <Button
+                            android:id="@+id/add_to_cart"
+                            style="?android:attr/borderlessButtonStyle"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginEnd="20dp"
+                            android:background="@drawable/rectangle_stroke"
+                            android:text="+"
+                            android:textColor="@color/black" />-->
+
+        </RelativeLayout>
+
+        <!--        <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:background="#cfcfd6"
+                    android:padding="0dp"
+                    android:layout_margin="8dp"
+                    android:id="@+id/accent_layout" />-->
+
+    </LinearLayout>
+
+
+</android.support.v7.widget.CardView>
