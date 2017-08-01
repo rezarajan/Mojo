@@ -182,7 +182,8 @@ public class DetailActivity extends FragmentActivity {
                                                         }); */
                         Palette palette;
                         palette = Palette.from(bitmap).generate();
-                        mutedColor = palette.getDarkVibrantColor(defaultColor);
+                        //mutedColor = palette.getDarkVibrantColor(defaultColor);
+                        mutedColor = palette.getVibrantColor(defaultColor);
                         //mutedColor = palette.getMutedColor(defaultColor);
 
                         /* Setting the colours of the detail view based on the icon clicked */

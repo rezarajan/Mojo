@@ -347,7 +347,8 @@ public class UserHub_test extends FragmentActivity implements android.location.L
                                                         }); */
                                                                 Palette palette;
                                                                 palette = Palette.from(bitmap).generate();
-                                                                mutedColor = palette.getDarkVibrantColor(defaultColor);
+                                                                //mutedColor = palette.getDarkVibrantColor(defaultColor);
+                                                                mutedColor = palette.getVibrantColor(defaultColor);
                                                                 //mutedColor = palette.getMutedColor(defaultColor);
 
                                                                 if (firstTime) {
@@ -416,7 +417,8 @@ public class UserHub_test extends FragmentActivity implements android.location.L
                                                         }); */
                                                                     Palette palette;
                                                                     palette = Palette.from(bitmap).generate();
-                                                                    mutedColor = palette.getDarkVibrantColor(defaultColor);
+                                                                   // mutedColor = palette.getDarkVibrantColor(defaultColor);
+                                                                    mutedColor = palette.getVibrantColor(defaultColor);
                                                                     //mutedColor = palette.getMutedColor(defaultColor);
                                                                     Log.d("Changing", "activated 2");
                                                                     //obj.colorFetched(position, vibrantColor, mutedColor);
@@ -459,7 +461,8 @@ public class UserHub_test extends FragmentActivity implements android.location.L
                                                     }); */
                                                                     Palette palette;
                                                                     palette = Palette.from(bitmap).generate();
-                                                                    vibrantColor = palette.getDarkVibrantColor(defaultColor);
+                                                                    //vibrantColor = palette.getDarkVibrantColor(defaultColor);
+                                                                    vibrantColor = palette.getVibrantColor(defaultColor);
                                                                     //mutedColor = palette.getMutedColor(defaultColor);
                                                                     Log.d("Changing", "activated 4");
                                                                     //obj.colorFetched(position, vibrantColor, mutedColor);
