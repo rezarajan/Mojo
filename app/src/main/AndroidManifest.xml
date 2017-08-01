@@ -180,7 +180,8 @@
             android:label="@string/title_activity_payments"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity android:name=".menu.gift_order" />
-        <activity android:name=".main.ui.checkout.Checkout"></activity>
+        <activity android:name=".main.ui.checkout.Checkout" />
+        <activity android:name=".main.ui.user.order_tracking"></activity>
     </application>
 
 </manifest>

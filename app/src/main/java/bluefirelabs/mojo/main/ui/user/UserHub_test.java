@@ -15,6 +15,7 @@ import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -94,7 +95,8 @@ public class UserHub_test extends FragmentActivity implements android.location.L
     private ImageView checkout_icon;
     private View positionView;
     private ViewPager viewPager;
-    private List<CommonFragment> fragments = new ArrayList<>(); // 供ViewPager使用
+    private List<CommonFragment> fragments = new ArrayList<>();
+    private TabLayout tablayout;
 
 
     @Override
@@ -117,7 +119,6 @@ public class UserHub_test extends FragmentActivity implements android.location.L
         });
 
 
-        // 1. 沉浸式状态栏
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             Window window = getWindow();
 /*            window.setFlags(
@@ -127,9 +128,13 @@ public class UserHub_test extends FragmentActivity implements android.location.L
             // add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
 
-            window.setFlags(
+/*            window.setFlags(
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
-                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);   */
+
+            window.setFlags(
+                    WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+                    WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
         }
 
         argbEvaluator = new ArgbEvaluator();
@@ -160,9 +165,12 @@ public class UserHub_test extends FragmentActivity implements android.location.L
     private void fillViewPager() {
         indicatorTv = (TextView) findViewById(R.id.indicator_tv);
         viewPager = (ViewPager) findViewById(R.id.viewpager);
+        tablayout = (TabLayout) findViewById(R.id.tabDots);
+
 
         // 1. viewPager添加parallax效果，使用PageTransformer就足够了
         viewPager.setPageTransformer(false, new CustPagerTransformer(this));
+        tablayout.setupWithViewPager(viewPager, true);
 
         firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser user = firebaseAuth.getCurrentUser();

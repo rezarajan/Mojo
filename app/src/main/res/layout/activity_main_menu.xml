@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/colorLightBlue">
 
     <!--1. 中间可滑动的viewPager-->
@@ -19,7 +20,15 @@
 
     </android.support.v4.view.ViewPager>
 
-    <!--2. 底部的三个图标按钮-->
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tabDots"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="70dp"
+        app:tabBackground="@drawable/tab_selector"
+        app:tabGravity="center"
+        app:tabIndicatorHeight="0dp"/>
 
     <!--TODO: Change this to make a bottom layout, maybe the  order indicator-->
 
@@ -33,7 +42,8 @@
         android:gravity="center_horizontal"
         android:text="RESTAURANT"
         android:layout_margin="70dp"
-        android:textColor="#ffffff" />
+        android:textColor="#ffffff"
+        android:visibility="gone"/>
 
 
     <RelativeLayout
