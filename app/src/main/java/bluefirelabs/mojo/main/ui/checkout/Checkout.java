@@ -26,6 +26,7 @@ import com.stripe.android.model.Token;
 import com.stripe.android.view.CardInputWidget;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -117,96 +118,46 @@ public class Checkout extends FragmentActivity {
     private void getPaymentsReady(){
 
 
+        //for(int i = 0; i<=99; i++){       //this is a test loop to place 100 orders
+        Log.d("Button clicked", "Placing order");
+
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("orders");
         FirebaseUser user = firebaseAuth.getCurrentUser();
         pushId = reference.push().getKey();     //String
 
-        DecimalFormat df = new DecimalFormat("#.00");
-
 
         Map notification = new HashMap<>();
         Map itemListing = new HashMap<>();
         Map costListing = new HashMap<>();
-        //Map previousPlaceholder = new HashMap<>();
-        String previousPlaceholder_Dets = "";
-        String previousPlaceholder_Quantity = "";
-        String previousPlaceholder_Cost = "";
-        String previousPlaceholder_Description = "";
 
-        Double subtotalCost = 0.00;
+        Double total_cost = 0.00;
+
+
+        //get the data and append to a list
+        //Cursor data = myDb.getAllData();
 
         //order data alphabetically by restaurant name and append to a list
         Cursor data = myDb.orderAlpha();
 
-        String restaurant, next_restaurant;     //to compare data for different restaurants
+        ArrayList<String> listData = new ArrayList<>();
+        //ArrayList<String> listData_comparison = new ArrayList<>();
+        String restaurant, next_restaurant;
 
         int count = data.getCount();
         for (int position = 0; position < count; position++) {
             data.moveToPosition(position);
             Log.d("Database", data.getString(1));
             Log.d("Cost", data.getString(3));
-            subtotalCost+= Double.parseDouble(data.getString(3)) * Double.parseDouble(data.getString(4)) * 1.00; //adding the cost of each item multiplied by the quantity and *1.00 to keep it a double
+            total_cost += Double.parseDouble(data.getString(3)) * Double.parseDouble(data.getString(4)) * 1.00; //adding the cost of each item multiplied by the quantity and *1.00 to keep it a double
+
         }
 
-
-        String subtotal = "$" + String.valueOf(df.format(subtotalCost));
-        item_subtotal_value.setText(subtotal);      //setting the subtotal value on the main layout
-
-
-        Double finalCost = subtotalCost + Double.parseDouble(item_tax_value.getText().toString().replace("$", ""));
-        String total = "$" + String.valueOf(df.format(finalCost));
-        item_total_value.setText(total);      //setting the subtotal value on the main layout
-
-
-
-        listContainer = (LinearLayout) findViewById(R.id.checkout_list_container);
-
-        Log.d("Checkout", "populating items");
-
-        //get the data and append to a list
-        //Cursor data = myDb.getAllData();
-
-/*        ArrayList<String> itemnameData = new ArrayList<>();
-        while(data.moveToNext()){
-            //get the value of the item name from the database in column
-            //then add it to the ArrayList
-            itemnameData.add(data.getString(2));
-        }*/
-
-
-        //Iterator<String> iterator = itemnameData.iterator();
-
-/*        for(int i = 0; i < itemnameData.size(); i++){
-            final LayoutInflater layoutInflater = LayoutInflater.from(this);
-            View childView = layoutInflater.inflate(R.layout.checkout_item, null);
-            listContainer.addView(childView);
-
-
-
-            //The checkout item contents
-            restaurant_name = (TextView) childView.findViewById(R.id.restaurant_name);
-            item_quantity = (TextView) childView.findViewById(R.id.item_quantity);
-            item_dets = (TextView) childView.findViewById(R.id.item_dets);
-            item_cost = (TextView) childView.findViewById(R.id.item_cost);
-            item_description = (TextView) childView.findViewById(R.id.item_description);
-            item_dets.setText(itemnameData.get(i));
-            System.out.println(itemnameData.get(i));
-        }*/
-
-
-
-        /*Filtering algorithm for different restaurants*/
         for (int position = 0; position < count; position++) {
-
-
             data.moveToPosition(position);
             restaurant = data.getString(1);     //gets the restaurant name
-
-
-
             //data.moveToPosition(position + 1);
-            if (data.moveToNext()) {
+            if (data.moveToNext() != false) {
                 next_restaurant = data.getString(1);       //comparing the next restaurant
             } else {
                 next_restaurant = restaurant;       //case for the last item in the list
@@ -214,7 +165,6 @@ public class Checkout extends FragmentActivity {
             Log.d("Comparison Parameters", restaurant + " : " + next_restaurant);
 
             if (restaurant.equals(next_restaurant)) {
-                restaurant_name.setText(restaurant);
                 Log.d("Outcome", "same");
                 //itemListing.clear();
                 //notification.clear();
@@ -231,41 +181,18 @@ public class Checkout extends FragmentActivity {
                 notification.put("vendoruid", data.getString(1));
                 //notification.put("runneruid", "Runner");
                 notification.put("postid", pushId);
-                itemListing.put(data.getString(2), data.getString(4));    //itemId (name), quantity
-                costListing.put(data.getString(2), data.getString(3));    //itemId (name), cost
-
-                //item_description.setText(data.getString(3));
-                //TODO: Make a new column in the SQL Database to accomodate the item description
+                itemListing.put(data.getString(2), data.getString(4));    //itemId, quantity
+                costListing.put(data.getString(2), data.getString(3));    //itemId, cost
 
                 reference.child(pushId).setValue(notification);
                 reference.child(pushId).child("items").setValue(itemListing);
                 reference.child(pushId).child("cost").setValue(costListing);
-                //Log.d("Push ID", pushId.toString());
-                pushId = reference.push().getKey();     //sets a new push id for the different restaurant
-                Log.d("Refreshing Push", pushId);
-                Log.d("The items pushed for " + restaurant + " are", itemListing.toString());
 
-
-
-                //System.out.println(data.getString(2));
-
-/*                item_dets.setText(data.getString(2));
-                item_quantity.setText(data.getString(4));
-                item_cost.setText(data.getString(3));       //TODO: Item cost has to be multiplied by quantity*/
-
-
-                /*reference.child(pushId).setValue(notification);
-                reference.child(pushId).child("items").setValue(itemListing);
-                reference.child(pushId).child("cost").setValue(costListing);
-*/
                 //data.moveToPosition(position + 1);
-                if (data.moveToNext()) {        //Deals with the first and other items, and the first and other items after restaurant switch
+                if (data.moveToNext() != false) {
                     //get the value from the database in column
                     //then add it to the ArrayList
                     //listData.add(data.getString(2));
-
-
-                    data.moveToPosition(position);
                     notification.put("user_token", FirebaseInstanceId.getInstance().getToken());
                     notification.put("customeruid_to", user.getUid());
                     notification.put("customeruid_from", "none");
@@ -274,33 +201,11 @@ public class Checkout extends FragmentActivity {
                     notification.put("postid", pushId);
                     itemListing.put(data.getString(2), data.getString(4));    //itemId, quantity
                     costListing.put(data.getString(2), data.getString(3));    //itemId, cost
-
-
-                    reference.child(pushId).setValue(notification);
-                    reference.child(pushId).child("items").setValue(itemListing);
-                    reference.child(pushId).child("cost").setValue(costListing);
-                    Log.d("The items pushed for " + restaurant + " are", itemListing.toString());
-                    System.out.println("Moving to next");
-
-                } else {        //Deals with the last item, or item after restaurant switch
-                    data.moveToPosition(position);
-                    data.moveToPosition(position);
-                    notification.put("user_token", FirebaseInstanceId.getInstance().getToken());
-                    notification.put("customeruid_to", user.getUid());
-                    notification.put("customeruid_from", "none");
-                    notification.put("vendoruid", data.getString(1));
-                    //notification.put("runneruid", "Runner");
-                    notification.put("postid", pushId);
-                    itemListing.put(data.getString(2), data.getString(4));    //itemId, quantity
-                    costListing.put(data.getString(2), data.getString(3));    //itemId, cost
-
-
                     reference.child(pushId).setValue(notification);
                     reference.child(pushId).child("items").setValue(itemListing);
                     reference.child(pushId).child("cost").setValue(costListing);
                     Log.d("The items pushed for " + restaurant + " are", itemListing.toString());
                 }
-
 
             } else {
                 Log.d("Position", String.valueOf(position));
@@ -324,15 +229,13 @@ public class Checkout extends FragmentActivity {
                     reference.child(pushId).child("items").setValue(itemListing);
                     reference.child(pushId).child("cost").setValue(costListing);
                     //Log.d("Push ID", pushId.toString());
-
-
                     pushId = reference.push().getKey();     //sets a new push id for the different restaurant
                     Log.d("Refreshing Push", pushId);
                     Log.d("The items pushed for " + restaurant + " are", itemListing.toString());
                     itemListing.clear();
                     costListing.clear();
                     notification.clear();
-                } else {        //Deals with the item just before restaurant switch
+                } else {
                     Log.d("Outcome", "different");
                     pushId = reference.push().getKey();     //sets a new push id for the different restaurant
                     Log.d("Setting new pushID", pushId);
@@ -343,10 +246,6 @@ public class Checkout extends FragmentActivity {
                     //get the value from the database in column
                     //then add it to the ArrayList
                     //listData.add(data.getString(2));
-
-                    data.moveToPosition(position);
-
-
                     notification.put("user_token", FirebaseInstanceId.getInstance().getToken());
                     notification.put("customeruid_to", user.getUid());
                     notification.put("customeruid_from", "none");
@@ -355,8 +254,6 @@ public class Checkout extends FragmentActivity {
                     notification.put("postid", pushId);
                     itemListing.put(data.getString(2), data.getString(4));    //itemId, quantity
                     costListing.put(data.getString(2), data.getString(3));    //itemId, cost
-
-                    //System.out.println(data.getString(2));
 
 
                     reference.child(pushId).setValue(notification);
@@ -368,8 +265,6 @@ public class Checkout extends FragmentActivity {
             }
         }
 
-
-
         final Map card = new HashMap<>();
 
         String uid = user.getUid();
@@ -377,8 +272,9 @@ public class Checkout extends FragmentActivity {
         String pushId = reference.push().getKey();     //String
         //reference.child(pushId).child("token").setValue(token.getCard());
         //card.put("amount", 100);
-        card.put("amount", finalCost * 100); //cost for Stripe is given in cents so multiply by 100 to get the dollar value
+        card.put("amount", total_cost * 100); //cost for Stripe is given in cents so multiply by 100 to get the dollar value
         reference.child(pushId).setValue(card);
+        //}
     }
 
 
@@ -418,6 +314,7 @@ public class Checkout extends FragmentActivity {
                                         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
                                         FirebaseUser user = firebaseAuth.getCurrentUser();
                                         String uid = user.getUid();
+                                        Log.d("UID for Payment", uid);
                                         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("/stripe_customers/" + uid + "/sources");
                                         String pushId = reference.push().getKey();     //String
                                         //reference.child(pushId).child("token").setValue(token.getCard());
@@ -457,22 +354,10 @@ public class Checkout extends FragmentActivity {
 
         DecimalFormat df = new DecimalFormat("#.00");
 
-
-        Map notification = new HashMap<>();
-        Map itemListing = new HashMap<>();
-        Map costListing = new HashMap<>();
-        //Map previousPlaceholder = new HashMap<>();
-        String previousPlaceholder_Dets = "";
-        String previousPlaceholder_Quantity = "";
-        String previousPlaceholder_Cost = "";
-        String previousPlaceholder_Description = "";
-
         Double subtotalCost = 0.00;
 
-        //order data alphabetically by restaurant name and append to a list
         Cursor data = myDb.orderAlpha();
 
-        String restaurant, next_restaurant;     //to compare data for different restaurants
 
         int count = data.getCount();
         for (int position = 0; position < count; position++) {
@@ -496,262 +381,6 @@ public class Checkout extends FragmentActivity {
         listContainer = (LinearLayout) findViewById(R.id.checkout_list_container);
 
         Log.d("Checkout", "populating items");
-
-        //get the data and append to a list
-        //Cursor data = myDb.getAllData();
-
-/*        ArrayList<String> itemnameData = new ArrayList<>();
-        while(data.moveToNext()){
-            //get the value of the item name from the database in column
-            //then add it to the ArrayList
-            itemnameData.add(data.getString(2));
-        }*/
-
-
-        //Iterator<String> iterator = itemnameData.iterator();
-
-/*        for(int i = 0; i < itemnameData.size(); i++){
-            final LayoutInflater layoutInflater = LayoutInflater.from(this);
-            View childView = layoutInflater.inflate(R.layout.checkout_item, null);
-            listContainer.addView(childView);
-            //The checkout item contents
-            restaurant_name = (TextView) childView.findViewById(R.id.restaurant_name);
-            item_quantity = (TextView) childView.findViewById(R.id.item_quantity);
-            item_dets = (TextView) childView.findViewById(R.id.item_dets);
-            item_cost = (TextView) childView.findViewById(R.id.item_cost);
-            item_description = (TextView) childView.findViewById(R.id.item_description);
-            item_dets.setText(itemnameData.get(i));
-            System.out.println(itemnameData.get(i));
-        }*/
-
-
-
-        /*Filtering algorithm for different restaurants*/
-/*        for (int position = 0; position < count; position++) {
-
-            *//*Setting up the card view for each item *//*
-
-            final LayoutInflater layoutInflater = LayoutInflater.from(this);
-            View childView = layoutInflater.inflate(R.layout.checkout_item, null);
-
-
-
-            //The checkout item contents
-            restaurant_name = (TextView) childView.findViewById(R.id.restaurant_name);
-            item_quantity = (TextView) childView.findViewById(R.id.item_quantity);
-            item_dets = (TextView) childView.findViewById(R.id.item_dets);
-            item_cost = (TextView) childView.findViewById(R.id.item_cost);
-            item_description = (TextView) childView.findViewById(R.id.item_description);
-
-            restaurant_separator = (View) childView.findViewById(R.id.restaurant_separator);
-            restaurant_name = (TextView) childView.findViewById(R.id.restaurant_name);
-
-            image = (ImageView) childView.findViewById(R.id.image);
-
-            //////////////////////////////////////////////////////////////////////////////////
-
-*//*
-            listContainer.addView(childView);
-            item_dets.setText(data.getString(2));
-            item_quantity.setText(data.getString(4));
-            item_cost.setText(data.getString(3));
-*//*
-
-
-            data.moveToPosition(position);
-            restaurant = data.getString(1);     //gets the restaurant name
-            restaurant_separator.setVisibility(View.VISIBLE);
-            restaurant_name.setVisibility(View.VISIBLE);
-            image.setVisibility(View.VISIBLE);
-            restaurant_name.setText(restaurant);
-
-
-
-            //data.moveToPosition(position + 1);
-            if (data.moveToNext()) {
-                next_restaurant = data.getString(1);       //comparing the next restaurant
-            } else {
-                next_restaurant = restaurant;       //case for the last item in the list
-            }
-            Log.d("Comparison Parameters", restaurant + " : " + next_restaurant);
-
-            if (restaurant.equals(next_restaurant)) {
-                //restaurant_name.setText(restaurant);
-                Log.d("Outcome", "same");
-                //itemListing.clear();
-                //notification.clear();
-                //this is done twice since for the case when the restaurants are different
-                //the former restaurant will not be added since it resorts to the else case
-                data.moveToPosition(position);
-                Log.d("Using pushID", String.valueOf(pushId));
-                //get the value from the database in column
-                //then add it to the ArrayList
-                //listData.add(data.getString(2));
-                notification.put("user_token", FirebaseInstanceId.getInstance().getToken());
-                notification.put("customeruid_to", user.getUid());
-                notification.put("customeruid_from", "none");
-                notification.put("vendoruid", data.getString(1));
-                //notification.put("runneruid", "Runner");
-                notification.put("postid", pushId);
-                itemListing.put(data.getString(2), data.getString(4));    //itemId (name), quantity
-                costListing.put(data.getString(2), data.getString(3));    //itemId (name), cost
-
-                //item_description.setText(data.getString(3));
-                //TODO: Make a new column in the SQL Database to accomodate the item description
-
-                //Log.d("Push ID", pushId.toString());
-                pushId = reference.push().getKey();     //sets a new push id for the different restaurant
-                Log.d("Refreshing Push", pushId);
-                Log.d("The items pushed for " + restaurant + " are", itemListing.toString());
-
-
-
-                //data.moveToPosition(position + 1);
-                if (data.moveToNext()) {        //Deals with the first and other items, and the first and other items after restaurant switch
-                    //get the value from the database in column
-                    //then add it to the ArrayList
-                    //listData.add(data.getString(2));
-
-
-                    data.moveToPosition(position);
-                    notification.put("user_token", FirebaseInstanceId.getInstance().getToken());
-                    notification.put("customeruid_to", user.getUid());
-                    notification.put("customeruid_from", "none");
-                    notification.put("vendoruid", data.getString(1));
-                    //notification.put("runneruid", "Runner");
-                    notification.put("postid", pushId);
-                    itemListing.put(data.getString(2), data.getString(4));    //itemId, quantity
-                    costListing.put(data.getString(2), data.getString(3));    //itemId, cost
-
-                    listContainer.addView(childView);
-                    Log.d("Activated", "1");
-
-
-                    //restaurant_name.setText(restaurant);
-
-                    item_dets.setText(data.getString(2));
-                    item_quantity.setText(data.getString(4));
-                    String cost = "$" + String.valueOf(df.format(Double.parseDouble(data.getString(3))));       //Displays with double decimals
-                    item_cost.setText(cost);
-
-                    reference.child(pushId).setValue(notification);
-                    reference.child(pushId).child("items").setValue(itemListing);
-                    reference.child(pushId).child("cost").setValue(costListing);
-                    Log.d("The items pushed for " + restaurant + " are", itemListing.toString());
-                    System.out.println("Moving to next");
-
-                } else {        //Deals with the last item, or item after restaurant switch
-                    data.moveToPosition(position);
-
-                    listContainer.addView(childView);
-                    Log.d("Activated", "0");
-
-                    restaurant_separator.setVisibility(View.VISIBLE);
-                    restaurant_name.setVisibility(View.VISIBLE);
-                    image.setVisibility(View.VISIBLE);
-
-                    item_dets.setText(data.getString(2));
-                    item_quantity.setText(data.getString(4));
-                    String cost = "$" + String.valueOf(df.format(Double.parseDouble(data.getString(3))));       //Displays with double decimals
-                    item_cost.setText(cost);
-                    restaurant_name.setText(restaurant);
-
-                    *//*restaurant_separator.setVisibility(View.GONE);
-                    restaurant_name.setVisibility(View.GONE);
-                    image.setVisibility(View.GONE);*//*
-                }
-
-
-            } else {
-                Log.d("Position", String.valueOf(position));
-                if (position == 0) {        //for the initial case
-                    data.moveToPosition(position);
-                    Log.d("Initial set", data.getString(1) + " with pushID: " + String.valueOf(pushId));
-                    //get the value from the database in column
-                    //then add it to the ArrayList
-                    //listData.add(data.getString(2));
-                    notification.put("user_token", FirebaseInstanceId.getInstance().getToken());
-                    notification.put("customeruid_to", user.getUid());
-                    notification.put("customeruid_from", "none");
-                    notification.put("vendoruid", data.getString(1));
-                    //notification.put("runneruid", "Runner");
-                    notification.put("postid", pushId);
-                    itemListing.put(data.getString(2), data.getString(4));    //itemId, quantity
-                    costListing.put(data.getString(2), data.getString(3));    //itemId, cost
-
-
-                    listContainer.addView(childView);
-                    Log.d("Activated", "2");
-                    restaurant_separator.setVisibility(View.VISIBLE);
-                    restaurant_name.setVisibility(View.VISIBLE);
-                    image.setVisibility(View.VISIBLE);
-
-                    item_dets.setText(data.getString(2));
-                    item_quantity.setText(data.getString(4));
-                    String cost = "$" + String.valueOf(df.format(Double.parseDouble(data.getString(3))));       //Displays with double decimals
-                    item_cost.setText(cost);
-
-                    *//*reference.child(pushId).setValue(notification);
-                    reference.child(pushId).child("items").setValue(itemListing);
-                    reference.child(pushId).child("cost").setValue(costListing);*//*
-                    //Log.d("Push ID", pushId.toString());
-                    pushId = reference.push().getKey();     //sets a new push id for the different restaurant
-                    Log.d("Refreshing Push", pushId);
-                    Log.d("The items pushed for " + restaurant + " are", itemListing.toString());
-                    itemListing.clear();
-                    costListing.clear();
-                    notification.clear();
-                } else {        //Deals with the item just before restaurant switch
-                    Log.d("Outcome", "different");
-                    pushId = reference.push().getKey();     //sets a new push id for the different restaurant
-                    Log.d("Setting new pushID", pushId);
-                    itemListing.clear();
-                    costListing.clear();
-                    notification.clear();
-                    Log.d("New info set", data.getString(1));
-                    //get the value from the database in column
-                    //then add it to the ArrayList
-                    //listData.add(data.getString(2));
-
-                    data.moveToPosition(position);
-
-
-                    notification.put("user_token", FirebaseInstanceId.getInstance().getToken());
-                    notification.put("customeruid_to", user.getUid());
-                    notification.put("customeruid_from", "none");
-                    notification.put("vendoruid", data.getString(1));
-                    //notification.put("runneruid", "Runner");
-                    notification.put("postid", pushId);
-                    itemListing.put(data.getString(2), data.getString(4));    //itemId, quantity
-                    costListing.put(data.getString(2), data.getString(3));    //itemId, cost
-                    //duplicateComparisonParameter.put(data.getString(2), data.getString(4));     //using itemListing to compare for duplicates
-
-
-                    listContainer.addView(childView);
-                    Log.d("Activated", "3");
-
-                    restaurant_name.setText(restaurant);
-                    item_dets.setText(data.getString(2));
-                    item_quantity.setText(data.getString(4));
-                    String cost = "$" + String.valueOf(df.format(Double.parseDouble(data.getString(3))));       //Displays with double decimals
-                    item_cost.setText(cost);
-                    //System.out.println(data.getString(2));
-
-
-                    *//*reference.child(pushId).setValue(notification);
-                    reference.child(pushId).child("items").setValue(itemListing);
-                    reference.child(pushId).child("cost").setValue(costListing);*//*
-                    Log.d("The items pushed for " + next_restaurant + " are", itemListing.toString());
-                    Toast.makeText(getApplicationContext(), "Order Placed", Toast.LENGTH_SHORT).show();
-                    restaurant_separator.setVisibility(View.GONE);
-                    restaurant_name.setVisibility(View.GONE);
-                    image.setVisibility(View.GONE);
-                }
-            }
-        }*/
-
-
-
 
             Double total_cost = 0.00;
 
@@ -797,36 +426,6 @@ public class Checkout extends FragmentActivity {
             }
 
             data.moveToPosition(position);      //resetting to the current position
-
-            //Setting visibility based on comprison parameters
-
-            //1.Enabling visibility of the separators if the restaurant is new
-
-/*            if(!placeHolder.equals(placeHolder_previous)){
-                restaurant_separator.setVisibility(View.VISIBLE);
-                restaurant_name.setVisibility(View.VISIBLE);
-                image.setVisibility(View.VISIBLE);
-            }
-
-            else if(placeHolder.equals(placeHolder_previous)){
-                restaurant_separator.setVisibility(View.GONE);
-                restaurant_name.setVisibility(View.GONE);
-                image.setVisibility(View.GONE);
-            }
-
-            if(placeHolder.equals(placeHolder_future)){
-                restaurant_separator.setVisibility(View.GONE);
-                restaurant_name.setVisibility(View.GONE);
-                image.setVisibility(View.GONE);
-
-            }
-
-            if(!placeHolder.equals(placeHolder_future)){
-                restaurant_separator.setVisibility(View.VISIBLE);
-                restaurant_name.setVisibility(View.VISIBLE);
-                image.setVisibility(View.VISIBLE);
-
-            }*/
 
 
             if(placeHolder.equals(placeHolder_previous)) {
@@ -911,138 +510,6 @@ public class Checkout extends FragmentActivity {
 
 
         }
-
-/*            for (int position = 0; position < count; position++) {
-                data.moveToPosition(position);
-                Log.d("Database", data.getString(1));
-                Log.d("Cost", data.getString(3));
-                total_cost += Double.parseDouble(data.getString(3)) * Double.parseDouble(data.getString(4)) * 1.00; //adding the cost of each item multiplied by the quantity and *1.00 to keep it a double
-
-            }
-
-            for (int position = 0; position < count; position++) {
-                data.moveToPosition(position);
-                restaurant = data.getString(1);     //gets the restaurant name
-                //data.moveToPosition(position + 1);
-                if (data.moveToNext() != false) {
-                    next_restaurant = data.getString(1);       //comparing the next restaurant
-                } else {
-                    next_restaurant = restaurant;       //case for the last item in the list
-                }
-                Log.d("Comparison Parameters", restaurant + " : " + next_restaurant);
-
-                if (restaurant.equals(next_restaurant)) {
-                    Log.d("Outcome", "same");
-                    //itemListing.clear();
-                    //notification.clear();
-                    //this is done twice since for the case when the restaurants are different
-                    //the former restaurant will not be added since it resorts to the else case
-                    data.moveToPosition(position);
-                    Log.d("Using pushID", String.valueOf(pushId));
-                    //get the value from the database in column
-                    //then add it to the ArrayList
-                    //listData.add(data.getString(2));
-                    notification.put("user_token", FirebaseInstanceId.getInstance().getToken());
-                    notification.put("customeruid_to", user.getUid());
-                    notification.put("customeruid_from", "none");
-                    notification.put("vendoruid", data.getString(1));
-                    //notification.put("runneruid", "Runner");
-                    notification.put("postid", pushId);
-                    itemListing.put(data.getString(2), data.getString(4));    //itemId, quantity
-                    costListing.put(data.getString(2), data.getString(3));    //itemId, cost
-
-                    reference.child(pushId).setValue(notification);
-                    reference.child(pushId).child("items").setValue(itemListing);
-                    reference.child(pushId).child("cost").setValue(costListing);
-
-                    //data.moveToPosition(position + 1);
-                    if (data.moveToNext() != false) {
-                        //get the value from the database in column
-                        //then add it to the ArrayList
-                        //listData.add(data.getString(2));
-                        notification.put("user_token", FirebaseInstanceId.getInstance().getToken());
-                        notification.put("customeruid_to", user.getUid());
-                        notification.put("customeruid_from", "none");
-                        notification.put("vendoruid", data.getString(1));
-                        //notification.put("runneruid", "Runner");
-                        notification.put("postid", pushId);
-                        itemListing.put(data.getString(2), data.getString(4));    //itemId, quantity
-                        costListing.put(data.getString(2), data.getString(3));    //itemId, cost
-                        reference.child(pushId).setValue(notification);
-                        reference.child(pushId).child("items").setValue(itemListing);
-                        reference.child(pushId).child("cost").setValue(costListing);
-                        Log.d("The items pushed for " + restaurant + " are", itemListing.toString());
-                    }
-
-                } else {
-                    Log.d("Position", String.valueOf(position));
-                    if (position == 0) {        //for the initial case
-                        data.moveToPosition(position);
-                        Log.d("Initial set", data.getString(1) + " with pushID: " + String.valueOf(pushId));
-                        //get the value from the database in column
-                        //then add it to the ArrayList
-                        //listData.add(data.getString(2));
-                        notification.put("user_token", FirebaseInstanceId.getInstance().getToken());
-                        notification.put("customeruid_to", user.getUid());
-                        notification.put("customeruid_from", "none");
-                        notification.put("vendoruid", data.getString(1));
-                        //notification.put("runneruid", "Runner");
-                        notification.put("postid", pushId);
-                        itemListing.put(data.getString(2), data.getString(4));    //itemId, quantity
-                        costListing.put(data.getString(2), data.getString(3));    //itemId, cost
-
-
-                        reference.child(pushId).setValue(notification);
-                        reference.child(pushId).child("items").setValue(itemListing);
-                        reference.child(pushId).child("cost").setValue(costListing);
-                        //Log.d("Push ID", pushId.toString());
-                        pushId = reference.push().getKey();     //sets a new push id for the different restaurant
-                        Log.d("Refreshing Push", pushId);
-                        Log.d("The items pushed for " + restaurant + " are", itemListing.toString());
-                        itemListing.clear();
-                        costListing.clear();
-                        notification.clear();
-                    } else {
-                        Log.d("Outcome", "different");
-                        pushId = reference.push().getKey();     //sets a new push id for the different restaurant
-                        Log.d("Setting new pushID", pushId);
-                        itemListing.clear();
-                        costListing.clear();
-                        notification.clear();
-                        Log.d("New info set", data.getString(1));
-                        //get the value from the database in column
-                        //then add it to the ArrayList
-                        //listData.add(data.getString(2));
-                        notification.put("user_token", FirebaseInstanceId.getInstance().getToken());
-                        notification.put("customeruid_to", user.getUid());
-                        notification.put("customeruid_from", "none");
-                        notification.put("vendoruid", data.getString(1));
-                        //notification.put("runneruid", "Runner");
-                        notification.put("postid", pushId);
-                        itemListing.put(data.getString(2), data.getString(4));    //itemId, quantity
-                        costListing.put(data.getString(2), data.getString(3));    //itemId, cost
-
-
-                        reference.child(pushId).setValue(notification);
-                        reference.child(pushId).child("items").setValue(itemListing);
-                        reference.child(pushId).child("cost").setValue(costListing);
-                        Log.d("The items pushed for " + next_restaurant + " are", itemListing.toString());
-                        Toast.makeText(getApplicationContext(), "Order Placed", Toast.LENGTH_SHORT).show();
-                    }
-                }
-            }
-
-            final Map card = new HashMap<>();
-
-            String uid = user.getUid();
-            reference = FirebaseDatabase.getInstance().getReference("/stripe_customers/" + uid + "/charges");
-            String pushId = reference.push().getKey();     //String
-            //reference.child(pushId).child("token").setValue(token.getCard());
-            //card.put("amount", 100);
-            card.put("amount", total_cost * 100); //cost for Stripe is given in cents so multiply by 100 to get the dollar value
-            reference.child(pushId).setValue(card);
-            //}*/
-
 
 
 
