@@ -38,7 +38,7 @@
                 android:layout_height="40dp"
                 android:layout_margin="20dp"
                 android:layout_alignParentEnd="true"
-                android:src="@drawable/checkout_icon"/>
+                android:src="@drawable/checkout_icon" />
 
 
             <!--            <LinearLayout

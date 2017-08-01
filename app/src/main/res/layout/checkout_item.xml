@@ -14,33 +14,50 @@
         android:orientation="vertical">
 
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center"
-            android:scaleType="centerCrop"
-            android:layout_marginTop="20dp"
-            android:id="@+id/image" />
-
-        <TextView
-            android:id="@+id/restaurant_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:paddingTop="8dp"
-            android:text="Restaurant"
-            android:textColor="@color/black"
-            android:textSize="18sp"
-            android:fontFamily="sans-serif-condensed" />
-
-
-        <View
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:background="#cfcfd6"
-            android:padding="0dp"
-            android:layout_margin="8dp"
-            android:id="@+id/restaurant_separator" />
+            android:layout_height="wrap_content">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:scaleType="centerCrop"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="14dp"
+                android:layout_marginEnd="14dp"
+                android:layout_alignParentStart="true"
+                android:id="@+id/image"
+                android:src="@drawable/ic_mojo_logo" />
+
+            <TextView
+                android:id="@+id/restaurant_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_toEndOf="@id/image"
+                android:layout_alignBottom="@id/image"
+                android:paddingTop="8dp"
+                android:text="Restaurant"
+                android:textColor="@color/black"
+                android:textSize="24sp"
+                android:fontFamily="sans-serif-condensed" />
+
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="2dp"
+                android:layout_alignStart="@id/restaurant_name"
+                android:layout_below="@id/restaurant_name"
+                android:background="#cfcfd6"
+                android:padding="0dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:id="@+id/restaurant_separator" />
+
+        </RelativeLayout>
+
+
+
 
 
 
@@ -65,13 +82,15 @@
 
             <TextView
                 android:id="@+id/item_quantity"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:layout_alignParentStart="true"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
+                android:gravity="center"
                 android:text="1"
-                android:textColor="@color/black"/>
+                android:textColor="@color/white"
+                android:background="@color/colorPrimary"/>
 
             <!--            <CheckBox
                             android:id="@+id/checkb"
@@ -94,7 +113,7 @@
                 android:id="@+id/item_dets"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
-                android:paddingLeft="30dp"
+                android:paddingStart="30dp"
                 android:paddingTop="8dp"
                 android:text="Item"
                 android:textColor="#000000"
@@ -108,8 +127,8 @@
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@id/item_dets"
                 android:layout_alignParentEnd="true"
-                android:paddingLeft="8dp"
-                android:paddingRight="30dp"
+                android:paddingStart="8dp"
+                android:paddingEnd="30dp"
                 android:paddingTop="4dp"
                 android:text="$1.00"
                 android:textColor="@color/black"

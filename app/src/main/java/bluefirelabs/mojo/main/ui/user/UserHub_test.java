@@ -243,7 +243,7 @@ public class UserHub_test extends FragmentActivity implements android.location.L
                 } else {
                     getLocation();
                 }
-                locationManager.requestLocationUpdates(provider, 400, 1, UserHub_test.this);
+                locationManager.requestLocationUpdates(provider, 10000, 100, UserHub_test.this);
                 Location myLocation = locationManager.getLastKnownLocation(provider);
                 if(myLocation == null){
                     getLocation();
@@ -580,18 +580,14 @@ public class UserHub_test extends FragmentActivity implements android.location.L
         firebaseTask(myCallback);
     }
 
-    /**
-     * 更新指示器
-     */
+
     private void updateIndicatorTv() {
         int totalNum = viewPager.getAdapter().getCount();
         int currentItem = viewPager.getCurrentItem() + 1;
         indicatorTv.setText(Html.fromHtml("<font color='#12edf0'>" + currentItem + "</font>  /  " + totalNum));
     }
 
-    /**
-     * 调整沉浸式菜单的title
-     */
+
     private void dealStatusBar() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             int statusBarHeight = getStatusBarHeight();
@@ -621,7 +617,7 @@ public class UserHub_test extends FragmentActivity implements android.location.L
     public void getLocation() {
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         provider = locationManager.getBestProvider(new Criteria(), false);
-        locationManager.requestLocationUpdates(provider, 400, 1, this);
+        locationManager.requestLocationUpdates(provider, 10000, 100, this);
 
 
         if (ActivityCompat.checkSelfPermission(this,

@@ -18,6 +18,22 @@
             android:id="@+id/detail_background"
             android:background="@color/cardview_light_background">
 
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:padding="4dp"
+                android:layout_margin="8dp"
+                android:src="@drawable/ic_mojo_logo"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="#cfcfd6"
+                android:padding="0dp"
+                android:layout_margin="4dp" />
+
+
+
 
 
             <LinearLayout
@@ -33,6 +49,7 @@
                 android:padding="0dp"
                 android:layout_margin="8dp"
                 android:id="@+id/accent_layout" />
+
 
             <RelativeLayout
                 android:layout_width="match_parent"
