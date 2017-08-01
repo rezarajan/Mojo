@@ -274,6 +274,8 @@ public class Checkout extends FragmentActivity {
         //card.put("amount", 100);
         card.put("amount", total_cost * 100); //cost for Stripe is given in cents so multiply by 100 to get the dollar value
         reference.child(pushId).setValue(card);
+
+        myDb.deleteAll();       //clears the database of current items
         //}
     }
 

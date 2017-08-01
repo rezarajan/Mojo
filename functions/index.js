@@ -714,7 +714,8 @@ exports.requestOrderMonitor = functions.database.ref("uid/{uid}/requests/{pushId
     //return admin.messaging().sendToTopic("usertest", payload, options);
 
 	console.log("Vendor: " + status.vendoruid);
-	return admin.messaging().sendToTopic(status.vendoruid, payload, options);		//using the vendoruid as the topic
+	//return admin.messaging().sendToTopic(status.vendoruid, payload, options);		//using the vendoruid as the topic
+		return admin.messaging().sendToTopic(status.customer, payload, options);
 	}
 	else{
 		return;
