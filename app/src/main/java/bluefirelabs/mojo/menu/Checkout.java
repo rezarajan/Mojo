@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -42,6 +43,7 @@ public class Checkout extends AppCompatActivity{
     private Button placeorder, cancelButton;
     private TextView noitems;
     private String pushId;
+    private ImageView checkout_icon;
 
 
     @Override
@@ -146,6 +148,7 @@ public class Checkout extends AppCompatActivity{
             mListView.setVisibility(View.INVISIBLE);
             noitems.setVisibility(View.VISIBLE);
         }
+
         populateListView();
         placeorder.setOnClickListener(new View.OnClickListener() {
             @Override

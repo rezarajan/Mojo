@@ -27,6 +27,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.firebase.geofire.GeoFire;
@@ -89,7 +90,8 @@ public class UserHub_test extends FragmentActivity implements android.location.L
     private DatabaseReference mFirebaseDatabaseReference;
     private FirebaseRecyclerAdapter<Food_List, FirebaseRecyclerAdapterRestaurants.RecyclerViewHolder> mFirebaseAdapter;
 
-    private TextView indicatorTv, restaurantName_indicator;
+    private TextView indicatorTv, restaurantName_indicator, location_indicator;
+    private ImageView checkout_icon;
     private View positionView;
     private ViewPager viewPager;
     private List<CommonFragment> fragments = new ArrayList<>(); // 供ViewPager使用
@@ -101,6 +103,18 @@ public class UserHub_test extends FragmentActivity implements android.location.L
         setContentView(R.layout.activity_main_menu);
 
         restaurantName_indicator = (TextView) findViewById(R.id.restaurantName_indicator);
+        location_indicator = (TextView) findViewById(R.id.location_indicator);
+
+        checkout_icon = (ImageView) findViewById(R.id.checkout_icon);
+
+        checkout_icon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Intent intent = new Intent(DetailActivity.this, Checkout.class);            //Goes to checkout
+                Intent intent = new Intent(getApplicationContext(), bluefirelabs.mojo.main.ui.checkout.Checkout.class);            //Goes to checkout
+                startActivity(intent);
+            }
+        });
 
 
         // 1. 沉浸式状态栏
@@ -138,9 +152,9 @@ public class UserHub_test extends FragmentActivity implements android.location.L
         myCallback.callbackCall("listing");
     }
 
-    public void setRestaurantName(final MyCallback_2 myCallback_2, String restaurantName) {
+    public void setRestaurantName(final MyCallback_2 myCallback_2, TextView textView, String restaurantName) {
 
-        myCallback_2.callbackCall(restaurantName);
+        myCallback_2.callbackCall(textView, restaurantName);
     }
 
     private void fillViewPager() {
@@ -155,8 +169,8 @@ public class UserHub_test extends FragmentActivity implements android.location.L
 
         final MyCallback_2 myCallback_2 = new MyCallback_2() {
             @Override
-            public void callbackCall(String restaurantName) {
-                restaurantName_indicator.setText(restaurantName);
+            public void callbackCall(TextView textView, String restaurantName) {
+                textView.setText(restaurantName);
 
             }
         };
@@ -271,7 +285,7 @@ public class UserHub_test extends FragmentActivity implements android.location.L
                         public void onKeyEntered(String key, GeoLocation location) {
                             System.out.println(String.format("Key %s entered the search area at [%f,%f]", key, location.latitude, location.longitude));
 
-
+                            setRestaurantName(myCallback_2, location_indicator, "Welcome to \n"+ key.toUpperCase());
 
 
                             final DatabaseReference reference = FirebaseDatabase.getInstance().getReference(restaurant).child(key);
@@ -378,7 +392,7 @@ public class UserHub_test extends FragmentActivity implements android.location.L
                                                 //Log.d("URL", fragments.get(position%10).dataReturn());
 
                                                 //sets the restaurant name
-                                                setRestaurantName(myCallback_2, dataSnapshot.child("id" + String.valueOf(position)).child("restaurant").getValue().toString().toUpperCase());
+                                                setRestaurantName(myCallback_2, restaurantName_indicator, dataSnapshot.child("id" + String.valueOf(position)).child("restaurant").getValue().toString().toUpperCase());
 
                                                 if (position < hopperValues.size() - 1) {
                                                     Picasso.with(getApplicationContext())
