@@ -293,7 +293,8 @@ public class UserHub_test extends FragmentActivity implements android.location.L
                         public void onKeyEntered(String key, GeoLocation location) {
                             System.out.println(String.format("Key %s entered the search area at [%f,%f]", key, location.latitude, location.longitude));
 
-                            setRestaurantName(myCallback_2, location_indicator, "Welcome to \n"+ key.toUpperCase());
+                            //setRestaurantName(myCallback_2, location_indicator, "Welcome to \n"+ key.toUpperCase());
+                            setRestaurantName(myCallback_2, location_indicator, key.toUpperCase());
 
 
                             final DatabaseReference reference = FirebaseDatabase.getInstance().getReference(restaurant).child(key);

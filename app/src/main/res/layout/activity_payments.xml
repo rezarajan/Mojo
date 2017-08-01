@@ -30,7 +30,7 @@
         android:layout_height="50dp"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        android:background="@drawable/checkout_icon"
+        android:background="@drawable/ic_arrow_forward_48px"
         app:srcCompat="@android:drawable/ic_dialog_email"/>
 
 

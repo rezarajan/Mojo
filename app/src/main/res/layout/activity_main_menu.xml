@@ -112,9 +112,9 @@
 
             <ImageView
                 android:id="@+id/checkout_icon"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:src="@drawable/checkout_icon"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_shopping_cart_48px"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
                 android:layout_centerVertical="true"
@@ -128,8 +128,20 @@
                 android:layout_centerInParent="true"
                 android:gravity="center_horizontal"
                 android:text="Dang! No venue found"
-                android:layout_margin="50dp"
-                android:textColor="#ffffff" />
+                android:layout_margin="0dp"
+                android:fontFamily="sans-serif-light"
+                android:textColor="@color/white"
+                android:textSize="16sp"/>
+
+            <ImageView
+                android:id="@+id/location_icon"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_marginStart="10dp"
+                android:src="@drawable/ic_near_me_48px"
+                android:layout_toEndOf="@id/location_indicator"
+                android:layout_alignTop="@id/location_indicator"
+                android:layout_marginEnd="15dp" />
 
 
         </RelativeLayout>
