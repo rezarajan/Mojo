@@ -28,7 +28,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
-                android:background="#cfcfd6"
+                android:background="@color/colorAccent"
                 android:padding="0dp"
                 android:layout_margin="4dp" />
 
@@ -154,7 +154,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
-                android:background="#cfcfd6"
+                android:background="@color/white"
                 android:padding="0dp"
                 android:layout_margin="8dp"
                 android:id="@+id/payment_separator" />
@@ -173,7 +173,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/default_payment"
-                        android:buttonTint="@color/white"
+                        android:buttonTint="@color/colorAccent"
                         android:checked="true"/>
 
                     <TextView
@@ -193,7 +193,7 @@
                         android:id="@+id/add_payment"
                         android:layout_below="@id/default_payment"
                         android:layout_marginTop="10dp"
-                        android:buttonTint="@color/white"
+                        android:buttonTint="@color/colorAccent"
                         android:checked="false"/>
 
                     <TextView

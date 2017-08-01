@@ -2,16 +2,18 @@
 
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     card_view:cardBackgroundColor="@android:color/transparent"
-    card_view:cardElevation="0dp">
+    card_view:cardElevation="0dp"
+    android:background="@color/colorPrimaryDark">
 
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="@color/colorPrimaryDark">
 
 
         <RelativeLayout
@@ -19,165 +21,273 @@
             android:layout_height="wrap_content">
 
             <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/image"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:layout_gravity="center"
-                android:scaleType="centerCrop"
-                android:layout_marginTop="20dp"
-                android:layout_marginStart="14dp"
-                android:layout_marginEnd="14dp"
                 android:layout_alignParentStart="true"
-                android:id="@+id/image"
+                android:layout_gravity="center"
+                android:layout_marginEnd="14dp"
+                android:layout_marginStart="14dp"
+                android:layout_marginTop="20dp"
+                android:scaleType="centerCrop"
                 android:src="@drawable/ic_mojo_logo" />
 
             <TextView
                 android:id="@+id/orderid"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignBottom="@id/image"
                 android:layout_gravity="center_horizontal"
                 android:layout_toEndOf="@id/image"
-                android:layout_alignBottom="@id/image"
+                android:fontFamily="sans-serif-condensed"
                 android:paddingTop="8dp"
                 android:text="Order ID"
                 android:textColor="@color/white"
-                android:textSize="24sp"
-                android:fontFamily="sans-serif-condensed" />
+                android:textSize="24sp" />
 
             <TextView
                 android:id="@+id/restaurant_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
                 android:layout_alignStart="@id/orderid"
                 android:layout_below="@id/orderid"
+                android:layout_gravity="center_horizontal"
+                android:fontFamily="sans-serif-condensed"
                 android:paddingBottom="8dp"
                 android:text="Restaurant"
                 android:textColor="@color/white"
-                android:textSize="16sp"
-                android:fontFamily="sans-serif-condensed" />
+                android:textSize="16sp" />
 
 
             <View
+                android:id="@+id/restaurant_separator"
                 android:layout_width="wrap_content"
                 android:layout_height="2dp"
                 android:layout_alignStart="@id/restaurant_name"
                 android:layout_below="@id/restaurant_name"
-                android:background="#cfcfd6"
-                android:padding="0dp"
-                android:layout_marginEnd="8dp"
                 android:layout_marginBottom="8dp"
-                android:id="@+id/restaurant_separator" />
+                android:layout_marginEnd="8dp"
+                android:background="@color/colorAccent"
+                android:padding="0dp" />
 
         </RelativeLayout>
 
 
-
-
-
-
-
         <RelativeLayout
+            android:id="@+id/detail_card_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/detail_card_layout"
+            android:paddingBottom="0dp"
             android:paddingLeft="30dp"
-            android:paddingBottom="20dp"
             android:paddingRight="30dp">
 
-            <!--            <ImageView
-                            android:id="@+id/head"
-                            android:layout_width="35dp"
-                            android:layout_height="35dp"
-                            android:layout_alignParentTop="true"
-                            android:layout_alignParentLeft="true"
-                            android:scaleType="fitXY"
-                            android:src="@drawable/ic_material_product_icon_192pxxhdpi" />-->
 
             <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/status_initial_icon"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:layout_gravity="center"
-                android:scaleType="centerCrop"
-                android:layout_marginTop="20dp"
-                android:layout_marginStart="14dp"
-                android:layout_marginEnd="14dp"
                 android:layout_alignParentStart="true"
-                android:id="@+id/status_initial_icon"
-                android:src="@drawable/ic_mojo_logo" />
+                android:layout_gravity="center"
+                android:layout_marginEnd="14dp"
+                android:layout_marginStart="14dp"
+                android:layout_marginTop="20dp"
+                android:scaleType="centerCrop"
+                android:src="#48B95E" />
 
-
-            <!--            <CheckBox
-                            android:id="@+id/checkb"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:button="@drawable/custom_checkbox"
-                            android:layout_alignParentStart="true"
-                            android:layout_centerVertical="true"
-                            android:theme="@style/MyCheckBox"/>-->
-
-            <!--            <android.support.v7.widget.AppCompatCheckBox
-                            android:id="@+id/checkb"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:button="@drawable/custom_checkbox"
-                            android:layout_alignParentStart="true"
-                            android:layout_centerVertical="true" />-->
 
             <TextView
                 android:id="@+id/status_initial"
-                android:layout_width="200dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignTop="@id/status_initial_icon"
                 android:layout_toEndOf="@id/status_initial_icon"
+                android:fontFamily="sans-serif"
                 android:paddingStart="10dp"
-                android:paddingTop="20dp"
-                android:text="Item"
+                android:paddingTop="10dp"
+                android:text="{Restaurant} has confirmed your order!"
                 android:textColor="@color/white"
-                android:textSize="18dp"
-                android:fontFamily="sans-serif-condensed"
-                />
+                android:textSize="16sp" />
 
-            <!--            <TextView
-                            android:id="@+id/item_description"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@id/item_cost"
-                            android:layout_alignStart="@id/item_dets"
-                            android:paddingBottom="8dp"
-                            android:paddingLeft="30dp"
-                            android:paddingTop="4dp"
-                            android:text=""
-                            android:textColor="#000000"
-                            android:textSize="12dp"
-                            android:fontFamily="sans-serif"  />-->
 
             <TextView
                 android:id="@+id/status_initial_time"
                 android:layout_width="250dp"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/status_initial"
                 android:layout_alignStart="@id/status_initial"
+                android:layout_below="@id/status_initial"
+                android:fontFamily="sans-serif"
                 android:paddingBottom="8dp"
                 android:paddingStart="10dp"
                 android:paddingTop="4dp"
-                android:text="Description"
+                android:text="hh:mm"
                 android:textColor="@color/white"
-                android:textSize="12sp"
-                android:fontFamily="sans-serif"  />
+                android:textSize="12sp" />
 
-            <!--            <Button
-                            android:id="@+id/add_to_cart"
-                            style="?android:attr/borderlessButtonStyle"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:layout_alignParentEnd="true"
-                            android:layout_centerVertical="true"
-                            android:layout_marginEnd="20dp"
-                            android:background="@drawable/rectangle_stroke"
-                            android:text="+"
-                            android:textColor="@color/black" />-->
 
         </RelativeLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/detail_card_layout_2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="0dp"
+            android:paddingStart="100dp"
+            android:paddingRight="30dp">
+
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/status_ready_icon"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_alignParentStart="true"
+                android:layout_gravity="center"
+                android:layout_marginEnd="14dp"
+                android:layout_marginStart="14dp"
+                android:layout_marginTop="20dp"
+                android:scaleType="centerCrop"
+                android:src="#0D7922" />
+
+
+            <TextView
+                android:id="@+id/status_ready"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@id/status_ready_icon"
+                android:layout_toEndOf="@id/status_ready_icon"
+                android:fontFamily="sans-serif"
+                android:paddingStart="10dp"
+                android:paddingTop="20dp"
+                android:text="Your order is ready. \nWe're finding you a runner :)"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+
+
+            <TextView
+                android:id="@+id/status_ready_time"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@id/status_ready"
+                android:layout_below="@id/status_ready"
+                android:fontFamily="sans-serif"
+                android:paddingBottom="8dp"
+                android:paddingStart="10dp"
+                android:paddingTop="4dp"
+                android:text="hh:mm"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
+
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/detail_card_layout_3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="15dp"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp">
+
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/status_collected_icon"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_alignParentStart="true"
+                android:layout_gravity="center"
+                android:layout_marginEnd="14dp"
+                android:layout_marginStart="14dp"
+                android:layout_marginTop="20dp"
+                android:scaleType="centerCrop"
+                android:src="#0C808D" />
+
+
+            <TextView
+                android:id="@+id/status_collected"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@id/status_collected_icon"
+                android:layout_toEndOf="@id/status_collected_icon"
+                android:fontFamily="sans-serif"
+                android:paddingStart="10dp"
+                android:paddingTop="10dp"
+                android:text="{RunnerName} has collected \nyour order"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+
+
+            <TextView
+                android:id="@+id/status_collected_time"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@id/status_collected"
+                android:layout_below="@id/status_collected"
+                android:fontFamily="sans-serif"
+                android:paddingBottom="8dp"
+                android:paddingStart="10dp"
+                android:paddingTop="4dp"
+                android:text="hh:mm"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
+
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/detail_card_layout_4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="0dp"
+            android:paddingStart="100dp"
+            android:paddingRight="30dp">
+
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/status_delivered_icon"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_alignParentStart="true"
+                android:layout_gravity="center"
+                android:layout_marginEnd="14dp"
+                android:layout_marginStart="14dp"
+                android:layout_marginTop="20dp"
+                android:scaleType="centerCrop"
+                android:src="#079BAB" />
+
+
+            <TextView
+                android:id="@+id/status_delivered"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@id/status_delivered_icon"
+                android:layout_toEndOf="@id/status_delivered_icon"
+                android:fontFamily="sans-serif"
+                android:paddingStart="10dp"
+                android:paddingTop="20dp"
+                android:text="{RunnerName} has delivered \nyour order"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+
+
+            <TextView
+                android:id="@+id/status_delivered_time"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@id/status_delivered"
+                android:layout_below="@id/status_delivered"
+                android:fontFamily="sans-serif"
+                android:paddingBottom="8dp"
+                android:paddingStart="10dp"
+                android:paddingTop="4dp"
+                android:text="hh:mm"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
+
+
+        </RelativeLayout>
+
 
         <!--        <View
                     android:layout_width="match_parent"
