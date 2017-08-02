@@ -95,7 +95,7 @@ public class order_tracking extends AppCompatActivity
 
             //String[] restaurantName = {""};
 
-            String result = model.getResult();
+            final String result = model.getResult();
             Log.d("Result", result);
 
             viewHolder.orderid.setText(model.getOrderid());
@@ -110,6 +110,16 @@ public class order_tracking extends AppCompatActivity
 
                     //Sets the vendor's name
                     viewHolder.restaurant_name.setText(restaurantName);
+                    if(result.equals("declined")){
+                        //case for declined orders
+                        viewHolder.status_initial.setText(restaurantName + " has declined your order :(");
+                    } else {
+                        //case for accepted orders
+                        //easier to do the else case for this to account for all the other results
+                        //since this is an asynchronous task
+                        viewHolder.status_initial.setText(restaurantName + " has accepted your order!");
+
+                    }
 
                     //sets the vendor's icon
                     Picasso.with(getApplicationContext())
@@ -124,16 +134,52 @@ public class order_tracking extends AppCompatActivity
             });
 
 
+            //the runner's uid is now available at this stage
+
+            if(model.getRunneruid() != null) {
+                final DatabaseReference reference_1 = FirebaseDatabase.getInstance().getReference(RESTAURANT)
+                        .child(model.getRunneruid()).child("info");
+                reference_1.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        Map<String, Object> hopperValues = (Map<String, Object>) dataSnapshot.getValue();
+                        String runnerName = hopperValues.get("name").toString();        //finds the runner's name
+
+
+                        //Sets the vendor's name
+                        viewHolder.status_collected.setText(runnerName + " has collected your order");
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+                final DatabaseReference reference_2 = FirebaseDatabase.getInstance().getReference(RESTAURANT)
+                        .child(model.getRunneruid()).child("info");
+                reference_2.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        Map<String, Object> hopperValues = (Map<String, Object>) dataSnapshot.getValue();
+                        String runnerName = hopperValues.get("name").toString();        //finds the runner's name
+
+
+                        //Sets the vendor's name
+                        viewHolder.status_delivered.setText(runnerName + " has delivered your order");
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+            }
+
+        //TODO: Change the if statement to a switch case
             if(result.equals("accepted") || result.equals("declined")){
-
-                if(result.equals("accepted")){
-                    //case for accpted orders
-                    viewHolder.status_initial.setText("{Restaurant} has accepted your order!");
-                } else {
-                    //case for declined orders
-                    viewHolder.status_initial.setText("{Restaurant} has declined your order :(");
-
-                }
                 viewHolder.status_initial_icon.setVisibility(View.VISIBLE);
                 viewHolder.status_initial.setVisibility(View.VISIBLE);
                 viewHolder.status_initial_time.setVisibility(View.VISIBLE);

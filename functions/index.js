@@ -577,6 +577,7 @@ exports.inprogressMonitor = functions.database.ref("inprogress/{vendoruid}/{push
 	refNode.child(status.vendoruid).child("orders").child("collected").child(status.orderid).set({
 			customeruid: status.customeruid,
 			vendoruid: status.vendoruid,
+			runneruid: status.runneruid,
 			items: snapshot.val(),
 			result: "collected",
 			orderid: status.orderid
@@ -584,6 +585,7 @@ exports.inprogressMonitor = functions.database.ref("inprogress/{vendoruid}/{push
 	refNode.child(status.customeruid).child("orders").child(status.orderid).set({
 			customeruid: status.customeruid,
 			vendoruid: status.vendoruid,
+			runneruid: status.runneruid,
 			items: snapshot.val(),
 			result: "collected",
 			orderid: status.orderid

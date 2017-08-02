@@ -11,6 +11,7 @@ public class orderHistory_List {
     private String icon;
     private String orderid;
     private String vendoruid;
+    private String runneruid;
     private String name;
     private String type;
     private String quantity;
@@ -58,6 +59,14 @@ public class orderHistory_List {
 
     public void setVendoruid(String vendoruid) {
         this.vendoruid = vendoruid;
+    }
+
+    public String getRunneruid() {
+        return runneruid;
+    }
+
+    public void setRunneruid(String runneruid) {
+        this.runneruid = runneruid;
     }
 
     public String getName() {
