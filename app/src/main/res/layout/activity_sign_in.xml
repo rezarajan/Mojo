@@ -24,48 +24,18 @@
         android:layout_gravity="center"
         android:padding="8dp"/>
 
-    <Button
-        android:id="@+id/social_media"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:text="Login with social media"
-        android:gravity="center"
-        android:layout_gravity="center"
-        android:padding="8dp" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:layout_gravity="center"
-        android:layout_marginTop="16dp"
-        android:text="Already have an account?"/>
-
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center">
-
-        <TextView
-            android:id="@+id/txtPls"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:text="Please " />
 
         <TextView
             android:id="@+id/sign_in"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_toEndOf="@id/txtPls"
             android:clickable="true"
             android:gravity="center"
             android:onClick="onClick"
-            android:text="Sign in"
+            android:text="Already have an account? \nSign in"
             android:textStyle="bold"/>
 
-    </RelativeLayout>
 
 </LinearLayout>

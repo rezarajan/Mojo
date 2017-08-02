@@ -36,7 +36,7 @@ public class MainActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
 
-        // 1. 沉浸式状态栏
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             Window window = getWindow();
             window.setFlags(
@@ -46,26 +46,21 @@ public class MainActivity extends FragmentActivity {
         positionView = findViewById(R.id.position_view);
         dealStatusBar(); // 调整状态栏高度
 
-        // 2. 初始化ImageLoader
-        //initImageLoader();
 
-        // 3. 填充ViewPager
         fillViewPager();
     }
 
-    /**
-     * 填充ViewPager
-     */
+
     private void fillViewPager() {
-        indicatorTv = (TextView) findViewById(R.id.indicator_tv);
+        //indicatorTv = (TextView) findViewById(R.id.indicator_tv);
         viewPager = (ViewPager) findViewById(R.id.viewpager);
 
-        // 1. viewPager添加parallax效果，使用PageTransformer就足够了
+
         viewPager.setPageTransformer(false, new CustPagerTransformer(this));
 
-        // 2. viewPager添加adapter
+
         for (int i = 0; i < 5; i++) {       //TODO: Add menu items here
-            // 预先准备10个fragment
+
             fragments.add(new CommonFragment());        //adds the fragment for each item.
         }
 
@@ -84,7 +79,7 @@ public class MainActivity extends FragmentActivity {
         });
 
 
-        // 3. viewPager滑动时，调整指示器
+
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -104,18 +99,14 @@ public class MainActivity extends FragmentActivity {
         updateIndicatorTv();
     }
 
-    /**
-     * 更新指示器
-     */
+
     private void updateIndicatorTv() {
         int totalNum = viewPager.getAdapter().getCount();
         int currentItem = viewPager.getCurrentItem() + 1;
         indicatorTv.setText(Html.fromHtml("<font color='#12edf0'>" + currentItem + "</font>  /  " + totalNum));
     }
 
-    /**
-     * 调整沉浸式菜单的title
-     */
+
     private void dealStatusBar() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             int statusBarHeight = getStatusBarHeight();

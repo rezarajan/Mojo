@@ -21,6 +21,8 @@ import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -32,9 +34,14 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import bluefirelabs.mojo.R;
 
@@ -67,8 +74,10 @@ public class Login extends AppCompatActivity implements LoaderCallbacks<Cursor> 
     // UI references.
     private AutoCompleteTextView mEmailView;
     private EditText mPasswordView;
+    private EditText mNameView;
     private View mProgressView;
     private View mLoginFormView;
+    private Boolean nameRequired = false;
 
     @Override
     public void onBackPressed() {
@@ -84,8 +93,27 @@ public class Login extends AppCompatActivity implements LoaderCallbacks<Cursor> 
         setContentView(R.layout.activity_login);
         overridePendingTransition(R.transition.fade_in, R.transition.fade_out);
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            Window window = getWindow();
+/*            window.setFlags(
+                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);*/
+
+            // add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+
+/*            window.setFlags(
+                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);   */
+
+            window.setFlags(
+                    WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+                    WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+        }
+
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
+        mNameView = (EditText) findViewById(R.id.firstName);
         populateAutoComplete();
 
         mPasswordView = (EditText) findViewById(R.id.password);
@@ -103,10 +131,19 @@ public class Login extends AppCompatActivity implements LoaderCallbacks<Cursor> 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseAuth.signOut();
 
-            Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
+            Button mEmailSignUpButton = (Button) findViewById(R.id.email_sign_in_button);
+            TextView mEmailSignInButton = (TextView) findViewById(R.id.sign_in);
             mEmailSignInButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    attemptLogin();
+                }
+            });
+
+            mEmailSignUpButton.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    nameRequired = true;
                     attemptLogin();
                 }
             });
@@ -174,6 +211,7 @@ public class Login extends AppCompatActivity implements LoaderCallbacks<Cursor> 
         mPasswordView.setError(null);
 
         // Store values at the time of the login attempt.
+        String name = mNameView.getText().toString();
         String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
 
@@ -196,6 +234,13 @@ public class Login extends AppCompatActivity implements LoaderCallbacks<Cursor> 
             mEmailView.setError(getString(R.string.error_invalid_email));
             focusView = mEmailView;
             cancel = true;
+        }
+
+        if(nameRequired){
+            if(TextUtils.isEmpty(name)){
+                cancel = true;
+
+            }
         }
 
         if (cancel) {
@@ -380,6 +425,17 @@ public class Login extends AppCompatActivity implements LoaderCallbacks<Cursor> 
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
                             //user is successfully registered and logged in
+
+                            //adding the user's name to the Firebase info node
+                            FirebaseUser user = firebaseAuth.getCurrentUser();
+
+                            Map name = new HashMap<>();
+                            name.put("name", mNameView.getText().toString());
+
+                            DatabaseReference reference = FirebaseDatabase.getInstance().getReference("uid").child(user.getUid()).child("info");
+                            reference.setValue(name);
+
+
                             Intent intent = new Intent(Login.this, bluefirelabs.mojo.permissions.permission_location.class);
                             Snackbar.make(findViewById(android.R.id.content), "User Created",
                                     Snackbar.LENGTH_LONG)
@@ -388,13 +444,14 @@ public class Login extends AppCompatActivity implements LoaderCallbacks<Cursor> 
                             finish();
                         }
                         else{
+
+                            //if user has a previous login on the device then take them to the main page
                             if(firebaseAuth.getCurrentUser() != null){
                                 Intent intent = new Intent(Login.this, bluefirelabs.mojo.permissions.permission_location.class);
                                 startActivity(intent);
                                 finish();
                             } else {
                                 userLogin(mEmail, mPassword);
-
                             }
                         }
                     }

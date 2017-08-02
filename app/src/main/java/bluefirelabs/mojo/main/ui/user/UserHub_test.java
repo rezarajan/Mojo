@@ -157,9 +157,6 @@ public class UserHub_test extends FragmentActivity implements android.location.L
         fillViewPager();
     }
 
-    /**
-     * 填充ViewPager
-     */
 
     public void firebaseTask(final MyCallback myCallback) {
 
@@ -172,7 +169,7 @@ public class UserHub_test extends FragmentActivity implements android.location.L
     }
 
     private void fillViewPager() {
-        indicatorTv = (TextView) findViewById(R.id.indicator_tv);
+        //indicatorTv = (TextView) findViewById(R.id.indicator_tv);
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         tablayout = (TabLayout) findViewById(R.id.tabDots);
 
