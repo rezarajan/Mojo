@@ -136,6 +136,7 @@ public class Login extends AppCompatActivity implements LoaderCallbacks<Cursor> 
             mEmailSignInButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    nameRequired = false;
                     attemptLogin();
                 }
             });
@@ -236,12 +237,6 @@ public class Login extends AppCompatActivity implements LoaderCallbacks<Cursor> 
             cancel = true;
         }
 
-        if(nameRequired){
-            if(TextUtils.isEmpty(name)){
-                cancel = true;
-
-            }
-        }
 
         if (cancel) {
             // There was an error; don't attempt login and focus the first
@@ -250,9 +245,15 @@ public class Login extends AppCompatActivity implements LoaderCallbacks<Cursor> 
         } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
-            showProgress(true);
-            mAuthTask = new UserLoginTask(email, password);
-            mAuthTask.execute((Void) null);
+
+            if(nameRequired){
+
+            } else {
+                showProgress(true);
+                mAuthTask = new UserLoginTask(email, password);
+                mAuthTask.execute((Void) null);
+            }
+
         }
     }
 
