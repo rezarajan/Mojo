@@ -33,7 +33,7 @@
                 android:src="@drawable/ic_mojo_logo" />
 
             <TextView
-                android:id="@+id/orderid"
+                android:id="@+id/restaurant_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@id/image"
@@ -41,20 +41,20 @@
                 android:layout_toEndOf="@id/image"
                 android:fontFamily="sans-serif-condensed"
                 android:paddingTop="8dp"
-                android:text="Order ID"
+                android:text="Restaurant"
                 android:textColor="@color/white"
                 android:textSize="24sp" />
 
             <TextView
-                android:id="@+id/restaurant_name"
+                android:id="@+id/orderid"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignStart="@id/orderid"
-                android:layout_below="@id/orderid"
+                android:layout_alignStart="@id/restaurant_name"
+                android:layout_below="@id/restaurant_name"
                 android:layout_gravity="center_horizontal"
                 android:fontFamily="sans-serif-condensed"
                 android:paddingBottom="8dp"
-                android:text="Restaurant"
+                android:text="Order ID"
                 android:textColor="@color/white"
                 android:textSize="16sp" />
 
@@ -63,8 +63,8 @@
                 android:id="@+id/restaurant_separator"
                 android:layout_width="wrap_content"
                 android:layout_height="2dp"
-                android:layout_alignStart="@id/restaurant_name"
-                android:layout_below="@id/restaurant_name"
+                android:layout_alignStart="@id/orderid"
+                android:layout_below="@id/orderid"
                 android:layout_marginBottom="8dp"
                 android:layout_marginEnd="8dp"
                 android:background="@color/colorAccent"

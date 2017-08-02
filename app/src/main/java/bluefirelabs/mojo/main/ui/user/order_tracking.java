@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
@@ -65,8 +66,106 @@ public class order_tracking extends AppCompatActivity
         @Override
         protected void populateViewHolder(final FirebaseRecyclerAdapterHistory.RecyclerViewHolder viewHolder, orderHistory_List model, int position) {
 
-            Log.d("Result", model.getResult());
+            String result = model.getResult();
+            Log.d("Result", result);
 
+            viewHolder.orderid.setText(model.getOrderid());
+
+
+            if(result.equals("accepted") || result.equals("declined")){
+
+                if(result.equals("accepted")){
+                    //case for accpted orders
+                    viewHolder.status_initial.setText("{Restaurant} has accepted your order!");
+                } else {
+                    //case for declined orders
+                    viewHolder.status_initial.setText("{Restaurant} has declined your order :(");
+
+                }
+                viewHolder.status_initial_icon.setVisibility(View.VISIBLE);
+                viewHolder.status_initial.setVisibility(View.VISIBLE);
+                viewHolder.status_initial_time.setVisibility(View.VISIBLE);
+
+                viewHolder.status_ready_icon.setVisibility(View.GONE);
+                viewHolder.status_ready.setVisibility(View.GONE);
+                viewHolder.status_ready_time.setVisibility(View.GONE);
+
+                viewHolder.status_collected_icon.setVisibility(View.GONE);
+                viewHolder.status_collected.setVisibility(View.GONE);
+                viewHolder.status_collected_time.setVisibility(View.GONE);
+
+                viewHolder.status_delivered_icon.setVisibility(View.GONE);
+                viewHolder.status_delivered.setVisibility(View.GONE);
+                viewHolder.status_delivered_time.setVisibility(View.GONE);
+
+            } else if (result.equals("sending")){
+                viewHolder.status_initial_icon.setVisibility(View.VISIBLE);
+                viewHolder.status_initial.setVisibility(View.VISIBLE);
+                viewHolder.status_initial_time.setVisibility(View.VISIBLE);
+
+                viewHolder.status_ready_icon.setVisibility(View.VISIBLE);
+                viewHolder.status_ready.setVisibility(View.VISIBLE);
+                viewHolder.status_ready_time.setVisibility(View.VISIBLE);
+
+                viewHolder.status_collected_icon.setVisibility(View.GONE);
+                viewHolder.status_collected.setVisibility(View.GONE);
+                viewHolder.status_collected_time.setVisibility(View.GONE);
+
+                viewHolder.status_delivered_icon.setVisibility(View.GONE);
+                viewHolder.status_delivered.setVisibility(View.GONE);
+                viewHolder.status_delivered_time.setVisibility(View.GONE);
+
+            } else if (result.equals("collected")){
+                viewHolder.status_initial_icon.setVisibility(View.VISIBLE);
+                viewHolder.status_initial.setVisibility(View.VISIBLE);
+                viewHolder.status_initial_time.setVisibility(View.VISIBLE);
+
+                viewHolder.status_ready_icon.setVisibility(View.VISIBLE);
+                viewHolder.status_ready.setVisibility(View.VISIBLE);
+                viewHolder.status_ready_time.setVisibility(View.VISIBLE);
+
+                viewHolder.status_collected_icon.setVisibility(View.VISIBLE);
+                viewHolder.status_collected.setVisibility(View.VISIBLE);
+                viewHolder.status_collected_time.setVisibility(View.VISIBLE);
+
+                viewHolder.status_delivered_icon.setVisibility(View.GONE);
+                viewHolder.status_delivered.setVisibility(View.GONE);
+                viewHolder.status_delivered_time.setVisibility(View.GONE);
+
+            } else if (result.equals("delivered")){
+                viewHolder.status_initial_icon.setVisibility(View.VISIBLE);
+                viewHolder.status_initial.setVisibility(View.VISIBLE);
+                viewHolder.status_initial_time.setVisibility(View.VISIBLE);
+
+                viewHolder.status_ready_icon.setVisibility(View.VISIBLE);
+                viewHolder.status_ready.setVisibility(View.VISIBLE);
+                viewHolder.status_ready_time.setVisibility(View.VISIBLE);
+
+                viewHolder.status_collected_icon.setVisibility(View.VISIBLE);
+                viewHolder.status_collected.setVisibility(View.VISIBLE);
+                viewHolder.status_collected_time.setVisibility(View.VISIBLE);
+
+                viewHolder.status_delivered_icon.setVisibility(View.VISIBLE);
+                viewHolder.status_delivered.setVisibility(View.VISIBLE);
+                viewHolder.status_delivered_time.setVisibility(View.VISIBLE);
+
+            } else {
+                viewHolder.status_initial_icon.setVisibility(View.GONE);
+                viewHolder.status_initial.setVisibility(View.GONE);
+                viewHolder.status_initial_time.setVisibility(View.GONE);
+
+                viewHolder.status_ready_icon.setVisibility(View.GONE);
+                viewHolder.status_ready.setVisibility(View.GONE);
+                viewHolder.status_ready_time.setVisibility(View.GONE);
+
+                viewHolder.status_collected_icon.setVisibility(View.GONE);
+                viewHolder.status_collected.setVisibility(View.GONE);
+                viewHolder.status_collected_time.setVisibility(View.GONE);
+
+                viewHolder.status_delivered_icon.setVisibility(View.GONE);
+                viewHolder.status_delivered.setVisibility(View.GONE);
+                viewHolder.status_delivered_time.setVisibility(View.GONE);
+            }
 
 
 

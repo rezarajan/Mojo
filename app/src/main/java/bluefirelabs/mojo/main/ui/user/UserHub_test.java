@@ -669,8 +669,8 @@ public class UserHub_test extends FragmentActivity implements android.location.L
 
     @Override
     public void onLocationChanged(Location location) {
-        viewPager.removeAllViews();     //removes the current venue restaurants when location updates
-        fillViewPager();                //refills the viewPager when you are in a venue
+        //viewPager.removeAllViews();     //removes the current venue restaurants when location updates
+        //fillViewPager();                //refills the viewPager when you are in a venue
         getLocation();
         lat = location.getLatitude();
         lng = location.getLongitude();

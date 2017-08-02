@@ -16,11 +16,11 @@ public class FirebaseRecyclerAdapterHistory {
 
     public static class RecyclerViewHolder extends RecyclerView.ViewHolder {
 
-        private Context context;
-        private ImageView restaurant_icon, status_initial_icon, status_ready_icon, status_collected_icon, status_delivered_icon;
+        public Context context;
+        public ImageView restaurant_icon, status_initial_icon, status_ready_icon, status_collected_icon, status_delivered_icon;
 
-        private TextView orderid, restaurant_name, status_initial, status_ready, status_collected, status_delivered;
-        private TextView status_initial_time, status_ready_time, status_collected_time, status_delivered_time;
+        public TextView orderid, restaurant_name, status_initial, status_ready, status_collected, status_delivered;
+        public TextView status_initial_time, status_ready_time, status_collected_time, status_delivered_time;
 
 
 
