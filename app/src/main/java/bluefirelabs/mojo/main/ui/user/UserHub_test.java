@@ -76,7 +76,7 @@ public class UserHub_test extends FragmentActivity implements android.location.L
     int defaultColor = 0x000000;
     int vibrantColor = -1, mutedColor = -1, accentColor = -1, accentColorMuted = -1;
 
-    boolean firstTime = true;
+    boolean firstTime = true, secondTime = true;
 
 
     private BroadcastReceiver broadcastReceiver;
@@ -174,7 +174,6 @@ public class UserHub_test extends FragmentActivity implements android.location.L
         tablayout = (TabLayout) findViewById(R.id.tabDots);
 
 
-        // 1. viewPager添加parallax效果，使用PageTransformer就足够了
         viewPager.setPageTransformer(false, new CustPagerTransformer(this));
         tablayout.setupWithViewPager(viewPager, true);
 
@@ -366,11 +365,22 @@ public class UserHub_test extends FragmentActivity implements android.location.L
                                                                 //mutedColor = palette.getMutedColor(defaultColor);
                                                                 accentColorMuted = palette.getLightVibrantColor(defaultColor);
 
-                                                                if (firstTime) {
+                                                                //First time and second time for the case when the ViewPager cycles to the
+                                                                //third colour and sets the wrong initial colour
+                                                                if (firstTime && secondTime) {
                                                                     viewPager.setBackgroundColor(mutedColor);
                                                                     checkout_icon.setColorFilter(accentColorMuted);
                                                                     order_history.setColorFilter(accentColorMuted);
                                                                     firstTime = false;
+                                                                }
+
+                                                                //after the first time this now sets the second colour
+                                                                //which is the same as the first fragment (since we exclude the 0th)
+                                                                if(!firstTime && secondTime){
+                                                                    viewPager.setBackgroundColor(mutedColor);
+                                                                    checkout_icon.setColorFilter(accentColorMuted);
+                                                                    order_history.setColorFilter(accentColorMuted);
+                                                                    secondTime = false;
                                                                 }
                                                                 Log.d("Changing", "activated 2");
                                                                 //obj.colorFetched(position, vibrantColor, mutedColor);

@@ -246,7 +246,7 @@ public class Login extends AppCompatActivity implements LoaderCallbacks<Cursor> 
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
 
-            if(nameRequired){
+            if(nameRequired && TextUtils.isEmpty(name)){
 
             } else {
                 showProgress(true);
