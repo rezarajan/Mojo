@@ -51,6 +51,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Field;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -97,6 +98,8 @@ public class UserHub_test extends FragmentActivity implements android.location.L
     private ViewPager viewPager;
     private List<CommonFragment> fragments = new ArrayList<>();
     private TabLayout tablayout;
+
+    DecimalFormat df = new DecimalFormat("#.00");
 
 
     @Override
@@ -149,12 +152,8 @@ public class UserHub_test extends FragmentActivity implements android.location.L
 
         argbEvaluator = new ArgbEvaluator();
         positionView = findViewById(R.id.position_view);
-        dealStatusBar(); // 调整状态栏高度
+        dealStatusBar();
 
-        // 2. 初始化ImageLoader
-        //initImageLoader();
-
-        // 3. 填充ViewPager
         fillViewPager();
     }
 
@@ -330,16 +329,15 @@ public class UserHub_test extends FragmentActivity implements android.location.L
                                         viewPager.setAdapter(new FragmentStatePagerAdapter(getSupportFragmentManager()) {
                                             @Override
                                             public Fragment getItem(int position) {
-                                                final Map<String, Object> restaurantIcons = (Map<String, Object>) dataSnapshot.getValue();
                                                 CommonFragment fragment = fragments.get(position % 10);
                                                 Log.d("Position", String.valueOf(position));
 
 
                                                 fragment.bindData(dataSnapshot.child("id" + String.valueOf(position)).child("icon").getValue().toString(),
                                                         dataSnapshot.child("id" + String.valueOf(position)).child("description").getValue().toString(),
-                                                        dataSnapshot.child("id" + String.valueOf(position)).child("restaurant").getValue().toString()
+                                                        dataSnapshot.child("id" + String.valueOf(position)).child("restaurant").getValue().toString(),
+                                                        Float.parseFloat(dataSnapshot.child("id" + String.valueOf(position)).child("rating").getValue().toString())
                                                 );
-
 
                                                 //backgroundChanger(myCallback_2, dataSnapshot.child("id" + String.valueOf(position)).child("icon").getValue().toString());
 

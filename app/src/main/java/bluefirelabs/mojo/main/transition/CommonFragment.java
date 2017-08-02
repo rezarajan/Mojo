@@ -27,16 +27,18 @@ import bluefirelabs.mojo.R;
  */
 public class CommonFragment extends Fragment implements DragLayout.GotoDetailListener {
     DragLayout dragLayout;
-    private ImageView imageView;
+    private ImageView imageView, icon1, icon2, icon3, icon4;
     private View address1, address2, address3, address5;
     private TextView address4;
     private RatingBar ratingBar;
-    private View head1, head2, head3, head4;
+    /*private View head1, head2, head3, head4;*/
     private String imageUrl, description, restaurantName;
     private Integer restaurantColor;
 
+    private Float rating = 0.0f;
+
     int defaultColor = 0x000000;
-    int vibrantColor = -1, mutedColor = -1;
+    int vibrantColor = -1, mutedColor = -1, mutedColor1 = -1, mutedColor2 = -1, mutedColor3 = -1, mutedColor4 = -1;
     int position;
 
     @Nullable
@@ -48,12 +50,23 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
         View rootView = inflater.inflate(R.layout.fragment_common, null);
         dragLayout = (DragLayout) rootView.findViewById(R.id.drag_layout);
         imageView = (ImageView) dragLayout.findViewById(R.id.image);
+
+        /* Restaurant Indicator Icons */
+
+        icon1 = (ImageView) dragLayout.findViewById(R.id.head1);
+        icon2 = (ImageView) dragLayout.findViewById(R.id.head2);
+        icon3 = (ImageView) dragLayout.findViewById(R.id.head3);
+        icon4 = (ImageView) dragLayout.findViewById(R.id.head4);
         //imageView = (CircleImageView) dragLayout.findViewById(R.id.image);
         //ImageLoader.getInstance().displayImage(imageUrl, imageView);
         Picasso.with(getContext()).load(imageUrl).into(imageView);
         //Log.d("View Bound", imageUrl);
 
 
+/*        icon1.setColorFilter(mutedColor1);
+        icon2.setColorFilter(mutedColor2);
+        icon3.setColorFilter(mutedColor3);
+        icon4.setColorFilter(mutedColor4);*/
 
 
         //Use this to det dragLayout background colour
@@ -87,10 +100,14 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
 
         address4.setText(description);
 
-        head1 = dragLayout.findViewById(R.id.head1);
+        ratingBar.setMax(5);
+        ratingBar.setStepSize(0.5f);
+        ratingBar.setRating(rating);
+
+/*        head1 = dragLayout.findViewById(R.id.head1);
         head2 = dragLayout.findViewById(R.id.head2);
         head3 = dragLayout.findViewById(R.id.head3);
-        head4 = dragLayout.findViewById(R.id.head4);
+        head4 = dragLayout.findViewById(R.id.head4);*/
 
         dragLayout.setGotoDetailListener(this);
         return rootView;
@@ -100,17 +117,17 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
     public void gotoDetail() {
         Activity activity = (Activity) getContext();
         ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity,
-                new Pair(imageView, DetailActivity.IMAGE_TRANSITION_NAME),
+                new Pair(imageView, DetailActivity.IMAGE_TRANSITION_NAME)
                 //new Pair(address1, DetailActivity.ADDRESS1_TRANSITION_NAME),
                 //new Pair(address2, DetailActivity.ADDRESS2_TRANSITION_NAME),
                 //new Pair(address3, DetailActivity.ADDRESS3_TRANSITION_NAME),
                 //new Pair(address4, DetailActivity.ADDRESS4_TRANSITION_NAME),
                // new Pair(address5, DetailActivity.ADDRESS5_TRANSITION_NAME),
                 //new Pair(ratingBar, DetailActivity.RATINGBAR_TRANSITION_NAME),
-                new Pair(head1, DetailActivity.HEAD1_TRANSITION_NAME),
+/*                new Pair(head1, DetailActivity.HEAD1_TRANSITION_NAME),
                 new Pair(head2, DetailActivity.HEAD2_TRANSITION_NAME),
                 new Pair(head3, DetailActivity.HEAD3_TRANSITION_NAME),
-                new Pair(head4, DetailActivity.HEAD4_TRANSITION_NAME)
+                new Pair(head4, DetailActivity.HEAD4_TRANSITION_NAME)*/
         );
         Intent intent = new Intent(activity, DetailActivity.class);
         intent.putExtra(DetailActivity.EXTRA_IMAGE_URL, imageUrl);
@@ -120,10 +137,11 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
         ActivityCompat.startActivity(activity, intent, options.toBundle());
     }
 
-    public void bindData(String imageUrl, String description, String restaurantName) {
+    public void bindData(String imageUrl, String description, String restaurantName, Float rating) {
         this.imageUrl = imageUrl;
         this.description = description;
         this.restaurantName = restaurantName;
+        this.rating = rating;
         Log.d("imageUrl", imageUrl);
     }
 

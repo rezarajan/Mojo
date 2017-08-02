@@ -16,6 +16,7 @@ public class orderHistory_List {
     private String type;
     private String quantity;
     private String result;
+    private Integer rating;
 
     public orderHistory_List(){
 
@@ -100,5 +101,14 @@ public class orderHistory_List {
     public void setResult(String result) {
         this.result = result;
     }
+
+    public Integer getRating() {
+        return rating;
+    }
+
+    public void setRating(Integer rating) {
+        this.rating = rating;
+    }
+
 
 }

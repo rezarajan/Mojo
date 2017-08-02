@@ -57,7 +57,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="NO. 7911847"
+                        android:text="Upper Deck"
                         android:textColor="#333"
                         android:textSize="15sp" />
 
@@ -90,28 +90,33 @@
                         android:id="@+id/head1"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:src="@drawable/image10" />
+                        android:layout_margin="8dp"
+                        android:src="@drawable/ic_restaurant_menu_48px"
+                        android:tint="#333"/>
 
                     <ImageView
                         android:id="@+id/head2"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:layout_marginLeft="-10dp"
-                        android:src="@drawable/image10" />
+                        android:layout_margin="8dp"
+                        android:src="@drawable/ic_local_pizza_48px"
+                        android:tint="#333"/>
 
                     <ImageView
                         android:id="@+id/head3"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:layout_marginLeft="-10dp"
-                        android:src="@drawable/image10" />
+                        android:layout_margin="8dp"
+                        android:src="@drawable/ic_local_drink_48px"
+                        android:tint="#333"/>
 
                     <ImageView
                         android:id="@+id/head4"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:layout_marginLeft="-10dp"
-                        android:src="@drawable/image10" />
+                        android:layout_margin="8dp"
+                        android:src="@drawable/ic_local_cafe_48px"
+                        android:tint="#333"/>
 
                     <View
                         android:layout_width="0dp"
