@@ -73,7 +73,7 @@ public class UserHub_test extends FragmentActivity implements android.location.L
 
     ArgbEvaluator argbEvaluator;
     int defaultColor = 0x000000;
-    int vibrantColor = -1, mutedColor = -1;
+    int vibrantColor = -1, mutedColor = -1, accentColor = -1, accentColorMuted = -1;
 
     boolean firstTime = true;
 
@@ -92,7 +92,7 @@ public class UserHub_test extends FragmentActivity implements android.location.L
     private FirebaseRecyclerAdapter<Food_List, FirebaseRecyclerAdapterRestaurants.RecyclerViewHolder> mFirebaseAdapter;
 
     private TextView indicatorTv, restaurantName_indicator, location_indicator;
-    private ImageView checkout_icon;
+    private ImageView checkout_icon, order_history;
     private View positionView;
     private ViewPager viewPager;
     private List<CommonFragment> fragments = new ArrayList<>();
@@ -108,6 +108,7 @@ public class UserHub_test extends FragmentActivity implements android.location.L
         location_indicator = (TextView) findViewById(R.id.location_indicator);
 
         checkout_icon = (ImageView) findViewById(R.id.checkout_icon);
+        order_history = (ImageView) findViewById(R.id.order_history);
 
         checkout_icon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -359,9 +360,12 @@ public class UserHub_test extends FragmentActivity implements android.location.L
                                                                 //mutedColor = palette.getDarkVibrantColor(defaultColor);
                                                                 mutedColor = palette.getVibrantColor(defaultColor);
                                                                 //mutedColor = palette.getMutedColor(defaultColor);
+                                                                accentColorMuted = palette.getLightVibrantColor(defaultColor);
 
                                                                 if (firstTime) {
                                                                     viewPager.setBackgroundColor(mutedColor);
+                                                                    checkout_icon.setColorFilter(accentColorMuted);
+                                                                    order_history.setColorFilter(accentColorMuted);
                                                                     firstTime = false;
                                                                 }
                                                                 Log.d("Changing", "activated 2");
@@ -428,6 +432,8 @@ public class UserHub_test extends FragmentActivity implements android.location.L
                                                                     palette = Palette.from(bitmap).generate();
                                                                    // mutedColor = palette.getDarkVibrantColor(defaultColor);
                                                                     mutedColor = palette.getVibrantColor(defaultColor);
+                                                                    accentColorMuted = palette.getLightVibrantColor(defaultColor);
+
                                                                     //mutedColor = palette.getMutedColor(defaultColor);
                                                                     Log.d("Changing", "activated 2");
                                                                     //obj.colorFetched(position, vibrantColor, mutedColor);
@@ -473,6 +479,8 @@ public class UserHub_test extends FragmentActivity implements android.location.L
                                                                     //vibrantColor = palette.getDarkVibrantColor(defaultColor);
                                                                     vibrantColor = palette.getVibrantColor(defaultColor);
                                                                     //mutedColor = palette.getMutedColor(defaultColor);
+                                                                    accentColor = palette.getLightVibrantColor(defaultColor);
+
                                                                     Log.d("Changing", "activated 4");
                                                                     //obj.colorFetched(position, vibrantColor, mutedColor);
                                                                     //viewPager.setBackgroundColor(vibrantColor);
@@ -497,6 +505,12 @@ public class UserHub_test extends FragmentActivity implements android.location.L
                                                     //animates the colour
                                                     viewPager.setBackgroundColor((Integer) argbEvaluator.evaluate(positionOffset,
                                                             mutedColor, vibrantColor));
+
+                                                    checkout_icon.setColorFilter((Integer) argbEvaluator.evaluate(positionOffset,
+                                                            accentColorMuted, accentColor));
+
+                                                    order_history.setColorFilter((Integer) argbEvaluator.evaluate(positionOffset,
+                                                            accentColorMuted, accentColor));
 
                                                     Log.d("Icon Links", fragments.get(position%10).dataReturn());
                                                 }
