@@ -13,8 +13,14 @@ import android.view.WindowManager;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
+
+import java.util.Map;
 
 import bluefirelabs.mojo.R;
 import bluefirelabs.mojo.handlers.adapters.FirebaseRecyclerAdapterHistory;
@@ -87,10 +93,35 @@ public class order_tracking extends AppCompatActivity
         @Override
         protected void populateViewHolder(final FirebaseRecyclerAdapterHistory.RecyclerViewHolder viewHolder, orderHistory_List model, int position) {
 
+            //String[] restaurantName = {""};
+
             String result = model.getResult();
             Log.d("Result", result);
 
             viewHolder.orderid.setText(model.getOrderid());
+
+            final DatabaseReference reference = FirebaseDatabase.getInstance().getReference(RESTAURANT).child(model.getVendoruid()).child("info");
+            reference.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    Map<String, Object> hopperValues = (Map<String, Object>) dataSnapshot.getValue();
+                    String restaurantName = hopperValues.get("name").toString();        //finds the vendor's name
+                    String imageUrl = hopperValues.get("icon").toString();        //finds the vendor's icon
+
+                    //Sets the vendor's name
+                    viewHolder.restaurant_name.setText(restaurantName);
+
+                    //sets the vendor's icon
+                    Picasso.with(getApplicationContext())
+                            .load(imageUrl)
+                            .into(viewHolder.restaurant_icon);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
 
 
             if(result.equals("accepted") || result.equals("declined")){

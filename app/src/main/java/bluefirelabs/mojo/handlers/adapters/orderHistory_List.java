@@ -10,6 +10,7 @@ public class orderHistory_List {
     private String description;
     private String icon;
     private String orderid;
+    private String vendoruid;
     private String name;
     private String type;
     private String quantity;
@@ -49,6 +50,14 @@ public class orderHistory_List {
 
     public void setOrderid(String orderid) {
         this.orderid = orderid;
+    }
+
+    public String getVendoruid() {
+        return vendoruid;
+    }
+
+    public void setVendoruid(String vendoruid) {
+        this.vendoruid = vendoruid;
     }
 
     public String getName() {
