@@ -330,32 +330,35 @@ public class Checkout extends FragmentActivity {
             @Override
             public void onClick(final View view) {
 
-                if(addPayment.isChecked()){
-                    final Card cardToSave = mCardInputWidget.getCard();
-                    if (cardToSave == null) {
-                        //mErrorDialogHandler.showError("Invalid Card Data");
-                        Snackbar.make(view, "Invalid Card Data", Snackbar.LENGTH_LONG)
-                                .setAction("Action", null).show();
-                    } else {
-                        cardToSave.validateNumber();
-                        cardToSave.validateCVC();
-                        if(!cardToSave.validateCard()) {
-                            Snackbar.make(view, "Card Data Invalid", Snackbar.LENGTH_LONG)
-                                    .setAction("Action", null).show();
-                        } else {
-                            Snackbar.make(view, "Card Data Valid", Snackbar.LENGTH_LONG)
-                                    .setAction("Action", null).show();
 
-                            //if card data is valid then the checkout popup will appear
-                            CharSequence options[] = new CharSequence[] {"Place Order", "Cancel"};
 
-                            AlertDialog.Builder builder = new AlertDialog.Builder(Checkout.this);
-                            builder.setTitle("Checkout");
-                            builder.setItems(options, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
 
-                                    if(which == 0){
+                //if card data is valid then the checkout popup will appear
+                CharSequence options[] = new CharSequence[] {"Place Order", "Cancel"};
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(Checkout.this);
+                builder.setTitle("Checkout");
+                builder.setItems(options, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        if(which == 0){
+                            if(addPayment.isChecked()){
+                                final Card cardToSave = mCardInputWidget.getCard();
+                                if (cardToSave == null) {
+                                    //mErrorDialogHandler.showError("Invalid Card Data");
+                                    Snackbar.make(view, "Invalid Card Data", Snackbar.LENGTH_LONG)
+                                            .setAction("Action", null).show();
+                                } else {
+                                    cardToSave.validateNumber();
+                                    cardToSave.validateCVC();
+                                    if(!cardToSave.validateCard()) {
+                                        Snackbar.make(view, "Card Data Invalid", Snackbar.LENGTH_LONG)
+                                                .setAction("Action", null).show();
+                                    } else {
+                                        Snackbar.make(view, "Card Data Valid", Snackbar.LENGTH_LONG)
+                                                .setAction("Action", null).show();
+
                                         //Accept payment and checkout
                                         Stripe stripe = new Stripe(view.getContext(), getResources().getString(R.string.stripe_key));      //TODO: Change this to the official product public key
                                         stripe.createToken(
@@ -396,24 +399,24 @@ public class Checkout extends FragmentActivity {
                                                     }
                                                 }
                                         );
-                                    }
 
-                                    else {
-                                        //Go back to checkout
                                     }
                                 }
-                            });
 
-                            builder.show();     //shows the dialog box for the checkout click choice
+                            }
 
+                            else {
+                                getPaymentsReady();
+                            }
+                        }
+
+                        else {
+                            //Go back to checkout
                         }
                     }
+                });
 
-                }
-
-                else {
-                    getPaymentsReady();
-                }
+                builder.show();     //shows the dialog box for the checkout click choice
 
             }
         });
