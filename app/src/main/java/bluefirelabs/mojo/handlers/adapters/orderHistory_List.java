@@ -4,7 +4,7 @@ package bluefirelabs.mojo.handlers.adapters;
  * Created by Reza Rajan on 2017-05-28.
  */
 
-public class Food_List {
+public class orderHistory_List {
 
     private String restaurant;
     private String description;
@@ -14,9 +14,8 @@ public class Food_List {
     private String type;
     private String quantity;
     private String result;
-    private long cost;
 
-    public Food_List(){
+    public orderHistory_List(){
 
     }
 
@@ -74,14 +73,6 @@ public class Food_List {
 
     public void setQuantity(String quantity) {
         this.quantity = quantity;
-    }
-
-    public long getCost() {
-        return cost;
-    }
-
-    public void setCost(long cost) {
-        this.cost = cost;
     }
 
     public String getResult() {

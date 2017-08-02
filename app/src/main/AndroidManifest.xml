@@ -141,10 +141,6 @@
             android:configChanges="orientation"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".carousellayout.MainActivity"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".main.ui.user.Gifts"
             android:configChanges="orientation"
             android:screenOrientation="portrait" />

@@ -119,6 +119,15 @@ public class UserHub_test extends FragmentActivity implements android.location.L
             }
         });
 
+        order_history.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Intent intent = new Intent(DetailActivity.this, Checkout.class);            //Goes to checkout
+                Intent intent = new Intent(getApplicationContext(), order_tracking.class);            //Goes to checkout
+                startActivity(intent);
+            }
+        });
+
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             Window window = getWindow();
