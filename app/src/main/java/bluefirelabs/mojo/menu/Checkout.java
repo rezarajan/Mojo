@@ -330,7 +330,7 @@ public class Checkout extends AppCompatActivity{
                         }
                     }
                 });
-                builder.show();
+
 
 
 

@@ -1,10 +1,12 @@
 package bluefirelabs.mojo.main.ui.checkout;
 
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -322,10 +324,11 @@ public class Checkout extends FragmentActivity {
         });
 
         Button pay = (Button) findViewById(R.id.pay);
+        Button cancel = (Button) findViewById(R.id.cancel);
+
         pay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
-
 
                 if(addPayment.isChecked()){
                     final Card cardToSave = mCardInputWidget.getCard();
@@ -343,45 +346,65 @@ public class Checkout extends FragmentActivity {
                             Snackbar.make(view, "Card Data Valid", Snackbar.LENGTH_LONG)
                                     .setAction("Action", null).show();
 
-                            Stripe stripe = new Stripe(view.getContext(), getResources().getString(R.string.stripe_key));      //TODO: Change this to the official product public key
-                            stripe.createToken(
-                                    cardToSave,
-                                    new TokenCallback() {
-                                        public void onSuccess(Token token) {
-                                            // Send token to your server
-                                            Log.d("token", token.getCard().toString());
+                            //if card data is valid then the checkout popup will appear
+                            CharSequence options[] = new CharSequence[] {"Place Order", "Cancel"};
 
-                                            FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-                                            FirebaseUser user = firebaseAuth.getCurrentUser();
-                                            String uid = user.getUid();
-                                            Log.d("UID for Payment", uid);
-                                            DatabaseReference reference = FirebaseDatabase.getInstance().getReference("/stripe_customers/" + uid + "/sources");
-                                            String pushId = reference.push().getKey();     //String
-                                            //reference.child(pushId).child("token").setValue(token.getCard());
-                                            card.put("object", "card");
-                                            card.put("exp_month", cardToSave.getExpMonth());
-                                            card.put("exp_year", cardToSave.getExpYear());
-                                            card.put("number", cardToSave.getNumber());
-                                            card.put("cvc", cardToSave.getCVC());
+                            AlertDialog.Builder builder = new AlertDialog.Builder(Checkout.this);
+                            builder.setTitle("Checkout");
+                            builder.setItems(options, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                    if(which == 0){
+                                        //Accept payment and checkout
+                                        Stripe stripe = new Stripe(view.getContext(), getResources().getString(R.string.stripe_key));      //TODO: Change this to the official product public key
+                                        stripe.createToken(
+                                                cardToSave,
+                                                new TokenCallback() {
+                                                    public void onSuccess(Token token) {
+                                                        // Send token to your server
+                                                        Log.d("token", token.getCard().toString());
+
+                                                        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+                                                        FirebaseUser user = firebaseAuth.getCurrentUser();
+                                                        String uid = user.getUid();
+                                                        Log.d("UID for Payment", uid);
+                                                        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("/stripe_customers/" + uid + "/sources");
+                                                        String pushId = reference.push().getKey();     //String
+                                                        //reference.child(pushId).child("token").setValue(token.getCard());
+                                                        card.put("object", "card");
+                                                        card.put("exp_month", cardToSave.getExpMonth());
+                                                        card.put("exp_year", cardToSave.getExpYear());
+                                                        card.put("number", cardToSave.getNumber());
+                                                        card.put("cvc", cardToSave.getCVC());
 
 
-                                            //creates a new source before payment
-                                            reference.child(pushId).child("token").updateChildren(card);
+                                                        //creates a new source before payment
+                                                        reference.child(pushId).child("token").updateChildren(card);
 
 
-                                            getPaymentsReady();
+                                                        getPaymentsReady();
 
-                                            Snackbar.make(view, "Payment Successful", Snackbar.LENGTH_LONG)
-                                                    .setAction("Action", null).show();
+                                                        Snackbar.make(view, "Payment Successful", Snackbar.LENGTH_LONG)
+                                                                .setAction("Action", null).show();
 
-                                        }
-                                        public void onError(Exception error) {
-                                            // Show localized error message
-                                            Snackbar.make(view, error.getLocalizedMessage(), Snackbar.LENGTH_LONG)
-                                                    .setAction("Action", null).show();
-                                        }
+                                                    }
+                                                    public void onError(Exception error) {
+                                                        // Show localized error message
+                                                        Snackbar.make(view, error.getLocalizedMessage(), Snackbar.LENGTH_LONG)
+                                                                .setAction("Action", null).show();
+                                                    }
+                                                }
+                                        );
                                     }
-                            );
+
+                                    else {
+                                        //Go back to checkout
+                                    }
+                                }
+                            });
+
+                            builder.show();     //shows the dialog box for the checkout click choice
 
                         }
                     }
@@ -392,6 +415,32 @@ public class Checkout extends FragmentActivity {
                     getPaymentsReady();
                 }
 
+            }
+        });
+
+
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                CharSequence options[] = new CharSequence[] {"Clear Cart", "Cancel"};
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(Checkout.this);
+                builder.setTitle("Clear Cart");
+                builder.setItems(options, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if(which == 0){
+                            //Clear the cart
+                            myDb.deleteAll();
+                            finish();
+                        }
+                        else {
+                            //Go back to checkout
+                        }
+                    }
+                });
+                builder.show();     //shows the dialog box for the cancel click choice
             }
         });
     }
