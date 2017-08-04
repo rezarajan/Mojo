@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import bluefirelabs.mojo.R;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by Reza Rajan on 2017-06-06.
@@ -19,9 +20,16 @@ public class FirebaseViewPagerAdapter {
     public static class RecyclerViewHolder extends RecyclerView.ViewHolder {
 
         private Context context;
-        public TextView itemTitle;
+/*        public TextView itemTitle;
         public TextView itemDescription;
-        public ImageView itemIcon;
+        public ImageView itemIcon;*/
+
+
+        public CircleImageView restaurantLogo, openindicatorIcon,
+                descriptor1, descriptor2, descriptor3, descriptor4;
+
+        public TextView restaurantName, openIndicatorText,
+                restaurantDescription, averageTime;
 
         public RecyclerViewHolder(View itemView) {
             super(itemView);
@@ -29,6 +37,25 @@ public class FirebaseViewPagerAdapter {
             //itemIcon = (ImageView) itemView.findViewById(R.id.item_icon);
             //itemTitle = (TextView) itemView.findViewById(R.id.item_title);
             //itemDescription = (TextView) itemView.findViewById(R.id.address1);
+
+
+
+            restaurantLogo = (CircleImageView) itemView.findViewById(R.id.restaurantLogo);
+            openindicatorIcon = (CircleImageView) itemView.findViewById(R.id.openIndicatorIcon);
+            descriptor1 = (CircleImageView) itemView.findViewById(R.id.descriptor1);
+            descriptor2 = (CircleImageView) itemView.findViewById(R.id.descriptor2);
+            descriptor3 = (CircleImageView) itemView.findViewById(R.id.descriptor3);
+            descriptor4 = (CircleImageView) itemView.findViewById(R.id.descriptor4);
+
+
+
+
+            restaurantName = (TextView) itemView.findViewById(R.id.restaurantName);
+            openIndicatorText = (TextView) itemView.findViewById(R.id.openIndicatorText);
+            restaurantDescription = (TextView) itemView.findViewById(R.id.restaurantDescription);
+            averageTime = (TextView) itemView.findViewById(R.id.averageTime);
+
+
             context = itemView.getContext();
 
             //itemIcon.setBackgroundColor(Color.parseColor("#d86a0a"));

@@ -41,6 +41,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -396,11 +397,18 @@ public class UserHub_carousel extends AppCompatActivity
 
             @Override
             protected void populateViewHolder(final FirebaseViewPagerAdapter.RecyclerViewHolder viewHolder, Food_List model, int position) {
-                //Log.d("Description: ", model.getDescription());
+                Log.d("Description: ", model.getDescription());
                 //viewHolder.itemDescription.setText(model.getDescription());
                 //viewHolder.itemTitle.setText(model.getRestaurant());
                 //viewHolder.itemIcon.setImageResource(R.drawable.restaurant_icon);
-                //Picasso.with(getApplicationContext()).load(model.getIcon()).into(viewHolder.itemIcon);
+
+                viewHolder.restaurantName.setText(model.getRestaurant());
+                //viewHolder.openIndicatorText.setText(model.getOpen());
+                viewHolder.restaurantDescription.setText(model.getDescription());
+                //viewHolder.averageTime.setText(model.getAverageTime());
+
+
+                Picasso.with(getApplicationContext()).load(model.getIcon()).into(viewHolder.restaurantLogo);
 
                 /*viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
