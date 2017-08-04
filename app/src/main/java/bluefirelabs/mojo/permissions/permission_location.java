@@ -27,6 +27,8 @@ import com.google.firebase.auth.FirebaseUser;
 
 import bluefirelabs.mojo.R;
 import bluefirelabs.mojo.main.ui.user.RunnerHub;
+import bluefirelabs.mojo.main.ui.user.UserHub;
+import bluefirelabs.mojo.main.ui.user.UserHub_carousel;
 import bluefirelabs.mojo.main.ui.user.UserHub_test;
 import bluefirelabs.mojo.main.ui.user.VendorHub;
 
@@ -117,7 +119,8 @@ public class permission_location extends AppCompatActivity implements GoogleApiC
             finish();
         } else {
             //Intent intent = new Intent(permission_location.this, UserHub.class);
-            Intent intent = new Intent(permission_location.this, UserHub_test.class);
+            Intent intent = new Intent(permission_location.this, UserHub_carousel.class);
+            //Intent intent = new Intent(permission_location.this, UserHub_test.class);
             startActivity(intent);
             finish();
         }

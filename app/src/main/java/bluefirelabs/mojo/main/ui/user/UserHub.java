@@ -20,7 +20,9 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.LinearSnapHelper;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SnapHelper;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -446,5 +448,9 @@ public class UserHub extends AppCompatActivity
         mRestaurantRecyclerView.setLayoutManager(mLinearLayoutManager);
         mRestaurantRecyclerView.setAdapter(mFirebaseAdapter);
         mRestaurantRecyclerView.setNestedScrollingEnabled(false);
+
+        //SnapHelper helper = new StartSnapHelper();
+        //SnapHelper helper = new LinearSnapHelper();
+        //helper.attachToRecyclerView(mRestaurantRecyclerView);
     }
 }

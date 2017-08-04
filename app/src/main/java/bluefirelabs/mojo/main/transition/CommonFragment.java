@@ -3,6 +3,7 @@ package bluefirelabs.mojo.main.transition;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -18,7 +19,14 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
+
+import java.util.Map;
 
 import bluefirelabs.mojo.R;
 
@@ -34,6 +42,7 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
     /*private View head1, head2, head3, head4;*/
     private String imageUrl, description, restaurantName;
     private Integer restaurantColor;
+    String imageColour;
 
     private Float rating = 0.0f;
 
@@ -89,8 +98,10 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
         //setColors(imageView.getImageAlpha());
         //setColors(R.mipmap.ic_launcher_round);
 
+        //imageView.setBackgroundColor(Color.parseColor(imageColour));
 
-        //imageView.setImageResource(R.drawable.image1);
+
+            //imageView.setImageResource(R.drawable.image1);
         //address1 = dragLayout.findViewById(R.id.address1);
         //address2 = dragLayout.findViewById(R.id.address2);
         //address3 = dragLayout.findViewById(R.id.address3);
@@ -100,9 +111,30 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
 
         address4.setText(description);
 
+
+
         ratingBar.setMax(5);
         ratingBar.setStepSize(0.5f);
         ratingBar.setRating(rating);
+
+        /*Updates the data on the fragments regardless of the position */
+
+
+/*        final DatabaseReference reference = FirebaseDatabase.getInstance().getReference("uid").child("Starbucks").child("info");
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+
+                ratingBar.setRating(Float.parseFloat(dataSnapshot.child("rating").getValue().toString()));
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });*/
+
 
 /*        head1 = dragLayout.findViewById(R.id.head1);
         head2 = dragLayout.findViewById(R.id.head2);
@@ -137,12 +169,17 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
         ActivityCompat.startActivity(activity, intent, options.toBundle());
     }
 
-    public void bindData(String imageUrl, String description, String restaurantName, Float rating) {
+    public void bindAllData(String imageUrl, String description, String restaurantName, Float rating) {
         this.imageUrl = imageUrl;
         this.description = description;
         this.restaurantName = restaurantName;
         this.rating = rating;
         Log.d("imageUrl", imageUrl);
+    }
+
+
+    public void bindImageData(String imageColour) {
+        this.imageColour = imageColour;
     }
 
     public String dataReturn () {

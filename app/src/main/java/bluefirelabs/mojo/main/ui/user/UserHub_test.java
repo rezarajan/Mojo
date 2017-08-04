@@ -299,8 +299,7 @@ public class UserHub_test extends FragmentActivity implements android.location.L
                             System.out.println(String.format("Key %s entered the search area at [%f,%f]", key, location.latitude, location.longitude));
 
                             //setRestaurantName(myCallback_2, location_indicator, "Welcome to \n"+ key.toUpperCase());
-                            setRestaurantName(myCallback_2, location_indicator, key.toUpperCase());
-
+                            //setRestaurantName(myCallback_2, location_indicator, key.toUpperCase());
 
                             final DatabaseReference reference = FirebaseDatabase.getInstance().getReference(restaurant).child(key);
                             reference.addValueEventListener(new ValueEventListener() {
@@ -329,7 +328,7 @@ public class UserHub_test extends FragmentActivity implements android.location.L
                                                 Log.d("Position", String.valueOf(position));
 
 
-                                                fragment.bindData(dataSnapshot.child("id" + String.valueOf(position)).child("icon").getValue().toString(),
+                                                fragment.bindAllData(dataSnapshot.child("id" + String.valueOf(position)).child("icon").getValue().toString(),
                                                         dataSnapshot.child("id" + String.valueOf(position)).child("description").getValue().toString(),
                                                         dataSnapshot.child("id" + String.valueOf(position)).child("restaurant").getValue().toString(),
                                                         Float.parseFloat(dataSnapshot.child("id" + String.valueOf(position)).child("rating").getValue().toString())

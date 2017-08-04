@@ -68,7 +68,7 @@ public class MainActivity extends FragmentActivity {
             @Override
             public Fragment getItem(int position) {
                 CommonFragment fragment = fragments.get(position % 10);
-                //fragment.bindData(imageArray[position % imageArray.length]);
+                //fragment.bindAllData(imageArray[position % imageArray.length]);
                 return fragment;
             }
 

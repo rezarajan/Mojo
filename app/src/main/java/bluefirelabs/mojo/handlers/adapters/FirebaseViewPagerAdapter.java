@@ -1,11 +1,14 @@
 package bluefirelabs.mojo.handlers.adapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import bluefirelabs.mojo.R;
 
 /**
  * Created by Reza Rajan on 2017-06-06.
@@ -27,6 +30,8 @@ public class FirebaseViewPagerAdapter {
             //itemTitle = (TextView) itemView.findViewById(R.id.item_title);
             //itemDescription = (TextView) itemView.findViewById(R.id.address1);
             context = itemView.getContext();
+
+            //itemIcon.setBackgroundColor(Color.parseColor("#d86a0a"));
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

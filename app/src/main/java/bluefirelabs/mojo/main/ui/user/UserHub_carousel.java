@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
@@ -19,12 +20,17 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.LinearSnapHelper;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SnapHelper;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.azoft.carousellayoutmanager.CarouselLayoutManager;
+import com.azoft.carousellayoutmanager.CarouselZoomPostLayoutListener;
+import com.azoft.carousellayoutmanager.CenterScrollListener;
 import com.firebase.geofire.GeoFire;
 import com.firebase.geofire.GeoLocation;
 import com.firebase.geofire.GeoQuery;
@@ -46,6 +52,7 @@ import bluefirelabs.mojo.fragments.restaurantlist_fragment;
 import bluefirelabs.mojo.handlers.adapters.FirebaseViewPagerAdapter;
 import bluefirelabs.mojo.handlers.adapters.Food_List;
 import bluefirelabs.mojo.handlers.online.HttpDataHandler;
+import bluefirelabs.mojo.main.transition.CommonFragment;
 import bluefirelabs.mojo.main.ui.payments.Payments;
 import bluefirelabs.mojo.handlers.online.SharedPrefManager;
 import bluefirelabs.mojo.handlers.online.uploadImage;
@@ -366,16 +373,23 @@ public class UserHub_carousel extends AppCompatActivity
 
     public void populateView(String venue){
         mRestaurantRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        mLinearLayoutManager = new LinearLayoutManager(this);
-        mLinearLayoutManager.setStackFromEnd(true);
+        //mLinearLayoutManager = new CenterZoomLayoutManager(this);
+         mLinearLayoutManager = new LinearLayoutManager(this);
+        //mLinearLayoutManager.setStackFromEnd(true);
+        //mLinearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+
+        CarouselLayoutManager layoutManager = new CarouselLayoutManager(CarouselLayoutManager.HORIZONTAL);
+        layoutManager.setPostLayoutListener(new CarouselZoomPostLayoutListener());
 
         FirebaseUser user = firebaseAuth.getCurrentUser();
         Log.d("UID", user.getUid());
 
+        final CommonFragment fragment = new CommonFragment();
+
         mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
         mFirebaseAdapter = new FirebaseRecyclerAdapter<Food_List, FirebaseViewPagerAdapter.RecyclerViewHolder>(
                 Food_List.class,
-                R.layout.fragment_common,
+                R.layout.infocard,
                 FirebaseViewPagerAdapter.RecyclerViewHolder.class,
                 mFirebaseDatabaseReference.child(RESTAURANT).child(venue)
         ) {
@@ -383,7 +397,7 @@ public class UserHub_carousel extends AppCompatActivity
             @Override
             protected void populateViewHolder(final FirebaseViewPagerAdapter.RecyclerViewHolder viewHolder, Food_List model, int position) {
                 //Log.d("Description: ", model.getDescription());
-                viewHolder.itemDescription.setText(model.getDescription());
+                //viewHolder.itemDescription.setText(model.getDescription());
                 //viewHolder.itemTitle.setText(model.getRestaurant());
                 //viewHolder.itemIcon.setImageResource(R.drawable.restaurant_icon);
                 //Picasso.with(getApplicationContext()).load(model.getIcon()).into(viewHolder.itemIcon);
@@ -394,6 +408,9 @@ public class UserHub_carousel extends AppCompatActivity
                         viewHolder.getter_restaurants();
                     }
                 }); */
+
+
+
             }
         };
 
@@ -402,15 +419,32 @@ public class UserHub_carousel extends AppCompatActivity
             public void onItemRangeInserted(int positionStart, int itemCount) {
                 super.onItemRangeInserted(positionStart, itemCount);
                 int restaurantCount = mFirebaseAdapter.getItemCount();
-                int lastVisiblePosition = mLinearLayoutManager.findLastVisibleItemPosition();
+/*                int lastVisiblePosition = mLinearLayoutManager.findLastVisibleItemPosition();
                 if(lastVisiblePosition == -1 || (positionStart >= (restaurantCount -1) && lastVisiblePosition == (positionStart -1))){
                     mRestaurantRecyclerView.scrollToPosition(positionStart);
-                }
+                }*/
+
+
             }
         });
 
-        mRestaurantRecyclerView.setLayoutManager(mLinearLayoutManager);
+
+        //mRestaurantRecyclerView.addItemDecoration(new OverlapDecoration());
+
+/*        SnapHelper helper = new LinearSnapHelper();
+        helper.attachToRecyclerView(mRestaurantRecyclerView);*/
+
+        //mRestaurantRecyclerView.setLayoutManager(mLinearLayoutManager);
+        mRestaurantRecyclerView.setLayoutManager(layoutManager);
         mRestaurantRecyclerView.setAdapter(mFirebaseAdapter);
+        mRestaurantRecyclerView.addOnScrollListener(new CenterScrollListener());
         mRestaurantRecyclerView.setNestedScrollingEnabled(false);
+
+        //SnapHelper helper = new StartSnapHelper();
+
+
+
+
+
     }
 }
