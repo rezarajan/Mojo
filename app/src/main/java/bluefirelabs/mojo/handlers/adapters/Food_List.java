@@ -15,6 +15,7 @@ public class Food_List {
     private String type;
     private String quantity;
     private String result;
+    private String open;
     private long cost;
 
     public Food_List(){
@@ -83,6 +84,14 @@ public class Food_List {
 
     public void setQuantity(String quantity) {
         this.quantity = quantity;
+    }
+
+    public String getOpen() {
+        return open;
+    }
+
+    public void setOpen(String open) {
+        this.open = open;
     }
 
     public long getCost() {

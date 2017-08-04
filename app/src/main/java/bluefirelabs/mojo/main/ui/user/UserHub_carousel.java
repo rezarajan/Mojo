@@ -464,8 +464,22 @@ public class UserHub_carousel extends AppCompatActivity
 */
 
 
+
                 if(model.getColor() != null){
                     viewHolder.background_image_view.setBackgroundColor(Color.parseColor(model.getColor()));
+                }
+
+                if(model.getOpen() != null){
+                    String openStatus = model.getOpen();
+                    viewHolder.openIndicatorText.setText(openStatus);
+
+                    if(openStatus.equals("Open")){
+                        viewHolder.openindicatorIcon.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.colorOpen));
+                    } else if(openStatus.equals("Closed")){
+                        viewHolder.openindicatorIcon.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.colorClosed));
+                    } else if(openStatus.equals("Closing")){
+                        viewHolder.openindicatorIcon.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.colorClosing));
+                    }
                 }
 
 
