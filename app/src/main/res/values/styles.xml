@@ -41,7 +41,7 @@
 
 
     <style name="BackGroundImageView">
-        <item name="android:alpha">0.5</item>
+        <item name="android:alpha">0.6</item>
         <item name="android:scaleType">fitXY</item>
         <!--<item name="android:src">@drawable/img_background</item>-->
     </style>
