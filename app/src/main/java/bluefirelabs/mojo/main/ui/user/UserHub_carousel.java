@@ -1,5 +1,6 @@
 package bluefirelabs.mojo.main.ui.user;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -17,8 +18,11 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.util.Pair;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -26,6 +30,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -57,6 +62,7 @@ import bluefirelabs.mojo.handlers.adapters.FirebaseViewPagerAdapter;
 import bluefirelabs.mojo.handlers.adapters.Food_List;
 import bluefirelabs.mojo.handlers.online.HttpDataHandler;
 import bluefirelabs.mojo.main.transition.CommonFragment;
+import bluefirelabs.mojo.main.transition.DetailActivity;
 import bluefirelabs.mojo.main.ui.payments.Payments;
 import bluefirelabs.mojo.handlers.online.SharedPrefManager;
 import bluefirelabs.mojo.handlers.online.uploadImage;
@@ -88,6 +94,12 @@ public class UserHub_carousel extends AppCompatActivity
 
     private RecyclerView mRestaurantRecyclerView;
     private LinearLayoutManager mLinearLayoutManager;
+
+
+    public static final String EXTRA_RESTAURANT_LOGO = "restaurantLogo";
+    public static final String EXTRA_RESTAURANT_NAME = "restaurantName";
+    public static final String EXTRA_RESTAURANT_COLOR = "restaurantColor";
+    public static final String EXTRA_TRANSITION_NAME = "transitionName";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -432,13 +444,19 @@ public class UserHub_carousel extends AppCompatActivity
         mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
         mFirebaseAdapter = new FirebaseRecyclerAdapter<Food_List, FirebaseViewPagerAdapter.RecyclerViewHolder>(
                 Food_List.class,
-                R.layout.infocard,
+                R.layout.infocard_front,
                 FirebaseViewPagerAdapter.RecyclerViewHolder.class,
                 mFirebaseDatabaseReference.child(RESTAURANT).child(venue)
         ) {
+            @Override
+            public void onBindViewHolder(FirebaseViewPagerAdapter.RecyclerViewHolder viewHolder, int position) {
+                super.onBindViewHolder(viewHolder, position);
+
+            }
+
 
             @Override
-            protected void populateViewHolder(final FirebaseViewPagerAdapter.RecyclerViewHolder viewHolder, Food_List model, final int position) {
+            protected void populateViewHolder(final FirebaseViewPagerAdapter.RecyclerViewHolder viewHolder, final Food_List model, final int position) {
                 Log.d("Description: ", model.getDescription());
                 //viewHolder.itemDescription.setText(model.getDescription());
                 //viewHolder.itemTitle.setText(model.getRestaurant());
@@ -551,6 +569,39 @@ public class UserHub_carousel extends AppCompatActivity
                     }
                 });*/
 
+
+
+
+            viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //Setting up the transitions for the logo, using the restaurant's name as the unique identifier
+                    //to avoid image clashing with other items
+/*                    ViewCompat.setTransitionName(viewHolder.restaurantLogo, viewHolder.restaurantName.toString());
+
+
+                    intent.putExtra(EXTRA_TRANSITION_NAME, ViewCompat.getTransitionName(viewHolder.restaurantLogo));*/
+
+
+
+                    ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(UserHub_carousel.this,
+                            new Pair(viewHolder.restaurantLogo, DetailActivity.IMAGE_TRANSITION_NAME)
+                    );
+
+
+                    Intent intent = new Intent(getApplicationContext(), DetailActivity.class);
+                    intent.putExtra(DetailActivity.EXTRA_RESTAURANT_LOGO, model.getIcon());
+                    intent.putExtra(DetailActivity.EXTRA_RESTAURANT_COLOR, model.getColor());
+
+
+                    startActivity(intent, options.toBundle());
+
+
+
+
+
+                }
+            });
 
             }
         };

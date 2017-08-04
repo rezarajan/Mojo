@@ -3,7 +3,6 @@ package bluefirelabs.mojo.main.transition;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -19,14 +18,7 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
-
-import java.util.Map;
 
 import bluefirelabs.mojo.R;
 
@@ -162,7 +154,7 @@ public class CommonFragment extends Fragment implements DragLayout.GotoDetailLis
                 new Pair(head4, DetailActivity.HEAD4_TRANSITION_NAME)*/
         );
         Intent intent = new Intent(activity, DetailActivity.class);
-        intent.putExtra(DetailActivity.EXTRA_IMAGE_URL, imageUrl);
+        intent.putExtra(DetailActivity.EXTRA_RESTAURANT_LOGO, imageUrl);
         intent.putExtra(DetailActivity.EXTRA_RESTAURANT_DETAILS, description);
         intent.putExtra(DetailActivity.EXTRA_RESTAURANT_NAME, restaurantName);
         intent.putExtra(DetailActivity.EXTRA_RESTAURANT_COLOR, restaurantColor);

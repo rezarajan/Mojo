@@ -51,8 +51,8 @@ import database.DatabaseHelper;
  */
 public class DetailActivity extends FragmentActivity {
 
-    public static final String EXTRA_IMAGE_URL = "detailImageUrl";
     public static final String EXTRA_RESTAURANT_DETAILS = "detailRestaurant";
+    public static final String EXTRA_RESTAURANT_LOGO = "restaurantLogo";
     public static final String EXTRA_RESTAURANT_NAME = "restaurantName";
     public static final String EXTRA_RESTAURANT_COLOR = "restaurantColor";
 
@@ -119,12 +119,12 @@ public class DetailActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
 
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+/*        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                     WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        }
+        }*/
 
-        setContentView(R.layout.activity_detail);
+        setContentView(R.layout.item_menu);
         myDb = new DatabaseHelper(this); //calls constructor from the database helper class
 
         imageView = (ImageView) findViewById(R.id.image);
@@ -151,7 +151,7 @@ public class DetailActivity extends FragmentActivity {
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
 
-        imageUrl = getIntent().getStringExtra(EXTRA_IMAGE_URL);
+        imageUrl = getIntent().getStringExtra(EXTRA_RESTAURANT_LOGO);
         restaurant_description = getIntent().getStringExtra(EXTRA_RESTAURANT_DETAILS);
         restaurantName = getIntent().getStringExtra(EXTRA_RESTAURANT_NAME);
         //mutedColor = getIntent().getIntExtra(EXTRA_RESTAURANT_COLOR, 0);
@@ -522,7 +522,7 @@ public class DetailActivity extends FragmentActivity {
             }
         };
 
-        firebaseTask(myCallback);
+        //firebaseTask(myCallback);
 
     }
 
