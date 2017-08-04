@@ -14,8 +14,10 @@
 
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:src="@mipmap/ic_launcher"/>
+        android:layout_height="144dp"
+        android:src="@mipmap/ic_launcher"
+        android:layout_marginBottom="16dp"
+        android:layout_marginTop="16dp"/>
 
     <!-- Login progress -->
     <ProgressBar
@@ -29,18 +31,21 @@
     <ScrollView
         android:id="@+id/login_form"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:id="@+id/email_login_form"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_gravity="center"
+            android:layout_marginBottom="16dp"
+            android:paddingTop="16dp">
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColorHint="@color/white">
+                android:textColorHint="@color/black">
 
                 <EditText
                     android:id="@+id/firstName"
@@ -48,6 +53,8 @@
                     android:layout_height="wrap_content"
                     android:imeActionId="@+id/login"
                     android:hint="First Name"
+                    android:textSize="16sp"
+                    android:fontFamily="sans-serif-light"
                     android:imeActionLabel="First Name"
                     android:imeOptions="actionUnspecified"
                     android:inputType="textPersonName"
@@ -59,13 +66,15 @@
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColorHint="@color/white">
+                android:textColorHint="@color/black">
 
                 <AutoCompleteTextView
                     android:id="@+id/email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/prompt_email"
+                    android:textSize="16sp"
+                    android:fontFamily="sans-serif-light"
                     android:inputType="textEmailAddress"
                     android:maxLines="1"
                     android:singleLine="true" />
@@ -75,13 +84,15 @@
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColorHint="@color/white">
+                android:textColorHint="@color/black">
 
                 <EditText
                     android:id="@+id/password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/prompt_password"
+                    android:textSize="16sp"
+                    android:fontFamily="sans-serif-light"
                     android:imeActionId="@+id/login"
                     android:imeActionLabel="@string/action_sign_in_short"
                     android:imeOptions="actionUnspecified"
@@ -91,40 +102,51 @@
 
             </android.support.design.widget.TextInputLayout>
 
-            <Button
-                android:id="@+id/email_sign_in_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:background="@color/colorAccent"
-                android:text="Register"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/forgot_password"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="24dp"
-                android:clickable="true"
-                android:gravity="center"
-                android:onClick="onClick"
-                android:text="Forgot your password?"
-                android:textSize="16sp"
-                android:textColor="@color/colorAccent"/>
-
-            <TextView
-                android:id="@+id/sign_in"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="32dp"
-                android:clickable="true"
-                android:gravity="center"
-                android:onClick="onClick"
-                android:text="Already have an account? \nSign in"
-                android:textSize="16sp"/>
-
         </LinearLayout>
     </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/actionButtons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:paddingBottom="32dp"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/email_sign_in_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorSecondary"
+            android:text="Register"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/forgot_password"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="24dp"
+            android:clickable="true"
+            android:gravity="center"
+            android:onClick="onClick"
+            android:text="Forgot your password?"
+            android:textColor="@color/colorSecondaryDark"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/sign_in"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="32dp"
+            android:clickable="true"
+            android:gravity="center"
+            android:onClick="onClick"
+            android:text="Already have an account? \nSign in"
+            android:textColor="@color/colorSecondaryDark"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+
 </LinearLayout>
