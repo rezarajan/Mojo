@@ -9,6 +9,7 @@ public class Food_List {
     private String restaurant;
     private String description;
     private String icon;
+    private String color;
     private String orderid;
     private String name;
     private String type;
@@ -42,6 +43,14 @@ public class Food_List {
 
     public void setIcon(String icon) {
         this.icon = icon;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
     }
 
     public String getOrderid() {

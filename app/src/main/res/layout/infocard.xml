@@ -1,126 +1,149 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="300dp"
-    android:layout_height="400dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     app:cardCornerRadius="16dp"
     app:cardPreventCornerOverlap="true"
     app:cardElevation="4dp"
-    android:layout_gravity="center">
+    android:layout_gravity="center"
+    android:layout_marginStart="36dp"
+    android:layout_marginEnd="36dp"
+    android:layout_marginTop="88dp"
+    android:layout_marginBottom="72dp">
 
-    <RelativeLayout
+    <ImageView
+        style="@style/BackGroundImageView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        tools:ignore="ContentDescription"
+        android:id="@+id/background_image_view"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
 
         <de.hdodenhof.circleimageview.CircleImageView
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="72dp"
-            android:layout_marginBottom="16dp"
+            android:layout_width="144dp"
+            android:layout_height="144dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="48dp"
+            android:layout_marginBottom="24dp"
             android:id="@+id/restaurantLogo" />
 
-        <TextView
-            android:layout_width="146dp"
-            android:layout_height="32dp"
-            android:id="@+id/restaurantName"
-            android:text="Restaurant Name"
-            android:textAlignment="textStart"
-            android:textSize="24sp"
-            android:layout_below="@id/restaurantLogo"
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="16dp"/>
-
-
-        <TextView
-            android:layout_width="84dp"
-            android:layout_height="32dp"
-            android:id="@+id/openIndicatorText"
-            android:text="Open"
-            android:textSize="16sp"
-            android:gravity="center"
-            android:layout_below="@id/restaurantLogo"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="16dp"
-            android:paddingLeft="16dp"/>
-
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:layout_width="16dp"
-            android:layout_height="32dp"
-            android:layout_centerHorizontal="true"
-            android:layout_below="@id/restaurantLogo"
-            android:layout_alignStart="@+id/openIndicatorText"
-            android:id="@+id/openIndicatorIcon"
-            android:src="@drawable/openindicatoricon"/>
-
-        <TextView
-            android:layout_width="256dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/restaurantDescription"
-            android:text="Restaurant Description"
-            android:textAlignment="textStart"
-            android:textSize="16sp"
-            android:layout_below="@id/restaurantName"
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp" />
-
-
-        <TextView
-            android:layout_width="256dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/averageTime"
-            android:text="Avg. Time"
-            android:textAlignment="textStart"
-            android:textSize="16sp"
-            android:layout_alignParentBottom="true"
-            android:layout_marginStart="16dp"
-            android:layout_marginBottom="16dp" />
-
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:layout_width="46dp"
-            android:layout_height="46dp"
-            android:layout_alignParentStart="true"
-            android:layout_marginTop="32dp"
-            android:layout_marginBottom="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_above="@id/averageTime"
-            android:id="@+id/descriptor1" />
-
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:layout_width="46dp"
-            android:layout_height="46dp"
-            android:layout_toEndOf="@id/descriptor1"
-            android:layout_marginTop="32dp"
-            android:layout_marginBottom="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_above="@id/averageTime"
-            android:id="@+id/descriptor2" />
-
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:layout_width="46dp"
-            android:layout_height="46dp"
-            android:layout_toEndOf="@id/descriptor2"
-            android:layout_marginTop="32dp"
-            android:layout_marginBottom="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_above="@id/averageTime"
-            android:id="@+id/descriptor3" />
-
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:layout_width="46dp"
-            android:layout_height="46dp"
-            android:layout_toEndOf="@id/descriptor3"
-            android:layout_marginTop="32dp"
-            android:layout_marginBottom="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_above="@id/averageTime"
-            android:id="@+id/descriptor4" />
 
 
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-    </RelativeLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/restaurantName"
+                android:text="Restaurant Name"
+                android:textSize="24sp"
+                android:layout_alignParentStart="true"
+                android:gravity="center_vertical"
+                android:layout_marginStart="24dp"/>
+
+
+            <TextView
+                android:layout_width="84dp"
+                android:layout_height="32dp"
+                android:id="@+id/openIndicatorText"
+                android:text="Open"
+                android:textSize="16sp"
+                android:gravity="center_vertical"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="24dp"
+                android:paddingStart="24dp"/>
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="16dp"
+                android:layout_height="32dp"
+                android:layout_centerHorizontal="true"
+                android:layout_alignStart="@+id/openIndicatorText"
+                android:id="@+id/openIndicatorIcon"
+                android:src="@drawable/openindicatoricon"/>
+
+            <TextView
+                android:layout_width="256dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/restaurantDescription"
+                android:text="Restaurant Description"
+                android:textAlignment="textStart"
+                android:textSize="14sp"
+                android:layout_below="@id/restaurantName"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="16dp" />
+
+
+            <TextView
+                android:layout_width="256dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/averageTime"
+                android:text="Avg. Time"
+                android:textAlignment="textStart"
+                android:textSize="14sp"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="24dp"
+                android:layout_marginBottom="24dp" />
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="46dp"
+                android:layout_height="46dp"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="32dp"
+                android:layout_marginBottom="16dp"
+                android:layout_marginStart="24dp"
+                android:layout_above="@id/averageTime"
+                android:id="@+id/descriptor1" />
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="46dp"
+                android:layout_height="46dp"
+                android:layout_toEndOf="@id/descriptor1"
+                android:layout_marginTop="32dp"
+                android:layout_marginBottom="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_above="@id/averageTime"
+                android:id="@+id/descriptor2" />
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="46dp"
+                android:layout_height="46dp"
+                android:layout_toEndOf="@id/descriptor2"
+                android:layout_marginTop="32dp"
+                android:layout_marginBottom="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_above="@id/averageTime"
+                android:id="@+id/descriptor3" />
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="46dp"
+                android:layout_height="46dp"
+                android:layout_toEndOf="@id/descriptor3"
+                android:layout_marginTop="32dp"
+                android:layout_marginBottom="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_above="@id/averageTime"
+                android:id="@+id/descriptor4" />
+
+
+
+
+        </RelativeLayout>
+    </LinearLayout>
+
+
 
 
 </android.support.v7.widget.CardView>

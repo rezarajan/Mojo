@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,7 +30,6 @@ import bluefirelabs.mojo.R;
 import bluefirelabs.mojo.main.ui.user.RunnerHub;
 import bluefirelabs.mojo.main.ui.user.UserHub;
 import bluefirelabs.mojo.main.ui.user.UserHub_carousel;
-import bluefirelabs.mojo.main.ui.user.UserHub_test;
 import bluefirelabs.mojo.main.ui.user.VendorHub;
 
 public class permission_location extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
@@ -50,6 +50,8 @@ public class permission_location extends AppCompatActivity implements GoogleApiC
         setContentView(R.layout.activity_main);
         settingButton = (Button) findViewById(R.id.btSettings);
         overridePendingTransition(R.transition.fade_in, R.transition.fade_out);
+
+
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             Window window = getWindow();

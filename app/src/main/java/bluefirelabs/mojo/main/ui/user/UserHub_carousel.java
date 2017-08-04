@@ -11,21 +11,24 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.LinearSnapHelper;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SnapHelper;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.azoft.carousellayoutmanager.CarouselLayoutManager;
@@ -80,6 +83,9 @@ public class UserHub_carousel extends AppCompatActivity
     private DatabaseReference mFirebaseDatabaseReference;
     private FirebaseRecyclerAdapter<Food_List, FirebaseViewPagerAdapter.RecyclerViewHolder> mFirebaseAdapter;
 
+    int defaultColor = 0x000000;
+    int mutedColor = -1;
+
     private RecyclerView mRestaurantRecyclerView;
     private LinearLayoutManager mLinearLayoutManager;
 
@@ -87,6 +93,41 @@ public class UserHub_carousel extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            Window window = getWindow();
+/*            window.setFlags(
+                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);*/
+
+            // clear FLAG_TRANSLUCENT_STATUS flag:
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
+            // add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+
+/*            window.setFlags(
+                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);   */
+
+            //Sets the status bar and navBar to no background, just icons
+/*            window.setFlags(
+                    WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+                    WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+        }*/
+
+            // finally change the color
+            window.setStatusBarColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
+
+        }
+
+        ImageView checkout_icon = (ImageView) findViewById(R.id.checkout_icon);
+        ImageView order_history = (ImageView) findViewById(R.id.order_history);
+
+        //Setting the icons to the secondary color (accent) using the Material Design Palette
+        checkout_icon.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.colorSecondary));
+        order_history.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.colorSecondary));
+
 
         broadcastReceiver = new BroadcastReceiver() {
             @Override
@@ -375,12 +416,13 @@ public class UserHub_carousel extends AppCompatActivity
     public void populateView(String venue){
         mRestaurantRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         //mLinearLayoutManager = new CenterZoomLayoutManager(this);
-         mLinearLayoutManager = new LinearLayoutManager(this);
+         //mLinearLayoutManager = new LinearLayoutManager(this);
         //mLinearLayoutManager.setStackFromEnd(true);
         //mLinearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
 
         CarouselLayoutManager layoutManager = new CarouselLayoutManager(CarouselLayoutManager.HORIZONTAL);
         layoutManager.setPostLayoutListener(new CarouselZoomPostLayoutListener());
+
 
         FirebaseUser user = firebaseAuth.getCurrentUser();
         Log.d("UID", user.getUid());
@@ -396,7 +438,7 @@ public class UserHub_carousel extends AppCompatActivity
         ) {
 
             @Override
-            protected void populateViewHolder(final FirebaseViewPagerAdapter.RecyclerViewHolder viewHolder, Food_List model, int position) {
+            protected void populateViewHolder(final FirebaseViewPagerAdapter.RecyclerViewHolder viewHolder, Food_List model, final int position) {
                 Log.d("Description: ", model.getDescription());
                 //viewHolder.itemDescription.setText(model.getDescription());
                 //viewHolder.itemTitle.setText(model.getRestaurant());
@@ -409,14 +451,91 @@ public class UserHub_carousel extends AppCompatActivity
 
 
                 Picasso.with(getApplicationContext()).load(model.getIcon()).into(viewHolder.restaurantLogo);
+                //Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.drinks);
+/*
+                if(viewHolder.restaurantLogo.getDrawable() != null) {
+                    bitmapDrawable = (BitmapDrawable) viewHolder.restaurantLogo.getDrawable();
+                    Bitmap bitmap = bitmapDrawable.getBitmap();
+                    Palette palette;
+                    palette = Palette.from(bitmap).generate();
+                    mutedColor = palette.getVibrantColor(defaultColor);
+                    viewHolder.itemView.setBackgroundColor(mutedColor);
+                }
+*/
 
-                /*viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+
+                if(model.getColor() != null){
+                    viewHolder.background_image_view.setBackgroundColor(Color.parseColor(model.getColor()));
+                }
+
+
+
+
+                               /* First Time colour palette set */
+              /*  Picasso.with(getApplicationContext())
+                        .load(model.getIcon())
+                        .into(new Target() {
+                            @Override
+                            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                                //Log.d("Setting Colour for", fragments.get(position%10).dataReturn());
+                                Log.d("Changing", "activated 1");
+                                Palette palette;
+                                palette = Palette.from(bitmap).generate();
+                                //mutedColor = palette.getDarkVibrantColor(defaultColor);
+                                mutedColor = palette.getVibrantColor(defaultColor);
+                                Log.d("mutedColor", String.valueOf(mutedColor));
+                                //mutedColor = palette.getMutedColor(defaultColor);
+                                //accentColorMuted = palette.getLightVibrantColor(defaultColor);
+
+                                viewHolder.background_image_view.setBackgroundColor(mutedColor);
+
+*//*                                //First time and second time for the case when the ViewPager cycles to the
+                                //third colour and sets the wrong initial colour
+                                if (firstTime && secondTime) {
+                                    viewPager.setBackgroundColor(mutedColor);
+                                    checkout_icon.setColorFilter(accentColorMuted);
+                                    order_history.setColorFilter(accentColorMuted);
+                                    firstTime = false;
+                                }
+
+                                //after the first time this now sets the second colour
+                                //which is the same as the first fragment (since we exclude the 0th)
+                                if(!firstTime && secondTime){
+                                    viewPager.setBackgroundColor(mutedColor);
+                                    checkout_icon.setColorFilter(accentColorMuted);
+                                    order_history.setColorFilter(accentColorMuted);
+                                    secondTime = false;
+                                }
+                                Log.d("Changing", "activated 2");
+                                //obj.colorFetched(position, vibrantColor, mutedColor);
+                                //viewPager.setBackgroundColor(vibrantColor);*//*
+
+
+                            }
+
+                            @Override
+                            public void onBitmapFailed(Drawable errorDrawable) {
+
+                            }
+
+
+                            @Override
+                            public void onPrepareLoad(Drawable placeHolderDrawable) {
+                                viewHolder.background_image_view.setBackgroundColor(mutedColor);
+
+                            }
+                        });*/
+                 //This works, so the problem only exists with Picasso since it is asynchronous
+                 //viewHolder.itemView.setBackgroundColor(Color.parseColor("#d86a0a"));
+
+
+/*                viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        viewHolder.getter_restaurants();
+                        //notifyItemChanged(position);
+                        notifyDataSetChanged();
                     }
-                }); */
-
+                });*/
 
 
             }
@@ -427,11 +546,12 @@ public class UserHub_carousel extends AppCompatActivity
             public void onItemRangeInserted(int positionStart, int itemCount) {
                 super.onItemRangeInserted(positionStart, itemCount);
                 int restaurantCount = mFirebaseAdapter.getItemCount();
+                //mRestaurantRecyclerView.scrollToPosition(restaurantCount);
 /*                int lastVisiblePosition = mLinearLayoutManager.findLastVisibleItemPosition();
                 if(lastVisiblePosition == -1 || (positionStart >= (restaurantCount -1) && lastVisiblePosition == (positionStart -1))){
                     mRestaurantRecyclerView.scrollToPosition(positionStart);
                 }*/
-
+            //mFirebaseAdapter.cleanup();
 
             }
         });
@@ -442,6 +562,8 @@ public class UserHub_carousel extends AppCompatActivity
 /*        SnapHelper helper = new LinearSnapHelper();
         helper.attachToRecyclerView(mRestaurantRecyclerView);*/
 
+
+        Log.d("Max Visible Items", String.valueOf(layoutManager.getMaxVisibleItems()));
         //mRestaurantRecyclerView.setLayoutManager(mLinearLayoutManager);
         mRestaurantRecyclerView.setLayoutManager(layoutManager);
         mRestaurantRecyclerView.setAdapter(mFirebaseAdapter);
@@ -449,6 +571,8 @@ public class UserHub_carousel extends AppCompatActivity
         mRestaurantRecyclerView.setNestedScrollingEnabled(false);
 
         //SnapHelper helper = new StartSnapHelper();
+
+
 
 
 
