@@ -239,7 +239,7 @@ public class DetailActivity extends FragmentActivity {
         //ViewCompat.setTransitionName(address5, ADDRESS5_TRANSITION_NAME);
         //ViewCompat.setTransitionName(ratingBar, RATINGBAR_TRANSITION_NAME);
 
-        dealListView();
+        //dealListView();
     }
 
 
