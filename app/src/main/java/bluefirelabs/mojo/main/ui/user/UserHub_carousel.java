@@ -94,6 +94,7 @@ public class UserHub_carousel extends AppCompatActivity
 
     private RecyclerView mRestaurantRecyclerView;
     private LinearLayoutManager mLinearLayoutManager;
+    CarouselLayoutManager layoutManager;
 
 
     public static final String EXTRA_RESTAURANT_LOGO = "restaurantLogo";
@@ -241,6 +242,7 @@ public class UserHub_carousel extends AppCompatActivity
         }
     }
 
+/*
     @Override
     protected void onResume() {
         super.onResume();
@@ -250,18 +252,19 @@ public class UserHub_carousel extends AppCompatActivity
         }
         locationManager.requestLocationUpdates(provider, 400, 1, this);
     }
+*/
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+/*        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
-        }
+        }*/
     }
 
-    @Override
+/*    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main_hub, menu);
@@ -281,7 +284,7 @@ public class UserHub_carousel extends AppCompatActivity
         }
 
         return super.onOptionsItemSelected(item);
-    }
+    }*/
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -432,7 +435,7 @@ public class UserHub_carousel extends AppCompatActivity
         //mLinearLayoutManager.setStackFromEnd(true);
         //mLinearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
 
-        CarouselLayoutManager layoutManager = new CarouselLayoutManager(CarouselLayoutManager.HORIZONTAL);
+        layoutManager = new CarouselLayoutManager(CarouselLayoutManager.HORIZONTAL);
         layoutManager.setPostLayoutListener(new CarouselZoomPostLayoutListener());
 
 
@@ -584,9 +587,11 @@ public class UserHub_carousel extends AppCompatActivity
 
 
 
+/*
                     ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(UserHub_carousel.this,
                             new Pair(viewHolder.restaurantLogo, DetailActivity.EXTRA_RESTAURANT_LOGO)
                     );
+*/
 
 
                     Intent intent = new Intent(getApplicationContext(), DetailActivity.class);
@@ -595,7 +600,8 @@ public class UserHub_carousel extends AppCompatActivity
                     intent.putExtra(DetailActivity.EXTRA_RESTAURANT_NAME, model.getRestaurant());
 
 
-                    startActivity(intent, options.toBundle());
+                    /*startActivity(intent, options.toBundle());*/
+                    startActivity(intent);
                 }
             });
 

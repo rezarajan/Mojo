@@ -351,30 +351,6 @@ public class DetailActivity extends FragmentActivity {
                                                             CheckBox checkbox = (CheckBox) childView.findViewById(R.id.checkb);
 
 
-                                                            /*Finding the complementary color for muted color and setting it as the color for the checkbox */
-
-/*                                                            ColorStateList colorStateList = new ColorStateList(
-                                                                    new int[][]{
-                                                                            new int[]{-android.R.attr.state_checked}, // unchecked
-                                                                            new int[]{android.R.attr.state_checked} , // checked
-                                                                    },
-                                                                    new int[] {
-
-
-                                                                            //getResources().getColor(R.color.colorPrimary),     //unchecked
-                                                                            //getResources().getColor(R.color.colorPrimary),     //checked
-                                                                            getComplementaryColor(mutedColor), //unchecked
-                                                                            getComplementaryColor(mutedColor),      //checked
-
-
-                                                                    }
-                                                            );
-
-
-
-                                                            CompoundButtonCompat.setButtonTintList(checkbox, colorStateList);*/
-
-
 
                                                          String sanitizedItem = item_details.getText().toString().replace("'", "''");        //looks for any "'" in the item name (like S'Mores) so that the DatabaseHelper can properly query it
                                                          Cursor data = myDb.getItemID(sanitizedItem);        //gets the primary key associated with the item name
@@ -455,44 +431,6 @@ public class DetailActivity extends FragmentActivity {
                                                                     }
                                                                 }
                                                             });
-
-
-
-
-/*                                                            childView.setOnClickListener(new View.OnClickListener() {
-                                                                @Override
-                                                                public void onClick(View v) {
-                                                                    Snackbar.make(v, item_details.getText() + " added to Cart",
-                                                                            Snackbar.LENGTH_LONG)
-                                                                            .setAction("Action", null).show();
-
-
-
-
-                                                                    //adding the item to the database for checkout
-                                                                    boolean isInserted = myDb.insertData(restaurant,       //The restaurant name
-                                                                            item_details.getText().toString(),     //The item name
-                                                                            item_cost.getText().toString().replace("$",""),       //The item cost
-                                                                            "1");                                //Adds the item at at the specific position to the database
-                                                                    //Default Quantity is 1
-
-                                                                    Log.d("Adapted Restaurant", restaurant);
-                                                                    if (isInserted == true) {
-                                                                        Snackbar.make(v, item_details.getText() + " added to Cart",
-                                                                                Snackbar.LENGTH_LONG)
-                                                                                .setAction("Action", null).show();
-                                                                    } else {
-                                                                        Snackbar.make(v, "Data not Inserted",
-                                                                                Snackbar.LENGTH_LONG)
-                                                                                .setAction("Action", null).show();
-                                                                    }
-
-
-
-
-
-                                                                }
-                                                            });*/
 
                                                         }
 
