@@ -160,6 +160,9 @@ public class DetailActivity extends FragmentActivity {
         //address4.setText(restaurant_description);
         Picasso.with(getApplicationContext()).load(imageUrl).into(imageView);
 
+
+        //Log.d("Restaurant Name Passed", restaurantName);
+
         if(restaurantColor != null){
             background_image_view.setBackgroundColor(Color.parseColor(restaurantColor));
             background_image_view.getBackground().setAlpha(153);        //0 <= alpha <= 255, setting for 60% = 153 to maintain the theme
@@ -227,7 +230,8 @@ public class DetailActivity extends FragmentActivity {
         });
 
 
-        ViewCompat.setTransitionName(imageView, IMAGE_TRANSITION_NAME);
+        //ViewCompat.setTransitionName(imageView, IMAGE_TRANSITION_NAME);
+        ViewCompat.setTransitionName(imageView, EXTRA_RESTAURANT_LOGO);
         //ViewCompat.setTransitionName(address1, ADDRESS1_TRANSITION_NAME);
         //ViewCompat.setTransitionName(address2, ADDRESS2_TRANSITION_NAME);
         //ViewCompat.setTransitionName(address3, ADDRESS3_TRANSITION_NAME);
@@ -235,7 +239,7 @@ public class DetailActivity extends FragmentActivity {
         //ViewCompat.setTransitionName(address5, ADDRESS5_TRANSITION_NAME);
         //ViewCompat.setTransitionName(ratingBar, RATINGBAR_TRANSITION_NAME);
 
-        //dealListView();
+        dealListView();
     }
 
 
@@ -349,7 +353,7 @@ public class DetailActivity extends FragmentActivity {
 
                                                             /*Finding the complementary color for muted color and setting it as the color for the checkbox */
 
-                                                            ColorStateList colorStateList = new ColorStateList(
+/*                                                            ColorStateList colorStateList = new ColorStateList(
                                                                     new int[][]{
                                                                             new int[]{-android.R.attr.state_checked}, // unchecked
                                                                             new int[]{android.R.attr.state_checked} , // checked
@@ -368,7 +372,7 @@ public class DetailActivity extends FragmentActivity {
 
 
 
-                                                            CompoundButtonCompat.setButtonTintList(checkbox, colorStateList);
+                                                            CompoundButtonCompat.setButtonTintList(checkbox, colorStateList);*/
 
 
 
@@ -526,7 +530,7 @@ public class DetailActivity extends FragmentActivity {
             }
         };
 
-        //firebaseTask(myCallback);
+        firebaseTask(myCallback);
 
     }
 

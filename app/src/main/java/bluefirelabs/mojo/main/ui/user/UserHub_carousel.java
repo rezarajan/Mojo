@@ -585,13 +585,14 @@ public class UserHub_carousel extends AppCompatActivity
 
 
                     ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(UserHub_carousel.this,
-                            new Pair(viewHolder.restaurantLogo, DetailActivity.IMAGE_TRANSITION_NAME)
+                            new Pair(viewHolder.restaurantLogo, DetailActivity.EXTRA_RESTAURANT_LOGO)
                     );
 
 
                     Intent intent = new Intent(getApplicationContext(), DetailActivity.class);
                     intent.putExtra(DetailActivity.EXTRA_RESTAURANT_LOGO, model.getIcon());
                     intent.putExtra(DetailActivity.EXTRA_RESTAURANT_COLOR, model.getColor());
+                    intent.putExtra(DetailActivity.EXTRA_RESTAURANT_NAME, model.getRestaurant());
 
 
                     startActivity(intent, options.toBundle());
