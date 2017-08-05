@@ -595,11 +595,6 @@ public class UserHub_carousel extends AppCompatActivity
 
 
                     startActivity(intent, options.toBundle());
-
-
-
-
-
                 }
             });
 
@@ -616,6 +611,10 @@ public class UserHub_carousel extends AppCompatActivity
                 if(lastVisiblePosition == -1 || (positionStart >= (restaurantCount -1) && lastVisiblePosition == (positionStart -1))){
                     mRestaurantRecyclerView.scrollToPosition(positionStart);
                 }*/
+
+                Log.d("Restaurant Count", String.valueOf(restaurantCount));
+                mRestaurantRecyclerView.scrollToPosition(restaurantCount/2);        //when the app launches the card is the middle card
+                //mRestaurantRecyclerView.smoothScrollToPosition(restaurantCount/2);        //when the app launches the cards scroll to the middle card
             //mFirebaseAdapter.cleanup();
 
             }

@@ -3,9 +3,7 @@ package bluefirelabs.mojo.main.transition;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -13,7 +11,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.CompoundButtonCompat;
-import android.support.v7.graphics.Palette;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -36,7 +33,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
 import java.util.Map;
 
@@ -56,7 +52,7 @@ public class DetailActivity extends FragmentActivity {
     public static final String EXTRA_RESTAURANT_NAME = "restaurantName";
     public static final String EXTRA_RESTAURANT_COLOR = "restaurantColor";
 
-    String imageUrl, restaurant_description, restaurantName;
+    String imageUrl, restaurant_description, restaurantName, restaurantColor;
     Integer mutedColor;
     int defaultColor = 0x000000;
 
@@ -78,8 +74,9 @@ public class DetailActivity extends FragmentActivity {
     private ImageView imageView, checkout_icon;
     //private CircleImageView imageView;
     private RatingBar ratingBar;
-    //private LinearLayout detail_layout;
-    private RelativeLayout detail_layout;
+    //private LinearLayout background_image_view;
+    private RelativeLayout background_image_view;
+    //private ImageView background_image_view;
     private View accent_layout;
     LinearLayout linearLayout;
     RelativeLayout detail_item;
@@ -138,8 +135,9 @@ public class DetailActivity extends FragmentActivity {
         listContainer = (LinearLayout) findViewById(R.id.detail_list_container);
         checkout_icon = (ImageView) findViewById(R.id.checkout_icon);
         //accent_layout = (LinearLayout) findViewById(R.id.accent_layout);
-        //detail_layout = (LinearLayout) findViewById(R.id.detail_background);
-        detail_layout = (RelativeLayout) findViewById(R.id.detail_background);
+        //background_image_view = (LinearLayout) findViewById(R.id.detail_background);
+        background_image_view = (RelativeLayout) findViewById(R.id.detail_background);
+        //background_image_view = (ImageView) findViewById(R.id.background_image_view);
         detail_item = (RelativeLayout) findViewById(R.id.detail_card_layout);
         accent_layout = (View) findViewById(R.id.accent_layout);        //separator colour
         linearLayout = (LinearLayout) findViewById(R.id.detail_list_layout);
@@ -154,14 +152,20 @@ public class DetailActivity extends FragmentActivity {
         imageUrl = getIntent().getStringExtra(EXTRA_RESTAURANT_LOGO);
         restaurant_description = getIntent().getStringExtra(EXTRA_RESTAURANT_DETAILS);
         restaurantName = getIntent().getStringExtra(EXTRA_RESTAURANT_NAME);
+        restaurantColor = getIntent().getStringExtra(EXTRA_RESTAURANT_COLOR);
         //mutedColor = getIntent().getIntExtra(EXTRA_RESTAURANT_COLOR, 0);
-        Log.d("Colour", String.valueOf(mutedColor));
+        //mutedColor = getIntent().getIntExtra(EXTRA_RESTAURANT_COLOR, 0);
+        Log.d("Colour", String.valueOf(restaurantColor));
         //ImageLoader.getInstance().displayImage(imageUrl, imageView);
         //address4.setText(restaurant_description);
         Picasso.with(getApplicationContext()).load(imageUrl).into(imageView);
 
+        if(restaurantColor != null){
+            background_image_view.setBackgroundColor(Color.parseColor(restaurantColor));
+            background_image_view.getBackground().setAlpha(153);        //0 <= alpha <= 255, setting for 60% = 153 to maintain the theme
+        }
 
-        Picasso.with(getApplicationContext())
+/*        Picasso.with(getApplicationContext())
                 .load(imageUrl)
                 .into(new Target() {
                     @Override
@@ -170,7 +174,7 @@ public class DetailActivity extends FragmentActivity {
                         Log.d("Changing", "activated 1");
 
                         //Bitmap bitmap = BitmapFactory.decodeResource(getResources(), image);
-                                                        /*Palette.from(bitmap).generate(new Palette.PaletteAsyncListener() {
+                                                        *//*Palette.from(bitmap).generate(new Palette.PaletteAsyncListener() {
                                                             @Override
                                                             public void onGenerated(Palette palette) {
                                                                 mutedColor = palette.getVibrantColor(defaultColor);
@@ -179,19 +183,19 @@ public class DetailActivity extends FragmentActivity {
                                                                 //obj.colorFetched(position, vibrantColor, mutedColor);
                                                                 //viewPager.setBackgroundColor(vibrantColor);
                                                             }
-                                                        }); */
+                                                        }); *//*
                         Palette palette;
                         palette = Palette.from(bitmap).generate();
                         //mutedColor = palette.getDarkVibrantColor(defaultColor);
                         mutedColor = palette.getVibrantColor(defaultColor);
                         //mutedColor = palette.getMutedColor(defaultColor);
 
-                        /* Setting the colours of the detail view based on the icon clicked */
+                        *//* Setting the colours of the detail view based on the icon clicked *//*
 
                         listContainer.setBackgroundColor(mutedColor);       //Sets the colour for one item of the detail list
                         linearLayout.setBackgroundColor(mutedColor);        //Sets the colour for the entire detail list
                         //accent_layout.setBackgroundColor(mutedColor);        //Sets the colour for the separator
-                        detail_layout.setBackgroundColor(mutedColor);        //Sets the colour for the frame (accents)
+                        background_image_view.setBackgroundColor(mutedColor);        //Sets the colour for the frame (accents)
                         Log.d("Muted Color Status", "Activated");
 
 
@@ -211,7 +215,7 @@ public class DetailActivity extends FragmentActivity {
                     public void onPrepareLoad(Drawable placeHolderDrawable) {
 
                     }
-                });
+                });*/
 
         checkout_icon.setOnClickListener(new View.OnClickListener() {
             @Override
