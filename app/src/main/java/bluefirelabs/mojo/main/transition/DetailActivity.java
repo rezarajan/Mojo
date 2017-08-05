@@ -11,6 +11,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.CompoundButtonCompat;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -81,6 +82,8 @@ public class DetailActivity extends FragmentActivity {
     LinearLayout linearLayout;
     RelativeLayout detail_item;
 
+    NestedScrollView nestedScrollView;
+
     DatabaseHelper myDb;
 
     private FirebaseRecyclerAdapter<Food_List, FirebaseRecyclerAdapterItems_new.RecyclerViewHolder> mFirebaseAdapter;
@@ -142,6 +145,8 @@ public class DetailActivity extends FragmentActivity {
         accent_layout = (View) findViewById(R.id.accent_layout);        //separator colour
         linearLayout = (LinearLayout) findViewById(R.id.detail_list_layout);
 
+        nestedScrollView = (NestedScrollView) findViewById(R.id.scrollView);
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             Window window = getWindow();
             window.setFlags(
@@ -164,8 +169,11 @@ public class DetailActivity extends FragmentActivity {
         //Log.d("Restaurant Name Passed", restaurantName);
 
         if(restaurantColor != null){
-            background_image_view.setBackgroundColor(Color.parseColor(restaurantColor));
-            background_image_view.getBackground().setAlpha(153);        //0 <= alpha <= 255, setting for 60% = 153 to maintain the theme
+            //background_image_view.setBackgroundColor(Color.parseColor(restaurantColor));
+            //background_image_view.getBackground().setAlpha(153);        //0 <= alpha <= 255, setting for 60% = 153 to maintain the theme
+
+            nestedScrollView.setBackgroundColor(Color.parseColor(restaurantColor));
+            nestedScrollView.getBackground().setAlpha(153);        //0 <= alpha <= 255, setting for 60% = 153 to maintain the theme
         }
 
 /*        Picasso.with(getApplicationContext())
