@@ -35,7 +35,7 @@ public class restaurantlist_fragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.restaurantinfo_layout, container, false);
+        return inflater.inflate(R.layout.restaurantcards, container, false);
     }
 
 

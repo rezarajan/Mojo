@@ -1,102 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/colorPrimary">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/colorPrimary"
+    android:orientation="vertical">
 
-
-
-
-    <android.support.v7.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/recycler_view">
-
-    </android.support.v7.widget.RecyclerView>
-
-<!--    <android.support.v4.view.ViewPager
-        android:id="@+id/viewpager"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentBottom="true"
-        android:clipToPadding="false"
-        android:paddingEnd="48dp"
-        android:paddingLeft="48dp"
-        android:paddingRight="48dp"
-        android:paddingStart="48dp">
-
-    </android.support.v4.view.ViewPager>-->
-
-<!--    <android.support.design.widget.TabLayout
-        android:id="@+id/tabDots"
-        android:layout_alignParentBottom="true"
+    <fragment
+        android:id="@+id/fragment_mainInfo"
+        android:name="bluefirelabs.mojo.fragments.mainInfo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="70dp"
-        app:tabBackground="@drawable/tab_selector"
-        app:tabGravity="center"
-        app:tabIndicatorHeight="0dp"/>-->
+        android:layout_gravity="center_horizontal"
+        tools:layout="@layout/restaurantcards" />
 
-
-<!--    <TextView
-        android:id="@+id/restaurantName_indicator"
-        android:layout_width="wrap_content"
+    <fragment
+        android:id="@+id/fragment_restaurantCards"
+        android:name="bluefirelabs.mojo.fragments.restaurantCards"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_alignParentBottom="true"
-        android:gravity="center_horizontal"
-        android:text="RESTAURANT"
-        android:layout_margin="70dp"
-        android:textColor="#ffffff"
-        android:visibility="gone"/>-->
+        android:layout_gravity="center_horizontal"
+        tools:layout="@layout/restaurantcards" />
 
-
-
-<!--        <View
-            android:id="@+id/position_view"
-            android:layout_width="1px"
-            android:layout_height="1px" />-->
-
-
-    <ImageView
-        android:id="@+id/checkout_icon"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:src="@drawable/ic_shopping_cart_48px"
-        android:layout_alignParentEnd="true"
-        android:layout_margin="16dp" />
-
-    <TextView
-        android:id="@+id/location_indicator"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:gravity="center_horizontal"
-        android:text="Dang! No venue found"
-        android:fontFamily="sans-serif"
-        android:textColor="@color/colorSecondaryDark"
-        android:textSize="16sp"
-        android:layout_marginTop="32dp"/>
-
-    <ImageView
-        android:id="@+id/location_icon"
-        android:layout_width="16sp"
-        android:layout_height="16sp"
-        android:src="@drawable/ic_room_48px"
-        android:layout_toEndOf="@id/location_indicator"
-        android:layout_alignBottom="@id/location_indicator"
-        android:layout_margin="8dp" />
-
-    <ImageView
-        android:id="@+id/order_history"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:src="@drawable/ic_history_48px"
-        android:layout_alignParentStart="true"
-        android:layout_margin="15dp" />
-
-
-
-
-</RelativeLayout>
+</LinearLayout>

@@ -55,7 +55,7 @@
             android:name="bluefirelabs.mojo.fragments.restaurantlist_fragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:layout="@layout/restaurantinfo_layout" />
+            tools:layout="@layout/restaurantcards" />
     </LinearLayout>
 </android.support.v4.widget.NestedScrollView>
 </android.support.design.widget.CoordinatorLayout>

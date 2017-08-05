@@ -70,10 +70,7 @@ import bluefirelabs.mojo.main.login.Sign_In;
 import bluefirelabs.mojo.menu.OrderHistory;
 
 public class UserHub_carousel extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener
-        , bluefirelabs.mojo.fragments.currentinfo_fragment.currentinfoListener
-        , restaurantlist_fragment.restaurantlistListener
-        , android.location.LocationListener {
+        implements android.location.LocationListener {
 
 
     LocationManager locationManager;
@@ -286,7 +283,7 @@ public class UserHub_carousel extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }*/
 
-    @SuppressWarnings("StatementWithEmptyBody")
+/*    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
@@ -317,7 +314,7 @@ public class UserHub_carousel extends AppCompatActivity
             startActivity(intent);
         }
 
-        /* else if (id == R.id.nav_slideshow) {
+        *//* else if (id == R.id.nav_slideshow) {
 
         } else if (id == R.id.nav_manage) {
 
@@ -325,12 +322,12 @@ public class UserHub_carousel extends AppCompatActivity
 
         } else if (id == R.id.nav_send) {
 
-        } */
+        } *//*
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
+    }*/
 
     public void getLocation() {
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -442,7 +439,6 @@ public class UserHub_carousel extends AppCompatActivity
         FirebaseUser user = firebaseAuth.getCurrentUser();
         Log.d("UID", user.getUid());
 
-        final CommonFragment fragment = new CommonFragment();
 
         mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
         mFirebaseAdapter = new FirebaseRecyclerAdapter<Food_List, FirebaseViewPagerAdapter.RecyclerViewHolder>(
