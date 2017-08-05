@@ -26,7 +26,9 @@ import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.LinearSnapHelper;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SnapHelper;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -68,6 +70,9 @@ import bluefirelabs.mojo.handlers.online.SharedPrefManager;
 import bluefirelabs.mojo.handlers.online.uploadImage;
 import bluefirelabs.mojo.main.login.Sign_In;
 import bluefirelabs.mojo.menu.OrderHistory;
+import cdflynn.android.library.turn.TurnLayoutManager;
+
+import static android.R.attr.radius;
 
 public class UserHub_carousel extends AppCompatActivity
         implements android.location.LocationListener {
@@ -92,6 +97,8 @@ public class UserHub_carousel extends AppCompatActivity
     private RecyclerView mRestaurantRecyclerView;
     private LinearLayoutManager mLinearLayoutManager;
     CarouselLayoutManager layoutManager;
+
+    TurnLayoutManager turnLayoutManager;
 
 
     public static final String EXTRA_RESTAURANT_LOGO = "restaurantLogo";
@@ -432,8 +439,17 @@ public class UserHub_carousel extends AppCompatActivity
         //mLinearLayoutManager.setStackFromEnd(true);
         //mLinearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
 
-        layoutManager = new CarouselLayoutManager(CarouselLayoutManager.HORIZONTAL);
-        layoutManager.setPostLayoutListener(new CarouselZoomPostLayoutListener());
+        //layoutManager = new CarouselLayoutManager(CarouselLayoutManager.HORIZONTAL);
+        //layoutManager.setPostLayoutListener(new CarouselZoomPostLayoutListener());
+
+
+
+        turnLayoutManager = new TurnLayoutManager(UserHub_carousel.this,              // provide a context
+                TurnLayoutManager.Gravity.END,        // from which direction should the list items orbit?
+                TurnLayoutManager.Orientation.HORIZONTAL, // Is this a vertical or horizontal scroll?
+                2000,               // The radius of the item rotation
+                0,                 // Extra offset distance
+                true);        // should list items angle towards the center? true/false.
 
 
         FirebaseUser user = firebaseAuth.getCurrentUser();
@@ -502,74 +518,6 @@ public class UserHub_carousel extends AppCompatActivity
 
 
 
-                               /* First Time colour palette set */
-              /*  Picasso.with(getApplicationContext())
-                        .load(model.getIcon())
-                        .into(new Target() {
-                            @Override
-                            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                                //Log.d("Setting Colour for", fragments.get(position%10).dataReturn());
-                                Log.d("Changing", "activated 1");
-                                Palette palette;
-                                palette = Palette.from(bitmap).generate();
-                                //mutedColor = palette.getDarkVibrantColor(defaultColor);
-                                mutedColor = palette.getVibrantColor(defaultColor);
-                                Log.d("mutedColor", String.valueOf(mutedColor));
-                                //mutedColor = palette.getMutedColor(defaultColor);
-                                //accentColorMuted = palette.getLightVibrantColor(defaultColor);
-
-                                viewHolder.background_image_view.setBackgroundColor(mutedColor);
-
-*//*                                //First time and second time for the case when the ViewPager cycles to the
-                                //third colour and sets the wrong initial colour
-                                if (firstTime && secondTime) {
-                                    viewPager.setBackgroundColor(mutedColor);
-                                    checkout_icon.setColorFilter(accentColorMuted);
-                                    order_history.setColorFilter(accentColorMuted);
-                                    firstTime = false;
-                                }
-
-                                //after the first time this now sets the second colour
-                                //which is the same as the first fragment (since we exclude the 0th)
-                                if(!firstTime && secondTime){
-                                    viewPager.setBackgroundColor(mutedColor);
-                                    checkout_icon.setColorFilter(accentColorMuted);
-                                    order_history.setColorFilter(accentColorMuted);
-                                    secondTime = false;
-                                }
-                                Log.d("Changing", "activated 2");
-                                //obj.colorFetched(position, vibrantColor, mutedColor);
-                                //viewPager.setBackgroundColor(vibrantColor);*//*
-
-
-                            }
-
-                            @Override
-                            public void onBitmapFailed(Drawable errorDrawable) {
-
-                            }
-
-
-                            @Override
-                            public void onPrepareLoad(Drawable placeHolderDrawable) {
-                                viewHolder.background_image_view.setBackgroundColor(mutedColor);
-
-                            }
-                        });*/
-                 //This works, so the problem only exists with Picasso since it is asynchronous
-                 //viewHolder.itemView.setBackgroundColor(Color.parseColor("#d86a0a"));
-
-
-/*                viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        //notifyItemChanged(position);
-                        notifyDataSetChanged();
-                    }
-                });*/
-
-
-
 
             viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -615,8 +563,8 @@ public class UserHub_carousel extends AppCompatActivity
                     mRestaurantRecyclerView.scrollToPosition(positionStart);
                 }*/
 
-                Log.d("Restaurant Count", String.valueOf(restaurantCount));
-                mRestaurantRecyclerView.scrollToPosition(restaurantCount/2);        //when the app launches the card is the middle card
+                //Log.d("Restaurant Count", String.valueOf(restaurantCount));
+                //mRestaurantRecyclerView.scrollToPosition(restaurantCount/2);        //when the app launches the card is the middle card
                 //mRestaurantRecyclerView.smoothScrollToPosition(restaurantCount/2);        //when the app launches the cards scroll to the middle card
             //mFirebaseAdapter.cleanup();
 
@@ -626,18 +574,20 @@ public class UserHub_carousel extends AppCompatActivity
 
         //mRestaurantRecyclerView.addItemDecoration(new OverlapDecoration());
 
-/*        SnapHelper helper = new LinearSnapHelper();
-        helper.attachToRecyclerView(mRestaurantRecyclerView);*/
 
-
-        Log.d("Max Visible Items", String.valueOf(layoutManager.getMaxVisibleItems()));
+        //Log.d("Max Visible Items", String.valueOf(layoutManager.getMaxVisibleItems()));
         //mRestaurantRecyclerView.setLayoutManager(mLinearLayoutManager);
-        mRestaurantRecyclerView.setLayoutManager(layoutManager);
-        mRestaurantRecyclerView.setAdapter(mFirebaseAdapter);
-        mRestaurantRecyclerView.addOnScrollListener(new CenterScrollListener());
-        mRestaurantRecyclerView.setNestedScrollingEnabled(false);
+        //mRestaurantRecyclerView.setLayoutManager(layoutManager);
 
+        mRestaurantRecyclerView.setAdapter(mFirebaseAdapter);
+        mRestaurantRecyclerView.setLayoutManager(turnLayoutManager);
         //SnapHelper helper = new StartSnapHelper();
+        //SnapHelper helper = new LinearSnapHelper();
+        //helper.attachToRecyclerView(mRestaurantRecyclerView);
+        //mRestaurantRecyclerView.addOnScrollListener(new CenterScrollListener());
+        //mRestaurantRecyclerView.setNestedScrollingEnabled(false);
+
+
 
 
 
