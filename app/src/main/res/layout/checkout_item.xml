@@ -39,7 +39,7 @@
                 android:layout_alignBottom="@id/image"
                 android:paddingTop="8dp"
                 android:text="Restaurant"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
                 android:textSize="24sp"
                 android:fontFamily="sans-serif-condensed" />
 
@@ -52,7 +52,8 @@
                 android:padding="0dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="8dp"
-                android:id="@+id/restaurant_separator" />
+                android:id="@+id/restaurant_separator"
+                android:backgroundTint="@color/colorSecondary"/>
 
         </RelativeLayout>
 
@@ -89,7 +90,7 @@
                 android:layout_centerVertical="true"
                 android:gravity="center"
                 android:text="1"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
                 android:background="@color/colorPrimaryDark"/>
 
             <!--            <CheckBox
@@ -116,7 +117,7 @@
                 android:paddingStart="30dp"
                 android:paddingTop="8dp"
                 android:text="Item"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
                 android:textSize="18dp"
                 android:fontFamily="sans-serif-condensed"
                 android:layout_toEndOf="@id/item_quantity" />
@@ -131,7 +132,7 @@
                 android:paddingEnd="30dp"
                 android:paddingTop="4dp"
                 android:text="$1.00"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
                 android:textSize="14dp"
                 android:fontFamily="sans-serif-light"   />
 
@@ -159,7 +160,7 @@
                 android:paddingStart="30dp"
                 android:paddingTop="4dp"
                 android:text="Description"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
                 android:textSize="12sp"
                 android:fontFamily="sans-serif"  />
 

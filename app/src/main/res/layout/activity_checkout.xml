@@ -30,7 +30,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
-                android:background="@color/colorAccent"
+                android:background="@color/colorSecondary"
                 android:padding="0dp"
                 android:layout_margin="4dp" />
 
@@ -50,7 +50,8 @@
                 android:background="#cfcfd6"
                 android:padding="0dp"
                 android:layout_margin="8dp"
-                android:id="@+id/accent_layout" />
+                android:id="@+id/accent_layout"
+                android:backgroundTint="@color/colorSecondary"/>
 
 
             <RelativeLayout
@@ -67,9 +68,9 @@
                     android:paddingLeft="30dp"
                     android:paddingTop="8dp"
                     android:text="Subtoal"
-                    android:textColor="@color/white"
+                    android:textColor="@color/black"
                     android:textSize="12sp"
-                    android:fontFamily="sans-serif-light" />
+                    android:fontFamily="sans-serif-" />
 
                 <TextView
                     android:id="@+id/item_subtotal_value"
@@ -81,9 +82,9 @@
                     android:paddingRight="30dp"
                     android:paddingTop="8dp"
                     android:text="$1.00"
-                    android:textColor="@color/white"
+                    android:textColor="@color/black"
                     android:textSize="12sp"
-                    android:fontFamily="sans-serif-light" />
+                    android:fontFamily="sans-serif-" />
 
                 <TextView
                     android:id="@+id/item_tax"
@@ -94,9 +95,9 @@
                     android:paddingLeft="30dp"
                     android:paddingTop="8dp"
                     android:text="Tax"
-                    android:textColor="@color/white"
+                    android:textColor="@color/black"
                     android:textSize="12sp"
-                    android:fontFamily="sans-serif-light" />
+                    android:fontFamily="sans-serif-" />
 
                 <TextView
                     android:id="@+id/item_tax_value"
@@ -108,9 +109,9 @@
                     android:paddingRight="30dp"
                     android:paddingTop="8dp"
                     android:text="$1.00"
-                    android:textColor="@color/white"
+                    android:textColor="@color/black"
                     android:textSize="12sp"
-                    android:fontFamily="sans-serif-light" />
+                    android:fontFamily="sans-serif-" />
 
                 <TextView
                     android:id="@+id/item_total"
@@ -121,9 +122,9 @@
                     android:paddingLeft="30dp"
                     android:paddingTop="20dp"
                     android:text="Total"
-                    android:textColor="@color/white"
+                    android:textColor="@color/black"
                     android:textSize="18sp"
-                    android:fontFamily="sans-serif-light" />
+                    android:fontFamily="sans-serif-" />
 
                 <TextView
                     android:id="@+id/item_total_value"
@@ -135,9 +136,9 @@
                     android:paddingRight="30dp"
                     android:paddingTop="20dp"
                     android:text="$2.00"
-                    android:textColor="@color/white"
+                    android:textColor="@color/black"
                     android:textSize="18sp"
-                    android:fontFamily="sans-serif-light" />
+                    android:fontFamily="sans-serif-" />
 
 
             </RelativeLayout>
@@ -148,7 +149,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="40dp"
-                android:textColor="@color/white"
+                android:textColor="@color/colorSecondary"
                 android:textSize="24sp"
                 android:fontFamily="sans-serif--condensed"
                 android:text="Payment"/>
@@ -156,7 +157,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
-                android:background="@color/white"
+                android:background="@color/colorSecondary"
                 android:padding="0dp"
                 android:layout_margin="8dp"
                 android:id="@+id/payment_separator" />
@@ -176,7 +177,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/default_payment"
-                        android:buttonTint="@color/colorAccent"
+                        android:buttonTint="@color/colorSecondary"
                         android:checked="true"/>
 
                     <TextView
@@ -185,7 +186,7 @@
                         android:layout_margin="4dp"
                         android:layout_toEndOf="@id/default_payment"
                         android:layout_alignBaseline="@id/default_payment"
-                        android:textColor="@color/white"
+                        android:textColor="@color/black"
                         android:textSize="16sp"
                         android:fontFamily="sans-serif"
                         android:text="Use default payment source"/>
@@ -196,7 +197,7 @@
                         android:id="@+id/add_payment"
                         android:layout_below="@id/default_payment"
                         android:layout_marginTop="10dp"
-                        android:buttonTint="@color/colorAccent"
+                        android:buttonTint="@color/colorSecondary"
                         android:checked="false"/>
 
                     <TextView
@@ -205,7 +206,7 @@
                         android:layout_margin="4dp"
                         android:layout_toEndOf="@id/add_payment"
                         android:layout_alignBaseline="@id/add_payment"
-                        android:textColor="@color/white"
+                        android:textColor="@color/black"
                         android:textSize="16sp"
                         android:fontFamily="sans-serif"
                         android:text="Add payment source"/>
@@ -238,7 +239,8 @@
                         android:layout_below="@id/card_input_widget"
                         android:layout_alignParentEnd="true"
                         android:layout_margin="@dimen/fab_margin"
-                        android:background="@drawable/ic_arrow_forward_48px" />
+                        android:background="@drawable/ic_arrow_forward_48px"
+                        android:buttonTint="@color/colorSecondary" />
 
                     <Button
                         android:id="@+id/cancel"
@@ -246,6 +248,7 @@
                         android:layout_height="50dp"
                         android:layout_gravity="bottom|start"
                         android:background="@drawable/ic_close_48px"
+                        android:buttonTint="@color/colorSecondary"
                         android:layout_alignBaseline="@+id/pay"
                         android:layout_alignBottom="@+id/pay"
                         android:layout_alignParentStart="true" />
