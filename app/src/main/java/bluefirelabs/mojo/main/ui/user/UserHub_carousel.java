@@ -447,8 +447,8 @@ public class UserHub_carousel extends AppCompatActivity
         turnLayoutManager = new TurnLayoutManager(UserHub_carousel.this,              // provide a context
                 TurnLayoutManager.Gravity.END,        // from which direction should the list items orbit?
                 TurnLayoutManager.Orientation.HORIZONTAL, // Is this a vertical or horizontal scroll?
-                2000,               // The radius of the item rotation
-                0,                 // Extra offset distance
+                4000,               // The radius of the item rotation
+                72,                 // Extra offset distance
                 true);        // should list items angle towards the center? true/false.
 
 
@@ -582,8 +582,8 @@ public class UserHub_carousel extends AppCompatActivity
         mRestaurantRecyclerView.setAdapter(mFirebaseAdapter);
         mRestaurantRecyclerView.setLayoutManager(turnLayoutManager);
         //SnapHelper helper = new StartSnapHelper();
-        //SnapHelper helper = new LinearSnapHelper();
-        //helper.attachToRecyclerView(mRestaurantRecyclerView);
+        SnapHelper helper = new LinearSnapHelper();
+        helper.attachToRecyclerView(mRestaurantRecyclerView);
         //mRestaurantRecyclerView.addOnScrollListener(new CenterScrollListener());
         //mRestaurantRecyclerView.setNestedScrollingEnabled(false);
 
