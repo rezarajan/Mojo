@@ -56,7 +56,7 @@ public class detailActivity extends Fragment{
 
     String imageUrl, restaurant_description, restaurantName, restaurantColor;
 
-    private ImageView imageView, checkout_icon;
+    private ImageView imageView;
     private RelativeLayout background_image_view;
     private View accent_layout;
     private LinearLayout listContainer;
@@ -90,7 +90,6 @@ public class detailActivity extends Fragment{
             imageView = (ImageView) view.findViewById(R.id.image);
 
             listContainer = (LinearLayout) view.findViewById(R.id.detail_list_container);
-            checkout_icon = (ImageView) view.findViewById(R.id.checkout_icon);
 
             background_image_view = (RelativeLayout) view.findViewById(R.id.detail_background);
 
@@ -120,15 +119,6 @@ public class detailActivity extends Fragment{
                 linearLayout.setBackgroundColor(Color.parseColor(restaurantColor));
                 linearLayout.getBackground().setAlpha(153);        //0 <= alpha <= 255, setting for 60% = 153 to maintain the theme
             }
-
-            checkout_icon.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //Intent intent = new Intent(DetailActivity.this, Checkout.class);            //Goes to checkout
-                    Intent intent = new Intent(getContext(), bluefirelabs.mojo.main.ui.checkout.Checkout.class);            //Goes to checkout
-                    startActivity(intent);
-                }
-            });
 
         }
 

@@ -84,6 +84,8 @@ public class UserHub_carousel extends AppCompatActivity
 
     FragmentManager fm;
 
+    private ImageView checkout_icon;
+
 
     public static final String EXTRA_RESTAURANT_LOGO = "restaurantLogo";
     public static final String EXTRA_RESTAURANT_NAME = "restaurantName";
@@ -123,6 +125,18 @@ public class UserHub_carousel extends AppCompatActivity
         ft.commit();
 
         locationTasks();
+
+        checkout_icon = (ImageView) findViewById(R.id.checkout_icon);
+
+        checkout_icon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Intent intent = new Intent(DetailActivity.this, Checkout.class);            //Goes to checkout
+                Intent intent = new Intent(getApplicationContext(), bluefirelabs.mojo.main.ui.checkout.Checkout.class);            //Goes to checkout
+                startActivity(intent);
+            }
+        });
+
 
 
     }
@@ -367,8 +381,8 @@ public class UserHub_carousel extends AppCompatActivity
         turnLayoutManager = new TurnLayoutManager(UserHub_carousel.this,              // provide a context
                 TurnLayoutManager.Gravity.END,        // from which direction should the list items orbit?
                 TurnLayoutManager.Orientation.HORIZONTAL, // Is this a vertical or horizontal scroll?
-                4800,               // The radius of the item rotation
-                144,                 // Extra offset distance
+                8000,               // The radius of the item rotation
+                72,                 // Extra offset distance
                 true);        // should list items angle towards the center? true/false.
 
 
@@ -419,6 +433,10 @@ public class UserHub_carousel extends AppCompatActivity
                     }
                 }
 
+
+                viewHolder.descriptor1.setImageResource(R.drawable.ic_local_cafe_48px);
+                viewHolder.descriptor2.setImageResource(R.drawable.ic_local_pizza_48px);
+                viewHolder.descriptor3.setImageResource(R.drawable.ic_local_drink_48px);
 
             viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
