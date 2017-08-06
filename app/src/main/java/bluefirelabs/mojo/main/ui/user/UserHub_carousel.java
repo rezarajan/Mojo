@@ -146,16 +146,20 @@ public class UserHub_carousel extends AppCompatActivity
     @Override
     public void onBackPressed() {
 
-        restaurantCards restaurantCards = new restaurantCards();
+        //restaurantCards restaurantCards = new restaurantCards();
         detailActivity detailActivity = (bluefirelabs.mojo.fragments.detailActivity) fm.findFragmentByTag("detailActivity");
-        //restaurantCards restaurantCards = (bluefirelabs.mojo.fragments.restaurantCards) fm.findFragmentByTag("restaurantCards");
+        restaurantCards restaurantCards = (bluefirelabs.mojo.fragments.restaurantCards) fm.findFragmentByTag("restaurantCards");
         FragmentTransaction ft = fm.beginTransaction();
-
+        Log.d("Position back", String.valueOf(cardPosition));
         if(detailActivity!=null){
             ft.remove(detailActivity);
-            ft.add(R.id.fragment2, restaurantCards, "restaurantCards");
-            ft.commit();
-            locationTasks();
+            //ft.add(R.id.fragment2, restaurantCards, "restaurantCards");
+            if(restaurantCards != null){
+                ft.attach(restaurantCards);
+                ft.commit();
+                locationTasks();
+            }
+
         }
     }
 
@@ -468,7 +472,8 @@ public class UserHub_carousel extends AppCompatActivity
                     //ft.replace(R.id.fragment2, detailActivity);
                     //ft.addToBackStack(null);
                     restaurantCards restaurantCards = (bluefirelabs.mojo.fragments.restaurantCards) fm.findFragmentByTag("restaurantCards");
-                    ft.remove(restaurantCards);
+                    //ft.remove(restaurantCards);
+                    ft.detach(restaurantCards);
                     ft.add(R.id.fragment2, detailActivity, "detailActivity");
                     ft.commit();
 
@@ -495,7 +500,7 @@ public class UserHub_carousel extends AppCompatActivity
             public void onItemRangeInserted(int positionStart, int itemCount) {
                 super.onItemRangeInserted(positionStart, itemCount);
                 int restaurantCount = mFirebaseAdapter.getItemCount();
-
+                mRestaurantRecyclerView.scrollToPosition(cardPosition);
 
             }
         });
@@ -508,8 +513,6 @@ public class UserHub_carousel extends AppCompatActivity
 
         SnapHelper helper = new LinearSnapHelper();
         helper.attachToRecyclerView(mRestaurantRecyclerView);
-
-
 
 
 
