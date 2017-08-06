@@ -133,7 +133,7 @@ public class detailActivity extends Fragment{
     }
 
 
-    private void dealListView() {       //TODO: Firebase Menu Items will go here
+    public void dealListView() {       //TODO: Firebase Menu Items will go here
         final LayoutInflater layoutInflater = LayoutInflater.from(getContext());
 
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();

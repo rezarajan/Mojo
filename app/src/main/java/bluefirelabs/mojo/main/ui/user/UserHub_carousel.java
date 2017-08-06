@@ -157,7 +157,6 @@ public class UserHub_carousel extends AppCompatActivity
 
     }
 
-/*
     @Override
     protected void onResume() {
         super.onResume();
@@ -165,8 +164,33 @@ public class UserHub_carousel extends AppCompatActivity
             return;
         }
         locationManager.requestLocationUpdates(provider, 400, 1, this);
+
+
+        detailActivity detailActivity = (bluefirelabs.mojo.fragments.detailActivity) fm.findFragmentByTag("detailActivity");
+        //restaurantCards restaurantCards = (bluefirelabs.mojo.fragments.restaurantCards) fm.findFragmentByTag("restaurantCards");
+        FragmentTransaction ft = fm.beginTransaction();
+        //Log.d("Position back", String.valueOf(cardPosition));
+        if(detailActivity!=null){
+            //ft.remove(detailActivity);
+            //ft.add(R.id.fragment2, restaurantCards, "restaurantCards");
+            ft.detach(detailActivity);
+            ft.attach(detailActivity);
+            ft.commit();
+
+/*            if(restaurantCards != null){
+                ft.setCustomAnimations(R.animator.slide_out_down, R.animator.slide_in_up);
+                ft.detach(detailActivity);
+                ft.attach(restaurantCards);
+                ft.commit();
+                locationTasks();
+            }*/
+
+        }
+
+        /*scrollView.setVisibility(View.GONE);*/
+
+
     }
-*/
 
     @Override
     public void onBackPressed() {
