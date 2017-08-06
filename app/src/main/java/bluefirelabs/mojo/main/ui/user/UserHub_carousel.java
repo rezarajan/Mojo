@@ -66,17 +66,13 @@ public class UserHub_carousel extends AppCompatActivity
     String provider;
     final int MY_PERMISSION_REQUEST_CODE = 7171;
     double lat, lng;
-    TextView small_description;
-    TextView userEmail;
+
     FirebaseAuth firebaseAuth;
     private BroadcastReceiver broadcastReceiver;
 
     public static final String RESTAURANT = "listing";
     private DatabaseReference mFirebaseDatabaseReference;
     private FirebaseRecyclerAdapter<Food_List, FirebaseViewPagerAdapter.RecyclerViewHolder> mFirebaseAdapter;
-
-    int defaultColor = 0x000000;
-    int mutedColor = -1;
 
     int cardPosition = 0;
 
@@ -396,10 +392,6 @@ public class UserHub_carousel extends AppCompatActivity
 
             @Override
             protected void populateViewHolder(final FirebaseViewPagerAdapter.RecyclerViewHolder viewHolder, final Food_List model, final int position) {
-                Log.d("Description: ", model.getDescription());
-                //viewHolder.itemDescription.setText(model.getDescription());
-                //viewHolder.itemTitle.setText(model.getRestaurant());
-                //viewHolder.itemIcon.setImageResource(R.drawable.restaurant_icon);
 
                 viewHolder.restaurantName.setText(model.getRestaurant());
                 //viewHolder.openIndicatorText.setText(model.getOpen());
@@ -426,9 +418,6 @@ public class UserHub_carousel extends AppCompatActivity
                         viewHolder.openindicatorIcon.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.colorClosing));
                     }
                 }
-
-
-
 
 
             viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -461,6 +450,12 @@ public class UserHub_carousel extends AppCompatActivity
 
 
 
+                    Bundle args = new Bundle();
+                    args.putString(detailActivity.EXTRA_RESTAURANT_LOGO, model.getIcon());
+                    args.putString(detailActivity.EXTRA_RESTAURANT_NAME, model.getRestaurant());
+                    args.putString(detailActivity.EXTRA_RESTAURANT_COLOR, model.getColor());
+                    args.putString(detailActivity.EXTRA_RESTAURANT_NAME, model.getRestaurant());
+
                     cardPosition = position;
                     Log.d("Position", String.valueOf(cardPosition));
 
@@ -471,23 +466,13 @@ public class UserHub_carousel extends AppCompatActivity
                     detailActivity detailActivity = new detailActivity();
                     //ft.replace(R.id.fragment2, detailActivity);
                     //ft.addToBackStack(null);
+
+                    detailActivity.setArguments(args);
                     restaurantCards restaurantCards = (bluefirelabs.mojo.fragments.restaurantCards) fm.findFragmentByTag("restaurantCards");
                     //ft.remove(restaurantCards);
                     ft.detach(restaurantCards);
                     ft.add(R.id.fragment2, detailActivity, "detailActivity");
                     ft.commit();
-
-
-
-
-
-
-
-
-
-
-
-
 
                 }
             });
@@ -504,9 +489,6 @@ public class UserHub_carousel extends AppCompatActivity
 
             }
         });
-
-
-
 
         mRestaurantRecyclerView.setAdapter(mFirebaseAdapter);
         mRestaurantRecyclerView.setLayoutManager(turnLayoutManager);
