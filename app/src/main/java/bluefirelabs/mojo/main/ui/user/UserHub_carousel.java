@@ -218,9 +218,9 @@ public class UserHub_carousel extends AppCompatActivity
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            dialog.setMessage("Please wait...");
+/*            dialog.setMessage("Please wait...");
             dialog.setCanceledOnTouchOutside(false);
-            dialog.show();
+            dialog.show();*/
         }
 
         @Override
