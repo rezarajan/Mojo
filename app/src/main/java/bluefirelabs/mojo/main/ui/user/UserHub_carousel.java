@@ -85,10 +85,10 @@ public class UserHub_carousel extends AppCompatActivity
 
     FragmentManager fm;
 
-    private ImageView checkout_icon;
+    private ImageView checkout_icon, order_history;
 
     private ScrollView scrollView;
-    private View checkout_icon_dummy;
+    private View checkout_icon_dummy, order_history_dummy;
 
 
     public static final String EXTRA_RESTAURANT_LOGO = "restaurantLogo";
@@ -123,12 +123,22 @@ public class UserHub_carousel extends AppCompatActivity
         scrollView = (ScrollView) findViewById(R.id.scrollView);
 
         checkout_icon = (ImageView) findViewById(R.id.checkout_icon);
+        order_history = (ImageView) findViewById(R.id.order_history);
 
         checkout_icon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //Intent intent = new Intent(DetailActivity.this, Checkout.class);            //Goes to checkout
                 Intent intent = new Intent(getApplicationContext(), bluefirelabs.mojo.main.ui.checkout.Checkout.class);            //Goes to checkout
+                startActivity(intent);
+            }
+        });
+
+        order_history.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Intent intent = new Intent(DetailActivity.this, Checkout.class);            //Goes to checkout
+                Intent intent = new Intent(getApplicationContext(), order_tracking.class);            //Goes to checkout
                 startActivity(intent);
             }
         });
@@ -509,6 +519,7 @@ public class UserHub_carousel extends AppCompatActivity
                         ft.commit();
 
                         checkout_icon_dummy = (View) findViewById(R.id.checkout_icon_dummy);
+                        order_history_dummy = (View) findViewById(R.id.order_history_dummy);
 
 
                         checkout_icon_dummy.setOnClickListener(new View.OnClickListener() {
@@ -516,6 +527,15 @@ public class UserHub_carousel extends AppCompatActivity
                             public void onClick(View v) {
                                 //Intent intent = new Intent(DetailActivity.this, Checkout.class);            //Goes to checkout
                                 Intent intent = new Intent(getApplicationContext(), bluefirelabs.mojo.main.ui.checkout.Checkout.class);            //Goes to checkout
+                                startActivity(intent);
+                            }
+                        });
+
+                        order_history_dummy.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                //Intent intent = new Intent(DetailActivity.this, Checkout.class);            //Goes to checkout
+                                Intent intent = new Intent(getApplicationContext(), order_tracking.class);            //Goes to checkout
                                 startActivity(intent);
                             }
                         });

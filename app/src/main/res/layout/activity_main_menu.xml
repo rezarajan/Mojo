@@ -45,7 +45,7 @@
                     android:layout_margin="16dp" />
 
                 <View
-                    android:id="@+id/location_indicator"
+                    android:id="@+id/location_indicator_dummy"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
@@ -53,15 +53,15 @@
                     android:layout_marginTop="32dp"/>
 
                 <View
-                    android:id="@+id/location_icon"
+                    android:id="@+id/location_icon_dummy"
                     android:layout_width="16sp"
                     android:layout_height="16sp"
-                    android:layout_toEndOf="@id/location_indicator"
-                    android:layout_alignBottom="@id/location_indicator"
+                    android:layout_toEndOf="@id/location_indicator_dummy"
+                    android:layout_alignBottom="@id/location_indicator_dummy"
                     android:layout_margin="8dp" />
 
                 <View
-                    android:id="@+id/order_history"
+                    android:id="@+id/order_history_dummy"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_alignParentStart="true"

@@ -71,7 +71,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_alignStart="@+id/openIndicatorText"
                 android:id="@+id/openIndicatorIcon"
-                android:src="@drawable/openindicatoricon"/>
+                android:src="@drawable/openindicatoricon" />
 
             <TextView
                 android:layout_width="256dp"
@@ -87,44 +87,44 @@
 
 
             <de.hdodenhof.circleimageview.CircleImageView
-                android:layout_width="46dp"
-                android:layout_height="46dp"
+                android:id="@+id/descriptor1"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
                 android:layout_alignParentStart="true"
-                android:layout_marginTop="32dp"
+                android:layout_below="@id/restaurantDescription"
                 android:layout_marginBottom="16dp"
                 android:layout_marginStart="24dp"
-                android:layout_below="@id/restaurantDescription"
-                android:id="@+id/descriptor1" />
+                android:layout_marginTop="32dp" />
 
             <de.hdodenhof.circleimageview.CircleImageView
-                android:layout_width="46dp"
-                android:layout_height="46dp"
-                android:layout_toEndOf="@id/descriptor1"
-                android:layout_marginTop="32dp"
+                android:id="@+id/descriptor2"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_below="@id/restaurantDescription"
                 android:layout_marginBottom="16dp"
                 android:layout_marginStart="16dp"
-                android:layout_below="@id/restaurantDescription"
-                android:id="@+id/descriptor2" />
+                android:layout_marginTop="32dp"
+                android:layout_toEndOf="@id/descriptor1" />
 
             <de.hdodenhof.circleimageview.CircleImageView
-                android:layout_width="46dp"
-                android:layout_height="46dp"
-                android:layout_toEndOf="@id/descriptor2"
-                android:layout_marginTop="32dp"
+                android:id="@+id/descriptor3"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_below="@id/restaurantDescription"
                 android:layout_marginBottom="16dp"
                 android:layout_marginStart="16dp"
-                android:layout_below="@id/restaurantDescription"
-                android:id="@+id/descriptor3" />
+                android:layout_marginTop="32dp"
+                android:layout_toEndOf="@id/descriptor2" />
 
             <de.hdodenhof.circleimageview.CircleImageView
-                android:layout_width="46dp"
-                android:layout_height="46dp"
-                android:layout_toEndOf="@id/descriptor3"
-                android:layout_marginTop="32dp"
+                android:id="@+id/descriptor4"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_below="@id/restaurantDescription"
                 android:layout_marginBottom="16dp"
                 android:layout_marginStart="16dp"
-                android:layout_below="@id/restaurantDescription"
-                android:id="@+id/descriptor4" />
+                android:layout_marginTop="32dp"
+                android:layout_toEndOf="@id/descriptor3" />
 
             <TextView
                 android:layout_width="256dp"
