@@ -28,6 +28,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.azoft.carousellayoutmanager.CarouselLayoutManager;
@@ -86,6 +87,8 @@ public class UserHub_carousel extends AppCompatActivity
 
     private ImageView checkout_icon;
 
+    private ScrollView scrollView;
+
 
     public static final String EXTRA_RESTAURANT_LOGO = "restaurantLogo";
     public static final String EXTRA_RESTAURANT_NAME = "restaurantName";
@@ -121,10 +124,12 @@ public class UserHub_carousel extends AppCompatActivity
         restaurantCards restaurantCards = new restaurantCards();
         detailActivity detailActivity = new detailActivity();
         FragmentTransaction ft = fm.beginTransaction();
-        ft.add(R.id.fragment2, restaurantCards, "restaurantCards");
+        ft.add(R.id.fragment1, restaurantCards, "restaurantCards");
         ft.commit();
 
         locationTasks();
+
+        scrollView = (ScrollView) findViewById(R.id.scrollView);
 
         checkout_icon = (ImageView) findViewById(R.id.checkout_icon);
 
@@ -381,9 +386,10 @@ public class UserHub_carousel extends AppCompatActivity
         turnLayoutManager = new TurnLayoutManager(UserHub_carousel.this,              // provide a context
                 TurnLayoutManager.Gravity.END,        // from which direction should the list items orbit?
                 TurnLayoutManager.Orientation.HORIZONTAL, // Is this a vertical or horizontal scroll?
-                8000,               // The radius of the item rotation
+                4600,               // The radius of the item rotation
                 72,                 // Extra offset distance
                 true);        // should list items angle towards the center? true/false.
+
 
 
         FirebaseUser user = firebaseAuth.getCurrentUser();
@@ -476,6 +482,10 @@ public class UserHub_carousel extends AppCompatActivity
 
                     cardPosition = position;
                     Log.d("Position", String.valueOf(cardPosition));
+
+
+                    scrollView.setVisibility(View.VISIBLE);
+
 
                     FragmentTransaction ft = fm.beginTransaction();
                     //ft.setCustomAnimations(R.animator.enter, R.animator.exit, R.animator.pop_enter, R.animator.pop_exit);
