@@ -127,6 +127,7 @@ public class detailActivity extends Fragment{
     }
 
 
+
     public void firebaseTask(final MyCallback myCallback) {
 
         myCallback.callbackCall("menu");
