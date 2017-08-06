@@ -120,16 +120,6 @@ public class UserHub_carousel extends AppCompatActivity
         }
 
 
-        fm = getFragmentManager();
-
-        restaurantCards restaurantCards = new restaurantCards();
-        detailActivity detailActivity = new detailActivity();
-        FragmentTransaction ft = fm.beginTransaction();
-        ft.add(R.id.fragment1, restaurantCards, "restaurantCards");
-        ft.commit();
-
-        locationTasks();
-
         scrollView = (ScrollView) findViewById(R.id.scrollView);
 
         checkout_icon = (ImageView) findViewById(R.id.checkout_icon);
@@ -143,6 +133,16 @@ public class UserHub_carousel extends AppCompatActivity
             }
         });
 
+        fm = getFragmentManager();
+
+        restaurantCards restaurantCards = new restaurantCards();
+        detailActivity detailActivity = new detailActivity();
+        FragmentTransaction ft = fm.beginTransaction();
+        ft.add(R.id.fragment1, restaurantCards, "restaurantCards");
+        ft.commit();
+
+        locationTasks();
+
 
 
     }
@@ -152,7 +152,6 @@ public class UserHub_carousel extends AppCompatActivity
     protected void onResume() {
         super.onResume();
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
             return;
         }
         locationManager.requestLocationUpdates(provider, 400, 1, this);
@@ -168,9 +167,11 @@ public class UserHub_carousel extends AppCompatActivity
         FragmentTransaction ft = fm.beginTransaction();
         Log.d("Position back", String.valueOf(cardPosition));
         if(detailActivity!=null){
-            ft.remove(detailActivity);
+            //ft.remove(detailActivity);
             //ft.add(R.id.fragment2, restaurantCards, "restaurantCards");
             if(restaurantCards != null){
+                ft.setCustomAnimations(R.animator.slide_out_down, R.animator.slide_in_up);
+                ft.detach(detailActivity);
                 ft.attach(restaurantCards);
                 ft.commit();
                 locationTasks();
@@ -293,7 +294,7 @@ public class UserHub_carousel extends AppCompatActivity
             }
         };
 
-        registerReceiver(broadcastReceiver, new IntentFilter(MyFirebaseInstanceIDService.TOKEN_BROADCAST));
+        //registerReceiver(broadcastReceiver, new IntentFilter(MyFirebaseInstanceIDService.TOKEN_BROADCAST));
 
         if(SharedPrefManager.getInstance(this).getToken() != null){
             Log.d("FCM Token: ", SharedPrefManager.getInstance(this).getToken());
@@ -447,14 +448,12 @@ public class UserHub_carousel extends AppCompatActivity
                 viewHolder.descriptor2.setImageResource(R.drawable.ic_local_pizza_48px);
                 viewHolder.descriptor3.setImageResource(R.drawable.ic_local_drink_48px);
 
-            viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    //Setting up the transitions for the logo, using the restaurant's name as the unique identifier
-                    //to avoid image clashing with other items
+                viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        //Setting up the transitions for the logo, using the restaurant's name as the unique identifier
+                        //to avoid image clashing with other items
 /*                    ViewCompat.setTransitionName(viewHolder.restaurantLogo, viewHolder.restaurantName.toString());
-
-
                     intent.putExtra(EXTRA_TRANSITION_NAME, ViewCompat.getTransitionName(viewHolder.restaurantLogo));*/
 
 
@@ -466,60 +465,64 @@ public class UserHub_carousel extends AppCompatActivity
 */
 
 
-                    Intent intent = new Intent(getApplicationContext(), DetailActivity.class);
-                    intent.putExtra(DetailActivity.EXTRA_RESTAURANT_LOGO, model.getIcon());
-                    intent.putExtra(DetailActivity.EXTRA_RESTAURANT_COLOR, model.getColor());
-                    intent.putExtra(DetailActivity.EXTRA_RESTAURANT_NAME, model.getRestaurant());
+                        Intent intent = new Intent(getApplicationContext(), DetailActivity.class);
+                        intent.putExtra(DetailActivity.EXTRA_RESTAURANT_LOGO, model.getIcon());
+                        intent.putExtra(DetailActivity.EXTRA_RESTAURANT_COLOR, model.getColor());
+                        intent.putExtra(DetailActivity.EXTRA_RESTAURANT_NAME, model.getRestaurant());
 
 
                     /*startActivity(intent, options.toBundle());*/
-                    //startActivity(intent);
+                        //startActivity(intent);
 
 
 
-                    Bundle args = new Bundle();
-                    args.putString(detailActivity.EXTRA_RESTAURANT_LOGO, model.getIcon());
-                    args.putString(detailActivity.EXTRA_RESTAURANT_NAME, model.getRestaurant());
-                    args.putString(detailActivity.EXTRA_RESTAURANT_COLOR, model.getColor());
-                    args.putString(detailActivity.EXTRA_RESTAURANT_NAME, model.getRestaurant());
+                        Bundle args = new Bundle();
+                        args.putString(detailActivity.EXTRA_RESTAURANT_LOGO, model.getIcon());
+                        args.putString(detailActivity.EXTRA_RESTAURANT_NAME, model.getRestaurant());
+                        args.putString(detailActivity.EXTRA_RESTAURANT_COLOR, model.getColor());
+                        args.putString(detailActivity.EXTRA_RESTAURANT_NAME, model.getRestaurant());
 
-                    cardPosition = position;
-                    Log.d("Position", String.valueOf(cardPosition));
-
-
-                    scrollView.setVisibility(View.VISIBLE);
+                        cardPosition = position;
+                        Log.d("Position", String.valueOf(cardPosition));
 
 
-                    FragmentTransaction ft = fm.beginTransaction();
-                    //ft.setCustomAnimations(R.animator.enter, R.animator.exit, R.animator.pop_enter, R.animator.pop_exit);
+                        scrollView.setVisibility(View.VISIBLE);
 
 
-                    detailActivity detailActivity = new detailActivity();
-                    //ft.replace(R.id.fragment2, detailActivity);
-                    //ft.addToBackStack(null);
-
-                    detailActivity.setArguments(args);
-                    restaurantCards restaurantCards = (bluefirelabs.mojo.fragments.restaurantCards) fm.findFragmentByTag("restaurantCards");
-                    //ft.remove(restaurantCards);
-                    ft.detach(restaurantCards);
-                    ft.add(R.id.fragment2, detailActivity, "detailActivity");
-                    ft.commit();
-
-                    checkout_icon_dummy = (View) findViewById(R.id.checkout_icon_dummy);
+                        FragmentTransaction ft = fm.beginTransaction();
+                        //ft.setCustomAnimations(R.animator.enter, R.animator.exit, R.animator.pop_enter, R.animator.pop_exit);
 
 
-                    checkout_icon_dummy.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            //Intent intent = new Intent(DetailActivity.this, Checkout.class);            //Goes to checkout
-                            Intent intent = new Intent(getApplicationContext(), bluefirelabs.mojo.main.ui.checkout.Checkout.class);            //Goes to checkout
-                            startActivity(intent);
-                        }
-                    });
+                        detailActivity detailActivity = new detailActivity();
+                        //ft.replace(R.id.fragment2, detailActivity);
+                        //ft.addToBackStack(null);
+
+                        detailActivity.setArguments(args);
+                        restaurantCards restaurantCards = (bluefirelabs.mojo.fragments.restaurantCards) fm.findFragmentByTag("restaurantCards");
+                        //ft.remove(restaurantCards);
+                        ft.detach(restaurantCards);
+
+                        ft.setCustomAnimations(R.animator.slide_in_up, R.animator.slide_out_down);
 
 
-                }
-            });
+                        ft.add(R.id.fragment2, detailActivity, "detailActivity");
+                        ft.commit();
+
+                        checkout_icon_dummy = (View) findViewById(R.id.checkout_icon_dummy);
+
+
+                        checkout_icon_dummy.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                //Intent intent = new Intent(DetailActivity.this, Checkout.class);            //Goes to checkout
+                                Intent intent = new Intent(getApplicationContext(), bluefirelabs.mojo.main.ui.checkout.Checkout.class);            //Goes to checkout
+                                startActivity(intent);
+                            }
+                        });
+
+
+                    }
+                });
 
             }
         };
