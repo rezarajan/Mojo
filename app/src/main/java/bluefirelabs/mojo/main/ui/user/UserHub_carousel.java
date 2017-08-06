@@ -1,6 +1,7 @@
 package bluefirelabs.mojo.main.ui.user;
 
-import android.app.Activity;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -15,23 +16,14 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.util.Pair;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.view.ViewCompat;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.LinearSnapHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SnapHelper;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -39,8 +31,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.azoft.carousellayoutmanager.CarouselLayoutManager;
-import com.azoft.carousellayoutmanager.CarouselZoomPostLayoutListener;
-import com.azoft.carousellayoutmanager.CenterScrollListener;
 import com.firebase.geofire.GeoFire;
 import com.firebase.geofire.GeoLocation;
 import com.firebase.geofire.GeoQuery;
@@ -59,20 +49,14 @@ import org.json.JSONObject;
 
 import bluefirelabs.mojo.R;
 import bluefirelabs.mojo.background_tasks.MyFirebaseInstanceIDService;
-import bluefirelabs.mojo.fragments.restaurantlist_fragment;
+import bluefirelabs.mojo.fragments.detailActivity;
+import bluefirelabs.mojo.fragments.restaurantCards;
 import bluefirelabs.mojo.handlers.adapters.FirebaseViewPagerAdapter;
 import bluefirelabs.mojo.handlers.adapters.Food_List;
 import bluefirelabs.mojo.handlers.online.HttpDataHandler;
-import bluefirelabs.mojo.main.transition.CommonFragment;
 import bluefirelabs.mojo.main.transition.DetailActivity;
-import bluefirelabs.mojo.main.ui.payments.Payments;
 import bluefirelabs.mojo.handlers.online.SharedPrefManager;
-import bluefirelabs.mojo.handlers.online.uploadImage;
-import bluefirelabs.mojo.main.login.Sign_In;
-import bluefirelabs.mojo.menu.OrderHistory;
 import cdflynn.android.library.turn.TurnLayoutManager;
-
-import static android.R.attr.radius;
 
 public class UserHub_carousel extends AppCompatActivity
         implements android.location.LocationListener {
@@ -94,11 +78,15 @@ public class UserHub_carousel extends AppCompatActivity
     int defaultColor = 0x000000;
     int mutedColor = -1;
 
+    int cardPosition = 0;
+
     private RecyclerView mRestaurantRecyclerView;
     private LinearLayoutManager mLinearLayoutManager;
     CarouselLayoutManager layoutManager;
 
     TurnLayoutManager turnLayoutManager;
+
+    FragmentManager fm;
 
 
     public static final String EXTRA_RESTAURANT_LOGO = "restaurantLogo";
@@ -123,127 +111,24 @@ public class UserHub_carousel extends AppCompatActivity
             // add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
 
-/*            window.setFlags(
-                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
-                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);   */
-
-            //Sets the status bar and navBar to no background, just icons
-/*            window.setFlags(
-                    WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-                    WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
-        }*/
 
             // finally change the color
             window.setStatusBarColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
 
         }
 
-        ImageView checkout_icon = (ImageView) findViewById(R.id.checkout_icon);
-        ImageView order_history = (ImageView) findViewById(R.id.order_history);
 
-        //Setting the icons to the secondary color (accent) using the Material Design Palette
-        checkout_icon.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.colorSecondary));
-        order_history.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.colorSecondary));
+        fm = getFragmentManager();
 
+        restaurantCards restaurantCards = new restaurantCards();
+        detailActivity detailActivity = new detailActivity();
+        FragmentTransaction ft = fm.beginTransaction();
+        ft.add(R.id.fragment2, restaurantCards, "restaurantCards");
+        ft.commit();
 
-        broadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-
-            }
-        };
-
-        registerReceiver(broadcastReceiver, new IntentFilter(MyFirebaseInstanceIDService.TOKEN_BROADCAST));
-
-        if(SharedPrefManager.getInstance(this).getToken() != null){
-            Log.d("FCM Token: ", SharedPrefManager.getInstance(this).getToken());
-        }
-
-        firebaseAuth = FirebaseAuth.getInstance();
-        FirebaseUser user = firebaseAuth.getCurrentUser();
+        locationTasks();
 
 
-        //small_description = (TextView) findViewById(R.id.small_description_location);
-
-        //FirebaseApp.initializeApp(this);
-        //FirebaseMessaging.getInstance().subscribeToTopic("Notifications");
-
-        /*Location Functions */
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
-            ActivityCompat.requestPermissions(this, new String[]{
-                    android.Manifest.permission.ACCESS_COARSE_LOCATION,
-                    android.Manifest.permission.ACCESS_FINE_LOCATION
-            }, MY_PERMISSION_REQUEST_CODE);
-
-        } else {
-            getLocation();
-        }
-        locationManager.requestLocationUpdates(provider, 400, 1, this);
-        Location myLocation = locationManager.getLastKnownLocation(provider);
-        if(myLocation == null){
-            getLocation();
-        } else {
-            lat = myLocation.getLatitude();
-            lng = myLocation.getLongitude();
-        }
-
-        new GetAddress().execute(String.format("%.4f,%.4f",lat,lng));
-
-        DatabaseReference ref_users = FirebaseDatabase.getInstance().getReference("geofire").child("users");
-        final GeoFire geoFire_users = new GeoFire(ref_users);
-
-        DatabaseReference ref_venues = FirebaseDatabase.getInstance().getReference("geofire").child("venues");
-        final GeoFire geoFire_venues = new GeoFire(ref_venues);
-
-        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-
-        String uid = "";
-        if(firebaseAuth.getCurrentUser() != null){
-            uid = firebaseAuth.getCurrentUser().getUid();
-
-            geoFire_users.setLocation(uid, new GeoLocation(lat, lng), new GeoFire.CompletionListener() {
-                @Override
-                public void onComplete(String key, DatabaseError error) {
-                    if (error != null) {
-                        System.err.println("There was an error saving the location to GeoFire: " + error);
-                    } else {
-                        System.out.println("Location saved on server successfully!");
-                    }
-                }
-            });
-
-            //Querying for nearby venues
-            GeoQuery geoQuery = geoFire_venues.queryAtLocation(new GeoLocation(lat, lng), 5);
-
-            geoQuery.addGeoQueryEventListener(new GeoQueryEventListener() {
-                @Override
-                public void onKeyEntered(String key, GeoLocation location) {
-                    System.out.println(String.format("Key %s entered the search area at [%f,%f]", key, location.latitude, location.longitude));
-                    populateView(key);
-                }
-
-                @Override
-                public void onKeyExited(String key) {
-                    System.out.println(String.format("Key %s is no longer in the search area", key));
-                }
-
-                @Override
-                public void onKeyMoved(String key, GeoLocation location) {
-                    System.out.println(String.format("Key %s moved within the search area to [%f,%f]", key, location.latitude, location.longitude));
-                }
-
-                @Override
-                public void onGeoQueryReady() {
-                    System.out.println("All initial data has been loaded and events have been fired!");
-                }
-
-                @Override
-                public void onGeoQueryError(DatabaseError error) {
-                    System.err.println("There was an error with this query: " + error);
-                }
-            });
-        }
     }
 
 /*
@@ -260,81 +145,19 @@ public class UserHub_carousel extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-/*        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }*/
-    }
 
-/*    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main_hub, menu);
-        return true;
-    }
+        restaurantCards restaurantCards = new restaurantCards();
+        detailActivity detailActivity = (bluefirelabs.mojo.fragments.detailActivity) fm.findFragmentByTag("detailActivity");
+        //restaurantCards restaurantCards = (bluefirelabs.mojo.fragments.restaurantCards) fm.findFragmentByTag("restaurantCards");
+        FragmentTransaction ft = fm.beginTransaction();
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if(detailActivity!=null){
+            ft.remove(detailActivity);
+            ft.add(R.id.fragment2, restaurantCards, "restaurantCards");
+            ft.commit();
+            locationTasks();
         }
-
-        return super.onOptionsItemSelected(item);
-    }*/
-
-/*    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
-
-        if (id == R.id.nav_logout) {
-            //Handle the camera action
-            firebaseAuth.signOut();
-            Snackbar.make(findViewById(android.R.id.content), "User Signed Out",
-                    Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show();
-
-            Intent intent = new Intent(this, Sign_In.class);
-            startActivity(intent);
-            finish();
-        }  else if (id == R.id.nav_gallery) {
-            Intent intent = new Intent(this, uploadImage.class);
-            startActivity(intent);
-
-        } else if (id == R.id.nav_send) {
-            Intent intent = new Intent(this, OrderHistory.class);
-            startActivity(intent);
-        } else if (id == R.id.nav_settings) {
-            Intent intent = new Intent(this, Payments.class);
-            startActivity(intent);
-        } else if (id == R.id.nav_gifts) {
-            Intent intent = new Intent(this, Gifts.class);
-            startActivity(intent);
-        }
-
-        *//* else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
-        } *//*
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
-    }*/
+    }
 
     public void getLocation() {
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -432,16 +255,113 @@ public class UserHub_carousel extends AppCompatActivity
         }
     }
 
+    public void locationTasks(){
+        ImageView checkout_icon = (ImageView) findViewById(R.id.checkout_icon);
+        ImageView order_history = (ImageView) findViewById(R.id.order_history);
+
+        //Setting the icons to the secondary color (accent) using the Material Design Palette
+        checkout_icon.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.colorSecondary));
+        order_history.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.colorSecondary));
+
+
+        broadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+
+            }
+        };
+
+        registerReceiver(broadcastReceiver, new IntentFilter(MyFirebaseInstanceIDService.TOKEN_BROADCAST));
+
+        if(SharedPrefManager.getInstance(this).getToken() != null){
+            Log.d("FCM Token: ", SharedPrefManager.getInstance(this).getToken());
+        }
+
+        firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = firebaseAuth.getCurrentUser();
+
+
+        /*Location Functions */
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this, new String[]{
+                    android.Manifest.permission.ACCESS_COARSE_LOCATION,
+                    android.Manifest.permission.ACCESS_FINE_LOCATION
+            }, MY_PERMISSION_REQUEST_CODE);
+
+        } else {
+            getLocation();
+        }
+        locationManager.requestLocationUpdates(provider, 400, 1, this);
+        Location myLocation = locationManager.getLastKnownLocation(provider);
+        if(myLocation == null){
+            getLocation();
+        } else {
+            lat = myLocation.getLatitude();
+            lng = myLocation.getLongitude();
+        }
+
+        new GetAddress().execute(String.format("%.4f,%.4f",lat,lng));
+
+        DatabaseReference ref_users = FirebaseDatabase.getInstance().getReference("geofire").child("users");
+        final GeoFire geoFire_users = new GeoFire(ref_users);
+
+        DatabaseReference ref_venues = FirebaseDatabase.getInstance().getReference("geofire").child("venues");
+        final GeoFire geoFire_venues = new GeoFire(ref_venues);
+
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+
+        String uid = "";
+        if(firebaseAuth.getCurrentUser() != null){
+            uid = firebaseAuth.getCurrentUser().getUid();
+
+            geoFire_users.setLocation(uid, new GeoLocation(lat, lng), new GeoFire.CompletionListener() {
+                @Override
+                public void onComplete(String key, DatabaseError error) {
+                    if (error != null) {
+                        System.err.println("There was an error saving the location to GeoFire: " + error);
+                    } else {
+                        System.out.println("Location saved on server successfully!");
+                    }
+                }
+            });
+
+            //Querying for nearby venues
+            GeoQuery geoQuery = geoFire_venues.queryAtLocation(new GeoLocation(lat, lng), 5);
+
+            geoQuery.addGeoQueryEventListener(new GeoQueryEventListener() {
+                @Override
+                public void onKeyEntered(String key, GeoLocation location) {
+                    System.out.println(String.format("Key %s entered the search area at [%f,%f]", key, location.latitude, location.longitude));
+                    populateView(key);
+                }
+
+                @Override
+                public void onKeyExited(String key) {
+                    System.out.println(String.format("Key %s is no longer in the search area", key));
+                }
+
+                @Override
+                public void onKeyMoved(String key, GeoLocation location) {
+                    System.out.println(String.format("Key %s moved within the search area to [%f,%f]", key, location.latitude, location.longitude));
+                }
+
+                @Override
+                public void onGeoQueryReady() {
+                    System.out.println("All initial data has been loaded and events have been fired!");
+                }
+
+                @Override
+                public void onGeoQueryError(DatabaseError error) {
+                    System.err.println("There was an error with this query: " + error);
+                }
+            });
+        }
+
+    }
+
     public void populateView(String venue){
         mRestaurantRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        //mLinearLayoutManager = new CenterZoomLayoutManager(this);
-         //mLinearLayoutManager = new LinearLayoutManager(this);
-        //mLinearLayoutManager.setStackFromEnd(true);
-        //mLinearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-
-        //layoutManager = new CarouselLayoutManager(CarouselLayoutManager.HORIZONTAL);
-        //layoutManager.setPostLayoutListener(new CarouselZoomPostLayoutListener());
-
 
 
         turnLayoutManager = new TurnLayoutManager(UserHub_carousel.this,              // provide a context
@@ -484,18 +404,6 @@ public class UserHub_carousel extends AppCompatActivity
 
 
                 Picasso.with(getApplicationContext()).load(model.getIcon()).into(viewHolder.restaurantLogo);
-                //Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.drinks);
-/*
-                if(viewHolder.restaurantLogo.getDrawable() != null) {
-                    bitmapDrawable = (BitmapDrawable) viewHolder.restaurantLogo.getDrawable();
-                    Bitmap bitmap = bitmapDrawable.getBitmap();
-                    Palette palette;
-                    palette = Palette.from(bitmap).generate();
-                    mutedColor = palette.getVibrantColor(defaultColor);
-                    viewHolder.itemView.setBackgroundColor(mutedColor);
-                }
-*/
-
 
 
                 if(model.getColor() != null){
@@ -545,7 +453,37 @@ public class UserHub_carousel extends AppCompatActivity
 
 
                     /*startActivity(intent, options.toBundle());*/
-                    startActivity(intent);
+                    //startActivity(intent);
+
+
+
+                    cardPosition = position;
+                    Log.d("Position", String.valueOf(cardPosition));
+
+                    FragmentTransaction ft = fm.beginTransaction();
+                    //ft.setCustomAnimations(R.animator.enter, R.animator.exit, R.animator.pop_enter, R.animator.pop_exit);
+
+
+                    detailActivity detailActivity = new detailActivity();
+                    //ft.replace(R.id.fragment2, detailActivity);
+                    //ft.addToBackStack(null);
+                    restaurantCards restaurantCards = (bluefirelabs.mojo.fragments.restaurantCards) fm.findFragmentByTag("restaurantCards");
+                    ft.remove(restaurantCards);
+                    ft.add(R.id.fragment2, detailActivity, "detailActivity");
+                    ft.commit();
+
+
+
+
+
+
+
+
+
+
+
+
+
                 }
             });
 
@@ -557,35 +495,19 @@ public class UserHub_carousel extends AppCompatActivity
             public void onItemRangeInserted(int positionStart, int itemCount) {
                 super.onItemRangeInserted(positionStart, itemCount);
                 int restaurantCount = mFirebaseAdapter.getItemCount();
-                //mRestaurantRecyclerView.scrollToPosition(restaurantCount);
-/*                int lastVisiblePosition = mLinearLayoutManager.findLastVisibleItemPosition();
-                if(lastVisiblePosition == -1 || (positionStart >= (restaurantCount -1) && lastVisiblePosition == (positionStart -1))){
-                    mRestaurantRecyclerView.scrollToPosition(positionStart);
-                }*/
 
-                //Log.d("Restaurant Count", String.valueOf(restaurantCount));
-                //mRestaurantRecyclerView.scrollToPosition(restaurantCount/2);        //when the app launches the card is the middle card
-                //mRestaurantRecyclerView.smoothScrollToPosition(restaurantCount/2);        //when the app launches the cards scroll to the middle card
-            //mFirebaseAdapter.cleanup();
 
             }
         });
 
 
-        //mRestaurantRecyclerView.addItemDecoration(new OverlapDecoration());
 
-
-        //Log.d("Max Visible Items", String.valueOf(layoutManager.getMaxVisibleItems()));
-        //mRestaurantRecyclerView.setLayoutManager(mLinearLayoutManager);
-        //mRestaurantRecyclerView.setLayoutManager(layoutManager);
 
         mRestaurantRecyclerView.setAdapter(mFirebaseAdapter);
         mRestaurantRecyclerView.setLayoutManager(turnLayoutManager);
-        //SnapHelper helper = new StartSnapHelper();
+
         SnapHelper helper = new LinearSnapHelper();
         helper.attachToRecyclerView(mRestaurantRecyclerView);
-        //mRestaurantRecyclerView.addOnScrollListener(new CenterScrollListener());
-        //mRestaurantRecyclerView.setNestedScrollingEnabled(false);
 
 
 
