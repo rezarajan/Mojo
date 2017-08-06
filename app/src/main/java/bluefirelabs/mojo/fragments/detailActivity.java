@@ -114,8 +114,11 @@ public class detailActivity extends Fragment{
                 //background_image_view.setBackgroundColor(Color.parseColor(restaurantColor));
                 //background_image_view.getBackground().setAlpha(153);        //0 <= alpha <= 255, setting for 60% = 153 to maintain the theme
 
-                nestedScrollView.setBackgroundColor(Color.parseColor(restaurantColor));
-                nestedScrollView.getBackground().setAlpha(153);        //0 <= alpha <= 255, setting for 60% = 153 to maintain the theme
+                //nestedScrollView.setBackgroundColor(Color.parseColor(restaurantColor));
+                //nestedScrollView.getBackground().setAlpha(153);        //0 <= alpha <= 255, setting for 60% = 153 to maintain the theme
+
+                linearLayout.setBackgroundColor(Color.parseColor(restaurantColor));
+                linearLayout.getBackground().setAlpha(153);        //0 <= alpha <= 255, setting for 60% = 153 to maintain the theme
             }
 
             checkout_icon.setOnClickListener(new View.OnClickListener() {

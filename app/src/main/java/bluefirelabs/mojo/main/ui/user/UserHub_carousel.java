@@ -367,8 +367,8 @@ public class UserHub_carousel extends AppCompatActivity
         turnLayoutManager = new TurnLayoutManager(UserHub_carousel.this,              // provide a context
                 TurnLayoutManager.Gravity.END,        // from which direction should the list items orbit?
                 TurnLayoutManager.Orientation.HORIZONTAL, // Is this a vertical or horizontal scroll?
-                4000,               // The radius of the item rotation
-                72,                 // Extra offset distance
+                4800,               // The radius of the item rotation
+                144,                 // Extra offset distance
                 true);        // should list items angle towards the center? true/false.
 
 
