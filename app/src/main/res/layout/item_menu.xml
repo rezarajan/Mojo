@@ -5,10 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@drawable/cardstroke"
     app:cardCornerRadius="16dp"
-    android:layout_marginBottom="-16dp"
-    app:cardElevation="8dp">
+    android:layout_marginBottom="-16dp">
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"

@@ -59,6 +59,7 @@ public class detailActivity extends Fragment{
     private ImageView imageView;
     private RelativeLayout background_image_view;
     private View accent_layout;
+    ;
     private LinearLayout listContainer;
 
     LinearLayout linearLayout;
@@ -98,8 +99,6 @@ public class detailActivity extends Fragment{
             linearLayout = (LinearLayout) view.findViewById(R.id.detail_list_layout);
 
             nestedScrollView = (NestedScrollView) view.findViewById(R.id.scrollView);
-
-
 
 
             Log.d("Colour", String.valueOf(restaurantColor));

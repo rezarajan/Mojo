@@ -88,6 +88,7 @@ public class UserHub_carousel extends AppCompatActivity
     private ImageView checkout_icon;
 
     private ScrollView scrollView;
+    private View checkout_icon_dummy;
 
 
     public static final String EXTRA_RESTAURANT_LOGO = "restaurantLogo";
@@ -176,6 +177,8 @@ public class UserHub_carousel extends AppCompatActivity
             }
 
         }
+
+        scrollView.setVisibility(View.GONE);
     }
 
     public void getLocation() {
@@ -501,6 +504,19 @@ public class UserHub_carousel extends AppCompatActivity
                     ft.detach(restaurantCards);
                     ft.add(R.id.fragment2, detailActivity, "detailActivity");
                     ft.commit();
+
+                    checkout_icon_dummy = (View) findViewById(R.id.checkout_icon_dummy);
+
+
+                    checkout_icon_dummy.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            //Intent intent = new Intent(DetailActivity.this, Checkout.class);            //Goes to checkout
+                            Intent intent = new Intent(getApplicationContext(), bluefirelabs.mojo.main.ui.checkout.Checkout.class);            //Goes to checkout
+                            startActivity(intent);
+                        }
+                    });
+
 
                 }
             });
