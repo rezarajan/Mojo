@@ -173,8 +173,8 @@ public class UserHub_carousel extends AppCompatActivity
         if(detailActivity!=null){
             //ft.remove(detailActivity);
             //ft.add(R.id.fragment2, restaurantCards, "restaurantCards");
-            ft.detach(detailActivity);
-            ft.attach(detailActivity);
+            ft.detach(detailActivity);      //removes the detailActivity from before the checkout
+            ft.attach(detailActivity);      //adds a new detailActivity with the refreshed checkboxes
             ft.commit();
 
 /*            if(restaurantCards != null){
@@ -200,16 +200,19 @@ public class UserHub_carousel extends AppCompatActivity
         restaurantCards restaurantCards = (bluefirelabs.mojo.fragments.restaurantCards) fm.findFragmentByTag("restaurantCards");
         FragmentTransaction ft = fm.beginTransaction();
         Log.d("Position back", String.valueOf(cardPosition));
-        if(detailActivity!=null){
+        if(detailActivity!=null && restaurantCards != null){
             //ft.remove(detailActivity);
             //ft.add(R.id.fragment2, restaurantCards, "restaurantCards");
-            if(restaurantCards != null){
                 ft.setCustomAnimations(R.animator.slide_out_down, R.animator.slide_in_up);
-                ft.detach(detailActivity);
+                ft.remove(detailActivity);      //Using remove here so that in the next case, when the user wants to exit the app detail activity will show null
+                                                //If detach was used, then detailActivity will still remain in the Fragment Manager, which results in an error
                 ft.attach(restaurantCards);
                 ft.commit();
                 locationTasks();
-            }
+
+        }
+        else if(detailActivity==null && restaurantCards != null){
+                finish();
 
         }
 
