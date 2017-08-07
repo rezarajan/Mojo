@@ -17,6 +17,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
@@ -57,8 +58,13 @@ import bluefirelabs.mojo.fragments.restaurantCards;
 import bluefirelabs.mojo.handlers.adapters.FirebaseViewPagerAdapter;
 import bluefirelabs.mojo.handlers.adapters.Food_List;
 import bluefirelabs.mojo.handlers.online.HttpDataHandler;
+import bluefirelabs.mojo.handlers.online.uploadImage;
+import bluefirelabs.mojo.main.login.Login;
+import bluefirelabs.mojo.main.login.Sign_In;
 import bluefirelabs.mojo.main.transition.DetailActivity;
 import bluefirelabs.mojo.handlers.online.SharedPrefManager;
+import bluefirelabs.mojo.main.ui.payments.Payments;
+import bluefirelabs.mojo.menu.OrderHistory;
 import cdflynn.android.library.turn.TurnLayoutManager;
 
 public class UserHub_carousel extends AppCompatActivity
@@ -231,15 +237,44 @@ public class UserHub_carousel extends AppCompatActivity
         // Create a new fragment and specify the fragment to show based on nav item clicked
         //Fragment fragment = null;
         Class fragmentClass;
+        Intent intent;
         switch(menuItem.getItemId()) {
             case R.id.nav_logout:
+                //Logout
+
                 //fragmentClass = FirstFragment.class;
+                firebaseAuth.signOut();
+                Snackbar.make(findViewById(android.R.id.content), "User Signed Out",
+                        Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+
+                intent = new Intent(this, Login.class);
+                startActivity(intent);
+                finish();
                 break;
             case R.id.nav_upload:
+                //Upload a profile picture to Firebase
+
                 //fragmentClass = SecondFragment.class;
+
+                intent = new Intent(this, uploadImage.class);
+                startActivity(intent);
                 break;
             case R.id.nav_payments:
+                //Add/remove or edit payment options
+
                 //fragmentClass = ThirdFragment.class;
+
+                intent = new Intent(this, Payments.class);
+                startActivity(intent);
+                break;
+            case R.id.nav_orderHistory:
+                //Go to order history
+
+                //fragmentClass = ThirdFragment.class;
+
+                intent = new Intent(this, order_tracking.class);
+                startActivity(intent);
                 break;
             default:
                 //fragmentClass = FirstFragment.class;

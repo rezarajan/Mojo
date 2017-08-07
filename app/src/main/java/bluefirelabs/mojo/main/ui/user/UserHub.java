@@ -276,7 +276,7 @@ public class UserHub extends AppCompatActivity
             Intent intent = new Intent(this, uploadImage.class);
             startActivity(intent);
 
-        } else if (id == R.id.nav_send) {
+        } else if (id == R.id.nav_orderHistory) {
             Intent intent = new Intent(this, OrderHistory.class);
             startActivity(intent);
         } else if (id == R.id.nav_payments) {

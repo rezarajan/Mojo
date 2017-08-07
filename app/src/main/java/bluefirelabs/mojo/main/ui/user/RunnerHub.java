@@ -163,7 +163,7 @@ public class RunnerHub extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         Menu menu = navigationView.getMenu();
-        MenuItem navSend = menu.findItem(R.id.nav_send);
+        MenuItem navSend = menu.findItem(R.id.nav_orderHistory);
         navSend.setTitle("QR Scanner");
 
         View header=navigationView.getHeaderView(0);
@@ -455,7 +455,7 @@ public class RunnerHub extends AppCompatActivity
             Intent intent = new Intent(this, uploadImage.class);
             startActivity(intent);
 
-        } else if (id == R.id.nav_send) {
+        } else if (id == R.id.nav_orderHistory) {
             Intent intent = new Intent(this, barcodeReader.class);
             startActivity(intent);
 
