@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
@@ -16,6 +17,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -42,6 +44,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
+import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -143,6 +147,42 @@ public class UserHub_carousel extends AppCompatActivity
             }
         });
 
+
+/*        // in Activity Context
+        ImageView icon = new ImageView(this); // Create an icon
+        Drawable iconDrawable = getResources().getDrawable(R.drawable.mojo_monkey);
+        icon.setImageDrawable(iconDrawable);
+
+        FloatingActionButton actionButton = new FloatingActionButton.Builder(this)
+                .setContentView(icon)
+                .setPosition(8)     //top left
+                .build();
+
+        SubActionButton.Builder itemBuilder = new SubActionButton.Builder(this);
+        // repeat many times:
+        ImageView orderHistory_button = new ImageView(this);
+        Drawable orderHistoryDrawable = getResources().getDrawable(R.drawable.ic_history_48px);
+        orderHistory_button.setImageDrawable(orderHistoryDrawable);
+        SubActionButton button1 = itemBuilder.setContentView(orderHistory_button).build();
+
+        // repeat many times:
+        ImageView qrButton = new ImageView(this);
+        Drawable qrDrawable = getResources().getDrawable(R.drawable.ic_menu_send);
+        qrButton.setImageDrawable(qrDrawable);
+        SubActionButton button2 = itemBuilder.setContentView(qrButton).build();
+
+
+        FloatingActionMenu actionMenu = new FloatingActionMenu.Builder(this)
+                .addSubActionView(button1)
+                .addSubActionView(button2)
+                .setStartAngle(0)
+                .setEndAngle(90)
+                .setRadius(216)
+                // ...
+                .attachTo(actionButton)
+                .build();*/
+
+
         fm = getFragmentManager();
 
         restaurantCards restaurantCards = new restaurantCards();
@@ -152,6 +192,9 @@ public class UserHub_carousel extends AppCompatActivity
         ft.commit();
 
         locationTasks();
+
+
+
 
 
 

@@ -40,4 +40,14 @@
         android:src="@drawable/ic_history_48px"
         android:layout_alignParentStart="true"
         android:layout_margin="15dp" />
+
+<!--    <com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton
+        android:id="@+id/order_history"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@drawable/ic_history_48px"
+        android:layout_alignParentStart="true"
+        android:layout_margin="15dp" >
+
+    </com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton>-->
 </RelativeLayout>
