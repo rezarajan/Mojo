@@ -432,7 +432,7 @@ public class Gifts extends AppCompatActivity
             Intent intent = new Intent(this, Sign_In.class);
             startActivity(intent);
             finish();
-        }  else if (id == R.id.nav_gallery) {
+        }  else if (id == R.id.nav_upload) {
             Intent intent = new Intent(this, uploadImage.class);
             startActivity(intent);
 

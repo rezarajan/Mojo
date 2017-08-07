@@ -20,9 +20,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.LinearSnapHelper;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SnapHelper;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -274,14 +272,14 @@ public class UserHub extends AppCompatActivity
             Intent intent = new Intent(this, Sign_In.class);
             startActivity(intent);
             finish();
-        }  else if (id == R.id.nav_gallery) {
+        }  else if (id == R.id.nav_upload) {
             Intent intent = new Intent(this, uploadImage.class);
             startActivity(intent);
 
         } else if (id == R.id.nav_send) {
             Intent intent = new Intent(this, OrderHistory.class);
             startActivity(intent);
-        } else if (id == R.id.nav_settings) {
+        } else if (id == R.id.nav_payments) {
             Intent intent = new Intent(this, Payments.class);
             startActivity(intent);
         } else if (id == R.id.nav_gifts) {

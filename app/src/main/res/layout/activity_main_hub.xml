@@ -8,7 +8,8 @@
     android:fitsSystemWindows="true"
     tools:openDrawer="start">
 
-    <include layout="@layout/hub_layout" />
+    <!--<include layout="@layout/hub_layout" />-->
+    <include layout="@layout/activity_main_menu"/>
 
 
 
@@ -19,7 +20,11 @@
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/nav_header_main_hub"
-        app:menu="@menu/activity_main_hub_drawer" />
+        app:menu="@menu/activity_main_hub_drawer"
+        android:background="@color/colorPrimary"
+        app:itemTextColor="@color/black"
+        app:itemIconTint="@color/colorSecondary"
+        app:elevation="8dp"/>
 
 
 

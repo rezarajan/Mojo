@@ -6,10 +6,8 @@ import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
@@ -17,21 +15,24 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton;
+
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.LinearSnapHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SnapHelper;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.ScrollView;
-import android.widget.TextView;
 
 import com.azoft.carousellayoutmanager.CarouselLayoutManager;
 import com.firebase.geofire.GeoFire;
@@ -44,8 +45,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
-import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -53,7 +52,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import bluefirelabs.mojo.R;
-import bluefirelabs.mojo.background_tasks.MyFirebaseInstanceIDService;
 import bluefirelabs.mojo.fragments.detailActivity;
 import bluefirelabs.mojo.fragments.restaurantCards;
 import bluefirelabs.mojo.handlers.adapters.FirebaseViewPagerAdapter;
@@ -94,6 +92,10 @@ public class UserHub_carousel extends AppCompatActivity
     private ScrollView scrollView;
     private View checkout_icon_dummy, order_history_dummy;
 
+    private DrawerLayout mDrawer;
+    private NavigationView nvDrawer;
+
+
 
     public static final String EXTRA_RESTAURANT_LOGO = "restaurantLogo";
     public static final String EXTRA_RESTAURANT_NAME = "restaurantName";
@@ -103,7 +105,7 @@ public class UserHub_carousel extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_menu);
+        setContentView(R.layout.activity_main_hub);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             Window window = getWindow();
@@ -122,6 +124,16 @@ public class UserHub_carousel extends AppCompatActivity
             window.setStatusBarColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
 
         }
+
+
+        // Find our drawer view
+        mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+        // Find our drawer view
+        nvDrawer = (NavigationView) findViewById(R.id.nav_view);
+        // Setup drawer view
+        setupDrawerContent(nvDrawer);
+
 
 
         scrollView = (ScrollView) findViewById(R.id.scrollView);
@@ -199,6 +211,72 @@ public class UserHub_carousel extends AppCompatActivity
 
 
     }
+
+
+
+
+
+    private void setupDrawerContent(NavigationView navigationView) {
+        navigationView.setNavigationItemSelectedListener(
+                new NavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(MenuItem menuItem) {
+                        selectDrawerItem(menuItem);
+                        return true;
+                    }
+                });
+    }
+
+    public void selectDrawerItem(MenuItem menuItem) {
+        // Create a new fragment and specify the fragment to show based on nav item clicked
+        //Fragment fragment = null;
+        Class fragmentClass;
+        switch(menuItem.getItemId()) {
+            case R.id.nav_logout:
+                //fragmentClass = FirstFragment.class;
+                break;
+            case R.id.nav_upload:
+                //fragmentClass = SecondFragment.class;
+                break;
+            case R.id.nav_payments:
+                //fragmentClass = ThirdFragment.class;
+                break;
+            default:
+                //fragmentClass = FirstFragment.class;
+        }
+
+        try {
+            //fragment = (Fragment) fragmentClass.newInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // Insert the fragment by replacing any existing fragment
+        //FragmentManager fragmentManager = getSupportFragmentManager();
+        //fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+
+        // Highlight the selected item has been done by NavigationView
+        menuItem.setChecked(true);
+        // Set action bar title
+        setTitle(menuItem.getTitle());
+        // Close the navigation drawer
+        mDrawer.closeDrawers();
+    }
+
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // The action bar home/up action should open or close the drawer.
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                mDrawer.openDrawer(GravityCompat.START);
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
 
     @Override
     protected void onResume() {

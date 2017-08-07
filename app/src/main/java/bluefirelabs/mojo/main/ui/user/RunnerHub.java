@@ -58,7 +58,6 @@ import bluefirelabs.mojo.handlers.online.SharedPrefManager;
 import bluefirelabs.mojo.handlers.online.uploadImage;
 import bluefirelabs.mojo.main.login.Sign_In;
 import bluefirelabs.mojo.menu.Runner_Checkout;
-import bluefirelabs.mojo.menu.Vendor_Checkout;
 
 public class RunnerHub extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener
@@ -452,7 +451,7 @@ public class RunnerHub extends AppCompatActivity
             Intent intent = new Intent(this, Sign_In.class);
             startActivity(intent);
             finish();
-        }  else if (id == R.id.nav_gallery) {
+        }  else if (id == R.id.nav_upload) {
             Intent intent = new Intent(this, uploadImage.class);
             startActivity(intent);
 
