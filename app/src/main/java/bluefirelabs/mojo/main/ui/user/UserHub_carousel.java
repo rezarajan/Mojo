@@ -54,6 +54,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import bluefirelabs.mojo.R;
+import bluefirelabs.mojo.barcode.barcodeReader;
 import bluefirelabs.mojo.fragments.detailActivity;
 import bluefirelabs.mojo.fragments.restaurantCards;
 import bluefirelabs.mojo.handlers.adapters.FirebaseViewPagerAdapter;
@@ -269,6 +270,16 @@ public class UserHub_carousel extends AppCompatActivity
                 intent = new Intent(this, Payments.class);
                 startActivity(intent);
                 break;
+
+            case R.id.nav_scan:
+                //Go to order history
+
+                //fragmentClass = ThirdFragment.class;
+
+                intent = new Intent(this, barcodeReader.class);
+                startActivity(intent);
+                break;
+
             case R.id.nav_orderHistory:
                 //Go to order history
 
