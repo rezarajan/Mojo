@@ -34,6 +34,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.ScrollView;
+import android.widget.TextView;
 
 import com.azoft.carousellayoutmanager.CarouselLayoutManager;
 import com.firebase.geofire.GeoFire;
@@ -60,11 +61,9 @@ import bluefirelabs.mojo.handlers.adapters.Food_List;
 import bluefirelabs.mojo.handlers.online.HttpDataHandler;
 import bluefirelabs.mojo.handlers.online.uploadImage;
 import bluefirelabs.mojo.main.login.Login;
-import bluefirelabs.mojo.main.login.Sign_In;
 import bluefirelabs.mojo.main.transition.DetailActivity;
 import bluefirelabs.mojo.handlers.online.SharedPrefManager;
 import bluefirelabs.mojo.main.ui.payments.Payments;
-import bluefirelabs.mojo.menu.OrderHistory;
 import cdflynn.android.library.turn.TurnLayoutManager;
 
 public class UserHub_carousel extends AppCompatActivity
@@ -97,6 +96,7 @@ public class UserHub_carousel extends AppCompatActivity
 
     private ScrollView scrollView;
     private View checkout_icon_dummy, order_history_dummy;
+    private TextView location_indicator, location_indicator_dummy;
 
     private DrawerLayout mDrawer;
     private NavigationView nvDrawer;
@@ -140,6 +140,7 @@ public class UserHub_carousel extends AppCompatActivity
         // Setup drawer view
         setupDrawerContent(nvDrawer);
 
+        location_indicator = (TextView) findViewById(R.id.location_indicator);
 
 
         scrollView = (ScrollView) findViewById(R.id.scrollView);
@@ -550,6 +551,7 @@ public class UserHub_carousel extends AppCompatActivity
                 public void onKeyEntered(String key, GeoLocation location) {
                     System.out.println(String.format("Key %s entered the search area at [%f,%f]", key, location.latitude, location.longitude));
                     populateView(key);
+                    location_indicator.setText(key);
                 }
 
                 @Override
@@ -576,7 +578,7 @@ public class UserHub_carousel extends AppCompatActivity
 
     }
 
-    public void populateView(String venue){
+    public void populateView(final String venue){
         mRestaurantRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
 
@@ -680,7 +682,6 @@ public class UserHub_carousel extends AppCompatActivity
 
 
                         scrollView.setVisibility(View.VISIBLE);
-
 
                         FragmentTransaction ft = fm.beginTransaction();
                         //ft.setCustomAnimations(R.animator.enter, R.animator.exit, R.animator.pop_enter, R.animator.pop_exit);

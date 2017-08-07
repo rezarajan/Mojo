@@ -83,8 +83,8 @@ public class Login extends AppCompatActivity implements LoaderCallbacks<Cursor> 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Intent intent = new Intent(Login.this, Sign_In.class);
-        startActivity(intent);
+/*        Intent intent = new Intent(Login.this, Sign_In.class);
+        startActivity(intent);*/
         finish();
     }
 
