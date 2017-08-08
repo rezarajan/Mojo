@@ -81,9 +81,10 @@ public class barcodeReader extends AppCompatActivity {
                         String UID = user.getUid();
 
 
-                        //The case for the runner picking up the order for delivery to the kiosk
-                        if(hopperValues.get("runneruid") != null && hopperValues.get("runneruid").toString().equals(UID)){
+                        //The case for the runner picking up the order for delivery to the kiosk (no runner and uid not not the customeruid)
+                        if(hopperValues.get("runneruid") == null && !hopperValues.get("customeruid").toString().equals(UID)){       //TODO: && runnermode == "enabled"
                             //appends the key "result" a value of "accepted". This can be changed to suit
+                            hopperValues.put("runneruid", UID);     //at this stage we need the runner's UID to be written to Firebase
                             hopperUpdates.put("result", "collected");
                             //updates the child, without destroying, or overwriting all data
                             hopperRef.updateChildren(hopperUpdates);

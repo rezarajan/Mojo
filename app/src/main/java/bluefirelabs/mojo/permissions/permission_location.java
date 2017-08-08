@@ -28,6 +28,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 import bluefirelabs.mojo.R;
 import bluefirelabs.mojo.main.ui.user.RunnerHub;
+import bluefirelabs.mojo.main.ui.user.RunnerHub_carousel;
 import bluefirelabs.mojo.main.ui.user.UserHub;
 import bluefirelabs.mojo.main.ui.user.UserHub_carousel;
 import bluefirelabs.mojo.main.ui.user.VendorHub;
@@ -116,7 +117,7 @@ public class permission_location extends AppCompatActivity implements GoogleApiC
             startActivity(intent);
             finish();
         } else if(user.getEmail().equals("runner@gmail.com")){
-            Intent intent = new Intent(permission_location.this, RunnerHub.class);
+            Intent intent = new Intent(permission_location.this, RunnerHub_carousel.class);
             startActivity(intent);
             finish();
         } else {
