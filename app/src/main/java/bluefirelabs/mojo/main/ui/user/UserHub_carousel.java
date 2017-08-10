@@ -394,6 +394,7 @@ public class UserHub_carousel extends AppCompatActivity
         //restaurantCards restaurantCards = new restaurantCards();
         detailActivity detailActivity = (bluefirelabs.mojo.fragments.detailActivity) fm.findFragmentByTag("detailActivity");
         restaurantCards restaurantCards = (bluefirelabs.mojo.fragments.restaurantCards) fm.findFragmentByTag("restaurantCards");
+        barcodeConfirmer barcodeConfirmer = (bluefirelabs.mojo.fragments.barcodeConfirmer) fm.findFragmentByTag("barcodeConfirmer");
         FragmentTransaction ft = fm.beginTransaction();
         Log.d("Position back", String.valueOf(cardPosition));
         if(detailActivity!=null && restaurantCards != null){
@@ -410,6 +411,19 @@ public class UserHub_carousel extends AppCompatActivity
         else if(detailActivity == null && restaurantCards != null){
                 finish();
 
+        }
+
+        if(barcodeConfirmer != null){
+            ft.setCustomAnimations(R.animator.slide_out_down, R.animator.slide_in_up);
+            ft.remove(barcodeConfirmer);      //Using remove here so that in the next case, when the user wants to exit the app detail activity will show null
+            //If detach was used, then detailActivity will still remain in the Fragment Manager, which results in an error
+            restaurantCards restaurantCards_fragment = new restaurantCards();
+
+            //Creating a new instance of the restaurantCards fragment since it has been previously deleted
+            ft.add(R.id.fragment1, restaurantCards_fragment, "restaurantCards");
+
+            ft.commit();
+            locationTasks();
         }
 
         scrollView.setVisibility(View.GONE);
