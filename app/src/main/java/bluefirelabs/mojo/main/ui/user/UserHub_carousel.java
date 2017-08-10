@@ -306,9 +306,6 @@ public class UserHub_carousel extends AppCompatActivity
                 ft.commit();
 
 
-
-                /*intent = new Intent(this, barcodeReader.class);
-                startActivity(intent);*/
                 break;
 
             case R.id.nav_orderHistory:
