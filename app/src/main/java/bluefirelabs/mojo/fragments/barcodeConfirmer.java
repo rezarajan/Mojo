@@ -60,65 +60,15 @@ public class barcodeConfirmer extends Fragment{
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View view =inflater.inflate(R.layout.activity_barcode_reader, container, false);
-        //finding the parent's ScrollView
-        final ScrollView scrollView = (ScrollView) getActivity().findViewById(R.id.scrollView);
         scanbtn = (Button) view.findViewById(R.id.scanbutton);
         barcodeDisplay = (TextView) view.findViewById(R.id.barcodeDisplay);
         if (ActivityCompat.checkSelfPermission(getContext(), android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[]{android.Manifest.permission.CAMERA}, PERMISSION_REQUEST);
         }
 
-        //TODO: Change this to an OK button, or a confirm button
-        scanbtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Intent intent = new Intent(getContext(), barcodeScanner.class);       //geos to the barcode scanner to read the QR
-                //startActivityForResult(intent, REQUEST_CODE);       //waits for the QR result
-                //getFragmentManager().popBackStack();
-                FragmentManager fm = getFragmentManager();
-                FragmentTransaction ft = fm.beginTransaction();
-
-                restaurantCards restaurantCards = (bluefirelabs.mojo.fragments.restaurantCards) fm.findFragmentByTag("restaurantCards");
-                detailActivity detailActivity = (bluefirelabs.mojo.fragments.detailActivity) fm.findFragmentByTag("detailActivity");
-                barcodeConfirmer barcodeConfirmer = (bluefirelabs.mojo.fragments.barcodeConfirmer) fm.findFragmentByTag("barcodeConfirmer");
-
-                restaurantCards restaurantCards_fragment = new restaurantCards();
-
-
-                ft.detach(barcodeConfirmer);
-
-                scrollView.setVisibility(View.GONE);
-
-
-
-                //ft.remove(restaurantCards);
-/*                if(detailActivity != null){
-                    ft.attach(detailActivity);
-                }*/
-
-
-                ft.setCustomAnimations(R.animator.slide_in_up, R.animator.slide_out_down);
-
-                if(restaurantCards != null) {
-                    ft.attach(restaurantCards);
-                    Log.d("Action", "attaching");
-                }
-
-                else {
-                    ft.add(R.id.fragment1, restaurantCards_fragment, "restaurantCards");
-                    Log.d("Action", "adding");
-                    ((UserHub_carousel)getActivity()).locationTasks();
-
-                }
-
-                ft.commit();
-
-            }
-        });
-
         //directing to the scan activity
-        //Intent intent = new Intent(getContext(), barcodeScanner.class);       //goes to the barcode scanner to read the QR
-        //startActivityForResult(intent, REQUEST_CODE);       //waits for the QR result
+        Intent intent = new Intent(getContext(), barcodeScanner.class);       //goes to the barcode scanner to read the QR
+        startActivityForResult(intent, REQUEST_CODE);       //waits for the QR result
 
         return view;
     }
@@ -185,20 +135,57 @@ public class barcodeConfirmer extends Fragment{
                             }
                         }
 
-                        if(barcodeConfirmer!=null){
-                            ft.detach(barcodeConfirmer);      //removes the detailActivity from before the checkout
-                            ft.attach(restaurantCards);      //adds a new detailActivity with the refreshed checkboxes
-                            ft.commit();
+                        //TODO: Change this to an OK button, or a confirm button
+                        scanbtn.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                //Intent intent = new Intent(getContext(), barcodeScanner.class);       //geos to the barcode scanner to read the QR
+                                //startActivityForResult(intent, REQUEST_CODE);       //waits for the QR result
+                                //getFragmentManager().popBackStack();
+                                FragmentManager fm = getFragmentManager();
+                                FragmentTransaction ft = fm.beginTransaction();
 
-/*            if(restaurantCards != null){
-                ft.setCustomAnimations(R.animator.slide_out_down, R.animator.slide_in_up);
-                ft.detach(detailActivity);
-                ft.attach(restaurantCards);
-                ft.commit();
-                locationTasks();
-            }*/
+                                restaurantCards restaurantCards = (bluefirelabs.mojo.fragments.restaurantCards) fm.findFragmentByTag("restaurantCards");
+                                detailActivity detailActivity = (bluefirelabs.mojo.fragments.detailActivity) fm.findFragmentByTag("detailActivity");
+                                barcodeConfirmer barcodeConfirmer = (bluefirelabs.mojo.fragments.barcodeConfirmer) fm.findFragmentByTag("barcodeConfirmer");
 
-                        }
+                                restaurantCards restaurantCards_fragment = new restaurantCards();
+
+
+                                ft.detach(barcodeConfirmer);
+
+                                //finding the parent's ScrollView
+                                final ScrollView scrollView = (ScrollView) getActivity().findViewById(R.id.scrollView);
+
+                                scrollView.setVisibility(View.GONE);
+
+
+
+                                //ft.remove(restaurantCards);
+/*                if(detailActivity != null){
+                    ft.attach(detailActivity);
+                }*/
+
+
+                                ft.setCustomAnimations(R.animator.slide_in_up, R.animator.slide_out_down);
+
+                                if(restaurantCards != null) {
+                                    ft.attach(restaurantCards);
+                                    Log.d("Action", "attaching");
+                                }
+
+                                else {
+                                    ft.add(R.id.fragment1, restaurantCards_fragment, "restaurantCards");
+                                    Log.d("Action", "adding");
+                                    ((UserHub_carousel)getActivity()).locationTasks();
+
+                                }
+
+                                ft.commit();
+
+                            }
+                        });
+
 
                     }
 
