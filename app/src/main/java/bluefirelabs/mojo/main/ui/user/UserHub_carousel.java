@@ -32,6 +32,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -54,7 +55,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import bluefirelabs.mojo.R;
-import bluefirelabs.mojo.barcode.barcodeReader;
+import bluefirelabs.mojo.fragments.barcodeConfirmer;
+import bluefirelabs.mojo.fragments.barcodeDirectConfirmer;
+import bluefirelabs.mojo.fragments.barcodeReader;
 import bluefirelabs.mojo.fragments.detailActivity;
 import bluefirelabs.mojo.fragments.restaurantCards;
 import bluefirelabs.mojo.handlers.adapters.FirebaseViewPagerAdapter;
@@ -98,6 +101,7 @@ public class UserHub_carousel extends AppCompatActivity
     private ScrollView scrollView;
     private View checkout_icon_dummy, order_history_dummy;
     private TextView location_indicator, location_indicator_dummy;
+    private Button confirmResult;
 
     private DrawerLayout mDrawer;
     private NavigationView nvDrawer;
@@ -272,12 +276,39 @@ public class UserHub_carousel extends AppCompatActivity
                 break;
 
             case R.id.nav_scan:
-                //Go to order history
 
-                //fragmentClass = ThirdFragment.class;
+                barcodeConfirmer barcodeConfirmer = new barcodeConfirmer();
+                scrollView.setVisibility(View.VISIBLE);
 
-                intent = new Intent(this, barcodeReader.class);
-                startActivity(intent);
+                FragmentTransaction ft = fm.beginTransaction();
+                //ft.setCustomAnimations(R.animator.enter, R.animator.exit, R.animator.pop_enter, R.animator.pop_exit);
+
+
+                //ft.replace(R.id.fragment2, detailActivity)
+                //ft.addToBackStack(null);
+
+                restaurantCards restaurantCards = (bluefirelabs.mojo.fragments.restaurantCards) fm.findFragmentByTag("restaurantCards");
+                detailActivity detailActivity = (bluefirelabs.mojo.fragments.detailActivity) fm.findFragmentByTag("detailActivity");
+
+                //ft.remove(restaurantCards);
+                if(restaurantCards != null){
+                    ft.remove(restaurantCards);
+                }
+
+                if(detailActivity != null){
+                    ft.remove(detailActivity);
+                }
+
+                ft.setCustomAnimations(R.animator.slide_in_up, R.animator.slide_out_down);
+
+
+                ft.add(R.id.fragment2, barcodeConfirmer, "barcodeConfirmer");
+                ft.commit();
+
+
+
+                /*intent = new Intent(this, barcodeReader.class);
+                startActivity(intent);*/
                 break;
 
             case R.id.nav_orderHistory:
@@ -379,7 +410,7 @@ public class UserHub_carousel extends AppCompatActivity
                 locationTasks();
 
         }
-        else if(detailActivity==null && restaurantCards != null){
+        else if(detailActivity == null && restaurantCards != null){
                 finish();
 
         }

@@ -6,7 +6,6 @@ import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -25,10 +24,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.HashMap;
 import java.util.Map;
 
-import bluefirelabs.mojo.Manifest;
 import bluefirelabs.mojo.R;
 
-public class barcodeReader extends AppCompatActivity {
+public class barcodeReader_activity extends AppCompatActivity {
     public static final int REQUEST_CODE = 100;
     public static final int PERMISSION_REQUEST = 200;
     Button scanbtn;
@@ -47,7 +45,7 @@ public class barcodeReader extends AppCompatActivity {
         scanbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(barcodeReader.this, barcodeScanner.class);       //geos to the barcode scanner to read the QR
+                Intent intent = new Intent(barcodeReader_activity.this, barcodeScanner.class);       //geos to the barcode scanner to read the QR
                 startActivityForResult(intent, REQUEST_CODE);       //waits for the QR result
             }
         });

@@ -140,7 +140,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity
-            android:name=".barcode.barcodeReader"
+            android:name=".barcode.barcodeReader_activity"
             android:configChanges="orientation"
             android:screenOrientation="portrait" />
         <activity

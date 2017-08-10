@@ -53,7 +53,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import bluefirelabs.mojo.R;
-import bluefirelabs.mojo.barcode.barcodeReader;
+import bluefirelabs.mojo.barcode.barcodeReader_activity;
 import bluefirelabs.mojo.fragments.detailActivity;
 import bluefirelabs.mojo.fragments.restaurantCards;
 import bluefirelabs.mojo.handlers.adapters.FirebaseViewPagerAdapter;
@@ -275,7 +275,7 @@ public class RunnerHub_carousel extends AppCompatActivity
 
                 //fragmentClass = ThirdFragment.class;
 
-                intent = new Intent(this, barcodeReader.class);
+                intent = new Intent(this, barcodeReader_activity.class);
                 startActivity(intent);
                 break;
 

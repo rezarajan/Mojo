@@ -1216,3 +1216,26 @@ exports.deliveredOrderMonitor = functions.database.ref("uid/{uid}/orders/deliver
 
 		});
 });
+
+
+function waitToClear(String reference){
+	/**reference of the form "group/{status.vendoruid}/{status.venue_to}/{one_node}"
+	*This looks after the three_node and two_node as well with the wildcard parameter
+	*To execute: in the appropriate monitor use: setTimeout(waitToClear(reference), 20000);
+	*This makes the function wait for two minutes before clearing the order from the grouping
+	*node and sending out for delivery 
+	*/
+	
+	var db = admin.database();
+	var referenceToPath = db.ref().child(reference);
+	ref.orderByKey().equalTo(status.orderid)
+		.on("child_added", function(snapshot) {
+		
+		
+		if(snapshot.key != null){
+			referenceToPath.child(status.orderid).remove();
+			console.log('OrderID: ' + status.orderid + " pushed to send");
+		}
+		
+	});
+}
