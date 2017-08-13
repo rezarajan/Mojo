@@ -112,43 +112,48 @@ public class barcodeConfirmer extends Fragment{
                         String UID = user.getUid();
 
 
-                        //The case for the runner picking up the order for delivery to the kiosk (no runner and uid not the customeruid)
-                        if(hopperValues.get("runneruid") == null && !hopperValues.get("customeruid").toString().equals(UID)){       //TODO: && runnermode == "enabled"
-                            //appends the key "result" a value of "accepted". This can be changed to suit
-                            hopperValues.put("runneruid", UID);     //at this stage we need the runner's UID to be written to Firebase
-                            hopperUpdates.put("result", "collected");
-                            //updates the child, without destroying, or overwriting all data
-                            hopperRef.updateChildren(hopperUpdates);
 
-                            //If it is a user, then show a receipt overview of the transaction on scanning
-                            //receiptOverview.setVisibility(View.VISIBLE);
-                        }
+                        if(hopperValues != null){
+                            //The case for the runner picking up the order for delivery to the kiosk (no runner and uid not the customeruid)
+                            if(hopperValues.get("runneruid") == null && !hopperValues.get("customeruid_to").toString().equals(UID)){       //TODO: && runnermode == "enabled"
+                                //appends the key "result" a value of "accepted". This can be changed to suit
+                                hopperValues.put("runneruid", UID);     //at this stage we need the runner's UID to be written to Firebase
+                                hopperUpdates.put("result", "collected");
+                                //updates the child, without destroying, or overwriting all data
+                                hopperRef.updateChildren(hopperUpdates);
 
-                        //The case of the user picking up the order from the kiosk or directly
-                        else if (hopperValues.get("customeruid") != null && hopperValues.get("customeruid").toString().equals(UID)){
-                            //appends the key "result" a value of "accepted". This can be changed to suit
-                            hopperUpdates.put("result", "delivered");
-                            //updates the child, without destroying, or overwriting all data
-                            hopperRef.updateChildren(hopperUpdates);
+                                //If it is a user, then show a receipt overview of the transaction on scanning
+                                //receiptOverview.setVisibility(View.VISIBLE);
+                            }
 
-                            //If it is a runner, then show a confirmation of the delivery
-                            //receiptOverview.setVisibility(View.VISIBLE);
+                            //The case of the user picking up the order from the kiosk or directly
+                            else if (hopperValues.get("customeruid_to") != null && hopperValues.get("customeruid_to").toString().equals(UID)){
+                                //appends the key "result" a value of "accepted". This can be changed to suit
+                                hopperUpdates.put("result", "delivered");
+                                //updates the child, without destroying, or overwriting all data
+                                hopperRef.updateChildren(hopperUpdates);
 
-                            //Showing the customer the receipt
-                            Intent intent = new Intent(getContext(), receipt.class);
-                            startActivity(intent);
+                                //If it is a runner, then show a confirmation of the delivery
+                                //receiptOverview.setVisibility(View.VISIBLE);
 
-                        }
+                                //Showing the customer the receipt
+                                Intent intent = new Intent(getContext(), receipt.class);
+                                startActivity(intent);
 
-                        //The case of the wrong person picking up the order
-                        else{
+                            }
 
-                            if(getView() != null){
-                                Snackbar.make(getView(), "This is not your order",
-                                        Snackbar.LENGTH_LONG)
-                                        .setAction("Action", null).show();
+                            //The case of the wrong person picking up the order
+                            else{
+
+                                if(getView() != null){
+                                    Snackbar.make(getView(), "This is not your order",
+                                            Snackbar.LENGTH_LONG)
+                                            .setAction("Action", null).show();
+                                }
                             }
                         }
+
+
 
                         //TODO: Change this to an OK button, or a confirm button
                         scanbtn.setOnClickListener(new View.OnClickListener() {

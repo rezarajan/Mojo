@@ -122,7 +122,7 @@ public class VendorHub extends AppCompatActivity
                 //Log.d("Values", dataSnapshot.getKey().toString());
                 Log.d("Values", dataSnapshot.getValue().toString());
                 restaurantName = (String) hopperValues.get("name"); //this directory only contains one item so it should not be a problem
-                RESTAURANT  = "uid/"+restaurantName+"/requests/";
+                RESTAURANT  = "uid/"+restaurantName+"/orders/requests/";
                 Log.d("Restaurant", RESTAURANT);
                 myCallback.callbackCall(RESTAURANT);
             }

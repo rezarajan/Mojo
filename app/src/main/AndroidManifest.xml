@@ -186,7 +186,9 @@
             android:name=".main.ui.user.order_tracking"
             android:configChanges="orientation"
             android:screenOrientation="portrait" />
-        <activity android:name=".main.ui.user.receipt"></activity>
+        <activity android:name=".main.ui.user.receipt"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>
