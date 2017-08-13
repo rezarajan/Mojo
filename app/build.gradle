@@ -49,9 +49,10 @@ dependencies {
     compile 'com.azoft.carousellayoutmanager:carousel:1.2.1'
     compile 'com.github.cdflynn:turn-layout-manager:v1.0'
     compile 'com.oguzdev:CircularFloatingActionMenu:1.0.2'
-    testCompile 'junit:junit:4.12'
     compile 'junit:junit:4.12'
+    testCompile 'junit:junit:4.12'
 }
+
 
 
 

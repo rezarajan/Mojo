@@ -156,8 +156,8 @@ public class UserHub_carousel extends AppCompatActivity
         checkout_icon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Intent intent = new Intent(DetailActivity.this, Checkout.class);            //Goes to checkout
-                Intent intent = new Intent(getApplicationContext(), bluefirelabs.mojo.main.ui.checkout.Checkout.class);            //Goes to checkout
+                //Intent intent = new Intent(DetailActivity.this, Checkout.class);            //Goes to receipt
+                Intent intent = new Intent(getApplicationContext(), bluefirelabs.mojo.main.ui.checkout.Checkout.class);            //Goes to receipt
                 startActivity(intent);
             }
         });
@@ -165,8 +165,8 @@ public class UserHub_carousel extends AppCompatActivity
         order_history.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Intent intent = new Intent(DetailActivity.this, Checkout.class);            //Goes to checkout
-                Intent intent = new Intent(getApplicationContext(), order_tracking.class);            //Goes to checkout
+                //Intent intent = new Intent(DetailActivity.this, Checkout.class);            //Goes to receipt
+                Intent intent = new Intent(getApplicationContext(), order_tracking.class);            //Goes to receipt
                 startActivity(intent);
             }
         });
@@ -369,7 +369,7 @@ public class UserHub_carousel extends AppCompatActivity
         if(detailActivity!=null){
             //ft.remove(detailActivity);
             //ft.add(R.id.fragment2, restaurantCards, "restaurantCards");
-            ft.detach(detailActivity);      //removes the detailActivity from before the checkout
+            ft.detach(detailActivity);      //removes the detailActivity from before the receipt
             ft.attach(detailActivity);      //adds a new detailActivity with the refreshed checkboxes
             ft.commit();
 
@@ -762,8 +762,8 @@ public class UserHub_carousel extends AppCompatActivity
                         checkout_icon_dummy.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                //Intent intent = new Intent(DetailActivity.this, Checkout.class);            //Goes to checkout
-                                Intent intent = new Intent(getApplicationContext(), bluefirelabs.mojo.main.ui.checkout.Checkout.class);            //Goes to checkout
+                                //Intent intent = new Intent(DetailActivity.this, Checkout.class);            //Goes to receipt
+                                Intent intent = new Intent(getApplicationContext(), bluefirelabs.mojo.main.ui.checkout.Checkout.class);            //Goes to receipt
                                 startActivity(intent);
                             }
                         });
@@ -771,8 +771,8 @@ public class UserHub_carousel extends AppCompatActivity
                         order_history_dummy.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                //Intent intent = new Intent(DetailActivity.this, Checkout.class);            //Goes to checkout
-                                Intent intent = new Intent(getApplicationContext(), order_tracking.class);            //Goes to checkout
+                                //Intent intent = new Intent(DetailActivity.this, Checkout.class);            //Goes to receipt
+                                Intent intent = new Intent(getApplicationContext(), order_tracking.class);            //Goes to receipt
                                 startActivity(intent);
                             }
                         });

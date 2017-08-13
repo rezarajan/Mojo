@@ -13,7 +13,7 @@ import android.util.Log;
 
 public class DatabaseHelper extends SQLiteOpenHelper{
 
-    public static final String DATABASE_NAME = "checkout.db";
+    public static final String DATABASE_NAME = "receipt.db";
     public static final String TABLE_NAME = "checkout_table";
     public static final String ID = "ID";       //column 1      //String 0
     public static final String RESTAURANT = "MENU";       //column 2    //String 1

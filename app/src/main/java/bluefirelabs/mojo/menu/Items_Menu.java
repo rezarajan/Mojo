@@ -115,7 +115,7 @@ public class Items_Menu extends AppCompatActivity {
 
 
 
-                        //adding the item to the database for checkout
+                        //adding the item to the database for receipt
                         boolean isInserted = myDb.insertData(restaurant,       //The restaurant name
                                 viewHolder.itemTitle.getText().toString(),     //The item name
                                 viewHolder.itemDescription.getText().toString().replace("$",""),       //The item cost

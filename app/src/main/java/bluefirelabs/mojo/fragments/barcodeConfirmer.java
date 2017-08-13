@@ -41,6 +41,7 @@ import bluefirelabs.mojo.R;
 import bluefirelabs.mojo.barcode.barcodeScanner;
 import bluefirelabs.mojo.main.transition.MyCallback;
 import bluefirelabs.mojo.main.ui.user.UserHub_carousel;
+import bluefirelabs.mojo.main.ui.user.receipt;
 import database.DatabaseHelper;
 
 /**
@@ -87,7 +88,7 @@ public class barcodeConfirmer extends Fragment{
         final FragmentTransaction ft = fm.beginTransaction();
 
 
-        final RelativeLayout receiptOverview = (RelativeLayout) getView().findViewById(R.id.receiptOverview);
+        //final RelativeLayout receiptOverview = (RelativeLayout) getView().findViewById(R.id.receiptOverview);
 
 
         final DatabaseReference reference1 = FirebaseDatabase.getInstance().getReference("requests");
@@ -111,7 +112,7 @@ public class barcodeConfirmer extends Fragment{
                         String UID = user.getUid();
 
 
-                        //The case for the runner picking up the order for delivery to the kiosk (no runner and uid not not the customeruid)
+                        //The case for the runner picking up the order for delivery to the kiosk (no runner and uid not the customeruid)
                         if(hopperValues.get("runneruid") == null && !hopperValues.get("customeruid").toString().equals(UID)){       //TODO: && runnermode == "enabled"
                             //appends the key "result" a value of "accepted". This can be changed to suit
                             hopperValues.put("runneruid", UID);     //at this stage we need the runner's UID to be written to Firebase
@@ -120,7 +121,7 @@ public class barcodeConfirmer extends Fragment{
                             hopperRef.updateChildren(hopperUpdates);
 
                             //If it is a user, then show a receipt overview of the transaction on scanning
-                            receiptOverview.setVisibility(View.VISIBLE);
+                            //receiptOverview.setVisibility(View.VISIBLE);
                         }
 
                         //The case of the user picking up the order from the kiosk or directly
@@ -131,7 +132,12 @@ public class barcodeConfirmer extends Fragment{
                             hopperRef.updateChildren(hopperUpdates);
 
                             //If it is a runner, then show a confirmation of the delivery
-                            receiptOverview.setVisibility(View.VISIBLE);
+                            //receiptOverview.setVisibility(View.VISIBLE);
+
+                            //Showing the customer the receipt
+                            Intent intent = new Intent(getContext(), receipt.class);
+                            startActivity(intent);
+
                         }
 
                         //The case of the wrong person picking up the order

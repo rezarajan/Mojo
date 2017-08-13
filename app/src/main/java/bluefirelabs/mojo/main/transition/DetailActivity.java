@@ -103,7 +103,7 @@ public class DetailActivity extends FragmentActivity {
     @Override
     protected void onResume() {
         super.onResume();          //Ensures that the animations remain constant
-        listContainer.removeAllViews();     //clears the previous set of items to refresh if the user makes a change at checkout
+        listContainer.removeAllViews();     //clears the previous set of items to refresh if the user makes a change at receipt
         dealListView();     //reloads all the views
     }
 
@@ -111,7 +111,7 @@ public class DetailActivity extends FragmentActivity {
     protected void onPause() {
         super.onPause();
         Log.d("Activity", "paused");
-        listContainer.removeAllViews();     //clears the previous set of items to refresh if the user makes a change at checkout
+        listContainer.removeAllViews();     //clears the previous set of items to refresh if the user makes a change at receipt
     }*/
 
     @Override
@@ -231,8 +231,8 @@ public class DetailActivity extends FragmentActivity {
         checkout_icon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Intent intent = new Intent(DetailActivity.this, Checkout.class);            //Goes to checkout
-                Intent intent = new Intent(DetailActivity.this, bluefirelabs.mojo.main.ui.checkout.Checkout.class);            //Goes to checkout
+                //Intent intent = new Intent(DetailActivity.this, Checkout.class);            //Goes to receipt
+                Intent intent = new Intent(DetailActivity.this, bluefirelabs.mojo.main.ui.checkout.Checkout.class);            //Goes to receipt
                 startActivity(intent);
             }
         });
@@ -398,7 +398,7 @@ public class DetailActivity extends FragmentActivity {
                                                                                 Snackbar.LENGTH_LONG)
                                                                                 .setAction("Action", null).show();
 
-                                                                        //adding the item to the database for checkout
+                                                                        //adding the item to the database for receipt
                                                                         boolean isInserted = myDb.insertData(restaurantName,       //The restaurant name
                                                                                 item_details.getText().toString(),     //The item name
                                                                                 item_cost.getText().toString().replace("$",""),       //The item cost
