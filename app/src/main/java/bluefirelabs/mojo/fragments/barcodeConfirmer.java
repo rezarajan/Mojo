@@ -87,6 +87,9 @@ public class barcodeConfirmer extends Fragment{
         final FragmentTransaction ft = fm.beginTransaction();
 
 
+        final RelativeLayout receiptOverview = (RelativeLayout) getView().findViewById(R.id.receiptOverview);
+
+
         final DatabaseReference reference1 = FirebaseDatabase.getInstance().getReference("requests");
 
 
@@ -115,6 +118,9 @@ public class barcodeConfirmer extends Fragment{
                             hopperUpdates.put("result", "collected");
                             //updates the child, without destroying, or overwriting all data
                             hopperRef.updateChildren(hopperUpdates);
+
+                            //If it is a user, then show a receipt overview of the transaction on scanning
+                            receiptOverview.setVisibility(View.VISIBLE);
                         }
 
                         //The case of the user picking up the order from the kiosk or directly
@@ -123,6 +129,9 @@ public class barcodeConfirmer extends Fragment{
                             hopperUpdates.put("result", "delivered");
                             //updates the child, without destroying, or overwriting all data
                             hopperRef.updateChildren(hopperUpdates);
+
+                            //If it is a runner, then show a confirmation of the delivery
+                            receiptOverview.setVisibility(View.VISIBLE);
                         }
 
                         //The case of the wrong person picking up the order

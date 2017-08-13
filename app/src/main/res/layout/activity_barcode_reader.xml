@@ -3,12 +3,42 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+<!--TODO: Payment overview goes here-->
+
+
+<!--    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/receiptOverview">
+
+        <TextView
+            android:id="@+id/orderID"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Order ID" />
+
+        <TextView
+            android:id="@+id/total"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Total" />
+
+        <TextView
+            android:id="@+id/cardNo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="xxxx 3333" />
+
+
+
+    </RelativeLayout>-->
+
 
     <Button
         android:id="@+id/scanbutton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Scan" />
+        android:text="Okay" />
 
     <TextView
         android:id="@+id/barcodeDisplay"
