@@ -35,6 +35,8 @@ const stripe = require('stripe')(functions.config().stripe.token),
       // [END chargecustomer]]
 
       // When a user is created, register them with Stripe
+
+
       exports.createStripeCustomer = functions.auth.user().onCreate(event => {
         const data = event.data;
         return stripe.customers.create({
@@ -83,6 +85,7 @@ const stripe = require('stripe')(functions.config().stripe.token),
 
 	var db = admin.database();
 	var refNode = db.ref("orders");
+	
 	refNode.push();
 	var postId = refNode.push().key;
 
@@ -112,6 +115,7 @@ exports.orderMonitor = functions.database.ref("orders/{pushId}/").onWrite((event
 
 	if(status !== null){
 	var ref = db.ref("orders").child(status.postid);
+	var refVenue = db.ref("uid").child(status.vendoruid);
 	var refNode = db.ref("requests");
 
 	ref.child("items").once("value")
@@ -120,7 +124,7 @@ exports.orderMonitor = functions.database.ref("orders/{pushId}/").onWrite((event
 				//the push creates the request id
 				refNode.child(status.postid).set({
 				customeruid_to: status.customeruid_to,
-        customeruid_from: status.customeruid_from,
+        		customeruid_from: status.customeruid_from,
 				vendoruid: status.vendoruid,
 				items: snapshot.val(),
 				result: "asking",				//sends to the requests node with parameter asking
@@ -139,6 +143,18 @@ exports.orderMonitor = functions.database.ref("orders/{pushId}/").onWrite((event
 				//the push creates the request id
 				refNode.child(status.postid).update({
 				cost: snapshot.val()
+				});
+			} else{
+				return;
+			}
+
+	});
+	refVenue.child("info").once("value")
+		.then(function(snapshot) {
+			if(snapshot.val() !== null){
+				//finds the venue of the vendor using the vendor's uid in the uid node
+				refNode.child(status.postid).update({
+				venue: snapshot.child("venue").val()
 				});
 			} else{
 				return;
@@ -176,7 +192,7 @@ exports.requestsMonitor = functions.database.ref("requests/{pushId}/").onWrite((
 
       ref.child("items").once("value")
       .then(function(snapshot) {
-        if(snapshot.val() !== null){
+        if(snapshot.val() !== null && status.venue != null){
       //the set uses the push key
       refNode.child(status.customeruid_to).child("gifts").child(status.postid).set({
           customeruid_to: status.customeruid_to,
@@ -184,6 +200,7 @@ exports.requestsMonitor = functions.database.ref("requests/{pushId}/").onWrite((
           user_token: status.user_token,
           vendoruid: status.vendoruid,
           //runneruid: status.runneruid,
+		  venue: status.venue,
           name: userDataName,
           items: snapshot.val(),
           result: "transient",
@@ -217,12 +234,13 @@ exports.requestsMonitor = functions.database.ref("requests/{pushId}/").onWrite((
 
 		ref.child("items").once("value")
 		.then(function(snapshot) {
-			if(snapshot.val() !== null){
+			if(snapshot.val() !== null && status.venue != null){
 		//the set uses the push key
 		refNode.child(status.vendoruid).child("orders").child("requests").child(status.orderid).set({
 				customeruid: status.customeruid_to,
 				vendoruid: status.vendoruid,
 				//runneruid: status.runneruid,
+				venue: status.venue,
 				name: userDataName,
 				items: snapshot.val(),
 				result: "asking",
@@ -261,6 +279,7 @@ exports.requestsMonitor = functions.database.ref("requests/{pushId}/").onWrite((
 		refNode.child(status.vendoruid).child(status.orderid).set({
 				customeruid: status.customeruid_to,
 				vendoruid: status.vendoruid,
+				venue: status.venue,
 				items: snapshot.val(),
 				result: "accepted",
 				orderid: status.orderid
@@ -296,6 +315,7 @@ exports.requestsMonitor = functions.database.ref("requests/{pushId}/").onWrite((
 		refNode.child(status.vendoruid).child("orders").child("declined").child(status.orderid).set({		//vendoruid
 				customeruid: status.customeruid_to,
 				vendoruid: status.vendoruid,
+				venue: status.venue,
 				items: snapshot.val(),
 				result: "declined",		//this is the only value we have to change after the first if
 				orderid: status.orderid
@@ -303,6 +323,7 @@ exports.requestsMonitor = functions.database.ref("requests/{pushId}/").onWrite((
 		refNode.child(status.customeruid_to).child("orders").child(status.orderid).set({		//customeruid
 				customeruid: status.customeruid_to,
 				vendoruid: status.vendoruid,
+				venue: status.venue,
 				items: snapshot.val(),
 				result: "declined",
 				orderid: status.orderid
@@ -343,8 +364,8 @@ exports.requestsMonitor = functions.database.ref("requests/{pushId}/").onWrite((
 		refNode.child(status.vendoruid).child(status.orderid).set({
 				customeruid: status.customeruid_to,
 				vendoruid: status.vendoruid,
-				//runneruid: status.runneruid,
-				runneruid: "Runner",		//this is just for testing. TODO: create a method to correctly find a runner
+				//runneruid: status.runneruid,		//this is where the runner scans the QR and also sets the uid from the frontend
+				venue: status.venue,
 				items: snapshot.val(),
 				result: "sending",
 				orderid: status.orderid
@@ -384,14 +405,15 @@ exports.requestsMonitor = functions.database.ref("requests/{pushId}/").onWrite((
 				customeruid: status.customeruid_to,
 				vendoruid: status.vendoruid,
 				//runneruid: status.runneruid,		//since the runneruid has already been set to "Runner" in sending case
-				runneruid: "Runner",
+				venue: status.venue,
+				runneruid: status.runneruid,		
 				items: snapshot.val(),
 				result: "collected",
 				orderid: status.orderid
 		});
-		ref.update({
-				runneruid: "Runner"
-		});
+		/*ref.update({
+				//runneruid: "Runner"		//this is where the runner scans the QR and also sets the uid from the frontend
+		}); */
 				//refNode.child(status.orderid).child("items").set(snapshot.val());
 			} else{
 				return;
@@ -424,6 +446,7 @@ exports.requestsMonitor = functions.database.ref("requests/{pushId}/").onWrite((
 		refNode.child(status.vendoruid).child(status.orderid).set({
 				customeruid: status.customeruid_to,
 				vendoruid: status.vendoruid,
+				venue: status.venue,
 				runneruid: status.runneruid,		//since the runneruid has already been set to "Runner" in sending case
 				items: snapshot.val(),		//gets the order items
 				result: "delivered",
@@ -474,6 +497,7 @@ exports.inprogressMonitor = functions.database.ref("inprogress/{vendoruid}/{push
 	refNode.child(status.vendoruid).child("orders").child("accepted").child(status.orderid).set({
 			customeruid: status.customeruid,
 			vendoruid: status.vendoruid,
+			venue: status.venue,
 			items: snapshot.val(),
 			result: "accepted",
 			orderid: status.orderid
@@ -481,6 +505,7 @@ exports.inprogressMonitor = functions.database.ref("inprogress/{vendoruid}/{push
 	refNode.child(status.customeruid).child("orders").child(status.orderid).set({
 			customeruid: status.customeruid,
 			vendoruid: status.vendoruid,
+			venue: status.venue,
 			items: snapshot.val(),
 			result: "accepted",
 			orderid: status.orderid
@@ -525,6 +550,7 @@ exports.inprogressMonitor = functions.database.ref("inprogress/{vendoruid}/{push
 	refNode.child(status.vendoruid).child("orders").child("sending").child(status.orderid).set({
 			customeruid: status.customeruid,
 			vendoruid: status.vendoruid,
+			venue: status.venue,
 			items: snapshot.val(),
 			result: "sending",
 			orderid: status.orderid
@@ -532,18 +558,19 @@ exports.inprogressMonitor = functions.database.ref("inprogress/{vendoruid}/{push
 	refNode.child(status.customeruid).child("orders").child(status.orderid).set({
 			customeruid: status.customeruid,
 			vendoruid: status.vendoruid,
+			venue: status.venue,
 			items: snapshot.val(),
 			result: "sending",
 			orderid: status.orderid
 	});
-	refNode.child(status.runneruid).child("orders").child("sending").child(status.orderid).set({
+	/* refNode.child(status.runneruid).child("orders").child("sending").child(status.orderid).set({
 			customeruid: status.customeruid,
 			vendoruid: status.vendoruid,
 			runneruid: status.runneruid,
 			items: snapshot.val(),
 			result: "sending",
 			orderid: status.orderid
-	});
+	}); */
 				//refNode.child(status.orderid).child("items").set(snapshot.val());
 			} else{
 				return;
@@ -560,9 +587,9 @@ exports.inprogressMonitor = functions.database.ref("inprogress/{vendoruid}/{push
 	refNode.child(status.customeruid).child("orders").child(status.orderid).update({
 			cost: snapshot.val()
 	});
-	refNode.child(status.runneruid).child("orders").child("sending").child(status.orderid).update({
+	/*refNode.child(status.runneruid).child("orders").child("sending").child(status.orderid).update({
 			cost: snapshot.val()
-	});
+	}); */
 			} else{
 				return;
 			}
@@ -574,10 +601,12 @@ exports.inprogressMonitor = functions.database.ref("inprogress/{vendoruid}/{push
 		.then(function(snapshot) {
 			if(snapshot.val() !== null){
 		//the set uses the push key
+				
 	refNode.child(status.vendoruid).child("orders").child("collected").child(status.orderid).set({
 			customeruid: status.customeruid,
 			vendoruid: status.vendoruid,
 			runneruid: status.runneruid,
+			venue: status.venue,
 			items: snapshot.val(),
 			result: "collected",
 			orderid: status.orderid
@@ -586,6 +615,7 @@ exports.inprogressMonitor = functions.database.ref("inprogress/{vendoruid}/{push
 			customeruid: status.customeruid,
 			vendoruid: status.vendoruid,
 			runneruid: status.runneruid,
+			venue: status.venue,
 			items: snapshot.val(),
 			result: "collected",
 			orderid: status.orderid
@@ -594,6 +624,7 @@ exports.inprogressMonitor = functions.database.ref("inprogress/{vendoruid}/{push
 			customeruid: status.customeruid,
 			vendoruid: status.vendoruid,
 			runneruid: status.runneruid,
+			venue: status.venue,
 			items: snapshot.val(),
 			result: "collected",
 			orderid: status.orderid
@@ -633,6 +664,7 @@ exports.inprogressMonitor = functions.database.ref("inprogress/{vendoruid}/{push
 			customeruid: status.customeruid,
 			vendoruid: status.vendoruid,
 			runneruid: status.runneruid,
+			venue: status.venue,
 			items: snapshot.val(),
 			result: "delivered",
 			orderid: status.orderid
@@ -641,6 +673,7 @@ exports.inprogressMonitor = functions.database.ref("inprogress/{vendoruid}/{push
 			customeruid: status.customeruid,
 			vendoruid: status.vendoruid,
 			runneruid: status.runneruid,
+			venue: status.venue,
 			items: snapshot.val(),
 			result: "delivered",
 			orderid: status.orderid
@@ -649,6 +682,7 @@ exports.inprogressMonitor = functions.database.ref("inprogress/{vendoruid}/{push
 			customeruid: status.customeruid,
 			vendoruid: status.vendoruid,
 			runneruid: status.runneruid,
+			venue: status.venue,
 			items: snapshot.val(),
 			result: "delivered",
 			orderid: status.orderid
@@ -700,7 +734,7 @@ exports.requestOrderMonitor = functions.database.ref("uid/{uid}/orders/requests/
         //sound: "default"
 
 		customeruid: status.customeruid,
-    vendoruid: status.vendoruid,
+    	vendoruid: status.vendoruid,
 		message: status.result,
         sound: "default"
 
@@ -743,8 +777,9 @@ if(status.result === "asking"){		//if asking then send to the uid node for vendo
   		//the set uses the push key
   		ref.set({
   				customeruid_to: status.customeruid_to,
-          customeruid_from: status.customeruid_from,
+				customeruid_from: status.customeruid_from,
   				vendoruid: status.vendoruid,
+				venue: status.venue,
   				//runneruid: status.runneruid,
   				//items: snapshot.val(),
   				postid: status.orderid
@@ -758,6 +793,7 @@ if(status.result === "asking"){		//if asking then send to the uid node for vendo
                 ref.set({
                 customeruid_to: status.customeruid_to,
                 customeruid_from: status.customeruid_from,
+				venue: status.venue,
                 user_token: status.user_token,
                 vendoruid: status.vendoruid,
                 items: snapshot.val(),
@@ -793,9 +829,10 @@ if(status.result === "asking"){		//if asking then send to the uid node for vendo
 
     		//the set uses the push key
     		ref.set({
-          customeruid_to: status.customeruid_to,
-          customeruid_from: status.customeruid_from,
+          			customeruid_to: status.customeruid_to,
+          			customeruid_from: status.customeruid_from,
     				vendoruid: status.vendoruid,
+					venue: status.venue,
     				//runneruid: status.runneruid,
     				//items: snapshot.val(),
     				result: "declined",
@@ -810,6 +847,7 @@ if(status.result === "asking"){		//if asking then send to the uid node for vendo
                   customeruid_to: status.customeruid_to,
                   customeruid_from: status.customeruid_from,
                   vendoruid: status.vendoruid,
+				  venue: status.venue,
                   items: snapshot.val(),
                   //result: "asking",				//sends to the requests node with parameter asking //orderMonitor handles the result node
                   //result: "transient",				//sends to the requests node with parameter transient for gifted food from others
@@ -940,7 +978,7 @@ exports.sendingOrderMonitor = functions.database.ref("uid/{uid}/orders/sending/{
         //sound: "default"
 
 		customeruid: status.customeruid,
-    vendoruid: status.vendoruid,
+    	vendoruid: status.vendoruid,
 		//runneruid: status.runneruid,
 		message: status.result,
         sound: "default"
@@ -979,7 +1017,7 @@ exports.sendingOrderMonitor = functions.database.ref("uid/{uid}/orders/sending/{
 			console.log("User Token: " + userTokenid);
 			return admin.messaging().sendToDevice(userTokenid, payload, options);		//using the user_token as the receiver
 			//return admin.messaging().sendToDevice(runneruserTokenid, payload, options);		//using the user_token as the receiver for the runner
-			return admin.messaging().sendToTopic("Runner", payload, options);		//this is a test topic for the runner until the actual runner user token is set up. Random sampling should be done to acquire this and then the information is set in the sending node for runnerUID.
+			//return admin.messaging().sendToTopic("Runner", payload, options);		//this is a test topic for the runner until the actual runner user token is set up. Random sampling should be done to acquire this and then the information is set in the sending node for runnerUID.
 
 		});
 	} else{
@@ -1065,7 +1103,7 @@ exports.declinedOrderMonitor = functions.database.ref("uid/{uid}/orders/declined
         //sound: "default"
 
 		customeruid: status.customeruid,
-    vendoruid: status.vendoruid,
+    	vendoruid: status.vendoruid,
 		message: status.result,
         sound: "default"
 
@@ -1178,3 +1216,26 @@ exports.deliveredOrderMonitor = functions.database.ref("uid/{uid}/orders/deliver
 
 		});
 });
+
+
+function waitToClear(String reference){
+	/**reference of the form "group/{status.vendoruid}/{status.venue_to}/{one_node}"
+	*This looks after the three_node and two_node as well with the wildcard parameter
+	*To execute: in the appropriate monitor use: setTimeout(waitToClear(reference), 20000);
+	*This makes the function wait for two minutes before clearing the order from the grouping
+	*node and sending out for delivery 
+	*/
+	
+	var db = admin.database();
+	var referenceToPath = db.ref().child(reference);
+	ref.orderByKey().equalTo(status.orderid)
+		.on("child_added", function(snapshot) {
+		
+		
+		if(snapshot.key != null){
+			referenceToPath.child(status.orderid).remove();
+			console.log('OrderID: ' + status.orderid + " pushed to send");
+		}
+		
+	});
+}

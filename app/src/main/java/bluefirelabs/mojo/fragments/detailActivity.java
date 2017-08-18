@@ -264,7 +264,7 @@ public class detailActivity extends Fragment{
                                                                                 Snackbar.LENGTH_LONG)
                                                                                 .setAction("Action", null).show();
 
-                                                                        //adding the item to the database for checkout
+                                                                        //adding the item to the database for receipt
                                                                         boolean isInserted = myDb.insertData(restaurantName,       //The restaurant name
                                                                                 item_details.getText().toString(),     //The item name
                                                                                 item_cost.getText().toString().replace("$",""),       //The item cost

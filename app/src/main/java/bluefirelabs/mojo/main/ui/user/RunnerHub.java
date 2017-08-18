@@ -50,7 +50,7 @@ import java.util.Map;
 
 import bluefirelabs.mojo.R;
 import bluefirelabs.mojo.background_tasks.MyFirebaseInstanceIDService;
-import bluefirelabs.mojo.barcode.barcodeReader;
+import bluefirelabs.mojo.barcode.barcodeReader_activity;
 import bluefirelabs.mojo.fragments.restaurantlist_fragment;
 import bluefirelabs.mojo.handlers.adapters.Vendor_Order_List;
 import bluefirelabs.mojo.handlers.online.HttpDataHandler;
@@ -456,7 +456,7 @@ public class RunnerHub extends AppCompatActivity
             startActivity(intent);
 
         } else if (id == R.id.nav_orderHistory) {
-            Intent intent = new Intent(this, barcodeReader.class);
+            Intent intent = new Intent(this, barcodeReader_activity.class);
             startActivity(intent);
 
         }/* else if (id == R.id.nav_slideshow) {

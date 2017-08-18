@@ -46,7 +46,7 @@ public class Checkout extends FragmentActivity {
 
     private ImageView image;
 
-    private TextView restaurant_name, item_quantity, item_dets, item_cost, item_description; //checkout item view
+    private TextView restaurant_name, item_quantity, item_dets, item_cost, item_description; //receipt item view
     private TextView item_subtotal, item_tax, item_total;           //base wrapper for the main view
     private TextView item_subtotal_value, item_tax_value, item_total_value;     //extended base wrapper for the main view
 
@@ -88,7 +88,7 @@ public class Checkout extends FragmentActivity {
 
 
 
-        //The checkout item contents
+        //The receipt item contents
         restaurant_name = (TextView) childView.findViewById(R.id.restaurant_name);
         item_quantity = (TextView) childView.findViewById(R.id.item_quantity);
         item_dets = (TextView) childView.findViewById(R.id.item_dets);
@@ -333,7 +333,7 @@ public class Checkout extends FragmentActivity {
 
 
 
-                //if card data is valid then the checkout popup will appear
+                //if card data is valid then the receipt popup will appear
                 CharSequence options[] = new CharSequence[] {"Place Order", "Cancel"};
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(Checkout.this);
@@ -359,7 +359,7 @@ public class Checkout extends FragmentActivity {
                                         Snackbar.make(view, "Card Data Valid", Snackbar.LENGTH_LONG)
                                                 .setAction("Action", null).show();
 
-                                        //Accept payment and checkout
+                                        //Accept payment and receipt
                                         Stripe stripe = new Stripe(view.getContext(), getResources().getString(R.string.stripe_key));      //TODO: Change this to the official product public key
                                         stripe.createToken(
                                                 cardToSave,
@@ -411,12 +411,12 @@ public class Checkout extends FragmentActivity {
                         }
 
                         else {
-                            //Go back to checkout
+                            //Go back to receipt
                         }
                     }
                 });
 
-                builder.show();     //shows the dialog box for the checkout click choice
+                builder.show();     //shows the dialog box for the receipt click choice
 
             }
         });
@@ -439,7 +439,7 @@ public class Checkout extends FragmentActivity {
                             finish();
                         }
                         else {
-                            //Go back to checkout
+                            //Go back to receipt
                         }
                     }
                 });
@@ -494,7 +494,7 @@ public class Checkout extends FragmentActivity {
         for(int position = 0; position < count; position ++) {
             data.moveToPosition(position);
                 View childView = layoutInflater.inflate(R.layout.checkout_item, null);
-                //The checkout item contents
+                //The receipt item contents
                 restaurant_name = (TextView) childView.findViewById(R.id.restaurant_name);
                 item_quantity = (TextView) childView.findViewById(R.id.item_quantity);
                 item_dets = (TextView) childView.findViewById(R.id.item_dets);

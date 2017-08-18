@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="34dp">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignTop="@+id/receiptInfo"
+            android:background="@color/white"/>
+
+        <RelativeLayout
+            android:id="@+id/receiptInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/restaurantLogo"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="100dp"
+            android:background="@color/white">
+
+            <TextView
+                android:id="@+id/orderid"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignStart="@+id/date"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="72dp"
+                android:text="Order ID"
+                android:textSize="16sp"
+                android:textColor="@color/black"/>
+
+            <TextView
+                android:id="@+id/cardNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:text="xxxx"
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                android:layout_alignBaseline="@+id/card"
+                android:layout_alignBottom="@+id/card"
+                android:layout_alignEnd="@+id/totalNumber" />
+
+            <TextView
+                android:id="@+id/totalNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/total"
+                android:layout_alignBottom="@+id/total"
+                android:layout_alignEnd="@+id/dateNumber"
+                android:gravity="end"
+                android:text="$0.00"
+                android:textSize="16sp"
+                android:textColor="@color/black"/>
+
+            <TextView
+                android:id="@+id/dateNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/date"
+                android:layout_alignBottom="@+id/date"
+                android:layout_alignEnd="@+id/orderidNumber"
+                android:gravity="end"
+                android:text="dd/mm/yy"
+                android:textSize="16sp"
+                android:textColor="@color/black"/>
+
+            <TextView
+                android:id="@+id/orderidNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/orderid"
+                android:layout_alignBottom="@+id/orderid"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="32dp"
+                android:gravity="end"
+                android:text="orderid"
+                android:textSize="16sp"
+                android:textColor="@color/black"/>
+
+            <TextView
+                android:id="@+id/total"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/date"
+                android:layout_marginBottom="16dp"
+                android:layout_marginStart="32dp"
+                android:text="Total"
+                android:textSize="16sp"
+                android:textColor="@color/black"/>
+
+            <TextView
+                android:id="@+id/card"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/total"
+                android:layout_marginStart="32dp"
+                android:text="Card No."
+                android:textSize="16sp"
+                android:textColor="@color/black"/>
+
+            <TextView
+                android:id="@+id/date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/orderid"
+                android:layout_marginBottom="8dp"
+                android:layout_marginStart="32dp"
+                android:text="Date"
+                android:textSize="16sp"
+                android:textColor="@color/black"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/restaurantLogo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:gravity="center_horizontal">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/mojo_monkey"/>
+
+        </RelativeLayout>
+
+
+        <View
+            android:id="@+id/separator"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="34dp"
+            android:layout_marginBottom="34dp"
+            android:background="@color/colorSecondary"
+            android:layout_below="@id/receiptInfo"/>
+
+        <TextView
+            android:id="@+id/orderPlaced"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Order Placed!"
+            android:textSize="34sp"
+            android:textColor="@color/black"
+            android:fontFamily="sans-serif-black"
+            android:layout_below="@+id/separator"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="16dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Thanks for using Mojo"
+            android:textSize="24sp"
+            android:textColor="@color/black"
+            android:fontFamily="sans-serif"
+            android:textStyle="italic"
+            android:layout_below="@+id/orderPlaced"
+            android:layout_centerHorizontal="true" />
+
+        <Button
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="Back"
+            android:textSize="14sp"
+            android:layout_marginStart="16dp"
+            android:layout_marginBottom="34dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignStart="@+id/separator"
+            android:id="@+id/backButton"
+            android:background="@color/colorSecondary"/>
+
+        <Button
+            android:id="@+id/trackButton"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/backButton"
+            android:layout_alignBottom="@+id/backButton"
+            android:layout_alignEnd="@+id/separator"
+            android:text="Track"
+            android:textSize="14sp"
+            android:layout_marginEnd="16dp"
+            android:background="@color/colorSecondary"/>
+
+    </RelativeLayout>
+
+
+
+</FrameLayout>

@@ -15,7 +15,6 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
@@ -32,7 +31,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -55,22 +53,20 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import bluefirelabs.mojo.R;
-import bluefirelabs.mojo.fragments.barcodeConfirmer;
-import bluefirelabs.mojo.fragments.barcodeDirectConfirmer;
-import bluefirelabs.mojo.fragments.barcodeReader;
+import bluefirelabs.mojo.barcode.barcodeReader_activity;
 import bluefirelabs.mojo.fragments.detailActivity;
 import bluefirelabs.mojo.fragments.restaurantCards;
 import bluefirelabs.mojo.handlers.adapters.FirebaseViewPagerAdapter;
 import bluefirelabs.mojo.handlers.adapters.Food_List;
 import bluefirelabs.mojo.handlers.online.HttpDataHandler;
+import bluefirelabs.mojo.handlers.online.SharedPrefManager;
 import bluefirelabs.mojo.handlers.online.uploadImage;
 import bluefirelabs.mojo.main.login.Login;
 import bluefirelabs.mojo.main.transition.DetailActivity;
-import bluefirelabs.mojo.handlers.online.SharedPrefManager;
 import bluefirelabs.mojo.main.ui.payments.Payments;
 import cdflynn.android.library.turn.TurnLayoutManager;
 
-public class UserHub_carousel extends AppCompatActivity
+public class RunnerHub_carousel extends AppCompatActivity
         implements android.location.LocationListener {
 
 
@@ -101,7 +97,6 @@ public class UserHub_carousel extends AppCompatActivity
     private ScrollView scrollView;
     private View checkout_icon_dummy, order_history_dummy;
     private TextView location_indicator, location_indicator_dummy;
-    private Button confirmResult;
 
     private DrawerLayout mDrawer;
     private NavigationView nvDrawer;
@@ -276,36 +271,12 @@ public class UserHub_carousel extends AppCompatActivity
                 break;
 
             case R.id.nav_scan:
+                //Go to order history
 
-                barcodeConfirmer barcodeConfirmer = new barcodeConfirmer();
-                scrollView.setVisibility(View.VISIBLE);
+                //fragmentClass = ThirdFragment.class;
 
-                FragmentTransaction ft = fm.beginTransaction();
-                //ft.setCustomAnimations(R.animator.enter, R.animator.exit, R.animator.pop_enter, R.animator.pop_exit);
-
-
-                //ft.replace(R.id.fragment2, detailActivity)
-                //ft.addToBackStack(null);
-
-                restaurantCards restaurantCards = (bluefirelabs.mojo.fragments.restaurantCards) fm.findFragmentByTag("restaurantCards");
-                detailActivity detailActivity = (bluefirelabs.mojo.fragments.detailActivity) fm.findFragmentByTag("detailActivity");
-
-                //ft.remove(restaurantCards);
-                if(restaurantCards != null){
-                    ft.remove(restaurantCards);
-                }
-
-                if(detailActivity != null){
-                    ft.remove(detailActivity);
-                }
-
-                ft.setCustomAnimations(R.animator.slide_in_up, R.animator.slide_out_down);
-
-
-                ft.add(R.id.fragment2, barcodeConfirmer, "barcodeConfirmer");
-                ft.commit();
-
-
+                intent = new Intent(this, barcodeReader_activity.class);
+                startActivity(intent);
                 break;
 
             case R.id.nav_orderHistory:
@@ -394,7 +365,6 @@ public class UserHub_carousel extends AppCompatActivity
         //restaurantCards restaurantCards = new restaurantCards();
         detailActivity detailActivity = (bluefirelabs.mojo.fragments.detailActivity) fm.findFragmentByTag("detailActivity");
         restaurantCards restaurantCards = (bluefirelabs.mojo.fragments.restaurantCards) fm.findFragmentByTag("restaurantCards");
-        barcodeConfirmer barcodeConfirmer = (bluefirelabs.mojo.fragments.barcodeConfirmer) fm.findFragmentByTag("barcodeConfirmer");
         FragmentTransaction ft = fm.beginTransaction();
         Log.d("Position back", String.valueOf(cardPosition));
         if(detailActivity!=null && restaurantCards != null){
@@ -408,22 +378,9 @@ public class UserHub_carousel extends AppCompatActivity
                 locationTasks();
 
         }
-        else if(detailActivity == null && restaurantCards != null){
+        else if(detailActivity==null && restaurantCards != null){
                 finish();
 
-        }
-
-        if(barcodeConfirmer != null){
-            ft.setCustomAnimations(R.animator.slide_out_down, R.animator.slide_in_up);
-            ft.remove(barcodeConfirmer);      //Using remove here so that in the next case, when the user wants to exit the app detail activity will show null
-            //If detach was used, then detailActivity will still remain in the Fragment Manager, which results in an error
-            restaurantCards restaurantCards_fragment = new restaurantCards();
-
-            //Creating a new instance of the restaurantCards fragment since it has been previously deleted
-            ft.add(R.id.fragment1, restaurantCards_fragment, "restaurantCards");
-
-            ft.commit();
-            locationTasks();
         }
 
         scrollView.setVisibility(View.GONE);
@@ -479,7 +436,7 @@ public class UserHub_carousel extends AppCompatActivity
 
     private class GetAddress extends AsyncTask<String,Void,String> {
 
-        ProgressDialog dialog = new ProgressDialog(UserHub_carousel.this);
+        ProgressDialog dialog = new ProgressDialog(RunnerHub_carousel.this);
 
         @Override
         protected void onPreExecute() {
@@ -635,7 +592,7 @@ public class UserHub_carousel extends AppCompatActivity
         mRestaurantRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
 
-        turnLayoutManager = new TurnLayoutManager(UserHub_carousel.this,              // provide a context
+        turnLayoutManager = new TurnLayoutManager(RunnerHub_carousel.this,              // provide a context
                 TurnLayoutManager.Gravity.END,        // from which direction should the list items orbit?
                 TurnLayoutManager.Orientation.HORIZONTAL, // Is this a vertical or horizontal scroll?
                 4600,               // The radius of the item rotation

@@ -126,7 +126,6 @@
             android:label="@string/title_activity_main_hub"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
-
         <activity
             android:name=".main.ui.user.UserHub_carousel"
             android:configChanges="orientation"
@@ -140,7 +139,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity
-            android:name=".barcode.barcodeReader"
+            android:name=".barcode.barcodeReader_activity"
             android:configChanges="orientation"
             android:screenOrientation="portrait" />
         <activity
@@ -179,10 +178,15 @@
             android:label="@string/title_activity_payments"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity android:name=".menu.gift_order" />
-        <activity android:name=".main.ui.checkout.Checkout"
+        <activity
+            android:name=".main.ui.checkout.Checkout"
             android:configChanges="orientation"
             android:screenOrientation="portrait" />
-        <activity android:name=".main.ui.user.order_tracking"
+        <activity
+            android:name=".main.ui.user.order_tracking"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity android:name=".main.ui.user.receipt"
             android:configChanges="orientation"
             android:screenOrientation="portrait" />
     </application>
