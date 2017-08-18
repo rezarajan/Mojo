@@ -488,9 +488,11 @@ public class Checkout extends FragmentActivity {
 
             Double total_cost = 0.00;
 
+        final LayoutInflater layoutInflater = LayoutInflater.from(this);
+
+
         for(int position = 0; position < count; position ++) {
             data.moveToPosition(position);
-                final LayoutInflater layoutInflater = LayoutInflater.from(this);
                 View childView = layoutInflater.inflate(R.layout.checkout_item, null);
                 //The checkout item contents
                 restaurant_name = (TextView) childView.findViewById(R.id.restaurant_name);
@@ -596,6 +598,18 @@ public class Checkout extends FragmentActivity {
 
                 listContainer.addView(childView);
             }
+
+            int positionClicked = (int) listContainer.indexOfChild(childView);
+            childView.setTag(positionClicked);
+
+
+            childView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int positionClicked = (int) v.getTag();
+                    Log.d("Position", String.valueOf(positionClicked));
+                }
+            });
 
             restaurant_name.setText(data.getString(1));
 
