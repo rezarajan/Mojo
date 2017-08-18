@@ -1,6 +1,7 @@
 package bluefirelabs.mojo.main.ui.checkout;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
@@ -36,6 +37,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import bluefirelabs.mojo.R;
+import bluefirelabs.mojo.menu.editcheckout;
 import database.DatabaseHelper;
 
 public class Checkout extends FragmentActivity {
@@ -46,7 +48,7 @@ public class Checkout extends FragmentActivity {
 
     private ImageView image;
 
-    private TextView restaurant_name, item_quantity, item_dets, item_cost, item_description; //receipt item view
+    private TextView restaurant_name, item_quantity, item_dets, item_cost, item_description, remove_item; //receipt item view
     private TextView item_subtotal, item_tax, item_total;           //base wrapper for the main view
     private TextView item_subtotal_value, item_tax_value, item_total_value;     //extended base wrapper for the main view
 
@@ -105,7 +107,6 @@ public class Checkout extends FragmentActivity {
 
 
         /////////////////////////////////////////////////////////////////////////////////////
-
 
 
 /*        mListView = (ListView)findViewById(R.id.listview_checkout);
@@ -460,7 +461,7 @@ public class Checkout extends FragmentActivity {
 
         Double subtotalCost = 0.00;
 
-        Cursor data = myDb.orderAlpha();
+        final Cursor data = myDb.orderAlpha();
 
 
         int count = data.getCount();
@@ -488,9 +489,10 @@ public class Checkout extends FragmentActivity {
 
             Double total_cost = 0.00;
 
+        final LayoutInflater layoutInflater = LayoutInflater.from(this);
+
         for(int position = 0; position < count; position ++) {
             data.moveToPosition(position);
-                final LayoutInflater layoutInflater = LayoutInflater.from(this);
                 View childView = layoutInflater.inflate(R.layout.checkout_item, null);
                 //The receipt item contents
                 restaurant_name = (TextView) childView.findViewById(R.id.restaurant_name);
@@ -500,6 +502,7 @@ public class Checkout extends FragmentActivity {
                 item_description = (TextView) childView.findViewById(R.id.item_description);
                 restaurant_separator = (View) childView.findViewById(R.id.restaurant_separator);
                 restaurant_name = (TextView) childView.findViewById(R.id.restaurant_name);
+                remove_item = (TextView) childView.findViewById(R.id.remove_item);
                 image = (ImageView) childView.findViewById(R.id.image);
                 //////////////////////////////////////////////////////////////////////////////////
             String placeHolder = data.getString(1);     //restaurant name
@@ -595,9 +598,25 @@ public class Checkout extends FragmentActivity {
                 }
 
                 listContainer.addView(childView);
+
             }
 
             restaurant_name.setText(data.getString(1));
+
+            int positionClicked = (int) listContainer.indexOfChild(childView);
+            childView.setTag(positionClicked);
+            remove_item.setTag(positionClicked);
+
+
+/*            childView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int positionClicked = (int) v.getTag();
+                    Log.d("Position", String.valueOf(positionClicked));
+
+                    Log.d("Item", item_dets.getText().toString());
+                }
+            });*/
 
 
             item_dets.setText(data.getString(2));
@@ -605,13 +624,39 @@ public class Checkout extends FragmentActivity {
             String cost = "$" + String.valueOf(df.format(Double.parseDouble(data.getString(3))));       //Displays with double decimals
             item_cost.setText(cost);
 
+            remove_item.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    int positionClicked = (int) v.getTag();
 
 
+                    //String sanitizedItem = item_dets.getText().toString().replace("'", "''");        //looks for any "'" in the item name (like S'Mores) so that the DatabaseHelper can properly query it
+
+                    data.moveToPosition(positionClicked);
+                    String sanitizedItem = data.getString(2).replace("'", "''");        //looks for any "'" in the item name (like S'Mores) so that the DatabaseHelper can properly query it
+                    Log.d("Item", sanitizedItem);
 
 
+                    Cursor dataItem = myDb.getItemID(sanitizedItem);        //gets the primary key associated with the item name
+                    int itemID = -1;
+                    while(dataItem.moveToNext()){
+                        itemID = dataItem.getInt(0);
+                    }
+                    if(itemID > 0){
 
+                        myDb.deleteName(itemID, sanitizedItem);     //The item name and ID are used to delete the item on checkbox unchecked
 
+                        Snackbar.make(v, item_dets.getText() + " removed from Cart",
+                                Snackbar.LENGTH_LONG)
+                                .setAction("Action", null).show();
 
+                        finish();
+                        startActivity(getIntent());
+
+                    }
+                }
+            });
 
         }
 
