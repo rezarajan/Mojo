@@ -603,8 +603,8 @@ public class Checkout extends FragmentActivity {
 
             restaurant_name.setText(data.getString(1));
 
-            int positionClicked = (int) listContainer.indexOfChild(childView);
-            childView.setTag(positionClicked);
+            int positionClicked = listContainer.indexOfChild(childView);
+            /*childView.setTag(positionClicked);*/
             remove_item.setTag(positionClicked);
 
 
