@@ -79,7 +79,7 @@ public class barcodeReader_activity extends AppCompatActivity {
                         String UID = user.getUid();
 
 
-                        //The case for the runner picking up the order for delivery to the kiosk (no runner and uid not not the customeruid)
+                        //The case for the runner picking up the order for delivery to the kiosk (no runner and uid is not the customeruid)
                         if(hopperValues.get("runneruid") == null && !hopperValues.get("customeruid").toString().equals(UID)){       //TODO: && runnermode == "enabled"
                             //appends the key "result" a value of "accepted". This can be changed to suit
                             hopperValues.put("runneruid", UID);     //at this stage we need the runner's UID to be written to Firebase
@@ -88,10 +88,17 @@ public class barcodeReader_activity extends AppCompatActivity {
                             hopperRef.updateChildren(hopperUpdates);
                         }
 
-                        //The case of the user picking up the order from the kiosk or directly
-                        else if (hopperValues.get("customeruid") != null && hopperValues.get("customeruid").toString().equals(UID)){
+                        //The case of the user picking up the order from the kiosk after the runner delivers to the kiosk
+                        else if (hopperValues.get("customeruid") != null && hopperValues.get("customeruid").toString().equals(UID) && hopperValues.get("runneruid") != null){
                             //appends the key "result" a value of "accepted". This can be changed to suit
                             hopperUpdates.put("result", "delivered");
+                            //updates the child, without destroying, or overwriting all data
+                            hopperRef.updateChildren(hopperUpdates);
+                        }
+                        //The case of the user picking up the order from the kiosk or directly
+                        else if (hopperValues.get("customeruid") != null && hopperValues.get("customeruid").toString().equals(UID) && hopperValues.get("runneruid") == null){
+                            //appends the key "result" a value of "accepted". This can be changed to suit
+                            hopperUpdates.put("result", "user_collected");
                             //updates the child, without destroying, or overwriting all data
                             hopperRef.updateChildren(hopperUpdates);
                         }

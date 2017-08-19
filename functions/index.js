@@ -471,6 +471,44 @@ exports.requestsMonitor = functions.database.ref("requests/{pushId}/").onWrite((
 			}
 
 	});
+	} else if (status.result === "user_collected"){	//if vendor accepts the order then send response to user
+		var db = admin.database();
+		var refNode = db.ref("inprogress/");	//changed the reference
+		var ref = db.ref("requests").child(status.orderid);
+
+		ref.child("items").once("value")
+		.then(function(snapshot) {
+			if(snapshot.val() !== null){
+		//the set uses the push key
+		//the set uses the push key
+		refNode.child(status.vendoruid).child(status.orderid).set({
+				customeruid: status.customeruid_to,
+				vendoruid: status.vendoruid,
+				venue: status.venue,
+				//runneruid: status.runneruid,		//since the runneruid has already been set to "Runner" in sending case
+				items: snapshot.val(),		//gets the order items
+				result: "user_collected",
+				orderid: status.orderid
+		});
+				//refNode.child(status.orderid).child("items").set(snapshot.val());
+			} else{
+				return;
+			}
+
+	});
+	ref.child("cost").once("value")
+		.then(function(snapshot) {
+			if(snapshot.val() !== null){
+		//the set uses the push key
+		//the set uses the push key
+		refNode.child(status.vendoruid).child(status.orderid).update({
+				cost: snapshot.val()
+		});
+			} else{
+				return;
+			}
+
+	});
 	}
 
 	});
@@ -706,6 +744,63 @@ exports.inprogressMonitor = functions.database.ref("inprogress/{vendoruid}/{push
 	refNode.child(status.runneruid).child("orders").child("delivered").child(status.orderid).update({
 			cost: snapshot.val()
 	});
+			} else{
+				return;
+			}
+
+	});
+
+	} else if (status.result === "user_collected"){	 //The case of the user picking up the order from the kiosk or directly
+	ref.child("items").once("value")
+		.then(function(snapshot) {
+			if(snapshot.val() !== null){
+		//the set uses the push key
+	refNode.child(status.vendoruid).child("orders").child("delivered").child(status.orderid).set({
+			customeruid: status.customeruid,
+			vendoruid: status.vendoruid,
+			//runneruid: status.runneruid,
+			venue: status.venue,
+			items: snapshot.val(),
+			result: "user_collected",
+			orderid: status.orderid
+	});
+	refNode.child(status.customeruid).child("orders").child(status.orderid).set({
+			customeruid: status.customeruid,
+			vendoruid: status.vendoruid,
+			//runneruid: status.runneruid,
+			venue: status.venue,
+			items: snapshot.val(),
+			result: "user_collected",
+			orderid: status.orderid
+	});
+/*	refNode.child(status.runneruid).child("orders").child("delivered").child(status.orderid).set({
+			customeruid: status.customeruid,
+			vendoruid: status.vendoruid,
+			runneruid: status.runneruid,
+			venue: status.venue,
+			items: snapshot.val(),
+			result: "delivered",
+			orderid: status.orderid
+	});*/
+				//refNode.child(status.orderid).child("items").set(snapshot.val());
+			} else{
+				return;
+			}
+
+	});
+	ref.child("cost").once("value")
+		.then(function(snapshot) {
+			if(snapshot.val() !== null){
+		//the set uses the push key
+	refNode.child(status.vendoruid).child("orders").child("delivered").child(status.orderid).update({
+			cost: snapshot.val()
+	});
+	refNode.child(status.customeruid).child("orders").child(status.orderid).update({
+			cost: snapshot.val()
+	});
+/*	refNode.child(status.runneruid).child("orders").child("delivered").child(status.orderid).update({
+			cost: snapshot.val()
+	});*/
 			} else{
 				return;
 			}
@@ -1176,24 +1271,44 @@ exports.deliveredOrderMonitor = functions.database.ref("uid/{uid}/orders/deliver
 	var ref2 = db.ref().child("uid").child(status.vendoruid).child("orders").child("accepted");
 	var ref3 = db.ref().child("uid").child(status.vendoruid).child("orders").child("sending");
 	var ref4 = db.ref().child("uid").child(status.vendoruid).child("orders").child("collected");
-	var ref5 = db.ref().child("uid").child(status.runneruid).child("orders").child("sending");
-	var ref6 = db.ref().child("uid").child(status.runneruid).child("orders").child("collected");
+	
+
+
 	ref.orderByKey().equalTo(status.orderid).on("child_added", function(snapshot) {
 		//set up for the case of the vendoruid write, which then deletes the node and then the runneruid write which would then be null since the node has just been deleted
 		if(snapshot.key !== null){
-	console.log(snapshot.key);
-	ref.child(snapshot.key).remove();		//removes the order from sending after the restaurant has delivered it
-		console.log('Vendor: Request removed');
-	ref2.child(snapshot.key).remove();		//removes the order from sending after the restaurant has delivered it
-		console.log('Vendor: Accepted removed');
-	ref3.child(snapshot.key).remove();		//removes the order from sending after the restaurant has delivered it
-		console.log('Vendor: Sending removed');
-	ref4.child(snapshot.key).remove();		//removes the order from sending after the restaurant has delivered it
-		console.log('Vendor: Collected removed');
-	ref5.child(snapshot.key).remove();		//removes the order from sending after the restaurant has delivered it
-		console.log('Runner: Sending removed');
-	ref6.child(snapshot.key).remove();		//removes the order from sending after the restaurant has delivered it
-		console.log('Runner: Collected removed');
+			console.log(snapshot.key);
+			
+			if(ref.child(snapshot.key) != null){
+					ref.child(snapshot.key).remove();		//removes the order from sending after the restaurant has delivered it
+					console.log('Vendor: Request removed');
+			}			
+			if(ref2.child(snapshot.key) != null){
+					ref2.child(snapshot.key).remove();		//removes the order from sending after the restaurant has delivered it
+					console.log('Vendor: Accepted removed');
+			}
+			if(ref3.child(snapshot.key) != null){
+					ref3.child(snapshot.key).remove();		//removes the order from sending after the restaurant has delivered it
+					console.log('Vendor: Sending removed');
+			}
+			if(ref4.child(snapshot.key) != null){
+						ref4.child(snapshot.key).remove();		//removes the order from sending after the restaurant has delivered it
+						console.log('Vendor: Collected removed');
+			}
+
+			if(status.runneruid != null){
+				var ref5 = db.ref().child("uid").child(status.runneruid).child("orders").child("sending");
+				var ref6 = db.ref().child("uid").child(status.runneruid).child("orders").child("collected");
+				if(ref5.child(snapshot.key) != null){
+					ref5.child(snapshot.key).remove();		//removes the order from sending after the restaurant has delivered it
+					console.log('Runner: Sending removed');
+				}
+				if(ref6.child(snapshot.key) != null){
+					ref6.child(snapshot.key).remove();		//removes the order from sending after the restaurant has delivered it
+					console.log('Runner: Collected removed');
+				}
+			}
+
 		} else{
 			return;
 		}
@@ -1218,7 +1333,8 @@ exports.deliveredOrderMonitor = functions.database.ref("uid/{uid}/orders/deliver
 });
 
 
-function waitToClear(String reference){
+function waitToClear(reference){
+	//reference is a string
 	/**reference of the form "group/{status.vendoruid}/{status.venue_to}/{one_node}"
 	*This looks after the three_node and two_node as well with the wildcard parameter
 	*To execute: in the appropriate monitor use: setTimeout(waitToClear(reference), 20000);
