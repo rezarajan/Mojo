@@ -1,7 +1,6 @@
 package bluefirelabs.mojo.main.transition;
 
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Build;
@@ -10,7 +9,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewCompat;
-import android.support.v4.widget.CompoundButtonCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -355,7 +353,6 @@ public class DetailActivity extends FragmentActivity {
                                                             //Picasso.with(getApplicationContext()).load(restaurantInfo.child("icon").getValue().toString()).into(headView);        //TODO: Use the vector logos here
 
 
-                                                            //TODO: Get the checkboxes to add/delete the data from the database
                                                             CheckBox checkbox = (CheckBox) childView.findViewById(R.id.checkb);
 
 

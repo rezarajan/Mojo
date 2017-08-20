@@ -712,7 +712,7 @@ public class RunnerHub_carousel extends AppCompatActivity
                         ft.add(R.id.fragment2, detailActivity, "detailActivity");
                         ft.commit();
 
-                        checkout_icon_dummy = (View) findViewById(R.id.checkout_icon_dummy);
+/*                        checkout_icon_dummy = (View) findViewById(R.id.checkout_icon_dummy);
                         order_history_dummy = (View) findViewById(R.id.order_history_dummy);
 
 
@@ -732,7 +732,7 @@ public class RunnerHub_carousel extends AppCompatActivity
                                 Intent intent = new Intent(getApplicationContext(), order_tracking.class);            //Goes to receipt
                                 startActivity(intent);
                             }
-                        });
+                        });*/
 
 
                     }

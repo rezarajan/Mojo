@@ -15,7 +15,6 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
@@ -56,17 +55,15 @@ import org.json.JSONObject;
 
 import bluefirelabs.mojo.R;
 import bluefirelabs.mojo.fragments.barcodeConfirmer;
-import bluefirelabs.mojo.fragments.barcodeDirectConfirmer;
-import bluefirelabs.mojo.fragments.barcodeReader;
 import bluefirelabs.mojo.fragments.detailActivity;
 import bluefirelabs.mojo.fragments.restaurantCards;
 import bluefirelabs.mojo.handlers.adapters.FirebaseViewPagerAdapter;
 import bluefirelabs.mojo.handlers.adapters.Food_List;
 import bluefirelabs.mojo.handlers.online.HttpDataHandler;
+import bluefirelabs.mojo.handlers.online.SharedPrefManager;
 import bluefirelabs.mojo.handlers.online.uploadImage;
 import bluefirelabs.mojo.main.login.Login;
 import bluefirelabs.mojo.main.transition.DetailActivity;
-import bluefirelabs.mojo.handlers.online.SharedPrefManager;
 import bluefirelabs.mojo.main.ui.payments.Payments;
 import cdflynn.android.library.turn.TurnLayoutManager;
 
@@ -755,6 +752,7 @@ public class UserHub_carousel extends AppCompatActivity
                         ft.add(R.id.fragment2, detailActivity, "detailActivity");
                         ft.commit();
 
+/*
                         checkout_icon_dummy = (View) findViewById(R.id.checkout_icon_dummy);
                         order_history_dummy = (View) findViewById(R.id.order_history_dummy);
 
@@ -776,6 +774,7 @@ public class UserHub_carousel extends AppCompatActivity
                                 startActivity(intent);
                             }
                         });
+*/
 
 
                     }

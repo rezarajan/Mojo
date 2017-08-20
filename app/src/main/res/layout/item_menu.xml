@@ -5,67 +5,73 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    app:cardCornerRadius="16dp"
+    app:cardCornerRadius="34dp"
     android:layout_marginBottom="-16dp">
 
     <android.support.v4.widget.NestedScrollView
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/scrollView">
+        android:layout_height="match_parent">
 
-    <LinearLayout
-        android:id="@+id/detail_list_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        <LinearLayout
+            android:id="@+id/detail_list_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-            <RelativeLayout
-                android:id="@+id/detail_background"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <!--<ImageView
-                    android:id="@+id/image"
-                    android:layout_width="match_parent"
-                    android:layout_height="200dp"
-                    android:scaleType="centerCrop" />-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_margin="34dp">
 
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/image"
-                    android:layout_width="200dp"
-                    android:layout_height="200dp"
-                    android:layout_centerHorizontal="true"
-                    android:layout_gravity="center"
-                    android:paddingTop="30dp"
-                    android:scaleType="centerCrop" />
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/image"
+                android:layout_width="78dp"
+                android:layout_height="78dp"
+                android:layout_gravity="center_vertical"
+                android:scaleType="centerCrop" />
 
-<!--                <ImageView
-                    android:id="@+id/checkout_icon"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_margin="20dp"
-                    android:layout_alignParentEnd="true"
-                    android:src="@drawable/ic_shopping_cart_48px" />-->
-
-
-                <View
-                    android:id="@+id/accent_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="2dp"
-                    android:layout_below="@id/image"
-                    android:layout_margin="30dp"
-                    android:background="#cfcfd6"
-                    android:padding="20dp" />
-
-
-                <LinearLayout
-                    android:id="@+id/detail_list_container"
-                    android:layout_width="match_parent"
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginStart="8dp"
+                android:layout_gravity="center_vertical">
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/accent_layout"
-                    android:orientation="vertical" />
+                    android:text="Starbucks"
+                    android:textColor="@color/white"
+                    android:textSize="22sp"
+                    android:fontFamily="sans-serif-condensed" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Average Delivery Time:"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    android:fontFamily="sans-serif"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="14 mins"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    android:fontFamily="sans-serif-condensed"/>
 
-            </RelativeLayout>
 
-    </LinearLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/detail_list_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical" />
+
+
+        </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 </android.support.v7.widget.CardView>
