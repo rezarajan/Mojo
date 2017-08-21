@@ -53,7 +53,7 @@ public class detailActivity extends Fragment{
     LinearLayout linearLayout;
     RelativeLayout detail_item;
 
-    NestedScrollView nestedScrollView;
+    NestedScrollView nestedScrollView, nestedScrollViewExtras;
 
     private SlidingUpPanelLayout slidingUpPanelLayout;
 
@@ -90,12 +90,16 @@ public class detailActivity extends Fragment{
             linearLayout = (LinearLayout) view.findViewById(R.id.detail_list_layout);
 
             nestedScrollView = (NestedScrollView) view.findViewById(R.id.scrollView);
+            nestedScrollViewExtras = (NestedScrollView) view.findViewById(R.id.scrollViewExtras);
 
             //setting up the sliding panel from the parent activity
             slidingUpPanelLayout = (SlidingUpPanelLayout) getActivity().findViewById(R.id.sliding_layout_frag2);
 
             //resetting the panel to a collapsed state
             slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+
+            //enables the scrollview in the sliding panel
+            slidingUpPanelLayout.setScrollableView(nestedScrollViewExtras);
 
 
             Log.d("Colour", String.valueOf(restaurantColor));

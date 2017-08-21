@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:sothree="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="400dp">
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        sothree:cardBackgroundColor="@color/colorPrimary"
+        sothree:cardCornerRadius="34dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/itemName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:text="Item Name"
+                android:textSize="24sp"
+                android:textColor="@color/colorPrimaryDark"
+                android:layout_margin="36dp"/>
+
+            <TextView
+                android:id="@+id/itemCost"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:text="$0.00"
+                android:textSize="24sp"
+                android:textColor="@color/colorPrimaryDark"
+                android:layout_margin="36dp"/>
+
+            <android.support.v4.widget.NestedScrollView
+                android:id="@+id/scrollViewExtras"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/itemName">
+
+<!--                    <LinearLayout
+                        android:id="@+id/detail_list_container"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginBottom="34dp"
+                        android:orientation="vertical" />-->
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="36dp"
+                        android:text="Hello World!"
+                        android:textColor="@color/colorPrimaryDark"/>
+<TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="36dp"
+                        android:text="Hello World!"
+                        android:textColor="@color/colorPrimaryDark"/>
+<TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="36dp"
+                        android:text="Hello World!"
+                        android:textColor="@color/colorPrimaryDark"/>
+<TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="36dp"
+                        android:text="Hello World!"
+                        android:textColor="@color/colorPrimaryDark"/>
+<TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="36dp"
+                        android:text="Hello World!"
+                        android:textColor="@color/colorPrimaryDark"/>
+<TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="36dp"
+                        android:text="Hello World!"
+                        android:textColor="@color/colorPrimaryDark"/>
+<TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="36dp"
+                        android:text="Hello World!"
+                        android:textColor="@color/colorPrimaryDark"/>
+<TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="36dp"
+                        android:text="Hello World!"
+                        android:textColor="@color/colorPrimaryDark"/>
+<TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="36dp"
+                        android:text="Hello World!"
+                        android:textColor="@color/colorPrimaryDark"/>
+
+
+                </LinearLayout>
+            </android.support.v4.widget.NestedScrollView>
+
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+
+
+</LinearLayout>
