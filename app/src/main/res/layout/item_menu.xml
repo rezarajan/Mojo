@@ -38,27 +38,30 @@
                 android:orientation="vertical"
                 android:layout_marginStart="8dp"
                 android:layout_gravity="center_vertical">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_bold"
                     android:text="Starbucks"
                     android:textColor="@color/white"
-                    android:textSize="22sp"
-                    android:fontFamily="sans-serif-condensed" />
+                    android:textSize="22sp" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat"
                     android:text="Average Delivery Time:"
                     android:textColor="@color/white"
-                    android:textSize="18sp"
-                    android:fontFamily="sans-serif"/>
+                    android:textSize="14sp" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_bold"
                     android:text="14 mins"
                     android:textColor="@color/white"
-                    android:textSize="18sp"
-                    android:fontFamily="sans-serif-condensed"/>
+                    android:textSize="14sp" />
 
 
             </LinearLayout>

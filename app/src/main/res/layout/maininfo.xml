@@ -24,32 +24,32 @@
         android:layout_centerHorizontal="true"
         app:cardBackgroundColor="@color/colorPrimaryLight">
 
-            <TextView
-                android:id="@+id/location_indicator"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                android:paddingTop="4dp"
-                android:paddingBottom="4dp"
-                android:fontFamily="sans-serif"
-                android:gravity="center"
-                android:text="Dang! No venue found"
-                android:textColor="@color/colorSecondary"
-                android:textSize="16sp" />
+        <TextView
+            android:id="@+id/location_indicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="@font/montserrat"
+            android:gravity="center"
+            android:paddingBottom="4dp"
+            android:paddingEnd="16dp"
+            android:paddingStart="16dp"
+            android:paddingTop="4dp"
+            android:text="Dang! No venue found"
+            android:textColor="@color/colorSecondary"
+            android:textSize="16sp" />
 
     </android.support.v7.widget.CardView>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="MOJO"
-        android:textSize="36sp"
-        android:textColor="@color/colorSecondary"
-        android:layout_margin="16dp"
         android:layout_centerHorizontal="true"
-        />
+        android:layout_margin="16dp"
+        android:fontFamily="@font/montserrat_bold"
+        android:text="MOJO"
+        android:textColor="@color/colorSecondary"
+        android:textSize="36sp" />
 
 
 

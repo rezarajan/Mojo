@@ -32,11 +32,11 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="30dp"
+                android:fontFamily="@font/montserrat"
                 android:text="Restaurant"
                 android:textColor="@color/colorPrimaryDark"
                 android:textSize="24sp"
-                android:fontFamily="sans-serif-condensed"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
 
         </FrameLayout>
 
@@ -97,13 +97,13 @@
                 android:id="@+id/item_dets"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/item_quantity"
+                android:fontFamily="@font/montserrat"
                 android:paddingStart="30dp"
                 android:paddingTop="8dp"
                 android:text="Item"
                 android:textColor="@color/black"
-                android:textSize="18dp"
-                android:fontFamily="sans-serif-condensed"
-                android:layout_toEndOf="@id/item_quantity" />
+                android:textSize="18dp" />
 
             <TextView
                 android:id="@+id/remove_item"
@@ -123,13 +123,13 @@
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@id/item_dets"
                 android:layout_alignParentEnd="true"
-                android:paddingStart="8dp"
+                android:fontFamily="@font/montserrat"
                 android:paddingEnd="30dp"
+                android:paddingStart="8dp"
                 android:paddingTop="4dp"
                 android:text="$1.00"
                 android:textColor="@color/black"
-                android:textSize="14dp"
-                android:fontFamily="sans-serif-light"   />
+                android:textSize="14dp" />
 
 
             <!--            <TextView
@@ -150,15 +150,15 @@
                 android:id="@+id/item_description"
                 android:layout_width="250dp"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/item_cost"
                 android:layout_alignStart="@id/item_dets"
+                android:layout_below="@id/item_cost"
+                android:fontFamily="@font/montserrat"
                 android:paddingBottom="8dp"
                 android:paddingStart="30dp"
                 android:paddingTop="4dp"
                 android:text="Description"
                 android:textColor="@color/black"
-                android:textSize="12sp"
-                android:fontFamily="sans-serif"  />
+                android:textSize="12sp" />
 
             <!--            <Button
                             android:id="@+id/add_to_cart"

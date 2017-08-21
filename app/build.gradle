@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 25
+    compileSdkVersion 26
     buildToolsVersion '25.0.3'
     defaultConfig {
         applicationId "bluefirelabs.mojo"
@@ -29,21 +29,21 @@ dependencies {
     })
     compile 'com.firebase:geofire-android:2.1.1'
     compile 'com.stripe:stripe-android:4.1.3'
-    compile 'com.android.support:appcompat-v7:25.3.1'
-    compile 'com.google.android.gms:play-services:10.2.6'
-    compile 'com.android.support:design:25.3.1'
+    compile 'com.android.support:appcompat-v7:26.0.0-beta1'
+    compile 'com.google.android.gms:play-services:11.2.0'
+    compile 'com.android.support:design:26.0.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    compile 'com.android.support:cardview-v7:25.3.1'
+    compile 'com.android.support:cardview-v7:26.0.1'
     compile 'com.squareup.okhttp3:okhttp:3.8.0'
-    compile 'com.google.firebase:firebase-auth:10.2.6'
-    compile 'com.google.firebase:firebase-database:10.2.6'
-    compile 'com.google.firebase:firebase-storage:10.2.6'
+    compile 'com.google.firebase:firebase-auth:11.2.0'
+    compile 'com.google.firebase:firebase-database:11.2.0'
+    compile 'com.google.firebase:firebase-storage:11.2.0'
     compile 'com.firebaseui:firebase-ui-database:1.2.0'
-    compile 'com.google.firebase:firebase-messaging:10.2.6'
+    compile 'com.google.firebase:firebase-messaging:11.2.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'org.jetbrains:annotations-java5:15.0'
     compile 'com.journeyapps:zxing-android-embedded:3.5.0'
-    compile 'com.android.support:palette-v7:25.3.1'
+    compile 'com.android.support:palette-v7:26.0.1'
     compile 'com.bignerdranch.android:expandablerecyclerview:1.0.3'
     compile 'de.hdodenhof:circleimageview:2.1.0'
     compile 'com.azoft.carousellayoutmanager:carousel:1.2.1'
