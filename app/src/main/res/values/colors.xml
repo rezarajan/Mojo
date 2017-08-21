@@ -16,6 +16,7 @@
 
 
     <color name="colorAccent">#FF4081</color>
+    <color name="colorAccentBackground">#ECECEC</color>
 
 
     <color name="colorOpen">#00e676</color>

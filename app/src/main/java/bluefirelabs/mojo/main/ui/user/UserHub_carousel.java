@@ -446,16 +446,41 @@ public class UserHub_carousel extends AppCompatActivity
     public void getLocation() {
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         provider = locationManager.getBestProvider(new Criteria(), false);
-        locationManager.requestLocationUpdates(provider, 400, 1, this);
+        locationManager.requestLocationUpdates(provider, 5000, 0, this);
 
 
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
-            return;
+            Log.d("Location Permission", "disabled");
         }
-        final Location location = locationManager.getLastKnownLocation(provider);
-        if (location == null)
-            Log.e("ERROR", "Location is null");
+
+        else{
+
+            Location location = locationManager.getLastKnownLocation(provider);
+            if (location == null)
+                Log.e("ERROR", "Location is null");
+            Log.d("Location Permission", "enabled");
+
+            locationManager.requestLocationUpdates(
+                    LocationManager.NETWORK_PROVIDER,
+                    5000,
+                    0, this);
+
+            location = locationManager
+                    .getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+
+            if(location == null){
+                Log.e("ERROR", "Network Location is null");
+
+            }
+            else{
+                Log.d("Location", "acquired");
+                Log.d("Lat", String.valueOf(location.getLatitude()));
+                Log.d("Long", String.valueOf(location.getLongitude()));
+
+                lat = location.getLatitude();
+                lng = location.getLongitude();
+            }
+        }
     }
 
     @Override
@@ -576,7 +601,7 @@ public class UserHub_carousel extends AppCompatActivity
         } else {
             getLocation();
         }
-        locationManager.requestLocationUpdates(provider, 400, 1, this);
+        locationManager.requestLocationUpdates(provider, 5000, 0, this);
         Location myLocation = locationManager.getLastKnownLocation(provider);
         if(myLocation == null){
             getLocation();

@@ -28,6 +28,7 @@
         android:background="#00000000"
         sothree:umanoPanelHeight="24dp"
         sothree:umanoShadowHeight="0dp"
+        sothree:umanoFadeColor="@android:color/transparent"
         sothree:umanoOverlay="true">
     <ScrollView
         android:layout_width="match_parent"
