@@ -101,6 +101,8 @@ public class detailActivity extends Fragment{
             //enables the scrollview in the sliding panel
             slidingUpPanelLayout.setScrollableView(nestedScrollViewExtras);
 
+            slidingUpPanelLayout.setTouchEnabled(false);
+
 
             Log.d("Colour", String.valueOf(restaurantColor));
 

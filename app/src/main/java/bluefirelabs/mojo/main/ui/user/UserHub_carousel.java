@@ -408,19 +408,23 @@ public class UserHub_carousel extends AppCompatActivity
         FragmentTransaction ft = fm.beginTransaction();
         Log.d("Position back", String.valueOf(cardPosition));
         if(detailActivity!=null && restaurantCards != null){
-            //ft.remove(detailActivity);
-            //ft.add(R.id.fragment2, restaurantCards, "restaurantCards");
+
+            if(slidingUpPanelLayout.getPanelState().equals(SlidingUpPanelLayout.PanelState.COLLAPSED)){
+                //ft.remove(detailActivity);
+                //ft.add(R.id.fragment2, restaurantCards, "restaurantCards");
                 ft.setCustomAnimations(R.animator.slide_out_down, R.animator.slide_in_up);
                 ft.remove(detailActivity);      //Using remove here so that in the next case, when the user wants to exit the app detail activity will show null
-                                                //If detach was used, then detailActivity will still remain in the Fragment Manager, which results in an error
+                //If detach was used, then detailActivity will still remain in the Fragment Manager, which results in an error
                 ft.attach(restaurantCards);
                 ft.commit();
                 locationTasks();
+                scrollView.setVisibility(View.GONE);
 
-            //resetting the panel to a collapsed state
-            slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
-
-
+            }
+            else {
+                //resetting the panel to a collapsed state
+                slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+            }
         }
         else if(detailActivity == null && restaurantCards != null){
                 finish();
@@ -438,9 +442,9 @@ public class UserHub_carousel extends AppCompatActivity
 
             ft.commit();
             locationTasks();
+            scrollView.setVisibility(View.GONE);
         }
 
-        scrollView.setVisibility(View.GONE);
     }
 
     public void getLocation() {
