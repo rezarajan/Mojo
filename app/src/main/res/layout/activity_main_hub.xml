@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:fitsSystemWindows="true"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
+
+<android.support.v4.widget.DrawerLayout
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
     tools:openDrawer="start">
+
 
     <!--<include layout="@layout/hub_layout" />-->
     <include layout="@layout/activity_main_menu"/>
-
-
 
     <android.support.design.widget.NavigationView
         android:id="@+id/nav_view"
@@ -24,8 +28,19 @@
         android:background="@color/colorPrimary"
         app:itemTextColor="@color/black"
         app:itemIconTint="@color/colorSecondary"
-        app:elevation="8dp"/>
+        app:elevation="8dp">
+    </android.support.design.widget.NavigationView>
 
 
 
 </android.support.v4.widget.DrawerLayout>
+
+    <ImageView
+        android:id="@+id/mojoHamburger"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_gravity="top|start"
+        android:layout_margin="15dp"
+        android:src="@drawable/ic_history_48px" />
+
+</FrameLayout>

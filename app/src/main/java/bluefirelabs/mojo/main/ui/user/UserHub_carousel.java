@@ -1,5 +1,6 @@
 package bluefirelabs.mojo.main.ui.user;
 
+import android.Manifest;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
@@ -28,6 +29,7 @@ import android.support.v7.widget.LinearSnapHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SnapHelper;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -95,7 +97,7 @@ public class UserHub_carousel extends AppCompatActivity
 
     FragmentManager fm;
 
-    private ImageView checkout_icon, order_history;
+    private ImageView checkout_icon, order_history, mojoHamburger;
 
     private ScrollView scrollView;
     private View checkout_icon_dummy, order_history_dummy;
@@ -108,7 +110,6 @@ public class UserHub_carousel extends AppCompatActivity
     private SlidingUpPanelLayout slidingUpPanelLayout;
 
     private CardView mainInfo;
-
 
 
     public static final String EXTRA_RESTAURANT_LOGO = "restaurantLogo";
@@ -147,10 +148,23 @@ public class UserHub_carousel extends AppCompatActivity
         // Find our drawer view
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
-        // Find our drawer view
+        // Find our navigation view
         nvDrawer = (NavigationView) findViewById(R.id.nav_view);
         // Setup drawer view
         setupDrawerContent(nvDrawer);
+
+        mojoHamburger = (ImageView) findViewById(R.id.mojoHamburger);
+        mojoHamburger.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(mDrawer.isDrawerOpen(Gravity.START)){
+                    mDrawer.closeDrawer(Gravity.START);
+                }
+                else{
+                    mDrawer.openDrawer(Gravity.START);
+                }
+            }
+        });
 
         slidingUpPanelLayout = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout_frag2);
         slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
@@ -228,14 +242,7 @@ public class UserHub_carousel extends AppCompatActivity
         locationTasks();
 
 
-
-
-
-
     }
-
-
-
 
 
     private void setupDrawerContent(NavigationView navigationView) {
@@ -254,7 +261,7 @@ public class UserHub_carousel extends AppCompatActivity
         //Fragment fragment = null;
         Class fragmentClass;
         Intent intent;
-        switch(menuItem.getItemId()) {
+        switch (menuItem.getItemId()) {
             case R.id.nav_logout:
                 //Logout
 
@@ -301,11 +308,11 @@ public class UserHub_carousel extends AppCompatActivity
                 detailActivity detailActivity = (bluefirelabs.mojo.fragments.detailActivity) fm.findFragmentByTag("detailActivity");
 
                 //ft.remove(restaurantCards);
-                if(restaurantCards != null){
+                if (restaurantCards != null) {
                     ft.remove(restaurantCards);
                 }
 
-                if(detailActivity != null){
+                if (detailActivity != null) {
                     ft.remove(detailActivity);
                 }
 
@@ -349,7 +356,6 @@ public class UserHub_carousel extends AppCompatActivity
     }
 
 
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // The action bar home/up action should open or close the drawer.
@@ -376,7 +382,7 @@ public class UserHub_carousel extends AppCompatActivity
         //restaurantCards restaurantCards = (bluefirelabs.mojo.fragments.restaurantCards) fm.findFragmentByTag("restaurantCards");
         FragmentTransaction ft = fm.beginTransaction();
         //Log.d("Position back", String.valueOf(cardPosition));
-        if(detailActivity!=null){
+        if (detailActivity != null) {
             //ft.remove(detailActivity);
             //ft.add(R.id.fragment2, restaurantCards, "restaurantCards");
             ft.detach(detailActivity);      //removes the detailActivity from before the receipt
@@ -407,9 +413,9 @@ public class UserHub_carousel extends AppCompatActivity
         barcodeConfirmer barcodeConfirmer = (bluefirelabs.mojo.fragments.barcodeConfirmer) fm.findFragmentByTag("barcodeConfirmer");
         FragmentTransaction ft = fm.beginTransaction();
         Log.d("Position back", String.valueOf(cardPosition));
-        if(detailActivity!=null && restaurantCards != null){
+        if (detailActivity != null && restaurantCards != null) {
 
-            if(slidingUpPanelLayout.getPanelState().equals(SlidingUpPanelLayout.PanelState.COLLAPSED)){
+            if (slidingUpPanelLayout.getPanelState().equals(SlidingUpPanelLayout.PanelState.COLLAPSED)) {
                 //ft.remove(detailActivity);
                 //ft.add(R.id.fragment2, restaurantCards, "restaurantCards");
                 ft.setCustomAnimations(R.animator.slide_out_down, R.animator.slide_in_up);
@@ -420,18 +426,16 @@ public class UserHub_carousel extends AppCompatActivity
                 locationTasks();
                 scrollView.setVisibility(View.GONE);
 
-            }
-            else {
+            } else {
                 //resetting the panel to a collapsed state
                 slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
             }
-        }
-        else if(detailActivity == null && restaurantCards != null){
-                finish();
+        } else if (detailActivity == null && restaurantCards != null) {
+            finish();
 
         }
 
-        if(barcodeConfirmer != null){
+        if (barcodeConfirmer != null) {
             ft.setCustomAnimations(R.animator.slide_out_down, R.animator.slide_in_up);
             ft.remove(barcodeConfirmer);      //Using remove here so that in the next case, when the user wants to exit the app detail activity will show null
             //If detach was used, then detailActivity will still remain in the Fragment Manager, which results in an error
@@ -450,6 +454,16 @@ public class UserHub_carousel extends AppCompatActivity
     public void getLocation() {
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         provider = locationManager.getBestProvider(new Criteria(), false);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
         locationManager.requestLocationUpdates(provider, 5000, 0, this);
 
 
