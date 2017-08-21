@@ -22,6 +22,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.LinearSnapHelper;
 import android.support.v7.widget.RecyclerView;
@@ -47,6 +48,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -103,6 +105,10 @@ public class UserHub_carousel extends AppCompatActivity
     private DrawerLayout mDrawer;
     private NavigationView nvDrawer;
 
+    private SlidingUpPanelLayout slidingUpPanelLayout;
+
+    private CardView mainInfo;
+
 
 
     public static final String EXTRA_RESTAURANT_LOGO = "restaurantLogo";
@@ -133,6 +139,10 @@ public class UserHub_carousel extends AppCompatActivity
 
         }
 
+        //setting the background opacity for the location card view without affecting the opacity
+        //of the text
+        mainInfo = (CardView) findViewById(R.id.location_indicator_holder);
+        mainInfo.getBackground().setAlpha(80);
 
         // Find our drawer view
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -141,6 +151,9 @@ public class UserHub_carousel extends AppCompatActivity
         nvDrawer = (NavigationView) findViewById(R.id.nav_view);
         // Setup drawer view
         setupDrawerContent(nvDrawer);
+
+        slidingUpPanelLayout = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout_frag2);
+        slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
 
         location_indicator = (TextView) findViewById(R.id.location_indicator);
 
@@ -404,6 +417,10 @@ public class UserHub_carousel extends AppCompatActivity
                 ft.commit();
                 locationTasks();
 
+            //resetting the panel to a collapsed state
+            slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+
+
         }
         else if(detailActivity == null && restaurantCards != null){
                 finish();
@@ -601,7 +618,7 @@ public class UserHub_carousel extends AppCompatActivity
                 public void onKeyEntered(String key, GeoLocation location) {
                     System.out.println(String.format("Key %s entered the search area at [%f,%f]", key, location.latitude, location.longitude));
                     populateView(key);
-                    location_indicator.setText(key);
+                    location_indicator.setText("You are at " + key);
                 }
 
                 @Override
@@ -637,7 +654,7 @@ public class UserHub_carousel extends AppCompatActivity
                 TurnLayoutManager.Orientation.HORIZONTAL, // Is this a vertical or horizontal scroll?
                 4600,               // The radius of the item rotation
                 72,                 // Extra offset distance
-                true);        // should list items angle towards the center? true/false.
+                false);        // should list items angle towards the center? true/false.
 
 
 

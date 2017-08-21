@@ -4,12 +4,12 @@
     <color name="colorPrimaryLight">#ffffff</color>
     <color name="colorPrimaryDark">#ccc0ae</color> -->
 
-    <color name="colorPrimary">#eeeeee</color>
-    <color name="colorPrimaryLight">#ffffff</color>
+    <color name="colorPrimary">#ffffff</color>
+    <color name="colorPrimaryLight">#d7d7d7</color>
     <color name="colorPrimaryDark">#bcbcbc</color>
 
 
-    <color name="colorSecondary">#00b3b8</color>
+    <color name="colorSecondary">#18abde</color>
     <color name="colorSecondaryLight">#5de5e9</color>
     <color name="colorSecondaryDark">#008287</color>
 

@@ -8,10 +8,10 @@
     app:cardPreventCornerOverlap="true"
     app:cardElevation="4dp"
     android:layout_gravity="center"
-    android:layout_marginStart="36dp"
-    android:layout_marginEnd="36dp"
-    android:layout_marginTop="88dp"
-    android:layout_marginBottom="58dp">
+    android:layout_marginStart="56dp"
+    android:layout_marginEnd="56dp"
+    android:layout_marginTop="124dp"
+    android:layout_marginBottom="96dp">
 
     <ImageView
         style="@style/BackGroundImageView"

@@ -1,45 +1,33 @@
 package bluefirelabs.mojo.fragments;
 
 import android.app.Fragment;
-import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
-import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.NestedScrollView;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import com.squareup.picasso.Picasso;
 
 import java.util.Map;
 
 import bluefirelabs.mojo.R;
-import bluefirelabs.mojo.handlers.adapters.FirebaseRecyclerAdapterItems_new;
-import bluefirelabs.mojo.handlers.adapters.Food_List;
-import bluefirelabs.mojo.main.transition.DetailActivity;
 import bluefirelabs.mojo.main.transition.MyCallback;
 import database.DatabaseHelper;
 
@@ -66,6 +54,9 @@ public class detailActivity extends Fragment{
     RelativeLayout detail_item;
 
     NestedScrollView nestedScrollView;
+
+    private SlidingUpPanelLayout slidingUpPanelLayout;
+
 
     DatabaseHelper myDb;
 
@@ -99,6 +90,12 @@ public class detailActivity extends Fragment{
             linearLayout = (LinearLayout) view.findViewById(R.id.detail_list_layout);
 
             nestedScrollView = (NestedScrollView) view.findViewById(R.id.scrollView);
+
+            //setting up the sliding panel from the parent activity
+            slidingUpPanelLayout = (SlidingUpPanelLayout) getActivity().findViewById(R.id.sliding_layout_frag2);
+
+            //resetting the panel to a collapsed state
+            slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
 
 
             Log.d("Colour", String.valueOf(restaurantColor));
@@ -276,6 +273,11 @@ public class detailActivity extends Fragment{
                                                                             Snackbar.make(v, item_details.getText() + " added to Cart",
                                                                                     Snackbar.LENGTH_LONG)
                                                                                     .setAction("Action", null).show();
+
+                                                                            //brings up the sliding panel if the item has extras
+                                                                            slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
+
+
                                                                         } else {
                                                                             Snackbar.make(v, "Error adding item to cart",
                                                                                     Snackbar.LENGTH_LONG)
