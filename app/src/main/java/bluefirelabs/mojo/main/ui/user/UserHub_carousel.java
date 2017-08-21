@@ -124,6 +124,7 @@ public class UserHub_carousel extends AppCompatActivity
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             Window window = getWindow();
+            View view = window.getDecorView();
 /*            window.setFlags(
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);*/
@@ -136,7 +137,11 @@ public class UserHub_carousel extends AppCompatActivity
 
 
             // finally change the color
-            window.setStatusBarColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
+            window.setStatusBarColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary));
+
+            int flags = view.getSystemUiVisibility();
+            flags |= View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
+            view.setSystemUiVisibility(flags);
 
         }
 
@@ -153,7 +158,7 @@ public class UserHub_carousel extends AppCompatActivity
         // Setup drawer view
         setupDrawerContent(nvDrawer);
 
-        mojoHamburger = (ImageView) findViewById(R.id.mojoHamburger);
+        mojoHamburger = findViewById(R.id.mojoHamburger);
         mojoHamburger.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -166,6 +171,9 @@ public class UserHub_carousel extends AppCompatActivity
             }
         });
 
+        mojoHamburger.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.colorSecondary));
+
+
         slidingUpPanelLayout = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout_frag2);
         slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
 
@@ -175,7 +183,7 @@ public class UserHub_carousel extends AppCompatActivity
         scrollView = (ScrollView) findViewById(R.id.scrollView);
 
         checkout_icon = (ImageView) findViewById(R.id.checkout_icon);
-        order_history = (ImageView) findViewById(R.id.order_history);
+       // order_history = (ImageView) findViewById(R.id.order_history);
 
         checkout_icon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -186,14 +194,14 @@ public class UserHub_carousel extends AppCompatActivity
             }
         });
 
-        order_history.setOnClickListener(new View.OnClickListener() {
+/*        order_history.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //Intent intent = new Intent(DetailActivity.this, Checkout.class);            //Goes to receipt
                 Intent intent = new Intent(getApplicationContext(), order_tracking.class);            //Goes to receipt
                 startActivity(intent);
             }
-        });
+        });*/
 
 
 /*        // in Activity Context
@@ -584,11 +592,11 @@ public class UserHub_carousel extends AppCompatActivity
 
     public void locationTasks(){
         ImageView checkout_icon = (ImageView) findViewById(R.id.checkout_icon);
-        ImageView order_history = (ImageView) findViewById(R.id.order_history);
+        //ImageView order_history = (ImageView) findViewById(R.id.order_history);
 
         //Setting the icons to the secondary color (accent) using the Material Design Palette
         checkout_icon.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.colorSecondary));
-        order_history.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.colorSecondary));
+        //order_history.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.colorSecondary));
 
 
         broadcastReceiver = new BroadcastReceiver() {

@@ -28,9 +28,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/detail_card_layout"
-            android:paddingLeft="30dp"
+            android:paddingStart="30dp"
             android:paddingBottom="20dp"
-            android:paddingRight="30dp">
+            android:paddingEnd="30dp">
 
 <!--            <ImageView
                 android:id="@+id/head"

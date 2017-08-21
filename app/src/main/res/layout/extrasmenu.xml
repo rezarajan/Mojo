@@ -20,26 +20,40 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
+                android:layout_marginStart="36dp"
+                android:layout_marginTop="24dp"
+                android:fontFamily="@font/montserrat_bold"
                 android:text="Item Name"
-                android:textSize="24sp"
                 android:textColor="@color/colorPrimaryDark"
-                android:layout_margin="36dp"/>
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/itemCost"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
+                android:layout_marginEnd="36dp"
+                android:layout_marginTop="24dp"
+                android:fontFamily="@font/montserrat_bold"
                 android:text="$0.00"
-                android:textSize="24sp"
                 android:textColor="@color/colorPrimaryDark"
-                android:layout_margin="36dp"/>
+                android:textSize="18sp" />
+
+            <View
+                android:id="@+id/separator"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@+id/itemName"
+                android:background="@color/colorPrimaryDark"
+                android:layout_marginTop="8dp"
+                android:alpha="0.8"/>
 
             <android.support.v4.widget.NestedScrollView
                 android:id="@+id/scrollViewExtras"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@+id/itemName">
+                android:layout_below="@+id/separator"
+                android:layout_marginBottom="56dp">
 
 <!--                    <LinearLayout
                         android:id="@+id/detail_list_container"
@@ -56,25 +70,25 @@
 
                     <include layout="@layout/extra_item" />
 
-<include layout="@layout/extra_item" />
+                    <include layout="@layout/extra_item" />
 
-<include layout="@layout/extra_item" />
+                    <include layout="@layout/extra_item" />
 
-<include layout="@layout/extra_item" />
+                    <include layout="@layout/extra_item" />
 
-<include layout="@layout/extra_item" />
+                    <include layout="@layout/extra_item" />
 
-<include layout="@layout/extra_item" />
+                    <include layout="@layout/extra_item" />
 
-<include layout="@layout/extra_item" />
+                    <include layout="@layout/extra_item" />
 
-<include layout="@layout/extra_item" />
+                    <include layout="@layout/extra_item" />
 
-<include layout="@layout/extra_item" />
+                    <include layout="@layout/extra_item" />
 
-<include layout="@layout/extra_item" />
+                    <include layout="@layout/extra_item" />
 
-<include layout="@layout/extra_item" />
+                    <include layout="@layout/extra_item" />
 
 
                 </LinearLayout>

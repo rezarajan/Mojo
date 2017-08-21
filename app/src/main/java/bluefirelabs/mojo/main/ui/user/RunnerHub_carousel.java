@@ -1,5 +1,6 @@
 package bluefirelabs.mojo.main.ui.user;
 
+import android.Manifest;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
@@ -102,7 +103,6 @@ public class RunnerHub_carousel extends AppCompatActivity
     private NavigationView nvDrawer;
 
 
-
     public static final String EXTRA_RESTAURANT_LOGO = "restaurantLogo";
     public static final String EXTRA_RESTAURANT_NAME = "restaurantName";
     public static final String EXTRA_RESTAURANT_COLOR = "restaurantColor";
@@ -146,7 +146,7 @@ public class RunnerHub_carousel extends AppCompatActivity
         scrollView = (ScrollView) findViewById(R.id.scrollView);
 
         checkout_icon = (ImageView) findViewById(R.id.checkout_icon);
-        order_history = (ImageView) findViewById(R.id.order_history);
+        //order_history = (ImageView) findViewById(R.id.order_history);
 
         checkout_icon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -157,14 +157,14 @@ public class RunnerHub_carousel extends AppCompatActivity
             }
         });
 
-        order_history.setOnClickListener(new View.OnClickListener() {
+/*        order_history.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //Intent intent = new Intent(DetailActivity.this, Checkout.class);            //Goes to receipt
                 Intent intent = new Intent(getApplicationContext(), order_tracking.class);            //Goes to receipt
                 startActivity(intent);
             }
-        });
+        });*/
 
 
 /*        // in Activity Context
@@ -213,14 +213,7 @@ public class RunnerHub_carousel extends AppCompatActivity
         locationTasks();
 
 
-
-
-
-
     }
-
-
-
 
 
     private void setupDrawerContent(NavigationView navigationView) {
@@ -239,7 +232,7 @@ public class RunnerHub_carousel extends AppCompatActivity
         //Fragment fragment = null;
         Class fragmentClass;
         Intent intent;
-        switch(menuItem.getItemId()) {
+        switch (menuItem.getItemId()) {
             case R.id.nav_logout:
                 //Logout
 
@@ -310,7 +303,6 @@ public class RunnerHub_carousel extends AppCompatActivity
     }
 
 
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // The action bar home/up action should open or close the drawer.
@@ -337,7 +329,7 @@ public class RunnerHub_carousel extends AppCompatActivity
         //restaurantCards restaurantCards = (bluefirelabs.mojo.fragments.restaurantCards) fm.findFragmentByTag("restaurantCards");
         FragmentTransaction ft = fm.beginTransaction();
         //Log.d("Position back", String.valueOf(cardPosition));
-        if(detailActivity!=null){
+        if (detailActivity != null) {
             //ft.remove(detailActivity);
             //ft.add(R.id.fragment2, restaurantCards, "restaurantCards");
             ft.detach(detailActivity);      //removes the detailActivity from before the receipt
@@ -367,19 +359,18 @@ public class RunnerHub_carousel extends AppCompatActivity
         restaurantCards restaurantCards = (bluefirelabs.mojo.fragments.restaurantCards) fm.findFragmentByTag("restaurantCards");
         FragmentTransaction ft = fm.beginTransaction();
         Log.d("Position back", String.valueOf(cardPosition));
-        if(detailActivity!=null && restaurantCards != null){
+        if (detailActivity != null && restaurantCards != null) {
             //ft.remove(detailActivity);
             //ft.add(R.id.fragment2, restaurantCards, "restaurantCards");
-                ft.setCustomAnimations(R.animator.slide_out_down, R.animator.slide_in_up);
-                ft.remove(detailActivity);      //Using remove here so that in the next case, when the user wants to exit the app detail activity will show null
-                                                //If detach was used, then detailActivity will still remain in the Fragment Manager, which results in an error
-                ft.attach(restaurantCards);
-                ft.commit();
-                locationTasks();
+            ft.setCustomAnimations(R.animator.slide_out_down, R.animator.slide_in_up);
+            ft.remove(detailActivity);      //Using remove here so that in the next case, when the user wants to exit the app detail activity will show null
+            //If detach was used, then detailActivity will still remain in the Fragment Manager, which results in an error
+            ft.attach(restaurantCards);
+            ft.commit();
+            locationTasks();
 
-        }
-        else if(detailActivity==null && restaurantCards != null){
-                finish();
+        } else if (detailActivity == null && restaurantCards != null) {
+            finish();
 
         }
 
@@ -389,6 +380,16 @@ public class RunnerHub_carousel extends AppCompatActivity
     public void getLocation() {
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         provider = locationManager.getBestProvider(new Criteria(), false);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
         locationManager.requestLocationUpdates(provider, 400, 1, this);
 
 
@@ -484,11 +485,11 @@ public class RunnerHub_carousel extends AppCompatActivity
 
     public void locationTasks(){
         ImageView checkout_icon = (ImageView) findViewById(R.id.checkout_icon);
-        ImageView order_history = (ImageView) findViewById(R.id.order_history);
+        //ImageView order_history = (ImageView) findViewById(R.id.order_history);
 
         //Setting the icons to the secondary color (accent) using the Material Design Palette
         checkout_icon.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.colorSecondary));
-        order_history.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.colorSecondary));
+        //order_history.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.colorSecondary));
 
 
         broadcastReceiver = new BroadcastReceiver() {

@@ -16,14 +16,13 @@
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp">
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="24sp"
                 android:background="@color/colorAccentBackground"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
                 android:id="@+id/restaurant_separator" />
 
             <TextView
@@ -35,7 +34,7 @@
                 android:fontFamily="@font/montserrat"
                 android:text="Restaurant"
                 android:textColor="@color/colorPrimaryDark"
-                android:textSize="24sp"
+                android:textSize="16sp"
                 android:textStyle="bold" />
 
         </FrameLayout>
@@ -99,11 +98,11 @@
                 android:layout_height="wrap_content"
                 android:layout_toEndOf="@id/item_quantity"
                 android:fontFamily="@font/montserrat"
-                android:paddingStart="30dp"
+                android:paddingStart="36dp"
                 android:paddingTop="8dp"
                 android:text="Item"
                 android:textColor="@color/black"
-                android:textSize="18dp" />
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/remove_item"
@@ -124,12 +123,12 @@
                 android:layout_alignBottom="@id/item_dets"
                 android:layout_alignParentEnd="true"
                 android:fontFamily="@font/montserrat"
-                android:paddingEnd="30dp"
+                android:paddingEnd="36dp"
                 android:paddingStart="8dp"
                 android:paddingTop="4dp"
                 android:text="$1.00"
                 android:textColor="@color/black"
-                android:textSize="14dp" />
+                android:textSize="16sp" />
 
 
             <!--            <TextView
@@ -154,11 +153,11 @@
                 android:layout_below="@id/item_cost"
                 android:fontFamily="@font/montserrat"
                 android:paddingBottom="8dp"
-                android:paddingStart="30dp"
+                android:paddingStart="36dp"
                 android:paddingTop="4dp"
                 android:text="Description"
                 android:textColor="@color/black"
-                android:textSize="12sp" />
+                android:textSize="16sp" />
 
             <!--            <Button
                             android:id="@+id/add_to_cart"
