@@ -51,6 +51,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import com.squareup.picasso.Picasso;
+import com.yarolegovich.discretescrollview.DiscreteScrollView;
+import com.yarolegovich.discretescrollview.Orientation;
+import com.yarolegovich.discretescrollview.transform.Pivot;
+import com.yarolegovich.discretescrollview.transform.ScaleTransformer;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -88,7 +92,7 @@ public class UserHub_carousel extends AppCompatActivity
 
     int cardPosition = 0;
 
-    private RecyclerView mRestaurantRecyclerView;
+    private DiscreteScrollView mRestaurantRecyclerView;
     private LinearLayoutManager mLinearLayoutManager;
     CarouselLayoutManager layoutManager;
 
@@ -696,7 +700,7 @@ public class UserHub_carousel extends AppCompatActivity
     }
 
     public void populateView(final String venue){
-        mRestaurantRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        mRestaurantRecyclerView = findViewById(R.id.recycler_view);
 
         CenterZoomLayoutManager centerZoomLayoutManager = new CenterZoomLayoutManager(this);
         centerZoomLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
@@ -860,15 +864,23 @@ public class UserHub_carousel extends AppCompatActivity
             public void onItemRangeInserted(int positionStart, int itemCount) {
                 super.onItemRangeInserted(positionStart, itemCount);
                 int restaurantCount = mFirebaseAdapter.getItemCount();
-                mRestaurantRecyclerView.scrollToPosition(cardPosition);
+                //mRestaurantRecyclerView.scrollToPosition(cardPosition);
 
             }
         });
 
+        mRestaurantRecyclerView.setOrientation(Orientation.HORIZONTAL); //Sets an orientation of the view
+        mRestaurantRecyclerView.setOffscreenItems(3); //Reserve extra space equal to (childSize * count) on each side of the view
+        mRestaurantRecyclerView.setItemTransformer(new ScaleTransformer.Builder()
+                .setMaxScale(1.0f)
+                .setMinScale(0.8f)
+                .setPivotX(Pivot.X.CENTER) // CENTER is a default one
+                .setPivotY(Pivot.Y.BOTTOM) // CENTER is a default one
+                .build());
         mRestaurantRecyclerView.setAdapter(mFirebaseAdapter);
         //mRestaurantRecyclerView.setLayoutManager(turnLayoutManager);
         //mRestaurantRecyclerView.setLayoutManager(mLinearLayoutManager);
-        mRestaurantRecyclerView.setLayoutManager(centerZoomLayoutManager);
+        //mRestaurantRecyclerView.setLayoutManager(centerZoomLayoutManager);
 
         //SnapHelper helper = new LinearSnapHelper();
         LinearSnapHelper helper = new LinearSnapHelper() {
