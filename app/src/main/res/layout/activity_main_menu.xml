@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:sothree="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:background="@color/colorPrimary"
     android:layout_width="match_parent"
@@ -77,14 +77,29 @@
                 tools:layout="@layout/maininfo"
                 android:layout_marginBottom="16dp"/>
 
-            <LinearLayout
-                android:id="@+id/fragment1"
+            <com.sothree.slidinguppanel.SlidingUpPanelLayout
+                android:id="@+id/sliding_layout_frag1"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_gravity="center_horizontal"
-                android:orientation="vertical">
+                android:gravity="bottom"
+                android:background="#00000000"
+                sothree:umanoPanelHeight="30dp"
+                sothree:umanoShadowHeight="0dp"
+                sothree:umanoOverlay="true">
 
-            </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/fragment1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_horizontal"
+                    android:orientation="vertical">
+
+                </LinearLayout>
+
+                <include layout="@layout/ordertrackingcard" />
+            </com.sothree.slidinguppanel.SlidingUpPanelLayout>
+
+
 
 
         </LinearLayout>

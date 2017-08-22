@@ -112,7 +112,8 @@ public class detailActivity extends Fragment{
             //enables the scrollview in the sliding panel
             slidingUpPanelLayout.setScrollableView(nestedScrollViewExtras);
 
-            slidingUpPanelLayout.setTouchEnabled(false);
+            //enables/disables the panel to be swiped in or out
+            slidingUpPanelLayout.setTouchEnabled(true);
 
 
             Log.d("Colour", String.valueOf(restaurantColor));

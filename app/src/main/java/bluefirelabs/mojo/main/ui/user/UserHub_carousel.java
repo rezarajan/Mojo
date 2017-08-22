@@ -110,7 +110,7 @@ public class UserHub_carousel extends AppCompatActivity
     private DrawerLayout mDrawer;
     private NavigationView nvDrawer;
 
-    private SlidingUpPanelLayout slidingUpPanelLayout;
+    private SlidingUpPanelLayout slidingUpPanelLayout_frag1, slidingUpPanelLayout_frag2;
 
     private CardView mainInfo;
 
@@ -176,9 +176,18 @@ public class UserHub_carousel extends AppCompatActivity
 
         mojoHamburger.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.colorSecondary));
 
+        ScrollView ScrollViewHistory = (ScrollView) findViewById(R.id.scrollViewHistory);
 
-        slidingUpPanelLayout = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout_frag2);
-        slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+        slidingUpPanelLayout_frag1 = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout_frag1);
+        slidingUpPanelLayout_frag2 = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout_frag2);
+        slidingUpPanelLayout_frag2.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+        slidingUpPanelLayout_frag2.setVisibility(View.GONE);
+
+        //enables the scrollview in the sliding panel
+        slidingUpPanelLayout_frag1.setScrollableView(ScrollViewHistory);
+
+        //enables/disables the panel to be swiped in or out
+        slidingUpPanelLayout_frag1.setTouchEnabled(true);
 
         location_indicator = (TextView) findViewById(R.id.location_indicator);
 
@@ -426,7 +435,7 @@ public class UserHub_carousel extends AppCompatActivity
         Log.d("Position back", String.valueOf(cardPosition));
         if (detailActivity != null && restaurantCards != null) {
 
-            if (slidingUpPanelLayout.getPanelState().equals(SlidingUpPanelLayout.PanelState.COLLAPSED)) {
+            if (slidingUpPanelLayout_frag2.getPanelState().equals(SlidingUpPanelLayout.PanelState.COLLAPSED)) {
                 //ft.remove(detailActivity);
                 //ft.add(R.id.fragment2, restaurantCards, "restaurantCards");
                 ft.setCustomAnimations(R.animator.slide_out_down, R.animator.slide_in_up);
@@ -436,14 +445,22 @@ public class UserHub_carousel extends AppCompatActivity
                 ft.commit();
                 locationTasks();
                 scrollView.setVisibility(View.GONE);
+                slidingUpPanelLayout_frag2.setVisibility(View.GONE);
+                slidingUpPanelLayout_frag1.setVisibility(View.VISIBLE);
 
             } else {
-                //resetting the panel to a collapsed state
-                slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+                //resetting the panel to a collapsed state on second fragment
+                slidingUpPanelLayout_frag2.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
             }
         } else if (detailActivity == null && restaurantCards != null) {
-            finish();
+            if (slidingUpPanelLayout_frag1.getPanelState().equals(SlidingUpPanelLayout.PanelState.COLLAPSED)) {
+                finish();
 
+            }
+            else {
+                //resetting the panel to a collapsed state on first fragment
+                slidingUpPanelLayout_frag1.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+            }
         }
 
         if (barcodeConfirmer != null) {
@@ -456,6 +473,9 @@ public class UserHub_carousel extends AppCompatActivity
             ft.add(R.id.fragment1, restaurantCards_fragment, "restaurantCards");
 
             ft.commit();
+
+            slidingUpPanelLayout_frag1.setVisibility(View.VISIBLE);
+
             locationTasks();
             scrollView.setVisibility(View.GONE);
         }
@@ -731,7 +751,6 @@ public class UserHub_carousel extends AppCompatActivity
             @Override
             public void onBindViewHolder(FirebaseViewPagerAdapter.RecyclerViewHolder viewHolder, int position) {
                 super.onBindViewHolder(viewHolder, position);
-
             }
 
 
@@ -806,7 +825,7 @@ public class UserHub_carousel extends AppCompatActivity
                         cardPosition = position;
                         Log.d("Position", String.valueOf(cardPosition));
 
-
+                        slidingUpPanelLayout_frag2.setVisibility(View.VISIBLE);
                         scrollView.setVisibility(View.VISIBLE);
 
                         FragmentTransaction ft = fm.beginTransaction();
@@ -824,33 +843,10 @@ public class UserHub_carousel extends AppCompatActivity
 
                         ft.setCustomAnimations(R.animator.slide_in_up, R.animator.slide_out_down);
 
-
                         ft.add(R.id.fragment2, detailActivity, "detailActivity");
                         ft.commit();
 
-/*
-                        checkout_icon_dummy = (View) findViewById(R.id.checkout_icon_dummy);
-                        order_history_dummy = (View) findViewById(R.id.order_history_dummy);
-
-
-                        checkout_icon_dummy.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                //Intent intent = new Intent(DetailActivity.this, Checkout.class);            //Goes to receipt
-                                Intent intent = new Intent(getApplicationContext(), bluefirelabs.mojo.main.ui.checkout.Checkout.class);            //Goes to receipt
-                                startActivity(intent);
-                            }
-                        });
-
-                        order_history_dummy.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                //Intent intent = new Intent(DetailActivity.this, Checkout.class);            //Goes to receipt
-                                Intent intent = new Intent(getApplicationContext(), order_tracking.class);            //Goes to receipt
-                                startActivity(intent);
-                            }
-                        });
-*/
+                        slidingUpPanelLayout_frag1.setVisibility(View.GONE);
 
 
                     }
@@ -915,10 +911,6 @@ public class UserHub_carousel extends AppCompatActivity
             }
         };
         helper.attachToRecyclerView(mRestaurantRecyclerView);
-
-
-
-
 
 
 
