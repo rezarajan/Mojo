@@ -1,5 +1,6 @@
 package bluefirelabs.mojo.main.ui.user;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -95,7 +96,7 @@ public class UserHub extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        View header=navigationView.getHeaderView(0);
+        View header = navigationView.getHeaderView(0);
 
         broadcastReceiver = new BroadcastReceiver() {
             @Override
@@ -106,7 +107,7 @@ public class UserHub extends AppCompatActivity
 
         registerReceiver(broadcastReceiver, new IntentFilter(MyFirebaseInstanceIDService.TOKEN_BROADCAST));
 
-        if(SharedPrefManager.getInstance(this).getToken() != null){
+        if (SharedPrefManager.getInstance(this).getToken() != null) {
             Log.d("FCM Token: ", SharedPrefManager.getInstance(this).getToken());
         }
 
@@ -149,14 +150,14 @@ public class UserHub extends AppCompatActivity
         }
         locationManager.requestLocationUpdates(provider, 400, 1, this);
         Location myLocation = locationManager.getLastKnownLocation(provider);
-        if(myLocation == null){
+        if (myLocation == null) {
             getLocation();
         } else {
             lat = myLocation.getLatitude();
             lng = myLocation.getLongitude();
         }
 
-        new GetAddress().execute(String.format("%.4f,%.4f",lat,lng));
+        new GetAddress().execute(String.format("%.4f,%.4f", lat, lng));
 
         DatabaseReference ref_users = FirebaseDatabase.getInstance().getReference("geofire").child("users");
         final GeoFire geoFire_users = new GeoFire(ref_users);
@@ -167,7 +168,7 @@ public class UserHub extends AppCompatActivity
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
 
         String uid = "";
-        if(firebaseAuth.getCurrentUser() != null){
+        if (firebaseAuth.getCurrentUser() != null) {
             uid = firebaseAuth.getCurrentUser().getUid();
 
             geoFire_users.setLocation(uid, new GeoLocation(lat, lng), new GeoFire.CompletionListener() {
@@ -272,7 +273,7 @@ public class UserHub extends AppCompatActivity
             Intent intent = new Intent(this, Sign_In.class);
             startActivity(intent);
             finish();
-        }  else if (id == R.id.nav_upload) {
+        } else if (id == R.id.nav_upload) {
             Intent intent = new Intent(this, uploadImage.class);
             startActivity(intent);
 
@@ -305,6 +306,16 @@ public class UserHub extends AppCompatActivity
     public void getLocation() {
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         provider = locationManager.getBestProvider(new Criteria(), false);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
         locationManager.requestLocationUpdates(provider, 400, 1, this);
 
 

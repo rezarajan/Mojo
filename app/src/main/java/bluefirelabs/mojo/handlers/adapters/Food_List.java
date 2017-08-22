@@ -17,7 +17,7 @@ public class Food_List {
     private String result;
     private String open;
     private String parent;
-    private long cost;
+    private double cost;
 
     public Food_List(){
 
@@ -103,11 +103,11 @@ public class Food_List {
         this.parent = parent;
     }
 
-    public long getCost() {
+    public double getCost() {
         return cost;
     }
 
-    public void setCost(long cost) {
+    public void setCost(double cost) {
         this.cost = cost;
     }
 

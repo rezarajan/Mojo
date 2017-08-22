@@ -28,6 +28,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import com.squareup.picasso.Picasso;
 
+import java.text.DecimalFormat;
 import java.util.Map;
 
 import bluefirelabs.mojo.R;
@@ -70,6 +71,7 @@ public class detailActivity extends Fragment{
     int cardPosition = 0;
 
     private String parent = "";
+    DecimalFormat df = new DecimalFormat("#.##");
 
 
     @Override
@@ -374,7 +376,7 @@ public class detailActivity extends Fragment{
 
     public void populateView(final DatabaseReference reference){
 
-        LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(getContext());
+        final LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(getContext());
         mLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 
         //DatabaseReference mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
@@ -387,33 +389,61 @@ public class detailActivity extends Fragment{
             @Override
             public void onBindViewHolder(FirebaseAdapterExtras.RecyclerViewHolder viewHolder, int position) {
                 super.onBindViewHolder(viewHolder, position);
-
             }
 
 
             @Override
             protected void populateViewHolder(final FirebaseAdapterExtras.RecyclerViewHolder viewHolder, final Food_List model, final int position) {
 
+
+/*                final MyCallback myCallback = new MyCallback() {
+                    @Override
+                    public void callbackCall(final String restaurant) {
+
+                    }
+                };
+
+                firebaseTask(myCallback);*/
+
+
                 if(parent.equals(model.getParent())){
                     parent = checkString(model.getParent());
                     Log.d("Parent", parent);
 
-                    viewHolder.extraTypeHolder.setVisibility(View.GONE);
+                    //removing the separator for items with similar parents
+                    if(position == 0){
+                        viewHolder.extraTypeHolder.setVisibility(View.VISIBLE);
+
+                    }
+                    else {
+                        viewHolder.extraTypeHolder.setVisibility(View.GONE);
+
+                    }
+                    if(model.getName() != null){
+
+                        viewHolder.extraParent.setText(model.getParent());
+                        Log.d("Cost", Double.toString(model.getCost()));
+                        viewHolder.extraName.setText(model.getName() + " • $" +  String.valueOf(df.format(model.getCost())));   //cost is formatted as 123 = 1.23
+
+                    }
                 }
                 else{
                     parent = checkString(model.getParent());
 
                     if(model.getName() != null){
+                        //adding the separator for items with different parents
                         viewHolder.extraTypeHolder.setVisibility(View.VISIBLE);
 
                         viewHolder.extraParent.setText(model.getParent());
-                        viewHolder.extraName.setText(model.getName());
+                        viewHolder.extraName.setText(model.getName() + " • $" +  String.valueOf(df.format(model.getCost())));
+
                     }
                 }
 
                 //viewHolder.openIndicatorText.setText(model.getOpen());
                 //viewHolder.extraCost.setText("$" + String.valueOf(model.getCost()));
                 //viewHolder.averageTime.setText(model.getAverageTime());
+
 
             }
         };
@@ -424,48 +454,14 @@ public class detailActivity extends Fragment{
                 super.onItemRangeInserted(positionStart, itemCount);
                 int restaurantCount = mFirebaseAdapter.getItemCount();
                 //mRestaurantRecyclerView.scrollToPosition(cardPosition);
+                mRestaurantRecyclerView.setLayoutManager(mLinearLayoutManager);
+                mRestaurantRecyclerView.setAdapter(mFirebaseAdapter);
 
             }
         });
 
-        mRestaurantRecyclerView.setAdapter(mFirebaseAdapter);
-        //mRestaurantRecyclerView.setLayoutManager(turnLayoutManager);
-        //mRestaurantRecyclerView.setLayoutManager(mLinearLayoutManager);
-        mRestaurantRecyclerView.setLayoutManager(mLinearLayoutManager);
 
-        //SnapHelper helper = new LinearSnapHelper();
-/*        LinearSnapHelper helper = new LinearSnapHelper() {
-            @Override
-            public int findTargetSnapPosition(RecyclerView.LayoutManager layoutManager, int velocityX, int velocityY) {
-                View centerView = findSnapView(layoutManager);
-                if (centerView == null)
-                    return RecyclerView.NO_POSITION;
 
-                int position = layoutManager.getPosition(centerView);
-                int targetPosition = -1;
-                if (layoutManager.canScrollHorizontally()) {
-                    if (velocityX < 0) {
-                        targetPosition = position - 1;
-                    } else {
-                        targetPosition = position + 1;
-                    }
-                }
-
-                if (layoutManager.canScrollVertically()) {
-                    if (velocityY < 0) {
-                        targetPosition = position - 1;
-                    } else {
-                        targetPosition = position + 1;
-                    }
-                }
-
-                final int firstItem = 0;
-                final int lastItem = layoutManager.getItemCount() - 1;
-                targetPosition = Math.min(lastItem, Math.max(targetPosition, firstItem));
-                return targetPosition;
-            }
-        };
-        helper.attachToRecyclerView(mRestaurantRecyclerView);*/
 
     }
 
