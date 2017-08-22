@@ -27,7 +27,6 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.LinearSnapHelper;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SnapHelper;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
@@ -699,11 +698,16 @@ public class UserHub_carousel extends AppCompatActivity
     public void populateView(final String venue){
         mRestaurantRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
+        CenterZoomLayoutManager centerZoomLayoutManager = new CenterZoomLayoutManager(this);
+        centerZoomLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+
+        mLinearLayoutManager = new LinearLayoutManager(this);
+        mLinearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
 
         turnLayoutManager = new TurnLayoutManager(UserHub_carousel.this,              // provide a context
                 TurnLayoutManager.Gravity.END,        // from which direction should the list items orbit?
                 TurnLayoutManager.Orientation.HORIZONTAL, // Is this a vertical or horizontal scroll?
-                4600,               // The radius of the item rotation
+                0,               // The radius of the item rotation
                 72,                 // Extra offset distance
                 false);        // should list items angle towards the center? true/false.
 
@@ -862,9 +866,42 @@ public class UserHub_carousel extends AppCompatActivity
         });
 
         mRestaurantRecyclerView.setAdapter(mFirebaseAdapter);
-        mRestaurantRecyclerView.setLayoutManager(turnLayoutManager);
+        //mRestaurantRecyclerView.setLayoutManager(turnLayoutManager);
+        //mRestaurantRecyclerView.setLayoutManager(mLinearLayoutManager);
+        mRestaurantRecyclerView.setLayoutManager(centerZoomLayoutManager);
 
-        SnapHelper helper = new LinearSnapHelper();
+        //SnapHelper helper = new LinearSnapHelper();
+        LinearSnapHelper helper = new LinearSnapHelper() {
+            @Override
+            public int findTargetSnapPosition(RecyclerView.LayoutManager layoutManager, int velocityX, int velocityY) {
+                View centerView = findSnapView(layoutManager);
+                if (centerView == null)
+                    return RecyclerView.NO_POSITION;
+
+                int position = layoutManager.getPosition(centerView);
+                int targetPosition = -1;
+                if (layoutManager.canScrollHorizontally()) {
+                    if (velocityX < 0) {
+                        targetPosition = position - 1;
+                    } else {
+                        targetPosition = position + 1;
+                    }
+                }
+
+                if (layoutManager.canScrollVertically()) {
+                    if (velocityY < 0) {
+                        targetPosition = position - 1;
+                    } else {
+                        targetPosition = position + 1;
+                    }
+                }
+
+                final int firstItem = 0;
+                final int lastItem = layoutManager.getItemCount() - 1;
+                targetPosition = Math.min(lastItem, Math.max(targetPosition, firstItem));
+                return targetPosition;
+            }
+        };
         helper.attachToRecyclerView(mRestaurantRecyclerView);
 
 

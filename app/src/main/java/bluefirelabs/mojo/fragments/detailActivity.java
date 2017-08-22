@@ -6,6 +6,8 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.NestedScrollView;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -28,7 +31,10 @@ import com.squareup.picasso.Picasso;
 import java.util.Map;
 
 import bluefirelabs.mojo.R;
+import bluefirelabs.mojo.handlers.adapters.FirebaseAdapterExtras;
+import bluefirelabs.mojo.handlers.adapters.Food_List;
 import bluefirelabs.mojo.main.transition.MyCallback;
+import bluefirelabs.mojo.main.ui.user.CenterZoomLayoutManager;
 import database.DatabaseHelper;
 
 /**
@@ -57,8 +63,12 @@ public class detailActivity extends Fragment{
 
     private SlidingUpPanelLayout slidingUpPanelLayout;
 
-
     DatabaseHelper myDb;
+
+    private FirebaseRecyclerAdapter<Food_List, FirebaseAdapterExtras.RecyclerViewHolder> mFirebaseAdapter;
+    private RecyclerView mRestaurantRecyclerView;
+
+    int cardPosition = 0;
 
 
     @Override
@@ -108,6 +118,8 @@ public class detailActivity extends Fragment{
 
             Picasso.with(getContext()).load(imageUrl).into(imageView);
 
+            //referencing the recyclerview in the sliding panel from the parent activity
+            mRestaurantRecyclerView = (RecyclerView) getActivity().findViewById(R.id.recycler_view_extras);
 
 
 
@@ -280,6 +292,9 @@ public class detailActivity extends Fragment{
                                                                                     Snackbar.LENGTH_LONG)
                                                                                     .setAction("Action", null).show();
 
+                                                                            //populating the extras view
+                                                                            populateView(reference);
+
                                                                             //brings up the sliding panel if the item has extras
                                                                             slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
 
@@ -351,6 +366,103 @@ public class detailActivity extends Fragment{
         };
 
         firebaseTask(myCallback);
+
+    }
+
+
+    public void populateView(final DatabaseReference reference){
+
+        CenterZoomLayoutManager centerZoomLayoutManager = new CenterZoomLayoutManager(getContext());
+        centerZoomLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+
+        LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(getContext());
+        mLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+
+
+
+
+        //DatabaseReference mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
+        mFirebaseAdapter = new FirebaseRecyclerAdapter<Food_List, FirebaseAdapterExtras.RecyclerViewHolder>(
+                Food_List.class,
+                R.layout.extra_item,
+                FirebaseAdapterExtras.RecyclerViewHolder.class,
+                reference.child("extras")
+        ) {
+            @Override
+            public void onBindViewHolder(FirebaseAdapterExtras.RecyclerViewHolder viewHolder, int position) {
+                super.onBindViewHolder(viewHolder, position);
+
+            }
+
+
+            @Override
+            protected void populateViewHolder(final FirebaseAdapterExtras.RecyclerViewHolder viewHolder, final Food_List model, final int position) {
+
+                if(model.getName() != null){
+                    viewHolder.extraName.setText(model.getName());
+                }
+
+                //viewHolder.openIndicatorText.setText(model.getOpen());
+                //viewHolder.extraCost.setText("$" + String.valueOf(model.getCost()));
+                //viewHolder.averageTime.setText(model.getAverageTime());
+
+            }
+        };
+
+        mFirebaseAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver(){
+            @Override
+            public void onItemRangeInserted(int positionStart, int itemCount) {
+                super.onItemRangeInserted(positionStart, itemCount);
+                int restaurantCount = mFirebaseAdapter.getItemCount();
+                //mRestaurantRecyclerView.scrollToPosition(cardPosition);
+
+            }
+        });
+
+        mRestaurantRecyclerView.setAdapter(mFirebaseAdapter);
+        //mRestaurantRecyclerView.setLayoutManager(turnLayoutManager);
+        //mRestaurantRecyclerView.setLayoutManager(mLinearLayoutManager);
+        mRestaurantRecyclerView.setLayoutManager(centerZoomLayoutManager);
+
+        //SnapHelper helper = new LinearSnapHelper();
+/*        LinearSnapHelper helper = new LinearSnapHelper() {
+            @Override
+            public int findTargetSnapPosition(RecyclerView.LayoutManager layoutManager, int velocityX, int velocityY) {
+                View centerView = findSnapView(layoutManager);
+                if (centerView == null)
+                    return RecyclerView.NO_POSITION;
+
+                int position = layoutManager.getPosition(centerView);
+                int targetPosition = -1;
+                if (layoutManager.canScrollHorizontally()) {
+                    if (velocityX < 0) {
+                        targetPosition = position - 1;
+                    } else {
+                        targetPosition = position + 1;
+                    }
+                }
+
+                if (layoutManager.canScrollVertically()) {
+                    if (velocityY < 0) {
+                        targetPosition = position - 1;
+                    } else {
+                        targetPosition = position + 1;
+                    }
+                }
+
+                final int firstItem = 0;
+                final int lastItem = layoutManager.getItemCount() - 1;
+                targetPosition = Math.min(lastItem, Math.max(targetPosition, firstItem));
+                return targetPosition;
+            }
+        };
+        helper.attachToRecyclerView(mRestaurantRecyclerView);*/
+
+
+
+
+
+
 
     }
 
