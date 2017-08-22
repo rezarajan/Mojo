@@ -69,6 +69,8 @@ public class detailActivity extends Fragment{
 
     int cardPosition = 0;
 
+    private String parent = "";
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -391,9 +393,21 @@ public class detailActivity extends Fragment{
             @Override
             protected void populateViewHolder(final FirebaseAdapterExtras.RecyclerViewHolder viewHolder, final Food_List model, final int position) {
 
-                if(model.getName() != null){
-                    viewHolder.extraParent.setText(model.getParent());
-                    viewHolder.extraName.setText(model.getName());
+                if(parent.equals(model.getParent())){
+                    parent = checkString(model.getParent());
+                    Log.d("Parent", parent);
+
+                    viewHolder.extraTypeHolder.setVisibility(View.GONE);
+                }
+                else{
+                    parent = checkString(model.getParent());
+
+                    if(model.getName() != null){
+                        viewHolder.extraTypeHolder.setVisibility(View.VISIBLE);
+
+                        viewHolder.extraParent.setText(model.getParent());
+                        viewHolder.extraName.setText(model.getName());
+                    }
                 }
 
                 //viewHolder.openIndicatorText.setText(model.getOpen());
@@ -452,12 +466,11 @@ public class detailActivity extends Fragment{
         };
         helper.attachToRecyclerView(mRestaurantRecyclerView);*/
 
+    }
 
-
-
-
-
-
+    private String checkString(String extraType) {
+        //handle value
+        return extraType;
     }
 
 }
