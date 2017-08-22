@@ -805,7 +805,7 @@ public class UserHub_carousel extends AppCompatActivity
 */
 
 
-                        if (!slidingUpPanelLayout_frag2.getPanelState().equals(SlidingUpPanelLayout.PanelState.COLLAPSED)) {
+                        if (slidingUpPanelLayout_frag1.getPanelState().equals(SlidingUpPanelLayout.PanelState.COLLAPSED)) {
 
                         Intent intent = new Intent(getApplicationContext(), DetailActivity.class);
                         intent.putExtra(DetailActivity.EXTRA_RESTAURANT_LOGO, model.getIcon());
