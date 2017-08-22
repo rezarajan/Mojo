@@ -870,12 +870,12 @@ public class UserHub_carousel extends AppCompatActivity
         });
 
         mRestaurantRecyclerView.setOrientation(Orientation.HORIZONTAL); //Sets an orientation of the view
-        mRestaurantRecyclerView.setOffscreenItems(3); //Reserve extra space equal to (childSize * count) on each side of the view
+        mRestaurantRecyclerView.setOffscreenItems(2); //Reserve extra space equal to (childSize * count) on each side of the view
         mRestaurantRecyclerView.setItemTransformer(new ScaleTransformer.Builder()
                 .setMaxScale(1.0f)
-                .setMinScale(0.8f)
+                .setMinScale(0.92f)
                 .setPivotX(Pivot.X.CENTER) // CENTER is a default one
-                .setPivotY(Pivot.Y.BOTTOM) // CENTER is a default one
+                .setPivotY(Pivot.Y.CENTER) // CENTER is a default one
                 .build());
         mRestaurantRecyclerView.setAdapter(mFirebaseAdapter);
         //mRestaurantRecyclerView.setLayoutManager(turnLayoutManager);
