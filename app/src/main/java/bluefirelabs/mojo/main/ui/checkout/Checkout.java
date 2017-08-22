@@ -1,7 +1,6 @@
 package bluefirelabs.mojo.main.ui.checkout;
 
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
@@ -37,7 +36,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import bluefirelabs.mojo.R;
-import bluefirelabs.mojo.menu.editcheckout;
 import database.DatabaseHelper;
 
 public class Checkout extends FragmentActivity {
@@ -495,13 +493,13 @@ public class Checkout extends FragmentActivity {
             data.moveToPosition(position);
                 View childView = layoutInflater.inflate(R.layout.checkout_item, null);
                 //The receipt item contents
-                restaurant_name = (TextView) childView.findViewById(R.id.restaurant_name);
+                restaurant_name = (TextView) childView.findViewById(R.id.extra_parent);
                 item_quantity = (TextView) childView.findViewById(R.id.item_quantity);
                 item_dets = (TextView) childView.findViewById(R.id.item_dets);
                 item_cost = (TextView) childView.findViewById(R.id.item_cost);
                 item_description = (TextView) childView.findViewById(R.id.item_description);
                 restaurant_separator = (View) childView.findViewById(R.id.restaurant_separator);
-                restaurant_name = (TextView) childView.findViewById(R.id.restaurant_name);
+                restaurant_name = (TextView) childView.findViewById(R.id.extra_parent);
                 remove_item = (TextView) childView.findViewById(R.id.remove_item);
                 image = (ImageView) childView.findViewById(R.id.image);
                 //////////////////////////////////////////////////////////////////////////////////

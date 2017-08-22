@@ -39,7 +39,7 @@ public class FirebaseRecyclerAdapterHistory {
             /* Declaring the TextViews for progress descriptions*/
 
             orderid = (TextView) itemView.findViewById(R.id.orderid);
-            restaurant_name = (TextView) itemView.findViewById(R.id.restaurant_name);
+            restaurant_name = (TextView) itemView.findViewById(R.id.extra_parent);
             status_initial = (TextView) itemView.findViewById(R.id.status_initial);
 
             status_ready = (TextView) itemView.findViewById(R.id.status_ready);

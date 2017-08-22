@@ -26,11 +26,11 @@
                 android:id="@+id/restaurant_separator" />
 
             <TextView
-                android:id="@+id/restaurant_name"
+                android:id="@+id/extra_parent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_marginStart="30dp"
+                android:layout_marginStart="36dp"
                 android:fontFamily="@font/montserrat"
                 android:text="Restaurant"
                 android:textColor="@color/colorPrimaryDark"

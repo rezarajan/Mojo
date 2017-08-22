@@ -16,9 +16,7 @@ public class Food_List {
     private String quantity;
     private String result;
     private String open;
-    private String extras;
-    private String hasextras;
-    private String hasextraschildren;
+    private String parent;
     private long cost;
 
     public Food_List(){
@@ -97,28 +95,12 @@ public class Food_List {
         this.open = open;
     }
 
-    public String getExtras() {
-        return extras;
+    public String getParent() {
+        return parent;
     }
 
-    public void setExtras(String extras) {
-        this.extras = extras;
-    }
-
-    public String getHasextras() {
-        return hasextras;
-    }
-
-    public void setHasextras(String hasextras) {
-        this.hasextras = hasextras;
-    }
-
-    public String getHasextraschildren() {
-        return hasextraschildren;
-    }
-
-    public void setHasextraschildren(String hasextraschildren) {
-        this.hasextraschildren = hasextraschildren;
+    public void setParent(String parent) {
+        this.parent = parent;
     }
 
     public long getCost() {

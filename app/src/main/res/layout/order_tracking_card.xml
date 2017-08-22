@@ -33,7 +33,7 @@
                 android:src="@drawable/ic_mojo_logo" />
 
             <TextView
-                android:id="@+id/restaurant_name"
+                android:id="@+id/extra_parent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignTop="@id/image"
@@ -49,8 +49,8 @@
                 android:id="@+id/orderid"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignStart="@id/restaurant_name"
-                android:layout_below="@id/restaurant_name"
+                android:layout_alignStart="@id/extra_parent"
+                android:layout_below="@id/extra_parent"
                 android:layout_gravity="center_horizontal"
                 android:fontFamily="sans-serif-condensed"
                 android:paddingBottom="8dp"

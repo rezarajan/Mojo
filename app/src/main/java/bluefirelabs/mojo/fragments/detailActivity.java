@@ -34,7 +34,6 @@ import bluefirelabs.mojo.R;
 import bluefirelabs.mojo.handlers.adapters.FirebaseAdapterExtras;
 import bluefirelabs.mojo.handlers.adapters.Food_List;
 import bluefirelabs.mojo.main.transition.MyCallback;
-import bluefirelabs.mojo.main.ui.user.CenterZoomLayoutManager;
 import database.DatabaseHelper;
 
 /**
@@ -372,9 +371,6 @@ public class detailActivity extends Fragment{
 
     public void populateView(final DatabaseReference reference){
 
-        CenterZoomLayoutManager centerZoomLayoutManager = new CenterZoomLayoutManager(getContext());
-        centerZoomLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-
         LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(getContext());
         mLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 
@@ -399,6 +395,7 @@ public class detailActivity extends Fragment{
             protected void populateViewHolder(final FirebaseAdapterExtras.RecyclerViewHolder viewHolder, final Food_List model, final int position) {
 
                 if(model.getName() != null){
+                    viewHolder.extraParent.setText(model.getParent());
                     viewHolder.extraName.setText(model.getName());
                 }
 
@@ -422,7 +419,7 @@ public class detailActivity extends Fragment{
         mRestaurantRecyclerView.setAdapter(mFirebaseAdapter);
         //mRestaurantRecyclerView.setLayoutManager(turnLayoutManager);
         //mRestaurantRecyclerView.setLayoutManager(mLinearLayoutManager);
-        mRestaurantRecyclerView.setLayoutManager(centerZoomLayoutManager);
+        mRestaurantRecyclerView.setLayoutManager(mLinearLayoutManager);
 
         //SnapHelper helper = new LinearSnapHelper();
 /*        LinearSnapHelper helper = new LinearSnapHelper() {

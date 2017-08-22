@@ -16,7 +16,7 @@ public class FirebaseAdapterExtras {
 
 
         public TextView extraName, extraCost,
-                restaurantDescription, averageTime;
+                extraParent, averageTime;
 
 
         public RecyclerViewHolder(View itemView) {
@@ -27,6 +27,7 @@ public class FirebaseAdapterExtras {
 
             extraName = (TextView) itemView.findViewById(R.id.item_dets);
             extraCost = (TextView) itemView.findViewById(R.id.itemCost);
+            extraParent = (TextView) itemView.findViewById(R.id.extra_parent);
 /*            restaurantDescription = (TextView) itemView.findViewById(R.id.restaurantDescription);
             averageTime = (TextView) itemView.findViewById(R.id.averageTime);*/
 
