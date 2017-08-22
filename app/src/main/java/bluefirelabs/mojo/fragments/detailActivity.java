@@ -374,15 +374,12 @@ public class detailActivity extends Fragment{
         LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(getContext());
         mLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 
-
-
-
         //DatabaseReference mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
         mFirebaseAdapter = new FirebaseRecyclerAdapter<Food_List, FirebaseAdapterExtras.RecyclerViewHolder>(
                 Food_List.class,
                 R.layout.extra_item,
                 FirebaseAdapterExtras.RecyclerViewHolder.class,
-                reference.child("extras")
+                reference.child("extras").orderByChild("parent")
         ) {
             @Override
             public void onBindViewHolder(FirebaseAdapterExtras.RecyclerViewHolder viewHolder, int position) {
