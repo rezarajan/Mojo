@@ -805,6 +805,8 @@ public class UserHub_carousel extends AppCompatActivity
 */
 
 
+                        if (!slidingUpPanelLayout_frag2.getPanelState().equals(SlidingUpPanelLayout.PanelState.COLLAPSED)) {
+
                         Intent intent = new Intent(getApplicationContext(), DetailActivity.class);
                         intent.putExtra(DetailActivity.EXTRA_RESTAURANT_LOGO, model.getIcon());
                         intent.putExtra(DetailActivity.EXTRA_RESTAURANT_COLOR, model.getColor());
@@ -850,6 +852,13 @@ public class UserHub_carousel extends AppCompatActivity
 
 
                     }
+
+                    else {
+                            slidingUpPanelLayout_frag1.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+
+                        }
+                    }
+
                 });
 
             }

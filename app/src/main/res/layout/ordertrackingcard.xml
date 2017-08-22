@@ -36,32 +36,38 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/itemName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/montserrat_bold"
-                android:text="Active Orders"
-                android:textColor="@color/colorPrimaryDark"
-                android:textSize="18sp"
-                android:gravity="center"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true" />
-
-            <View
-                android:id="@+id/separator"
+            <LinearLayout
+                android:id="@+id/separatorHolder"
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_below="@+id/itemName"
-                android:background="@color/colorPrimaryDark"
-                android:alpha="0.8"/>
+                android:layout_height="30dp"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/itemName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:fontFamily="@font/montserrat_bold"
+                    android:text="Active Orders"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="18sp"
+                    android:gravity="center"
+                    android:layout_gravity="center"/>
+
+                <View
+                    android:id="@+id/separator"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/colorPrimaryDark"
+                    android:alpha="0.8"/>
+
+            </LinearLayout>
+
 
 
             <ScrollView
                 android:id="@+id/scrollViewHistory"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@+id/separator"
+                android:layout_below="@+id/separatorHolder"
                 android:layout_marginBottom="0dp">
 
 

@@ -64,7 +64,7 @@
                             android:src="@drawable/ic_material_product_icon_192pxxhdpi" />-->
 
 
-            <TextView
+<!--            <TextView
                 android:id="@+id/item_quantity"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
@@ -74,7 +74,7 @@
                 android:gravity="center"
                 android:text="1"
                 android:textColor="@color/black"
-                android:background="@color/colorPrimaryDark"/>
+                android:background="@color/colorPrimaryDark"/>-->
 
             <!--            <CheckBox
                             android:id="@+id/checkb"
@@ -101,11 +101,11 @@
                 android:fontFamily="@font/montserrat"
                 android:paddingStart="36dp"
                 android:paddingTop="8dp"
-                android:text="Item"
-                android:textColor="@color/black"
+                android:text="Item • $1.00"
+                android:textColor="@color/colorPrimaryDark"
                 android:textSize="16sp" />
 
-            <TextView
+<!--            <TextView
                 android:id="@+id/remove_item"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
@@ -129,7 +129,7 @@
                 android:paddingTop="4dp"
                 android:text="$1.00"
                 android:textColor="@color/black"
-                android:textSize="16sp" />
+                android:textSize="16sp" />-->
 
 
             <!--            <TextView
@@ -146,7 +146,7 @@
                             android:textSize="12dp"
                             android:fontFamily="sans-serif"  />-->
 
-            <TextView
+            <!--<TextView
                 android:id="@+id/item_description"
                 android:layout_width="250dp"
                 android:layout_height="wrap_content"
@@ -158,7 +158,7 @@
                 android:paddingTop="4dp"
                 android:text="Description"
                 android:textColor="@color/black"
-                android:textSize="16sp" />
+                android:textSize="16sp" />-->
 
             <!--            <Button
                             android:id="@+id/add_to_cart"
