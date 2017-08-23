@@ -43,6 +43,9 @@ public class Checkout extends FragmentActivity {
 
     DatabaseHelper myDb;
     DatabaseHelperExtras myDbExtras;
+
+    private String itemRef;
+    private Cursor dataExtras;
     private LinearLayout listContainer;
     private RelativeLayout detail_card_layout;
 
@@ -154,6 +157,7 @@ public class Checkout extends FragmentActivity {
         Map notification = new HashMap<>();
         Map itemListing = new HashMap<>();
         Map costListing = new HashMap<>();
+        Map extrasListing = new HashMap<>();
 
         Double total_cost = 0.00;
 
@@ -208,16 +212,66 @@ public class Checkout extends FragmentActivity {
                 itemListing.put(data.getString(2), data.getString(4));    //itemId, quantity
                 costListing.put(data.getString(2), data.getString(3));    //itemId, cost
 
-                reference.child(pushId).setValue(notification);
-                reference.child(pushId).child("items").setValue(itemListing);
-                reference.child(pushId).child("cost").setValue(costListing);
+                itemRef = data.getString(2) + "_0";     //uniquetag = itemId + (_0)
 
-                Cursor dataExtras = myDbExtras.orderExtras(data.getString(2) + "_0", data.getString(1));    //uniquetag = itemId + (_0), restaurant
+                dataExtras = myDbExtras.orderExtras(itemRef, data.getString(1));    //uniquetag = itemId + (_0), restaurant
 
                 //Iterates through the database for all extras
                 while(dataExtras.moveToNext()){
-                    Log.d("Extra", dataExtras.getString(0));
+                    Log.d("Extra for Upload", dataExtras.getString(0));
+                    extrasListing.put("name",  dataExtras.getString(0));    //name, extraName
+                    extrasListing.put("cost",  dataExtras.getString(1));    //cost, extraCost
+                    extrasListing.put("quantity",  dataExtras.getString(2));    //cost, extraQuantity
+
+                    Log.d("ExtraListing", extrasListing.toString());
+
+                    reference.child(pushId).child("user_token").setValue(FirebaseInstanceId.getInstance().getToken());
+                    reference.child(pushId).child("customeruid_to").setValue(user.getUid());
+                    reference.child(pushId).child("customeruid_from").setValue("none");
+                    reference.child(pushId).child("vendoruid").setValue(data.getString(1));
+                    reference.child(pushId).child("postid").setValue(pushId);
+                    //reference.child(pushId).child("items").child(data.getString(2)).setValue(data.getString(4));
+                    reference.child(pushId).child("cost").child(data.getString(2)).setValue(data.getString(3));
+                    reference.child(pushId).child("items").child(itemRef).child("extras").child(dataExtras.getString(0)).setValue(extrasListing);
+
+                    extrasListing.clear();
                 }
+
+                /*reference.child(pushId).child("items").child(itemRef).setValue(itemListing);
+                reference.child(pushId).child("items").child(itemRef).setValue(costListing);*/
+                /*reference.child(pushId).child("items").setValue(itemListing);
+                reference.child(pushId).child("cost").setValue(costListing);*/
+
+
+                /*itemListing.put("name", data.getString(2));    //name, itemId
+                itemListing.put("cost", data.getString(3));    //cost, cost
+
+                itemRef = data.getString(2) + "_0";     //uniquetag = itemId + (_0)
+
+                dataExtras = myDbExtras.orderExtras(itemRef, data.getString(1));    //uniquetag = itemId + (_0), restaurant
+
+                //Iterates through the database for all extras
+                while(dataExtras.moveToNext()){
+                    Log.d("Extra for Upload", dataExtras.getString(0));
+                    extrasListing.put("name",  dataExtras.getString(0));    //name, extraName
+                    extrasListing.put("cost",  dataExtras.getString(1));    //cost, extraCost
+                    extrasListing.put("quantity",  dataExtras.getString(2));    //cost, extraQuantity
+
+                    reference.child(pushId).child("items").child(itemRef).child("extras").setValue(extrasListing);
+
+                    Log.d("ExtraListing", extrasListing.toString());
+
+                    extrasListing.clear();
+
+
+                }
+
+                reference.child(pushId).setValue(notification);
+                *//*reference.child(pushId).child("items").child(itemRef).setValue(itemListing);
+                reference.child(pushId).child("items").child(itemRef).setValue(costListing);*//*
+                reference.child(pushId).child("items").child(itemRef).setValue(itemListing);
+                //reference.child(pushId).child("cost").setValue(costListing);*/
+
 
 
                 //data.moveToPosition(position + 1);
@@ -233,10 +287,31 @@ public class Checkout extends FragmentActivity {
                     notification.put("postid", pushId);
                     itemListing.put(data.getString(2), data.getString(4));    //itemId, quantity
                     costListing.put(data.getString(2), data.getString(3));    //itemId, cost
-                    reference.child(pushId).setValue(notification);
-                    reference.child(pushId).child("items").setValue(itemListing);
-                    reference.child(pushId).child("cost").setValue(costListing);
-                    Log.d("The items pushed for " + restaurant, itemListing.toString());
+
+                    itemRef = data.getString(2) + "_0";     //uniquetag = itemId + (_0)
+
+                    dataExtras = myDbExtras.orderExtras(itemRef, data.getString(1));    //uniquetag = itemId + (_0), restaurant
+
+                    //Iterates through the database for all extras
+                    while(dataExtras.moveToNext()){
+                        Log.d("Extra for Upload", dataExtras.getString(0));
+                        extrasListing.put("name",  dataExtras.getString(0));    //name, extraName
+                        extrasListing.put("cost",  dataExtras.getString(1));    //cost, extraCost
+                        extrasListing.put("quantity",  dataExtras.getString(2));    //cost, extraQuantity
+
+                        reference.child(pushId).child("user_token").setValue(FirebaseInstanceId.getInstance().getToken());
+                        reference.child(pushId).child("customeruid_to").setValue(user.getUid());
+                        reference.child(pushId).child("customeruid_from").setValue("none");
+                        reference.child(pushId).child("vendoruid").setValue(data.getString(1));
+                        reference.child(pushId).child("postid").setValue(pushId);
+                        //reference.child(pushId).child("items").child(data.getString(2)).setValue(data.getString(4));
+                        reference.child(pushId).child("cost").child(data.getString(2)).setValue(data.getString(3));
+                        reference.child(pushId).child("items").child(itemRef).child("extras").child(dataExtras.getString(0)).setValue(extrasListing);
+
+                        extrasListing.clear();
+
+                    }
+
                 }
 
             } else {
@@ -256,10 +331,29 @@ public class Checkout extends FragmentActivity {
                     itemListing.put(data.getString(2), data.getString(4));    //itemId, quantity
                     costListing.put(data.getString(2), data.getString(3));    //itemId, cost
 
+                    itemRef = data.getString(2) + "_0";     //uniquetag = itemId + (_0)
 
-                    reference.child(pushId).setValue(notification);
-                    reference.child(pushId).child("items").setValue(itemListing);
-                    reference.child(pushId).child("cost").setValue(costListing);
+                    dataExtras = myDbExtras.orderExtras(itemRef, data.getString(1));    //uniquetag = itemId + (_0), restaurant
+
+                    //Iterates through the database for all extras
+                    while(dataExtras.moveToNext()){
+                        Log.d("Extra for Upload", dataExtras.getString(0));
+                        extrasListing.put("name",  dataExtras.getString(0));    //name, extraName
+                        extrasListing.put("cost",  dataExtras.getString(1));    //cost, extraCost
+                        extrasListing.put("quantity",  dataExtras.getString(2));    //cost, extraQuantity
+
+                        reference.child(pushId).child("user_token").setValue(FirebaseInstanceId.getInstance().getToken());
+                        reference.child(pushId).child("customeruid_to").setValue(user.getUid());
+                        reference.child(pushId).child("customeruid_from").setValue("none");
+                        reference.child(pushId).child("vendoruid").setValue(data.getString(1));
+                        reference.child(pushId).child("postid").setValue(pushId);
+                        //reference.child(pushId).child("items").child(data.getString(2)).setValue(data.getString(4));
+                        reference.child(pushId).child("cost").child(data.getString(2)).setValue(data.getString(3));
+                        reference.child(pushId).child("items").child(itemRef).child("extras").child(dataExtras.getString(0)).setValue(extrasListing);
+
+                        extrasListing.clear();
+
+                    }
                     //Log.d("Push ID", pushId.toString());
                     pushId = reference.push().getKey();     //sets a new push id for the different restaurant
                     Log.d("Refreshing Push", pushId);
@@ -267,6 +361,7 @@ public class Checkout extends FragmentActivity {
                     itemListing.clear();
                     costListing.clear();
                     notification.clear();
+                    extrasListing.clear();
                 } else {
                     Log.d("Outcome", "different");
                     pushId = reference.push().getKey();     //sets a new push id for the different restaurant
@@ -287,10 +382,30 @@ public class Checkout extends FragmentActivity {
                     itemListing.put(data.getString(2), data.getString(4));    //itemId, quantity
                     costListing.put(data.getString(2), data.getString(3));    //itemId, cost
 
+                    itemRef = data.getString(2) + "_0";     //uniquetag = itemId + (_0)
 
-                    reference.child(pushId).setValue(notification);
-                    reference.child(pushId).child("items").setValue(itemListing);
-                    reference.child(pushId).child("cost").setValue(costListing);
+                    dataExtras = myDbExtras.orderExtras(itemRef, data.getString(1));    //uniquetag = itemId + (_0), restaurant
+
+                    //Iterates through the database for all extras
+                    while(dataExtras.moveToNext()){
+                        Log.d("Extra for Upload", dataExtras.getString(0));
+                        extrasListing.put("name",  dataExtras.getString(0));    //name, extraName
+                        extrasListing.put("cost",  dataExtras.getString(1));    //cost, extraCost
+                        extrasListing.put("quantity",  dataExtras.getString(2));    //cost, extraQuantity
+
+                        reference.child(pushId).child("user_token").setValue(FirebaseInstanceId.getInstance().getToken());
+                        reference.child(pushId).child("customeruid_to").setValue(user.getUid());
+                        reference.child(pushId).child("customeruid_from").setValue("none");
+                        reference.child(pushId).child("vendoruid").setValue(data.getString(1));
+                        reference.child(pushId).child("postid").setValue(pushId);
+                        //reference.child(pushId).child("items").child(data.getString(2)).setValue(data.getString(4));
+                        reference.child(pushId).child("cost").child(data.getString(2)).setValue(data.getString(3));
+                        reference.child(pushId).child("items").child(itemRef).child("extras").child(dataExtras.getString(0)).setValue(extrasListing);
+
+                        extrasListing.clear();
+
+                    }
+
                     Log.d("The items pushed for " + next_restaurant, itemListing.toString());
                     //Toast.makeText(getApplicationContext(), "Order Placed", Toast.LENGTH_SHORT).show();
                 }
@@ -447,6 +562,7 @@ public class Checkout extends FragmentActivity {
                         if(which == 0){
                             //Clear the cart
                             myDb.deleteAll();
+                            myDbExtras.deleteAll();
                             finish();
                         }
                         else {

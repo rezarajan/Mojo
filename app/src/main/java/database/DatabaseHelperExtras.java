@@ -107,7 +107,7 @@ public class DatabaseHelperExtras extends SQLiteOpenHelper{
 
     public Cursor orderExtras(String uniquetag, String restaurant){
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor res = db.rawQuery("SELECT " + EXTRA + " FROM " + TABLE_NAME  + " WHERE " + UNIQUETAG + " = '" + uniquetag + "'" + " AND " + RESTAURANT + " = '" + restaurant + "'", null);
+        Cursor res = db.rawQuery("SELECT " + EXTRA + "," + COST + "," + QUANTITY + " FROM " + TABLE_NAME  + " WHERE " + UNIQUETAG + " = '" + uniquetag + "'" + " AND " + RESTAURANT + " = '" + restaurant + "'", null);
         return res;
     }
 }
