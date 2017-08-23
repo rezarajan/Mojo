@@ -224,7 +224,7 @@ public class Checkout extends FragmentActivity {
                     reference.child(pushId).setValue(notification);
                     reference.child(pushId).child("items").setValue(itemListing);
                     reference.child(pushId).child("cost").setValue(costListing);
-                    Log.d("The items pushed for " + restaurant + " are", itemListing.toString());
+                    Log.d("The items pushed for " + restaurant, itemListing.toString());
                 }
 
             } else {
@@ -251,7 +251,7 @@ public class Checkout extends FragmentActivity {
                     //Log.d("Push ID", pushId.toString());
                     pushId = reference.push().getKey();     //sets a new push id for the different restaurant
                     Log.d("Refreshing Push", pushId);
-                    Log.d("The items pushed for " + restaurant + " are", itemListing.toString());
+                    Log.d("The items pushed for " + restaurant, itemListing.toString());
                     itemListing.clear();
                     costListing.clear();
                     notification.clear();
@@ -279,7 +279,7 @@ public class Checkout extends FragmentActivity {
                     reference.child(pushId).setValue(notification);
                     reference.child(pushId).child("items").setValue(itemListing);
                     reference.child(pushId).child("cost").setValue(costListing);
-                    Log.d("The items pushed for " + next_restaurant + " are", itemListing.toString());
+                    Log.d("The items pushed for " + next_restaurant, itemListing.toString());
                     //Toast.makeText(getApplicationContext(), "Order Placed", Toast.LENGTH_SHORT).show();
                 }
             }
