@@ -485,7 +485,7 @@ public class detailActivity extends Fragment{
                                     .setAction("Action", null).show();
 
                             //Cursor dataExtras = myDbExtras.orderExtras("Coffee_0", restaurantName);
-                            Cursor dataExtras = myDbExtras.getColumnData("UNIQUETAG");
+                            Cursor dataExtras = myDbExtras.getColumnData("EXTRA");
 
                             Log.d("Database Size", String.valueOf(dataExtras.getCount()));
 

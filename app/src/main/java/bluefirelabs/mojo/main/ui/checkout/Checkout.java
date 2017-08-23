@@ -37,10 +37,12 @@ import java.util.Map;
 
 import bluefirelabs.mojo.R;
 import database.DatabaseHelper;
+import database.DatabaseHelperExtras;
 
 public class Checkout extends FragmentActivity {
 
     DatabaseHelper myDb;
+    DatabaseHelperExtras myDbExtras;
     private LinearLayout listContainer;
     private RelativeLayout detail_card_layout;
 
@@ -112,6 +114,8 @@ public class Checkout extends FragmentActivity {
         placeorder = (Button)findViewById(R.id.button_place_order);
         noitems = (TextView)findViewById(R.id.content_available_indicator);*/
         myDb = new DatabaseHelper(this);
+        myDbExtras = new DatabaseHelperExtras(this); //calls constructor from the database helper class
+
         Cursor data = myDb.getAllData();
         if(data.getCount() > 0){
 /*            placeorder.setVisibility(View.VISIBLE);
@@ -207,6 +211,14 @@ public class Checkout extends FragmentActivity {
                 reference.child(pushId).setValue(notification);
                 reference.child(pushId).child("items").setValue(itemListing);
                 reference.child(pushId).child("cost").setValue(costListing);
+
+                Cursor dataExtras = myDbExtras.orderExtras(data.getString(2) + "_0", data.getString(1));    //uniquetag = itemId + (_0), restaurant
+
+                //Iterates through the database for all extras
+                while(dataExtras.moveToNext()){
+                    Log.d("Extra", dataExtras.getString(0));
+                }
+
 
                 //data.moveToPosition(position + 1);
                 if (data.moveToNext() != false) {
