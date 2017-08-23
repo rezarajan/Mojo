@@ -36,6 +36,7 @@ import bluefirelabs.mojo.handlers.adapters.FirebaseAdapterExtras;
 import bluefirelabs.mojo.handlers.adapters.Food_List;
 import bluefirelabs.mojo.main.transition.MyCallback;
 import database.DatabaseHelper;
+import database.DatabaseHelperExtras;
 
 /**
  * Created by reza on 8/5/17.
@@ -64,6 +65,7 @@ public class detailActivity extends Fragment{
     private SlidingUpPanelLayout slidingUpPanelLayout;
 
     DatabaseHelper myDb;
+    DatabaseHelperExtras myDbExtras;
 
     private FirebaseRecyclerAdapter<Food_List, FirebaseAdapterExtras.RecyclerViewHolder> mFirebaseAdapter;
     private RecyclerView mRestaurantRecyclerView;
@@ -91,6 +93,7 @@ public class detailActivity extends Fragment{
             Log.d("Restaurant", restaurantName);
 
             myDb = new DatabaseHelper(getContext()); //calls constructor from the database helper class
+            myDbExtras = new DatabaseHelperExtras(getContext()); //calls constructor from the database helper class
 
             imageView = (ImageView) view.findViewById(R.id.image);
 
@@ -436,6 +439,40 @@ public class detailActivity extends Fragment{
 
                         viewHolder.extraParent.setText(model.getParent());
                         viewHolder.extraName.setText(model.getName() + " • $" +  String.valueOf(df.format(model.getCost())));
+                        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                //adding the item to the database for receipt
+                                boolean isInserted = myDbExtras.insertData(restaurantName,       //The restaurant name
+                                        "Coffee",     //The item name
+                                        "1",       //The item cost
+                                        "Coffee_0",
+                                        model.getName(),
+                                        "1");                                //Adds the item at at the specific position to the database
+                                //Default Quantity is 1
+
+                                if (isInserted == true) {
+                                    Snackbar.make(view, "Data inserted",
+                                            Snackbar.LENGTH_LONG)
+                                            .setAction("Action", null).show();
+
+                                    Cursor dataExtras = myDbExtras.orderExtras("Coffee_0", restaurantName);
+
+                                    Log.d("Database Size", String.valueOf(dataExtras.getCount()));
+
+                                    //Iterates through the database for all extras
+                                    while(dataExtras.moveToNext()){
+                                        Log.d("Extra", dataExtras.getString(0));
+                                    }
+
+
+                                } else {
+                                    Snackbar.make(view, "Error adding item to cart",
+                                            Snackbar.LENGTH_LONG)
+                                            .setAction("Action", null).show();
+                                }
+                            }
+                        });
 
                     }
                 }
