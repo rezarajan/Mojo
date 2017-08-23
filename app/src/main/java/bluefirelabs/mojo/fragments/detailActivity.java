@@ -476,7 +476,8 @@ public class detailActivity extends Fragment{
                                 String.valueOf(model.getCost()),       //The item cost
                                 itemName + "_0", //TODO: Make this a unique tag for each item on the card when the user is able to select more than one item
                                 model.getName(),    //The extra name
-                                "1");                                //Adds the item at at the specific position to the database
+                                "1",
+                                viewHolder.extraParent.getText().toString());                                //Adds the item at at the specific position to the database
                         //Default Quantity is 1
 
                         if (isInserted == true) {

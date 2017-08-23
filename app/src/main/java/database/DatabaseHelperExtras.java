@@ -22,6 +22,7 @@ public class DatabaseHelperExtras extends SQLiteOpenHelper{
     public static final String UNIQUETAG = "UNIQUETAG";       //column 5      //String 4
     public static final String EXTRA = "EXTRA";       //column 6      //String 5
     public static final String QUANTITY = "QUANTITY";       //column 7      //String 6
+    public static final String PARENTTYPE = "TYPE";       //column 8      //String 7
 
 
     public DatabaseHelperExtras(Context context) {
@@ -33,7 +34,7 @@ public class DatabaseHelperExtras extends SQLiteOpenHelper{
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String SQL_String = "CREATE TABLE " + TABLE_NAME + "(" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + RESTAURANT + " TEXT," + ITEM + " TEXT," + COST + " LONG," + EXTRA + " TEXT," + QUANTITY + " TEXT," + UNIQUETAG + " TEXT)";
+        String SQL_String = "CREATE TABLE " + TABLE_NAME + "(" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + RESTAURANT + " TEXT," + ITEM + " TEXT," + COST + " LONG," + EXTRA + " TEXT," + QUANTITY + " TEXT," + PARENTTYPE + " TEXT," + UNIQUETAG + " TEXT)";
         db.execSQL(SQL_String);
     }
 
@@ -43,7 +44,7 @@ public class DatabaseHelperExtras extends SQLiteOpenHelper{
         onCreate(db);
     }
 
-    public boolean insertData(String restaurant, String item, String cost, String uniquetag, String extra, String quantity){
+    public boolean insertData(String restaurant, String item, String cost, String uniquetag, String extra, String quantity, String type){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(RESTAURANT, restaurant);
@@ -52,6 +53,7 @@ public class DatabaseHelperExtras extends SQLiteOpenHelper{
         contentValues.put(UNIQUETAG, uniquetag);
         contentValues.put(EXTRA, extra);
         contentValues.put(QUANTITY, quantity);
+        contentValues.put(PARENTTYPE, type);
         long result = db.insert(TABLE_NAME, null, contentValues);
         return result != -1;
     }
@@ -107,7 +109,7 @@ public class DatabaseHelperExtras extends SQLiteOpenHelper{
 
     public Cursor orderExtras(String uniquetag, String restaurant){
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor res = db.rawQuery("SELECT " + EXTRA + "," + COST + "," + QUANTITY + " FROM " + TABLE_NAME  + " WHERE " + UNIQUETAG + " = '" + uniquetag + "'" + " AND " + RESTAURANT + " = '" + restaurant + "'", null);
+        Cursor res = db.rawQuery("SELECT " + EXTRA + "," + COST + "," + QUANTITY + "," + PARENTTYPE + " FROM " + TABLE_NAME  + " WHERE " + UNIQUETAG + " = '" + uniquetag + "'" + " AND " + RESTAURANT + " = '" + restaurant + "'", null);
         return res;
     }
 }

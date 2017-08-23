@@ -222,6 +222,7 @@ public class Checkout extends FragmentActivity {
                     extrasListing.put("name",  dataExtras.getString(0));    //name, extraName
                     extrasListing.put("cost",  dataExtras.getString(1));    //cost, extraCost
                     extrasListing.put("quantity",  dataExtras.getString(2));    //cost, extraQuantity
+                    extrasListing.put("parent",  dataExtras.getString(3));    //parent(type) of extra, type
 
                     Log.d("ExtraListing", extrasListing.toString());
 
@@ -298,6 +299,8 @@ public class Checkout extends FragmentActivity {
                         extrasListing.put("name",  dataExtras.getString(0));    //name, extraName
                         extrasListing.put("cost",  dataExtras.getString(1));    //cost, extraCost
                         extrasListing.put("quantity",  dataExtras.getString(2));    //cost, extraQuantity
+                        extrasListing.put("parent",  dataExtras.getString(3));    //parent(type) of extra, type
+
 
                         reference.child(pushId).child("user_token").setValue(FirebaseInstanceId.getInstance().getToken());
                         reference.child(pushId).child("customeruid_to").setValue(user.getUid());
@@ -341,6 +344,8 @@ public class Checkout extends FragmentActivity {
                         extrasListing.put("name",  dataExtras.getString(0));    //name, extraName
                         extrasListing.put("cost",  dataExtras.getString(1));    //cost, extraCost
                         extrasListing.put("quantity",  dataExtras.getString(2));    //cost, extraQuantity
+                        extrasListing.put("parent",  dataExtras.getString(3));    //parent(type) of extra, type
+
 
                         reference.child(pushId).child("user_token").setValue(FirebaseInstanceId.getInstance().getToken());
                         reference.child(pushId).child("customeruid_to").setValue(user.getUid());
@@ -392,6 +397,8 @@ public class Checkout extends FragmentActivity {
                         extrasListing.put("name",  dataExtras.getString(0));    //name, extraName
                         extrasListing.put("cost",  dataExtras.getString(1));    //cost, extraCost
                         extrasListing.put("quantity",  dataExtras.getString(2));    //cost, extraQuantity
+                        extrasListing.put("parent",  dataExtras.getString(3));    //parent(type) of extra, type
+
 
                         reference.child(pushId).child("user_token").setValue(FirebaseInstanceId.getInstance().getToken());
                         reference.child(pushId).child("customeruid_to").setValue(user.getUid());
@@ -423,6 +430,7 @@ public class Checkout extends FragmentActivity {
         reference.child(pushId).setValue(card);
 
         myDb.deleteAll();       //clears the database of current items
+        myDbExtras.deleteAll(); //clears the database of extra items
         //}
 
         finish();
