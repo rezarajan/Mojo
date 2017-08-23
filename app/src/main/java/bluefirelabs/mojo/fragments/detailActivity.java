@@ -300,7 +300,7 @@ public class detailActivity extends Fragment{
                                                                                     .setAction("Action", null).show();
 
                                                                             //populating the extras view
-                                                                            populateView(reference);
+                                                                            populateView(reference, item_details.getText().toString());
 
                                                                             //brings up the sliding panel if the item has extras
                                                                             slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
@@ -377,7 +377,7 @@ public class detailActivity extends Fragment{
     }
 
 
-    public void populateView(final DatabaseReference reference){
+    public void populateView(final DatabaseReference reference, final String itemName){
 
         final LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(getContext());
         mLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -428,6 +428,14 @@ public class detailActivity extends Fragment{
                         Log.d("Cost", Double.toString(model.getCost()));
                         viewHolder.extraName.setText(model.getName() + " • $" +  String.valueOf(df.format(model.getCost())));   //cost is formatted as 123 = 1.23
 
+                        viewHolder.extraName.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+
+                                Log.d("Extra Type", viewHolder.extraParent.getText().toString());
+                            }
+                        });
+
                     }
                 }
                 else{
@@ -439,15 +447,19 @@ public class detailActivity extends Fragment{
 
                         viewHolder.extraParent.setText(model.getParent());
                         viewHolder.extraName.setText(model.getName() + " • $" +  String.valueOf(df.format(model.getCost())));
-                        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                        viewHolder.extraName.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
+
+                                Log.d("Extra Type", viewHolder.extraParent.getText().toString());
+
+                                Cursor dataExtrasAll = myDbExtras.getAllData();
                                 //adding the item to the database for receipt
                                 boolean isInserted = myDbExtras.insertData(restaurantName,       //The restaurant name
-                                        "Coffee",     //The item name
-                                        "1",       //The item cost
-                                        "Coffee_0",
-                                        model.getName(),
+                                        itemName,     //The item name
+                                        String.valueOf(model.getCost()),       //The item cost
+                                        "Coffee_" + String.valueOf(dataExtrasAll.getCount() + 1), //Unique tag for the item
+                                        model.getName(),    //The extra name
                                         "1");                                //Adds the item at at the specific position to the database
                                 //Default Quantity is 1
 
@@ -456,7 +468,8 @@ public class detailActivity extends Fragment{
                                             Snackbar.LENGTH_LONG)
                                             .setAction("Action", null).show();
 
-                                    Cursor dataExtras = myDbExtras.orderExtras("Coffee_0", restaurantName);
+                                    //Cursor dataExtras = myDbExtras.orderExtras("Coffee_0", restaurantName);
+                                    Cursor dataExtras = myDbExtras.getColumnData("EXTRA");
 
                                     Log.d("Database Size", String.valueOf(dataExtras.getCount()));
 

@@ -62,6 +62,12 @@ public class DatabaseHelperExtras extends SQLiteOpenHelper{
         return res;
     }
 
+    public Cursor getColumnData(String column){
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor res = db.rawQuery("SELECT " + column + " FROM " + TABLE_NAME, null);
+        return res;
+    }
+
     //The variable ITEM just has to be changed to the column you are interested in deleting items from
     public Integer deleteData(String TODELETE){
         SQLiteDatabase db = this.getWritableDatabase();
