@@ -516,7 +516,7 @@ public class detailActivity extends Fragment{
                     public void onClick(View view) {
 
                         //Setting up the check to avoid negative values
-                        if(extraCountValue > 0){
+                        if(Integer.parseInt(viewHolder.extraCount.getText().toString()) > 0){
                             //decreasing the value of the extra by 1
                             extraCountValue = Integer.parseInt(viewHolder.extraCount.getText().toString()) - 1;
 
@@ -528,6 +528,7 @@ public class detailActivity extends Fragment{
                         Log.d("Extra Type", viewHolder.extraParent.getText().toString());
 
                         Cursor dataExtrasAll = myDbExtras.getAllData();
+
                         //adding the item to the database for receipt
                         /*boolean isInserted = myDbExtras.insertData(restaurantName,       //The restaurant name
                                 itemName,     //The item name
