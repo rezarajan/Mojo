@@ -16,7 +16,8 @@
 
 
     <color name="colorAccent">#FF4081</color>
-    <color name="colorAccentBackground">#ECECEC</color>
+    <color name="colorAccentBackground">#EDEDED</color>
+    <color name="colorAccentBackgroundButton">#D8D8D8</color>
 
 
     <color name="colorOpen">#00e676</color>
