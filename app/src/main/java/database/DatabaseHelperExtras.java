@@ -98,6 +98,15 @@ public class DatabaseHelperExtras extends SQLiteOpenHelper{
         db.execSQL(query);
     }
 
+   public void updateQuantity(String newQuantity, String uniquetag, String oldQuantity, String restaurant, String extra){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "UPDATE " + TABLE_NAME + " SET " + QUANTITY + " = '" + newQuantity + "' WHERE " + UNIQUETAG + " = '" + uniquetag + "'" + " AND " + QUANTITY + " = '" + oldQuantity + "'" + " AND " + RESTAURANT + " = '" + restaurant + "'" + " AND " + EXTRA + " = '" + extra + "'";
+
+        Log.d("DatabaseHelper: ", "updateName: query: " + query);
+        Log.d("DatabaseHelper: ", "updateName: Setting quantity to: " + newQuantity);
+        db.execSQL(query);
+    }
+
     public void deleteName(int id, String name){
         SQLiteDatabase db = this.getWritableDatabase();
         String query = "DELETE FROM " + TABLE_NAME + " WHERE " + ID + " = '" + id + "'" + " AND " + ITEM + " = '" + name + "'";

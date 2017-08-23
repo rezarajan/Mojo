@@ -19,6 +19,9 @@ public class FirebaseAdapterExtras {
         public TextView extraName, extraCost,
                 extraParent;
 
+        public TextView removeButton, extraCount,
+                addButton;
+
         public FrameLayout extraTypeHolder;
 
 
@@ -30,6 +33,9 @@ public class FirebaseAdapterExtras {
             extraName = (TextView) itemView.findViewById(R.id.item_dets);
             extraCost = (TextView) itemView.findViewById(R.id.itemCost);
             extraParent = (TextView) itemView.findViewById(R.id.extra_parent);
+            removeButton = (TextView) itemView.findViewById(R.id.removeButton);
+            extraCount = (TextView) itemView.findViewById(R.id.extraCount);
+            addButton = (TextView) itemView.findViewById(R.id.addButton);
 /*            restaurantDescription = (TextView) itemView.findViewById(R.id.restaurantDescription);
             averageTime = (TextView) itemView.findViewById(R.id.averageTime);*/
 
