@@ -246,6 +246,17 @@ exports.requestsMonitor = functions.database.ref("requests/{pushId}/").onWrite((
 				result: "asking",
 				orderid: status.orderid
 		});
+				
+		refNode.child(status.customeruid_to).child("orders").child("requests").child(status.orderid).set({
+				customeruid: status.customeruid_to,
+				vendoruid: status.vendoruid,
+				//runneruid: status.runneruid,
+				venue: status.venue,
+				name: userDataName,
+				items: snapshot.val(),
+				result: "asking",
+				orderid: status.orderid
+		});
 				//refNode.child(status.orderid).child("items").set(snapshot.val());
 			} else{
 				return;
@@ -257,6 +268,10 @@ exports.requestsMonitor = functions.database.ref("requests/{pushId}/").onWrite((
 			if(snapshot.val() !== null){
 		//the set uses the push key
 		refNode.child(status.vendoruid).child("orders").child("requests").child(status.orderid).update({
+				cost: snapshot.val()
+		});
+				
+		refNode.child(status.customeruid_to).child("orders").child("requests").child(status.orderid).update({
 				cost: snapshot.val()
 		});
 				//refNode.child(status.orderid).child("items").set(snapshot.val());
@@ -320,7 +335,7 @@ exports.requestsMonitor = functions.database.ref("requests/{pushId}/").onWrite((
 				result: "declined",		//this is the only value we have to change after the first if
 				orderid: status.orderid
 		});
-		refNode.child(status.customeruid_to).child("orders").child(status.orderid).set({		//customeruid
+		refNode.child(status.customeruid_to).child("orders").child("declined").child(status.orderid).set({		//customeruid
 				customeruid: status.customeruid_to,
 				vendoruid: status.vendoruid,
 				venue: status.venue,
@@ -341,7 +356,7 @@ exports.requestsMonitor = functions.database.ref("requests/{pushId}/").onWrite((
 		refNode.child(status.vendoruid).child("orders").child("declined").child(status.orderid).update({		//vendoruid
 				cost: snapshot.val()
 		});
-		refNode.child(status.customeruid_to).child("orders").child(status.orderid).update({		//customeruid
+		refNode.child(status.customeruid_to).child("orders").child("declined").child(status.orderid).update({		//customeruid
 				cost: snapshot.val()
 		});
 				//refNode.child(status.orderid).child("items").set(snapshot.val());
@@ -540,7 +555,7 @@ exports.inprogressMonitor = functions.database.ref("inprogress/{vendoruid}/{push
 			result: "accepted",
 			orderid: status.orderid
 	});
-	refNode.child(status.customeruid).child("orders").child(status.orderid).set({
+	refNode.child(status.customeruid).child("orders").child("accepted").child(status.orderid).set({
 			customeruid: status.customeruid,
 			vendoruid: status.vendoruid,
 			venue: status.venue,
@@ -571,7 +586,7 @@ exports.inprogressMonitor = functions.database.ref("inprogress/{vendoruid}/{push
 	refNode.child(status.vendoruid).child("orders").child("accepted").child(status.orderid).update({
 			cost: snapshot.val()
 	});
-	refNode.child(status.customeruid).child("orders").child(status.orderid).update({
+	refNode.child(status.customeruid).child("orders").child("accepted").child(status.orderid).update({
 			cost: snapshot.val()
 	});
 			} else{
@@ -593,7 +608,7 @@ exports.inprogressMonitor = functions.database.ref("inprogress/{vendoruid}/{push
 			result: "sending",
 			orderid: status.orderid
 	});
-	refNode.child(status.customeruid).child("orders").child(status.orderid).set({
+	refNode.child(status.customeruid).child("orders").child("sending").child(status.orderid).set({
 			customeruid: status.customeruid,
 			vendoruid: status.vendoruid,
 			venue: status.venue,
@@ -622,7 +637,7 @@ exports.inprogressMonitor = functions.database.ref("inprogress/{vendoruid}/{push
 	refNode.child(status.vendoruid).child("orders").child("sending").child(status.orderid).update({
 			cost: snapshot.val()
 	});
-	refNode.child(status.customeruid).child("orders").child(status.orderid).update({
+	refNode.child(status.customeruid).child("orders").child("sending").child(status.orderid).update({
 			cost: snapshot.val()
 	});
 	/*refNode.child(status.runneruid).child("orders").child("sending").child(status.orderid).update({
@@ -649,7 +664,7 @@ exports.inprogressMonitor = functions.database.ref("inprogress/{vendoruid}/{push
 			result: "collected",
 			orderid: status.orderid
 	});
-	refNode.child(status.customeruid).child("orders").child(status.orderid).set({
+	refNode.child(status.customeruid).child("orders").child("collected").child(status.orderid).set({
 			customeruid: status.customeruid,
 			vendoruid: status.vendoruid,
 			runneruid: status.runneruid,
@@ -681,7 +696,7 @@ exports.inprogressMonitor = functions.database.ref("inprogress/{vendoruid}/{push
 	refNode.child(status.vendoruid).child("orders").child("collected").child(status.orderid).update({
 			cost: snapshot.val()
 	});
-	refNode.child(status.customeruid).child("orders").child(status.orderid).update({
+	refNode.child(status.customeruid).child("orders").child("collected").child(status.orderid).update({
 			cost: snapshot.val()
 	});
 	refNode.child(status.runneruid).child("orders").child("collected").child(status.orderid).update({
@@ -707,7 +722,7 @@ exports.inprogressMonitor = functions.database.ref("inprogress/{vendoruid}/{push
 			result: "delivered",
 			orderid: status.orderid
 	});
-	refNode.child(status.customeruid).child("orders").child(status.orderid).set({
+	refNode.child(status.customeruid).child("orders").child("delivered").child(status.orderid).set({
 			customeruid: status.customeruid,
 			vendoruid: status.vendoruid,
 			runneruid: status.runneruid,
@@ -738,7 +753,7 @@ exports.inprogressMonitor = functions.database.ref("inprogress/{vendoruid}/{push
 	refNode.child(status.vendoruid).child("orders").child("delivered").child(status.orderid).update({
 			cost: snapshot.val()
 	});
-	refNode.child(status.customeruid).child("orders").child(status.orderid).update({
+	refNode.child(status.customeruid).child("orders").child("delivered").child(status.orderid).update({
 			cost: snapshot.val()
 	});
 	refNode.child(status.runneruid).child("orders").child("delivered").child(status.orderid).update({
@@ -764,7 +779,7 @@ exports.inprogressMonitor = functions.database.ref("inprogress/{vendoruid}/{push
 			result: "user_collected",
 			orderid: status.orderid
 	});
-	refNode.child(status.customeruid).child("orders").child(status.orderid).set({
+	refNode.child(status.customeruid).child("orders").child("delivered").child(status.orderid).set({
 			customeruid: status.customeruid,
 			vendoruid: status.vendoruid,
 			//runneruid: status.runneruid,
@@ -795,7 +810,7 @@ exports.inprogressMonitor = functions.database.ref("inprogress/{vendoruid}/{push
 	refNode.child(status.vendoruid).child("orders").child("delivered").child(status.orderid).update({
 			cost: snapshot.val()
 	});
-	refNode.child(status.customeruid).child("orders").child(status.orderid).update({
+	refNode.child(status.customeruid).child("orders").child("delivered").child(status.orderid).update({
 			cost: snapshot.val()
 	});
 /*	refNode.child(status.runneruid).child("orders").child("delivered").child(status.orderid).update({
@@ -1023,7 +1038,7 @@ exports.acceptedOrderMonitor = functions.database.ref("uid/{uid}/orders/accepted
         //sound: "default"
 
 		customeruid: status.customeruid,
-    vendoruid: status.vendoruid,
+    	vendoruid: status.vendoruid,
 		message: status.result,
         sound: "default"
 
