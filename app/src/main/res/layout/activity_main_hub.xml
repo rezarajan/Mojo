@@ -41,7 +41,7 @@
         android:layout_height="36dp"
         android:layout_gravity="top|start"
         android:layout_margin="15dp"
-        android:src="@drawable/ic_history_48px"
+        android:src="@drawable/ic_mojo_logo"
         android:backgroundTint="@color/colorSecondary"/>
 
 </FrameLayout>
