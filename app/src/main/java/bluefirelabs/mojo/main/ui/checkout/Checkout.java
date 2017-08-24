@@ -237,6 +237,8 @@ public class Checkout extends FragmentActivity {
                     //reference.child(pushId).child("items").child(data.getString(2)).setValue(data.getString(4));
                     reference.child(pushId).child("cost").child(data.getString(2)).setValue(data.getString(3));
                     reference.child(pushId).child("items").child(itemRef).child("extras").child(dataExtras.getString(0)).setValue(extrasListing);
+                    reference.child(pushId).child("items").child(itemRef).child("name").setValue(data.getString(2));
+                    reference.child(pushId).child("items").child(itemRef).child("cost").setValue(data.getString(3));
 
                     extrasListing.clear();
                 }
@@ -316,6 +318,8 @@ public class Checkout extends FragmentActivity {
                         //reference.child(pushId).child("items").child(data.getString(2)).setValue(data.getString(4));
                         reference.child(pushId).child("cost").child(data.getString(2)).setValue(data.getString(3));
                         reference.child(pushId).child("items").child(itemRef).child("extras").child(dataExtras.getString(0)).setValue(extrasListing);
+                        reference.child(pushId).child("items").child(itemRef).child("name").setValue(data.getString(2));
+                        reference.child(pushId).child("items").child(itemRef).child("cost").setValue(data.getString(3));
 
                         extrasListing.clear();
 
@@ -364,6 +368,8 @@ public class Checkout extends FragmentActivity {
                         //reference.child(pushId).child("items").child(data.getString(2)).setValue(data.getString(4));
                         reference.child(pushId).child("cost").child(data.getString(2)).setValue(data.getString(3));
                         reference.child(pushId).child("items").child(itemRef).child("extras").child(dataExtras.getString(0)).setValue(extrasListing);
+                        reference.child(pushId).child("items").child(itemRef).child("name").setValue(data.getString(2));
+                        reference.child(pushId).child("items").child(itemRef).child("cost").setValue(data.getString(3));
 
                         extrasListing.clear();
 
@@ -420,6 +426,8 @@ public class Checkout extends FragmentActivity {
                         //reference.child(pushId).child("items").child(data.getString(2)).setValue(data.getString(4));
                         reference.child(pushId).child("cost").child(data.getString(2)).setValue(data.getString(3));
                         reference.child(pushId).child("items").child(itemRef).child("extras").child(dataExtras.getString(0)).setValue(extrasListing);
+                        reference.child(pushId).child("items").child(itemRef).child("name").setValue(data.getString(2));
+                        reference.child(pushId).child("items").child(itemRef).child("cost").setValue(data.getString(3));
 
                         extrasListing.clear();
 

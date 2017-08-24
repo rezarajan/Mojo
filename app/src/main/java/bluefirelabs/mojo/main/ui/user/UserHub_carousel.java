@@ -73,6 +73,7 @@ import bluefirelabs.mojo.main.login.Login;
 import bluefirelabs.mojo.main.transition.DetailActivity;
 import bluefirelabs.mojo.main.ui.payments.Payments;
 import cdflynn.android.library.turn.TurnLayoutManager;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class UserHub_carousel extends AppCompatActivity
         implements android.location.LocationListener {
@@ -114,6 +115,7 @@ public class UserHub_carousel extends AppCompatActivity
 
     private CardView mainInfo;
 
+    private CircleImageView orderTrackingIndicator;
 
     public static final String EXTRA_RESTAURANT_LOGO = "restaurantLogo";
     public static final String EXTRA_RESTAURANT_NAME = "restaurantName";
@@ -147,6 +149,10 @@ public class UserHub_carousel extends AppCompatActivity
             view.setSystemUiVisibility(flags);
 
         }
+
+        orderTrackingIndicator = findViewById(R.id.orderTrackingIndicator);
+        orderTrackingIndicator.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.colorOpen));
+
 
         //setting the background opacity for the location card view without affecting the opacity
         //of the text
