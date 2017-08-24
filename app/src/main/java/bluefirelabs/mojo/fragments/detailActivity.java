@@ -176,7 +176,7 @@ public class detailActivity extends Fragment{
                             Log.d("HopperValues", hopperValues.toString());
                             Log.d("Size", String.valueOf(hopperValues.size()));
 
-
+                            //Getting keys
                             for (final String s : hopperValues.keySet()) {
                                 Log.d("List Item", "Key: " + s);
 

@@ -46,9 +46,11 @@ import com.firebase.geofire.GeoQueryEventListener;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import com.squareup.picasso.Picasso;
 import com.yarolegovich.discretescrollview.DiscreteScrollView;
@@ -59,6 +61,8 @@ import com.yarolegovich.discretescrollview.transform.ScaleTransformer;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.Map;
 
 import bluefirelabs.mojo.R;
 import bluefirelabs.mojo.fragments.barcodeConfirmer;
@@ -151,7 +155,70 @@ public class UserHub_carousel extends AppCompatActivity
         }
 
         orderTrackingIndicator = findViewById(R.id.orderTrackingIndicator);
-        orderTrackingIndicator.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.colorOpen));
+        //The indicator operations will be handled with an addEventListener
+        orderTrackingIndicator.setVisibility(View.GONE);
+
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        String uid = firebaseAuth.getCurrentUser().getUid();
+
+
+        final DatabaseReference orderTrackingReference = FirebaseDatabase.getInstance().getReference("uid")
+                .child(uid).child("orders");
+        orderTrackingReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Map<String, Object> hopperValues = (Map<String, Object>) dataSnapshot.getValue();
+
+                if(hopperValues != null){
+                    for(int i = 0; i < hopperValues.size(); i++){
+                        //setting the order tracker visible in the case that it was previously removed
+                        orderTrackingIndicator.setVisibility(View.VISIBLE);
+
+                        if(hopperValues.get("requests") != null){
+                            orderTrackingIndicator.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
+                        }
+                        if(hopperValues.get("accepted") != null){
+                            orderTrackingIndicator.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.colorSecondary));
+
+                        }
+                        if(hopperValues.get("declined") != null){
+                            orderTrackingIndicator.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.colorClosed));
+
+                        }
+                        if(hopperValues.get("sending") != null){
+                            orderTrackingIndicator.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.colorSecondary));
+
+                        }
+                        if(hopperValues.get("delivered") != null){
+                            orderTrackingIndicator.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.colorOpen));
+
+                        }
+
+                        //Leaving out delivered since this is not useful for live order tracking
+                    /*if(hopperValues.get("delivered") != null){
+
+                    }*/
+                    }
+                }
+                else{
+                    //removing the indicator for no active orders
+                    orderTrackingIndicator.setVisibility(View.GONE);
+                }
+
+                //String runnerName = hopperValues.get("accepted").toString();        //finds the runner's name
+
+
+                //Sets the vendor's name
+                //viewHolder.status_collected.setText(runnerName + " has collected your order");
+                //Log.d("Accepted Orders", accepted.toString());
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
 
         //setting the background opacity for the location card view without affecting the opacity
