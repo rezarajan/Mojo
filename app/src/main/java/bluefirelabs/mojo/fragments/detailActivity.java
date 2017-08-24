@@ -77,6 +77,7 @@ public class detailActivity extends Fragment{
     Integer extraCountValue = 0;
 
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

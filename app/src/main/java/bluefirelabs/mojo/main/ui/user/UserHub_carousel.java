@@ -121,6 +121,8 @@ public class UserHub_carousel extends AppCompatActivity
 
     private CircleImageView orderTrackingIndicator;
 
+    private TextView mojoLogo;
+
     public static final String EXTRA_RESTAURANT_LOGO = "restaurantLogo";
     public static final String EXTRA_RESTAURANT_NAME = "restaurantName";
     public static final String EXTRA_RESTAURANT_COLOR = "restaurantColor";
@@ -333,6 +335,57 @@ public class UserHub_carousel extends AppCompatActivity
         ft.commit();
 
         locationTasks();
+
+        mojoLogo = findViewById(R.id.mojoLogo);
+
+        mojoLogo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                detailActivity detailActivity = (bluefirelabs.mojo.fragments.detailActivity) fm.findFragmentByTag("detailActivity");
+                restaurantCards restaurantCards = (bluefirelabs.mojo.fragments.restaurantCards) fm.findFragmentByTag("restaurantCards");
+                barcodeConfirmer barcodeConfirmer = (bluefirelabs.mojo.fragments.barcodeConfirmer) fm.findFragmentByTag("barcodeConfirmer");
+
+                FragmentTransaction ft = fm.beginTransaction();
+
+                if (detailActivity != null && restaurantCards != null) {
+
+                    if (slidingUpPanelLayout_frag2.getPanelState().equals(SlidingUpPanelLayout.PanelState.COLLAPSED)) {
+                        //ft.remove(detailActivity);
+                        //ft.add(R.id.fragment2, restaurantCards, "restaurantCards");
+                        ft.setCustomAnimations(R.animator.slide_out_down, R.animator.slide_in_up);
+                        ft.remove(detailActivity);      //Using remove here so that in the next case, when the user wants to exit the app detail activity will show null
+                        //If detach was used, then detailActivity will still remain in the Fragment Manager, which results in an error
+                        ft.attach(restaurantCards);
+                        ft.commit();
+                        locationTasks();
+                        scrollView.setVisibility(View.GONE);
+                        slidingUpPanelLayout_frag2.setVisibility(View.GONE);
+                        slidingUpPanelLayout_frag1.setVisibility(View.VISIBLE);
+
+                    } else {
+                        //resetting the panel to a collapsed state on second fragment
+                        slidingUpPanelLayout_frag2.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+
+                        ft.setCustomAnimations(R.animator.slide_out_down, R.animator.slide_in_up);
+                        ft.remove(detailActivity);      //Using remove here so that in the next case, when the user wants to exit the app detail activity will show null
+                        //If detach was used, then detailActivity will still remain in the Fragment Manager, which results in an error
+                        ft.attach(restaurantCards);
+                        ft.commit();
+                        locationTasks();
+                        scrollView.setVisibility(View.GONE);
+                        slidingUpPanelLayout_frag2.setVisibility(View.GONE);
+                        slidingUpPanelLayout_frag1.setVisibility(View.VISIBLE);
+                    }
+                } else if (detailActivity == null && restaurantCards != null) {
+                    if (slidingUpPanelLayout_frag1.getPanelState().equals(SlidingUpPanelLayout.PanelState.EXPANDED)) {
+                        //resetting the panel to a collapsed state on first fragment
+                        slidingUpPanelLayout_frag1.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+
+                    }
+                }
+            }
+        });
 
 
     }
