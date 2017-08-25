@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="90dp"
+    android:layout_height="23dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="5dp"
+    android:background="@color/colorPrimaryLight">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/extraItem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="4dp"
+            android:fontFamily="@font/montserrat"
+            android:text="Item x1"
+            android:textSize="10sp"
+            android:textColor="@color/colorPrimaryDark"/>
+
+        <FrameLayout
+            android:id="@+id/removeExtra"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.makeramen.roundedimageview.RoundedImageView
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="24dp"
+                android:layout_gravity="end"
+                android:layout_marginStart="14dp"
+                android:id="@+id/imageView1"
+                android:scaleType="fitCenter"
+                app:riv_corner_radius_top_left="0dp"
+                app:riv_corner_radius_top_right="5dp"
+                app:riv_corner_radius_bottom_left="0dp"
+                app:riv_corner_radius_bottom_right="5dp"
+                app:riv_border_width="0dip"
+                app:riv_border_color="#000000"
+                app:riv_mutate_background="true"
+                app:riv_tile_mode="repeat"
+                app:riv_oval="false"
+                android:background="@color/colorPrimaryDark"/>
+
+            <TextView
+                android:layout_width="34dp"
+                android:layout_height="24dp"
+                android:layout_marginStart="18dp"
+                android:text="X"
+                android:gravity="center"/>
+
+        </FrameLayout>
+
+
+    </LinearLayout>
+</android.support.v7.widget.CardView>
