@@ -8,13 +8,13 @@
     android:layout_marginBottom="-78dp"
     card_view:cardBackgroundColor="@android:color/white"
     card_view:cardCornerRadius="30dp"
-    card_view:cardElevation="0dp">
+    card_view:cardElevation="1dp">
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/card_border"
-        android:alpha="0.2"></FrameLayout>
+        android:alpha="0.3"></FrameLayout>
 
 
     <android.support.constraint.ConstraintLayout
