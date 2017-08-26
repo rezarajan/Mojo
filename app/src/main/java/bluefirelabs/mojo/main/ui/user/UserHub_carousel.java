@@ -66,6 +66,7 @@ import java.util.Map;
 
 import bluefirelabs.mojo.R;
 import bluefirelabs.mojo.fragments.barcodeConfirmer;
+import bluefirelabs.mojo.fragments.cart;
 import bluefirelabs.mojo.fragments.detailActivity;
 import bluefirelabs.mojo.fragments.restaurantCards;
 import bluefirelabs.mojo.handlers.adapters.FirebaseViewPagerAdapter;
@@ -276,7 +277,8 @@ public class UserHub_carousel extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 //Intent intent = new Intent(DetailActivity.this, Checkout.class);            //Goes to receipt
-                Intent intent = new Intent(getApplicationContext(), bluefirelabs.mojo.main.ui.checkout.Checkout.class);            //Goes to receipt
+                //Intent intent = new Intent(getApplicationContext(), bluefirelabs.mojo.main.ui.checkout.Checkout.class);            //Goes to receipt
+                Intent intent = new Intent(getApplicationContext(), cart.class);            //Goes to receipt
                 startActivity(intent);
             }
         });

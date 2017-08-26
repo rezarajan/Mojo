@@ -154,7 +154,7 @@
             android:configChanges="orientation"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".main.transition.MainActivity"
+            android:name=".fragments.cart"
             android:configChanges="orientation"
             android:screenOrientation="portrait" />
         <activity

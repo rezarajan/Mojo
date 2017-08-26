@@ -16,7 +16,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
     public static final String DATABASE_NAME = "receipt.db";
     public static final String TABLE_NAME = "checkout_table";
     public static final String ID = "ID";       //column 1      //String 0
-    public static final String RESTAURANT = "MENU";       //column 2    //String 1
+    public static final String RESTAURANT = "RESTAURANT";       //column 2    //String 1
     public static final String ITEM = "ITEM";       //column 3      //String 2
     public static final String COST = "COST";       //column 4      //String 3
     public static final String QUANTITY = "QUANTITY";       //column 5      //String 4
@@ -26,8 +26,6 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         super(context, DATABASE_NAME, null, 1);
 
     }
-
-
 
     @Override
     public void onCreate(SQLiteDatabase db) {
