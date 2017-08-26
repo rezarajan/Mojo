@@ -19,6 +19,7 @@ public class shoppingCartAdapter extends RecyclerView.Adapter<SetViewHolder>{
 
     private Context context;
     private ArrayList<String> arrayList;
+    private View view;
 
     public shoppingCartAdapter(Context context, ArrayList<String> arrayList){
         this.context = context;
@@ -75,6 +76,8 @@ public class shoppingCartAdapter extends RecyclerView.Adapter<SetViewHolder>{
     @Override
     public void onBindViewHolder(SetViewHolder holder, int position) {
         holder.restaurantName.setText(arrayList.get(position));
+        holder.subRecycler.setVisibility(View.GONE);
+        holder.view.setVisibility(View.GONE);
     }
 
     @Override

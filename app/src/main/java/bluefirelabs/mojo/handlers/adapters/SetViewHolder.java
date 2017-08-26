@@ -15,11 +15,17 @@ public class SetViewHolder extends RecyclerView.ViewHolder {
     public TextView restaurantName, restaurantCost,
             totalItemQuantity;
 
+    public RecyclerView subRecycler;
+
+    public View view;
+
     public SetViewHolder(View itemView) {
         super(itemView);
 
         restaurantName = (TextView) itemView.findViewById(R.id.restaurantName);
         restaurantCost = (TextView) itemView.findViewById(R.id.restaurantCost);
         totalItemQuantity = (TextView) itemView.findViewById(R.id.totalItemQuantity);
+        subRecycler = itemView.findViewById(R.id.subRecycler);
+        view = itemView.findViewById(R.id.view);
     }
 }
