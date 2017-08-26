@@ -3,6 +3,7 @@ package bluefirelabs.mojo.handlers.adapters;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.transition.TransitionManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,9 @@ public class shoppingCartAdapter extends RecyclerView.Adapter<SetViewHolder>{
     private View view;
 
     private int mExpandedPosition = -1;
+
+    private boolean firstRun = true;
+
 
     public shoppingCartAdapter(Context context, ArrayList<String> arrayList){
         this.context = context;
@@ -81,6 +85,21 @@ public class shoppingCartAdapter extends RecyclerView.Adapter<SetViewHolder>{
         holder.restaurantName.setText(arrayList.get(position));
         //holder.subRecycler.setVisibility(View.GONE);
 
+
+        if(firstRun){
+            if(position == getItemCount()-1){
+                holder.subRecycler.setVisibility(View.VISIBLE);
+                holder.view.setVisibility(View.VISIBLE);
+
+                //Sets the expanded position to the last item so that on the first run the last
+                //card is expanded
+                mExpandedPosition = getItemCount() - 1;
+
+                Log.d("Item Count", String.valueOf(getItemCount()));
+                firstRun = false;
+            }
+        }
+
         final boolean isExpanded = position==mExpandedPosition;
         holder.subRecycler.setVisibility(isExpanded?View.VISIBLE:View.GONE);
         holder.view.setVisibility(isExpanded?View.VISIBLE:View.GONE);
@@ -93,6 +112,8 @@ public class shoppingCartAdapter extends RecyclerView.Adapter<SetViewHolder>{
                 notifyDataSetChanged();
             }
         });
+
+
         //holder.view.setVisibility(View.GONE);
     }
 
