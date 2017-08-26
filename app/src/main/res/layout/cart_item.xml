@@ -19,7 +19,8 @@
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:stateListAnimator="@animator/comment_selection">
 
         <TextView
             android:id="@+id/restaurantName"

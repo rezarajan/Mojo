@@ -2,6 +2,7 @@ package bluefirelabs.mojo.handlers.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.transition.TransitionManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,8 @@ public class shoppingCartAdapter extends RecyclerView.Adapter<SetViewHolder>{
     private Context context;
     private ArrayList<String> arrayList;
     private View view;
+
+    private int mExpandedPosition = -1;
 
     public shoppingCartAdapter(Context context, ArrayList<String> arrayList){
         this.context = context;
@@ -74,10 +77,23 @@ public class shoppingCartAdapter extends RecyclerView.Adapter<SetViewHolder>{
     }
 
     @Override
-    public void onBindViewHolder(SetViewHolder holder, int position) {
+    public void onBindViewHolder(final SetViewHolder holder, final int position) {
         holder.restaurantName.setText(arrayList.get(position));
-        holder.subRecycler.setVisibility(View.GONE);
-        holder.view.setVisibility(View.GONE);
+        //holder.subRecycler.setVisibility(View.GONE);
+
+        final boolean isExpanded = position==mExpandedPosition;
+        holder.subRecycler.setVisibility(isExpanded?View.VISIBLE:View.GONE);
+        holder.view.setVisibility(isExpanded?View.VISIBLE:View.GONE);
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mExpandedPosition = isExpanded ? -1:holder.getAdapterPosition();
+                TransitionManager.beginDelayedTransition(holder.subRecycler);
+                notifyDataSetChanged();
+            }
+        });
+        //holder.view.setVisibility(View.GONE);
     }
 
     @Override
