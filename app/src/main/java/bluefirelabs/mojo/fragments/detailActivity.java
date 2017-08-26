@@ -54,8 +54,10 @@ public class detailActivity extends Fragment{
     private ImageView imageView;
     private RelativeLayout background_image_view;
     private View accent_layout;
-    ;
+
     private LinearLayout listContainer;
+
+    private TextView restaurantNameHolder;
 
     LinearLayout linearLayout;
     RelativeLayout detail_item;
@@ -106,6 +108,10 @@ public class detailActivity extends Fragment{
             detail_item = (RelativeLayout) view.findViewById(R.id.detail_card_layout);
             accent_layout = (View) view.findViewById(R.id.accent_layout);        //separator colour
             linearLayout = (LinearLayout) view.findViewById(R.id.detail_list_layout);
+
+            //Setting the restaurant name on the top of the card
+            restaurantNameHolder = view.findViewById(R.id.restaurantNameHolder);
+            restaurantNameHolder.setText(restaurantName);
 
             nestedScrollView = (NestedScrollView) view.findViewById(R.id.scrollView);
             nestedScrollViewExtras = (NestedScrollView) view.findViewById(R.id.scrollViewExtras);
