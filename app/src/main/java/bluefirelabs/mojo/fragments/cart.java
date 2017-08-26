@@ -28,12 +28,17 @@ public class cart extends FragmentActivity {
 
 
         Cursor data = myDb.orderAlpha();
+        String previousRestaurant = "";
 
         if(data != null){
             if(data.moveToFirst()){
                 do{
-                    restaurantNames.add(data.getString(1));
-                    Log.d("Database Data", data.getString(1));
+
+                    if(!data.getString(1).equals(previousRestaurant)){
+                        restaurantNames.add(data.getString(1));
+                        Log.d("Database Data", data.getString(1));
+                        previousRestaurant = data.getString(1);
+                    }
                 } while (data.moveToNext());
             }
         }
