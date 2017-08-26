@@ -1,9 +1,7 @@
 package bluefirelabs.mojo.fragments;
 
 import android.app.Fragment;
-import android.database.Cursor;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,8 +10,6 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 
 import bluefirelabs.mojo.R;
-import bluefirelabs.mojo.handlers.adapters.shoppingCartAdapter;
-import database.DatabaseHelper;
 
 public class shoppingCart extends Fragment {
 
@@ -24,6 +20,7 @@ public class shoppingCart extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+/*
         DatabaseHelper myDb = new DatabaseHelper(getContext());
 
         Cursor data = myDb.orderAlpha();
@@ -41,6 +38,7 @@ public class shoppingCart extends Fragment {
 
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
+*/
 
 
     }

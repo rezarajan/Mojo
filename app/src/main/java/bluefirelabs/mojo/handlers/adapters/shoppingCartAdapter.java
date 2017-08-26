@@ -20,7 +20,7 @@ public class shoppingCartAdapter extends RecyclerView.Adapter<SetViewHolder>{
 
 
     private Context context;
-    private ArrayList<String> arrayList;
+    private ArrayList<String> restaurantName, restaurantQuantity;
     private View view;
 
     private int mExpandedPosition = -1;
@@ -28,9 +28,10 @@ public class shoppingCartAdapter extends RecyclerView.Adapter<SetViewHolder>{
     private boolean firstRun = true;
 
 
-    public shoppingCartAdapter(Context context, ArrayList<String> arrayList){
+    public shoppingCartAdapter(Context context, ArrayList<String> restaurantName, ArrayList<String> restaurantQuantity){
         this.context = context;
-        this.arrayList = arrayList;
+        this.restaurantName = restaurantName;
+        this.restaurantQuantity = restaurantQuantity;
     }
 
 
@@ -82,8 +83,19 @@ public class shoppingCartAdapter extends RecyclerView.Adapter<SetViewHolder>{
 
     @Override
     public void onBindViewHolder(final SetViewHolder holder, final int position) {
-        holder.restaurantName.setText(arrayList.get(position));
         //holder.subRecycler.setVisibility(View.GONE);
+        holder.restaurantName.setText(restaurantName.get(position));
+        String item;
+
+        //this appends the correct spelling based on item quantity
+        if(restaurantQuantity.get(position).equals("1")){
+            item = " item";
+        }
+        else {
+            item = " items";
+        }
+        holder.totalItemQuantity.setText(restaurantQuantity.get(position) + item);
+
 
 
         if(firstRun){
@@ -119,6 +131,6 @@ public class shoppingCartAdapter extends RecyclerView.Adapter<SetViewHolder>{
 
     @Override
     public int getItemCount() {
-        return arrayList.size();
+        return restaurantName.size();
     }
 }
