@@ -88,7 +88,7 @@ public class cart extends FragmentActivity {
 
                         itemName.put(data.getString(1) + "_" + String.valueOf(indexItems), data.getString(2));   //restaurant_0, itemName
                         itemCost.put(data.getString(1) + "_" + String.valueOf(indexItems), data.getString(3));   //restaurant_0, itemCost
-                        itemCount.put(data.getString(1) + "_" + String.valueOf(indexItems), data.getString(4));   //restaurant_0, itemCost
+                        itemCount.put(data.getString(1) + "_" + String.valueOf(indexItems), data.getString(4));   //restaurant_0, itemQuantity
                         indexItems++;
 
                         restaurantNames.add(data.getString(1));

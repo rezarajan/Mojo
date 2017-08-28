@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.transition.TransitionManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -34,6 +35,8 @@ public class shoppingCartAdapter extends RecyclerView.Adapter<SetViewHolder>{
     private int mExpandedPosition = -1;
 
     private boolean firstRun = true;
+
+    private Double restaurantCost = 0.00;
 
 
     public shoppingCartAdapter(Context context, ArrayList<String> restaurantName, ArrayList<String> restaurantQuantity, Map<String, String> itemName, Map<String, String> itemCost, Map<String, String> itemCount){
@@ -111,6 +114,15 @@ public class shoppingCartAdapter extends RecyclerView.Adapter<SetViewHolder>{
         }
         holder.totalItemQuantity.setText(restaurantQuantity.get(position) + item);
 
+        restaurantCost = 0.00;
+
+        for(int i=0; i < Integer.parseInt(restaurantQuantity.get(position)); i++){
+            restaurantCost += Double.parseDouble(itemCost.get(restaurantName.get(position) + "_" + String.valueOf(i)));
+
+            //Log.d("Cost", itemCost.get(restaurantName.get(position) + "_" + String.valueOf(i)));
+        }
+
+        holder.restaurantCost.setText("$" + String.valueOf(restaurantCost));
 
 
         if(firstRun){
