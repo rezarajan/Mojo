@@ -100,7 +100,7 @@ public class subItemAdapter extends RecyclerView.Adapter<SubsetViewHolder>{
 
 
         //holder.itemName.setText("Item Name");
-        //holder.itemName.setText(itemName.get(restaurantName + "_" + String.valueOf(position)));
+        holder.itemName.setText(itemName.get(restaurantName + "_" + String.valueOf(position)));
         String item;
 
         //this appends the correct spelling based on item quantity

@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.transition.TransitionManager;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -133,6 +134,32 @@ public class shoppingCartAdapter extends RecyclerView.Adapter<SetViewHolder>{
             //if the view is expanded then the items for the restaurant are displayed
             holder.subRecycler.setLayoutManager(itemlayoutManager);
             holder.subRecycler.setAdapter(itemAdapter);
+
+            RecyclerView.OnItemTouchListener mScrollTouchListener = new RecyclerView.OnItemTouchListener() {
+                @Override
+                public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
+                    int action = e.getAction();
+                    switch (action) {
+                        case MotionEvent.ACTION_MOVE:
+                            rv.getParent().requestDisallowInterceptTouchEvent(true);
+                            break;
+                    }
+                    return false;
+                }
+
+                @Override
+                public void onTouchEvent(RecyclerView rv, MotionEvent e) {
+
+                }
+
+                @Override
+                public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+
+                }
+            };
+
+            holder.subRecycler.addOnItemTouchListener(mScrollTouchListener);
+
         }
 
 
