@@ -13,15 +13,23 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import bluefirelabs.mojo.R;
 import bluefirelabs.mojo.handlers.adapters.shoppingCartAdapter;
+import bluefirelabs.mojo.handlers.adapters.subItemAdapter;
 import database.DatabaseHelper;
+import database.DatabaseHelperExtras;
 
 public class cart extends FragmentActivity {
 
     private ArrayList<String> restaurantNames = new ArrayList<>();
     private ArrayList<String> restaurantQuantity = new ArrayList<>();
+    //private ArrayList<String> itemName = new ArrayList<>();/**/
+
+    private Map<String, String> itemName = new HashMap<String, String>();
+
     private RecyclerView recyclerView;
 
     @Override
@@ -54,12 +62,14 @@ public class cart extends FragmentActivity {
 
 
         DatabaseHelper myDb = new DatabaseHelper(getApplicationContext());
+        DatabaseHelperExtras myDbExtras = new DatabaseHelperExtras(getApplicationContext());
         recyclerView = findViewById(R.id.mainRecycler);
 
-
         Cursor data = myDb.orderAlpha();
+        Cursor dataItems = myDb.orderAlpha();
         String previousRestaurant = "";
         int index = -1; //set to -1 since on the first iteration for item quantity there is a ++ to make it 0
+        int indexItems = 0;
         int specificItemQuantity = 1;
 
 
@@ -69,6 +79,12 @@ public class cart extends FragmentActivity {
 
                     if(!data.getString(1).equals(previousRestaurant)){
                         specificItemQuantity = 1;
+                        indexItems = 0;
+
+                        myDbExtras.orderExtras(data.getString(2) + "_0", data.getString(1));
+
+                        itemName.put(data.getString(1) + "_" + String.valueOf(indexItems), data.getString(2));   //restaurant_0, itemName
+                        indexItems++;
 
                         restaurantNames.add(data.getString(1));
                         Log.d("Database Data", data.getString(1));
@@ -86,6 +102,9 @@ public class cart extends FragmentActivity {
                         restaurantQuantity.set(index, String.valueOf(specificItemQuantity));    //using the set operation to overwrite existing data at the index
                         Log.d("Index : Quantity", String.valueOf(index) + ":" + String.valueOf(specificItemQuantity));
 
+                        itemName.put(data.getString(1) + "_" + String.valueOf(indexItems), data.getString(2));   //restaurant_1, itemName
+                        indexItems++;
+
 
                     }
                 } while (data.moveToNext());
@@ -93,12 +112,14 @@ public class cart extends FragmentActivity {
         }
 
         Log.d("Quantity list", restaurantQuantity.toString());
+        Log.d("Item list", itemName.toString());
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-        shoppingCartAdapter adapter = new shoppingCartAdapter(getApplicationContext(), restaurantNames, restaurantQuantity);
+        shoppingCartAdapter adapter = new shoppingCartAdapter(getApplicationContext(), restaurantNames, restaurantQuantity, itemName);
 
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
+
 
     }
 }

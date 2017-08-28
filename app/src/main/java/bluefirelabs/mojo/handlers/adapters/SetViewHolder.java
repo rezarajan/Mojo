@@ -28,4 +28,5 @@ public class SetViewHolder extends RecyclerView.ViewHolder {
         subRecycler = itemView.findViewById(R.id.subRecycler);
         view = itemView.findViewById(R.id.view);
     }
+
 }
