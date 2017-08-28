@@ -10,6 +10,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -37,6 +38,13 @@ public class shoppingCartAdapter extends RecyclerView.Adapter<SetViewHolder>{
     private boolean firstRun = true;
 
     private Double restaurantCost = 0.00;
+    private DecimalFormat df = new DecimalFormat("#.##");
+
+    private String newTotal;
+
+    private int positionToSet;
+
+
 
 
     public shoppingCartAdapter(Context context, ArrayList<String> restaurantName, ArrayList<String> restaurantQuantity, Map<String, String> itemName, Map<String, String> itemCost, Map<String, String> itemCount){
@@ -103,7 +111,7 @@ public class shoppingCartAdapter extends RecyclerView.Adapter<SetViewHolder>{
 
         final LinearLayoutManager itemlayoutManager = new LinearLayoutManager(context);
         itemlayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        final subItemAdapter itemAdapter = new subItemAdapter(context, itemName, itemCost, itemCount, restaurantName.get(position), Integer.parseInt(restaurantQuantity.get(position)));
+        final subItemAdapter itemAdapter = new subItemAdapter(context, itemName, itemCost, itemCount, restaurantName.get(position), Integer.parseInt(restaurantQuantity.get(position)), holder);
 
         //this appends the correct spelling based on item quantity
         if(restaurantQuantity.get(position).equals("1")){
@@ -117,12 +125,18 @@ public class shoppingCartAdapter extends RecyclerView.Adapter<SetViewHolder>{
         restaurantCost = 0.00;
 
         for(int i=0; i < Integer.parseInt(restaurantQuantity.get(position)); i++){
-            restaurantCost += Double.parseDouble(itemCost.get(restaurantName.get(position) + "_" + String.valueOf(i)));
+            restaurantCost += (Double.parseDouble(itemCost.get(restaurantName.get(position) + "_" + String.valueOf(i)))) * (Double.parseDouble(itemCount.get(restaurantName.get(position) + "_" + String.valueOf(i))));
 
             //Log.d("Cost", itemCost.get(restaurantName.get(position) + "_" + String.valueOf(i)));
         }
 
-        holder.restaurantCost.setText("$" + String.valueOf(restaurantCost));
+        holder.restaurantCost.setText("$" + String.valueOf(df.format(restaurantCost)));
+
+        //if the item quantities are changed this sets the text to the appropriate view
+        if(newTotal != null && position == positionToSet){
+            holder.restaurantCost.setText(newTotal);
+        }
+
 
 
         if(firstRun){
@@ -181,11 +195,22 @@ public class shoppingCartAdapter extends RecyclerView.Adapter<SetViewHolder>{
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                //For the case when the user changes the item total
+                newTotal = holder.restaurantCost.getText().toString();
+
+                positionToSet = position;
+
+                Log.d("New Cost", newTotal);
+
                 mExpandedPosition = isExpanded ? -1:holder.getAdapterPosition();
                 TransitionManager.beginDelayedTransition(holder.subRecycler);
                 notifyDataSetChanged();
+
             }
         });
+
+
 
 
         //holder.view.setVisibility(View.GONE);
