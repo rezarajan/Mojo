@@ -22,22 +22,24 @@ public class subItemAdapter extends RecyclerView.Adapter<SubsetViewHolder>{
 
 
     private Context context;
-    private Map<String, String> itemName, restaurantQuantity;
+    private Map<String, String> itemName, restaurantQuantity, itemCost, itemCount;
 
     private String restaurantName;
 
     private View view;
 
     private int mExpandedPosition = -1;
-    private int itemCount = 1;
+    private int totalItemCount = 1;
 
     private boolean firstRun = true;
 
 
-    public subItemAdapter(Context context, Map<String, String> itemName, String restaurantName, Integer itemCount){
+    public subItemAdapter(Context context, Map<String, String> itemName, Map<String, String> itemCost, Map<String, String> itemCount, String restaurantName, Integer totalItemCount){
         this.context = context;
         this.itemName = itemName;
         this.restaurantName = restaurantName;
+        this.totalItemCount = totalItemCount;
+        this.itemCost = itemCost;
         this.itemCount = itemCount;
         //this.restaurantQuantity = restaurantQuantity;
     }
@@ -86,7 +88,6 @@ public class subItemAdapter extends RecyclerView.Adapter<SubsetViewHolder>{
     @Override
     public SubsetViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.cart_sub_item, parent, false);
-        Log.d("Hello from ViewHolder", String.valueOf(itemCount));
         return new SubsetViewHolder(view);
     }
 
@@ -94,15 +95,15 @@ public class subItemAdapter extends RecyclerView.Adapter<SubsetViewHolder>{
     public void onBindViewHolder(final SubsetViewHolder holder, final int position) {
         //holder.subRecycler.setVisibility(View.GONE);
         //holder.itemName.setText(itemName.get(position));
-        Log.d("Hello from ViewHolder", itemName.toString());
+        /*Log.d("Hello from ViewHolder", itemName.toString());
         Log.d("Hello from ViewHolder", restaurantName + "_" + String.valueOf(position));
-        Log.d("Hello from ViewHolder", String.valueOf(itemCount));
+        Log.d("Hello from ViewHolder", String.valueOf(itemCount));*/
 
 
         //holder.itemName.setText("Item Name");
         holder.itemName.setText(itemName.get(restaurantName + "_" + String.valueOf(position)));
-        String item;
-
+        holder.specificItemPrice.setText("$" + itemCost.get(restaurantName + "_" + String.valueOf(position)));
+        holder.itemCount.setText(itemCount.get(restaurantName + "_" + String.valueOf(position)));
         //this appends the correct spelling based on item quantity
 /*
         if(restaurantQuantity.get(position).equals("1")){
@@ -151,6 +152,6 @@ public class subItemAdapter extends RecyclerView.Adapter<SubsetViewHolder>{
 
     @Override
     public int getItemCount() {
-        return itemCount;
+        return totalItemCount;
     }
 }

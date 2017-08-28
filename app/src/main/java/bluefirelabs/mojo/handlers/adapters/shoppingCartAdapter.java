@@ -4,7 +4,6 @@ import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.transition.TransitionManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -27,6 +26,8 @@ public class shoppingCartAdapter extends RecyclerView.Adapter<SetViewHolder>{
     private ArrayList<String> restaurantName, restaurantQuantity;
 
     private Map<String, String> itemName = new HashMap<String, String>();
+    private Map<String, String> itemCost = new HashMap<String, String>();
+    private Map<String, String> itemCount = new HashMap<String, String>();
 
     private View view;
 
@@ -35,11 +36,13 @@ public class shoppingCartAdapter extends RecyclerView.Adapter<SetViewHolder>{
     private boolean firstRun = true;
 
 
-    public shoppingCartAdapter(Context context, ArrayList<String> restaurantName, ArrayList<String> restaurantQuantity, Map<String, String> itemName){
+    public shoppingCartAdapter(Context context, ArrayList<String> restaurantName, ArrayList<String> restaurantQuantity, Map<String, String> itemName, Map<String, String> itemCost, Map<String, String> itemCount){
         this.context = context;
         this.restaurantName = restaurantName;
         this.restaurantQuantity = restaurantQuantity;
         this.itemName = itemName;
+        this.itemCost = itemCost;
+        this.itemCount = itemCount;
     }
 
 
@@ -97,7 +100,7 @@ public class shoppingCartAdapter extends RecyclerView.Adapter<SetViewHolder>{
 
         final LinearLayoutManager itemlayoutManager = new LinearLayoutManager(context);
         itemlayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        final subItemAdapter itemAdapter = new subItemAdapter(context, itemName, restaurantName.get(position), Integer.parseInt(restaurantQuantity.get(position)));
+        final subItemAdapter itemAdapter = new subItemAdapter(context, itemName, itemCost, itemCount, restaurantName.get(position), Integer.parseInt(restaurantQuantity.get(position)));
 
         //this appends the correct spelling based on item quantity
         if(restaurantQuantity.get(position).equals("1")){
@@ -119,8 +122,8 @@ public class shoppingCartAdapter extends RecyclerView.Adapter<SetViewHolder>{
                 //card is expanded
                 mExpandedPosition = getItemCount() - 1;
 
-                Log.d("Item Count", String.valueOf(getItemCount()));
-                Log.d("Items", itemName.toString());
+                /*Log.d("Item Count", String.valueOf(getItemCount()));
+                Log.d("Items", itemName.toString());*/
                 firstRun = false;
             }
         }

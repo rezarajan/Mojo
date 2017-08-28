@@ -13,7 +13,7 @@ import bluefirelabs.mojo.R;
 public class SubsetViewHolder extends RecyclerView.ViewHolder {
 
     public TextView itemName, specificItemPrice,
-            removeItem;
+                itemCount, removeItem;
 
     public RecyclerView supersubRecycler;
 
@@ -24,6 +24,7 @@ public class SubsetViewHolder extends RecyclerView.ViewHolder {
 
         itemName = (TextView) itemView.findViewById(R.id.itemName);
         specificItemPrice = (TextView) itemView.findViewById(R.id.specificItemPrice);
+        itemCount = (TextView) itemView.findViewById(R.id.extraCount);
         removeItem = (TextView) itemView.findViewById(R.id.removeItem);
         supersubRecycler = itemView.findViewById(R.id.supersubRecycler);
         subSeparator = itemView.findViewById(R.id.subSeparator);

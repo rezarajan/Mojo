@@ -30,6 +30,8 @@ public class cart extends FragmentActivity {
     //private ArrayList<String> itemName = new ArrayList<>();/**/
 
     private Map<String, String> itemName = new HashMap<String, String>();
+    private Map<String, String> itemCost = new HashMap<String, String>();
+    private Map<String, String> itemCount = new HashMap<String, String>();
 
     private RecyclerView recyclerView;
 
@@ -85,6 +87,8 @@ public class cart extends FragmentActivity {
                         myDbExtras.orderExtras(data.getString(2) + "_0", data.getString(1));
 
                         itemName.put(data.getString(1) + "_" + String.valueOf(indexItems), data.getString(2));   //restaurant_0, itemName
+                        itemCost.put(data.getString(1) + "_" + String.valueOf(indexItems), data.getString(3));   //restaurant_0, itemCost
+                        itemCount.put(data.getString(1) + "_" + String.valueOf(indexItems), data.getString(4));   //restaurant_0, itemCost
                         indexItems++;
 
                         restaurantNames.add(data.getString(1));
@@ -104,6 +108,8 @@ public class cart extends FragmentActivity {
                         Log.d("Index : Quantity", String.valueOf(index) + ":" + String.valueOf(specificItemQuantity));
 
                         itemName.put(data.getString(1) + "_" + String.valueOf(indexItems), data.getString(2));   //restaurant_1, itemName
+                        itemCost.put(data.getString(1) + "_" + String.valueOf(indexItems), data.getString(3));   //restaurant_1, itemCost
+                        itemCount.put(data.getString(1) + "_" + String.valueOf(indexItems), data.getString(4));   //restaurant_1, itemQuantity
                         indexItems++;
 
 
@@ -112,11 +118,11 @@ public class cart extends FragmentActivity {
             }
         }
 
-        Log.d("Quantity list", restaurantQuantity.toString());
-        Log.d("Item list", itemName.toString());
+/*        Log.d("Quantity list", restaurantQuantity.toString());
+        Log.d("Item list", itemName.toString());*/
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-        shoppingCartAdapter adapter = new shoppingCartAdapter(getApplicationContext(), restaurantNames, restaurantQuantity, itemName);
+        shoppingCartAdapter adapter = new shoppingCartAdapter(getApplicationContext(), restaurantNames, restaurantQuantity, itemName, itemCost, itemCount);
 
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
