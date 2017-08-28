@@ -94,6 +94,10 @@ public class shoppingCartAdapter extends RecyclerView.Adapter<SetViewHolder>{
         holder.restaurantName.setText(restaurantName.get(position));
         String item;
 
+        final LinearLayoutManager itemlayoutManager = new LinearLayoutManager(context);
+        itemlayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        final subItemAdapter itemAdapter = new subItemAdapter(context, itemName, restaurantName.get(position), Integer.parseInt(restaurantQuantity.get(position)));
+
         //this appends the correct spelling based on item quantity
         if(restaurantQuantity.get(position).equals("1")){
             item = " item";
@@ -125,6 +129,12 @@ public class shoppingCartAdapter extends RecyclerView.Adapter<SetViewHolder>{
         holder.subRecycler.setVisibility(isExpanded?View.VISIBLE:View.GONE);
         holder.view.setVisibility(isExpanded?View.VISIBLE:View.GONE);
 
+        if(isExpanded){
+            //if the view is expanded then the items for the restaurant are displayed
+            holder.subRecycler.setLayoutManager(itemlayoutManager);
+            holder.subRecycler.setAdapter(itemAdapter);
+        }
+
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -132,13 +142,6 @@ public class shoppingCartAdapter extends RecyclerView.Adapter<SetViewHolder>{
                 mExpandedPosition = isExpanded ? -1:holder.getAdapterPosition();
                 TransitionManager.beginDelayedTransition(holder.subRecycler);
                 notifyDataSetChanged();
-
-                LinearLayoutManager itemlayoutManager = new LinearLayoutManager(context);
-                itemlayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-                subItemAdapter itemAdapter = new subItemAdapter(context, itemName, restaurantName.get(position), Integer.parseInt(restaurantQuantity.get(position)));
-
-                holder.subRecycler.setLayoutManager(itemlayoutManager);
-                holder.subRecycler.setAdapter(itemAdapter);
             }
         });
 
