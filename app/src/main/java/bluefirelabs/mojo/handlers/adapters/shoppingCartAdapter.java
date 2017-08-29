@@ -1,6 +1,7 @@
 package bluefirelabs.mojo.handlers.adapters;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.transition.TransitionManager;
@@ -16,6 +17,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import bluefirelabs.mojo.R;
+import database.DatabaseHelper;
+import database.DatabaseHelperExtras;
 
 /**
  * Created by Reza Rajan on 2017-06-06.
@@ -40,11 +43,7 @@ public class shoppingCartAdapter extends RecyclerView.Adapter<SetViewHolder>{
     private Double restaurantCost = 0.00;
     private DecimalFormat df = new DecimalFormat("#.##");
 
-    private String newTotal;
-
-    private int positionToSet;
-
-
+    private int previouslyExpanded = -1;
 
 
     public shoppingCartAdapter(Context context, ArrayList<String> restaurantName, ArrayList<String> restaurantQuantity, Map<String, String> itemName, Map<String, String> itemCost, Map<String, String> itemCount){
@@ -106,6 +105,66 @@ public class shoppingCartAdapter extends RecyclerView.Adapter<SetViewHolder>{
     @Override
     public void onBindViewHolder(final SetViewHolder holder, final int position) {
         //holder.subRecycler.setVisibility(View.GONE);
+
+        //holder.setIsRecyclable(false);
+
+        DatabaseHelper myDb = new DatabaseHelper(context);
+        DatabaseHelperExtras myDbExtras = new DatabaseHelperExtras(context);
+
+        Cursor data = myDb.orderAlpha();
+        Cursor dataItems = myDb.orderAlpha();
+        String previousRestaurant = "";
+        int index = -1; //set to -1 since on the first iteration for item quantity there is a ++ to make it 0
+        int indexItems = 0;
+        int specificItemQuantity = 1;
+
+        //String restaurantNameholder = holder.restaurantName.getText().toString();
+
+        itemName.clear();
+        itemCost.clear();
+        itemCount.clear();
+
+        if(data != null){
+            if(data.moveToFirst()){
+                do{
+
+                    if(!data.getString(1).equals(previousRestaurant)){
+                        specificItemQuantity = 1;
+                        indexItems = 0;
+
+                        myDbExtras.orderExtras(data.getString(2) + "_0", data.getString(1));
+
+                        itemName.put(data.getString(1) + "_" + String.valueOf(indexItems), data.getString(2));   //restaurant_0, itemName
+                        itemCost.put(data.getString(1) + "_" + String.valueOf(indexItems), data.getString(3));   //restaurant_0, itemCost
+                        itemCount.put(data.getString(1) + "_" + String.valueOf(indexItems), data.getString(4));   //restaurant_0, itemQuantity
+                        indexItems++;
+
+                        previousRestaurant = data.getString(1);
+
+                        //index is set to -1 so for the first iteration this operation sets the index to 0
+                        index++;
+                        TODO: restaurantQuantity.add(index, String.valueOf(specificItemQuantity));    //using the add operation since this is a new index
+
+                        //Log.d("Index : Quantity", String.valueOf(index) + ":" + String.valueOf(specificItemQuantity));
+
+                    }
+                    else {
+                        specificItemQuantity++;
+                        restaurantQuantity.set(index, String.valueOf(specificItemQuantity));    //using the set operation to overwrite existing data at the index
+                        Log.d("Index : Quantity", String.valueOf(index) + ":" + String.valueOf(specificItemQuantity));
+
+                        itemName.put(data.getString(1) + "_" + String.valueOf(indexItems), data.getString(2));   //restaurant_1, itemName
+                        itemCost.put(data.getString(1) + "_" + String.valueOf(indexItems), data.getString(3));   //restaurant_1, itemCost
+                        itemCount.put(data.getString(1) + "_" + String.valueOf(indexItems), data.getString(4));   //restaurant_1, itemQuantity
+                        indexItems++;
+
+
+                    }
+                } while (data.moveToNext());
+            }
+        }
+
+
         holder.restaurantName.setText(restaurantName.get(position));
         String item;
 
@@ -122,6 +181,33 @@ public class shoppingCartAdapter extends RecyclerView.Adapter<SetViewHolder>{
         }
         holder.totalItemQuantity.setText(restaurantQuantity.get(position) + item);
 
+
+
+/*        if(position != previouslyExpanded && previouslyExpanded != -1){
+            Log.d("Previously Expanded_0", String.valueOf(position));
+            Log.d("Previously Expanded", String.valueOf(previouslyExpanded));
+
+            restaurantCost = 0.00;
+
+            for(int i=0; i < Integer.parseInt(restaurantQuantity.get(position)); i++){
+                restaurantCost += (Double.parseDouble(itemCost.get(restaurantName.get(position) + "_" + String.valueOf(i)))) * (Double.parseDouble(itemCount.get(restaurantName.get(position) + "_" + String.valueOf(i))));
+
+                //Log.d("Cost", itemCost.get(restaurantName.get(position) + "_" + String.valueOf(i)));
+            }
+
+            Log.d("Cost", String.valueOf(restaurantCost));
+
+            if(position != getItemCount()-1 && holder.restaurantCost.getText().toString().equals("$0.00")){
+
+            }
+        }*/
+
+
+
+
+        //Log.d("Cost_1", String.valueOf(restaurantCost));
+
+
         restaurantCost = 0.00;
 
         for(int i=0; i < Integer.parseInt(restaurantQuantity.get(position)); i++){
@@ -132,14 +218,11 @@ public class shoppingCartAdapter extends RecyclerView.Adapter<SetViewHolder>{
 
         holder.restaurantCost.setText("$" + String.valueOf(df.format(restaurantCost)));
 
-        //if the item quantities are changed this sets the text to the appropriate view
-        if(newTotal != null && position == positionToSet){
-            holder.restaurantCost.setText(newTotal);
-        }
-
 
 
         if(firstRun){
+            Log.d("Operation", "First Run");
+
             if(position == getItemCount()-1){
                 holder.subRecycler.setVisibility(View.VISIBLE);
                 holder.view.setVisibility(View.VISIBLE);
@@ -195,13 +278,19 @@ public class shoppingCartAdapter extends RecyclerView.Adapter<SetViewHolder>{
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+/*
+                restaurantCost = 0.00;
 
-                //For the case when the user changes the item total
-                newTotal = holder.restaurantCost.getText().toString();
+                for(int i=0; i < Integer.parseInt(restaurantQuantity.get(position)); i++){
+                    restaurantCost += (Double.parseDouble(itemCost.get(restaurantName.get(position) + "_" + String.valueOf(i)))) * (Double.parseDouble(itemCount.get(restaurantName.get(position) + "_" + String.valueOf(i))));
 
-                positionToSet = position;
+                    //Log.d("Cost", itemCost.get(restaurantName.get(position) + "_" + String.valueOf(i)));
+                }
 
-                Log.d("New Cost", newTotal);
+                Log.d("Cost_2", String.valueOf(restaurantCost));*/
+                //Log.d("Previously Expanded", String.valueOf(mExpandedPosition));
+
+                previouslyExpanded = mExpandedPosition;
 
                 mExpandedPosition = isExpanded ? -1:holder.getAdapterPosition();
                 TransitionManager.beginDelayedTransition(holder.subRecycler);

@@ -1,6 +1,7 @@
 package bluefirelabs.mojo.handlers.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -16,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import bluefirelabs.mojo.R;
+import bluefirelabs.mojo.fragments.cart;
 import database.DatabaseHelper;
 
 /**
@@ -151,8 +153,6 @@ public class subItemAdapter extends RecyclerView.Adapter<SubsetViewHolder>{
 
                     myDb.insertData(restaurantName, holder.itemName.getText().toString(), itemCost.get(restaurantName + "_" + String.valueOf(position)), String.valueOf(count));
                 }
-
-
             }
         });
 

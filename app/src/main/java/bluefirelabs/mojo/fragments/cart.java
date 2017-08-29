@@ -1,5 +1,6 @@
 package bluefirelabs.mojo.fragments;
 
+import android.content.Context;
 import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 
@@ -33,7 +35,9 @@ public class cart extends FragmentActivity {
     private Map<String, String> itemCost = new HashMap<String, String>();
     private Map<String, String> itemCount = new HashMap<String, String>();
 
-    private RecyclerView recyclerView;
+    public RecyclerView recyclerView;
+
+    private shoppingCartAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,10 +67,22 @@ public class cart extends FragmentActivity {
 
         }
 
+        //View view = getWindow().getDecorView().getRootView();
 
-        DatabaseHelper myDb = new DatabaseHelper(getApplicationContext());
-        DatabaseHelperExtras myDbExtras = new DatabaseHelperExtras(getApplicationContext());
+        //recyclerView = findViewById(R.id.mainRecycler);
+
         recyclerView = findViewById(R.id.mainRecycler);
+
+
+        swapData(getApplicationContext());
+
+
+
+    }
+
+    public void swapData(Context context){
+        DatabaseHelper myDb = new DatabaseHelper(context);
+        DatabaseHelperExtras myDbExtras = new DatabaseHelperExtras(context);
 
         Cursor data = myDb.orderAlpha();
         Cursor dataItems = myDb.orderAlpha();
@@ -121,11 +137,11 @@ public class cart extends FragmentActivity {
 /*        Log.d("Quantity list", restaurantQuantity.toString());
         Log.d("Item list", itemName.toString());*/
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-        shoppingCartAdapter adapter = new shoppingCartAdapter(getApplicationContext(), restaurantNames, restaurantQuantity, itemName, itemCost, itemCount);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(context);
+        layoutManager.setAutoMeasureEnabled(false);
+        adapter = new shoppingCartAdapter(context, restaurantNames, restaurantQuantity, itemName, itemCost, itemCount);
 
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
-
     }
 }
