@@ -1,3 +1,12 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="bluefirelabs.mojo.fragments.shoppingCart"
+    android:background="@color/white" >
+
+
 <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mainRecycler"
@@ -7,3 +16,40 @@
     android:background="@color/white">
 
 </android.support.v7.widget.RecyclerView>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center|bottom"
+        android:layout_marginBottom="24dp">
+        <android.support.v7.widget.CardView
+            android:id="@+id/proceedButton"
+            android:layout_width="288dp"
+            android:layout_height="50dp"
+            app:cardCornerRadius="25dp"
+            app:cardElevation="0dp"
+            android:layout_alignParentBottom="true"
+            app:cardBackgroundColor="@color/colorSecondary">
+
+            <TextView
+                android:id="@+id/location_indicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+
+                android:fontFamily="@font/montserrat"
+                android:gravity="center"
+                android:paddingBottom="4dp"
+                android:paddingEnd="16dp"
+                android:paddingStart="16dp"
+                android:paddingTop="4dp"
+                android:text="Proceed"
+                android:textColor="@color/colorPrimary"
+                android:textSize="25sp" />
+
+        </android.support.v7.widget.CardView>
+    </RelativeLayout>
+
+
+    </FrameLayout>
