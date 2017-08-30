@@ -505,7 +505,25 @@ public class detailActivity extends Fragment{
                         boolean isInserted = myDbExtras.insertData(restaurantName,       //The restaurant name
                                 itemName,     //The item name
                                 String.valueOf(model.getCost()),       //The item cost
+                                itemName + "_0", //TODO: Make this a unique tag for each item on the card when the user is able to select more than one item
+                                model.getName(),    //The extra name
+                                viewHolder.extraCount.getText().toString(), //The quantity of the specific extra
+                                viewHolder.extraParent.getText().toString());                                //Adds the item at at the specific position to the database
+                        //Default Quantity is 1
+
+                        myDbExtras.insertData(restaurantName,       //The restaurant name
+                                itemName,     //The item name
+                                String.valueOf(model.getCost()),       //The item cost
                                 itemName + "_1", //TODO: Make this a unique tag for each item on the card when the user is able to select more than one item
+                                model.getName(),    //The extra name
+                                viewHolder.extraCount.getText().toString(), //The quantity of the specific extra
+                                viewHolder.extraParent.getText().toString());                                //Adds the item at at the specific position to the database
+                        //Default Quantity is 1
+
+                        myDbExtras.insertData(restaurantName,       //The restaurant name
+                                itemName,     //The item name
+                                String.valueOf(model.getCost()),       //The item cost
+                                itemName + "_2", //TODO: Make this a unique tag for each item on the card when the user is able to select more than one item
                                 model.getName(),    //The extra name
                                 viewHolder.extraCount.getText().toString(), //The quantity of the specific extra
                                 viewHolder.extraParent.getText().toString());                                //Adds the item at at the specific position to the database

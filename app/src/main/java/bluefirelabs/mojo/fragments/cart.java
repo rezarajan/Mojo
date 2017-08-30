@@ -273,7 +273,7 @@ public class cart extends FragmentActivity {
                 costListing.put(data.getString(2), data.getString(3));    //itemId, cost
 
 
-                identifier = 0;
+                identifier = -1;
                 do {
                     //TODO: Change this to an actual number when the user selects the number of items of a particular kind
                     identifier++;
@@ -371,7 +371,7 @@ public class cart extends FragmentActivity {
                     //dataExtras = myDbExtras.orderExtras(data.getString(2), data.getString(1));    //uniquetag = itemId + (_0), restaurant
                     //dataExtras = myDbExtras.orderExtras(data.getString(2) + "_0", data.getString(1));    //uniquetag = itemId + (_0), restaurant
 
-                    identifier = 0;
+                    identifier = -1;
                     do {
                         //TODO: Change this to an actual number when the user selects the number of items of a particular kind
                         identifier++;
@@ -466,7 +466,7 @@ public class cart extends FragmentActivity {
                     //dataExtras = myDbExtras.orderExtras(data.getString(2), data.getString(1));    //uniquetag = itemId + (_0), restaurant
                     //dataExtras = myDbExtras.orderExtras(data.getString(2) + "_0", data.getString(1));    //uniquetag = itemId + (_0), restaurant
 
-                    identifier = 0;
+                    identifier = -1;
                     do {
                         //TODO: Change this to an actual number when the user selects the number of items of a particular kind
                         identifier++;
@@ -572,7 +572,7 @@ public class cart extends FragmentActivity {
                     //dataExtras = myDbExtras.orderExtras(data.getString(2), data.getString(1));    //uniquetag = itemId + (_0), restaurant
                     //dataExtras = myDbExtras.orderExtras(data.getString(2) + "_0", data.getString(1));    //uniquetag = itemId + (_0), restaurant
 
-                    identifier = 0;
+                    identifier = -1;
                     do {
                         //TODO: Change this to an actual number when the user selects the number of items of a particular kind
                         identifier++;
