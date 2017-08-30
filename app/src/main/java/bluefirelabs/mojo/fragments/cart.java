@@ -53,7 +53,7 @@ public class cart extends FragmentActivity {
     private Map<String, String> itemCost = new HashMap<String, String>();
     private Map<String, String> itemCount = new HashMap<String, String>();
 
-    public RecyclerView recyclerView;
+    private RecyclerView recyclerView;
 
     private shoppingCartAdapter adapter;
 

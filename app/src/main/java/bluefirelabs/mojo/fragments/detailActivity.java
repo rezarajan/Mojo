@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -66,6 +67,8 @@ public class detailActivity extends Fragment{
 
     private SlidingUpPanelLayout slidingUpPanelLayout;
 
+    private Button addAnother;
+
     DatabaseHelper myDb;
     DatabaseHelperExtras myDbExtras;
 
@@ -79,7 +82,6 @@ public class detailActivity extends Fragment{
     Integer extraCountValue = 0;
 
     private Integer identifier = 0;
-
 
 
     @Override
@@ -116,6 +118,7 @@ public class detailActivity extends Fragment{
             restaurantNameHolder.setText(restaurantName);
 
             itemNameExtras = getActivity().findViewById(R.id.itemName);
+            addAnother = getActivity().findViewById(R.id.addSameItem);
 
 
             nestedScrollView = (NestedScrollView) view.findViewById(R.id.scrollView);
@@ -394,6 +397,8 @@ public class detailActivity extends Fragment{
 
     public void populateView(final DatabaseReference reference, final String itemName){
 
+        identifier = 0;
+
         final LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(getContext());
         mLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 
@@ -510,13 +515,13 @@ public class detailActivity extends Fragment{
                         boolean isInserted = myDbExtras.insertData(restaurantName,       //The restaurant name
                                 itemName,     //The item name
                                 String.valueOf(model.getCost()),       //The item cost
-                                itemName + "_0", //TODO: Make this a unique tag for each item on the card when the user is able to select more than one item
+                                itemName + "_" + String.valueOf(identifier), //TODO: Make this a unique tag for each item on the card when the user is able to select more than one item
                                 model.getName(),    //The extra name
                                 viewHolder.extraCount.getText().toString(), //The quantity of the specific extra
                                 viewHolder.extraParent.getText().toString());                                //Adds the item at at the specific position to the database
                         //Default Quantity is 1
 
-                        myDbExtras.insertData(restaurantName,       //The restaurant name
+/*                        myDbExtras.insertData(restaurantName,       //The restaurant name
                                 itemName,     //The item name
                                 String.valueOf(model.getCost()),       //The item cost
                                 itemName + "_1", //TODO: Make this a unique tag for each item on the card when the user is able to select more than one item
@@ -532,7 +537,7 @@ public class detailActivity extends Fragment{
                                 model.getName(),    //The extra name
                                 viewHolder.extraCount.getText().toString(), //The quantity of the specific extra
                                 viewHolder.extraParent.getText().toString());                                //Adds the item at at the specific position to the database
-                        //Default Quantity is 1
+                        //Default Quantity is 1*/
 
                         if (isInserted == true) {
                             Snackbar.make(view, "Data inserted",
@@ -567,7 +572,7 @@ public class detailActivity extends Fragment{
                             //decreasing the value of the extra by 1
                             extraCountValue = Integer.parseInt(viewHolder.extraCount.getText().toString()) - 1;
 
-                            myDbExtras.updateQuantity(String.valueOf(extraCountValue), itemName + "_0", String.valueOf(extraCountValue+1), restaurantName, model.getName());
+                            //myDbExtras.updateQuantity(String.valueOf(extraCountValue), itemName + "_0", String.valueOf(extraCountValue+1), restaurantName, model.getName());
                             viewHolder.extraCount.setText(String.valueOf(extraCountValue));
 
                         }
@@ -588,7 +593,7 @@ public class detailActivity extends Fragment{
                         boolean isInserted = myDbExtras.insertData(restaurantName,       //The restaurant name
                                 itemName,     //The item name
                                 String.valueOf(model.getCost()),       //The item cost
-                                itemName + "_1", //TODO: Make this a unique tag for each item on the card when the user is able to select more than one item
+                                itemName + "_" + String.valueOf(identifier), //TODO: Make this a unique tag for each item on the card when the user is able to select more than one item
                                 model.getName(),    //The extra name
                                 viewHolder.extraCount.getText().toString(), //The quantity of the specific extra
                                 viewHolder.extraParent.getText().toString());                                //Adds the item at at the specific position to the database
@@ -682,6 +687,304 @@ public class detailActivity extends Fragment{
 
             }
         });
+
+        addAnother.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                identifier++;
+
+                final LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(getContext());
+                mLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+
+                //DatabaseReference mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
+                mFirebaseAdapter = new FirebaseRecyclerAdapter<Food_List, FirebaseAdapterExtras.RecyclerViewHolder>(
+                        Food_List.class,
+                        R.layout.extra_item,
+                        FirebaseAdapterExtras.RecyclerViewHolder.class,
+                        reference.child("extras").orderByChild("parent")
+                ) {
+                    @Override
+                    public void onBindViewHolder(FirebaseAdapterExtras.RecyclerViewHolder viewHolder, int position) {
+                        super.onBindViewHolder(viewHolder, position);
+                    }
+
+
+                    @Override
+                    protected void populateViewHolder(final FirebaseAdapterExtras.RecyclerViewHolder viewHolder, final Food_List model, final int position) {
+
+
+/*                final MyCallback myCallback = new MyCallback() {
+                    @Override
+                    public void callbackCall(final String restaurant) {
+
+                    }
+                };
+
+                firebaseTask(myCallback);*/
+
+
+                        if(parent.equals(model.getParent())){
+                            parent = checkString(model.getParent());
+                            Log.d("Parent", parent);
+
+                            //removing the separator for items with similar parents
+                            if(position == 0){
+                                viewHolder.extraTypeHolder.setVisibility(View.VISIBLE);
+
+                            }
+                            else {
+                                viewHolder.extraTypeHolder.setVisibility(View.GONE);
+
+                            }
+                            if(model.getName() != null){
+
+                                viewHolder.extraParent.setText(model.getParent());
+                                Log.d("Cost", Double.toString(model.getCost()));
+                                viewHolder.extraName.setText(model.getName() + " • $" +  String.valueOf(df.format(model.getCost())));   //cost is formatted as 123 = 1.23
+
+                        /*viewHolder.extraName.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+
+                                Log.d("Extra Type", viewHolder.extraParent.getText().toString());
+                            }
+                        });*/
+
+                            }
+                        }
+                        else{
+                            parent = checkString(model.getParent());
+
+                            if(model.getName() != null){
+                                //adding the separator for items with different parents
+                                viewHolder.extraTypeHolder.setVisibility(View.VISIBLE);
+
+                                viewHolder.extraParent.setText(model.getParent());
+                                viewHolder.extraName.setText(model.getName() + " • $" +  String.valueOf(df.format(model.getCost())));
+
+                            }
+                        }
+
+                        //viewHolder.openIndicatorText.setText(model.getOpen());
+                        //viewHolder.extraCost.setText("$" + String.valueOf(model.getCost()));
+                        //viewHolder.averageTime.setText(model.getAverageTime());
+
+                        viewHolder.addButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+
+
+                                Cursor dataExtras;
+
+                                //identifier = -1;
+
+                                //This would have created an identifier to circle through and find any
+                                // previous item of the same kind, then append an identifier for any
+                                // new item
+/*                        do {
+                            //TODO: Change this to an actual number when the user selects the number of items of a particular kind
+                            identifier++;
+                            dataExtras = myDbExtras.orderExtras(itemName + "_" + String.valueOf(identifier), restaurantName);    //uniquetag = itemId + (_0), restaurant;
+
+                        } while (dataExtras.getCount() > 0);*/
+
+                                //increasing the value of the extra by 1
+                                extraCountValue = Integer.parseInt(viewHolder.extraCount.getText().toString()) + 1;
+                                //myDbExtras.updateQuantity(String.valueOf(extraCountValue), itemName + "_" + String.valueOf(identifier), String.valueOf(extraCountValue-1), restaurantName, model.getName());
+
+                                viewHolder.extraCount.setText(String.valueOf(extraCountValue));
+
+                                Log.d("Extra Type", viewHolder.extraParent.getText().toString());
+
+                                Cursor dataExtrasAll = myDbExtras.getAllData();
+                                //adding the item to the database for receipt
+                        /*boolean isInserted = myDbExtras.insertData(restaurantName,       //The restaurant name
+                                itemName,     //The item name
+                                String.valueOf(model.getCost()),       //The item cost
+                                "Coffee_" + String.valueOf(dataExtrasAll.getCount() + 1), //Unique tag for the item
+                                model.getName(),    //The extra name
+                                "1");                                //Adds the item at at the specific position to the database
+                        //Default Quantity is 1*/
+
+                                boolean isInserted = myDbExtras.insertData(restaurantName,       //The restaurant name
+                                        itemName,     //The item name
+                                        String.valueOf(model.getCost()),       //The item cost
+                                        itemName + "_" + String.valueOf(identifier), //TODO: Make this a unique tag for each item on the card when the user is able to select more than one item
+                                        model.getName(),    //The extra name
+                                        viewHolder.extraCount.getText().toString(), //The quantity of the specific extra
+                                        viewHolder.extraParent.getText().toString());                                //Adds the item at at the specific position to the database
+                                //Default Quantity is 1
+
+/*                                myDbExtras.insertData(restaurantName,       //The restaurant name
+                                        itemName,     //The item name
+                                        String.valueOf(model.getCost()),       //The item cost
+                                        itemName + "_1", //TODO: Make this a unique tag for each item on the card when the user is able to select more than one item
+                                        model.getName(),    //The extra name
+                                        viewHolder.extraCount.getText().toString(), //The quantity of the specific extra
+                                        viewHolder.extraParent.getText().toString());                                //Adds the item at at the specific position to the database
+                                //Default Quantity is 1
+
+                                myDbExtras.insertData(restaurantName,       //The restaurant name
+                                        itemName,     //The item name
+                                        String.valueOf(model.getCost()),       //The item cost
+                                        itemName + "_2", //TODO: Make this a unique tag for each item on the card when the user is able to select more than one item
+                                        model.getName(),    //The extra name
+                                        viewHolder.extraCount.getText().toString(), //The quantity of the specific extra
+                                        viewHolder.extraParent.getText().toString());                                //Adds the item at at the specific position to the database
+                                //Default Quantity is 1*/
+
+                                if (isInserted == true) {
+                                    Snackbar.make(view, "Data inserted",
+                                            Snackbar.LENGTH_LONG)
+                                            .setAction("Action", null).show();
+
+                                    //Cursor dataExtras = myDbExtras.orderExtras("Coffee_0", restaurantName);
+                                    dataExtras = myDbExtras.getColumnData("EXTRA");
+
+                                    Log.d("Database Size", String.valueOf(dataExtras.getCount()));
+
+                                    //Iterates through the database for all extras
+                                    while(dataExtras.moveToNext()){
+                                        Log.d("Extra", dataExtras.getString(0));
+                                    }
+
+
+                                } else {
+                                    Snackbar.make(view, "Error adding item to cart",
+                                            Snackbar.LENGTH_LONG)
+                                            .setAction("Action", null).show();
+                                }
+                            }
+                        });
+
+                        viewHolder.removeButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+
+                                //Setting up the check to avoid negative values
+                                if(Integer.parseInt(viewHolder.extraCount.getText().toString()) > 0){
+                                    //decreasing the value of the extra by 1
+                                    extraCountValue = Integer.parseInt(viewHolder.extraCount.getText().toString()) - 1;
+
+                                    //myDbExtras.updateQuantity(String.valueOf(extraCountValue), itemName + "_0", String.valueOf(extraCountValue+1), restaurantName, model.getName());
+                                    viewHolder.extraCount.setText(String.valueOf(extraCountValue));
+
+                                }
+
+                                Log.d("Extra Type", viewHolder.extraParent.getText().toString());
+
+                                Cursor dataExtrasAll = myDbExtras.getAllData();
+
+                                //adding the item to the database for receipt
+                        /*boolean isInserted = myDbExtras.insertData(restaurantName,       //The restaurant name
+                                itemName,     //The item name
+                                String.valueOf(model.getCost()),       //The item cost
+                                "Coffee_" + String.valueOf(dataExtrasAll.getCount() + 1), //Unique tag for the item
+                                model.getName(),    //The extra name
+                                "1");                                //Adds the item at at the specific position to the database
+                        //Default Quantity is 1*/
+
+                                boolean isInserted = myDbExtras.insertData(restaurantName,       //The restaurant name
+                                        itemName,     //The item name
+                                        String.valueOf(model.getCost()),       //The item cost
+                                        itemName + "_" + String.valueOf(identifier), //TODO: Make this a unique tag for each item on the card when the user is able to select more than one item
+                                        model.getName(),    //The extra name
+                                        viewHolder.extraCount.getText().toString(), //The quantity of the specific extra
+                                        viewHolder.extraParent.getText().toString());                                //Adds the item at at the specific position to the database
+                                //Default Quantity is 1
+
+                                if (isInserted == true) {
+                                    Snackbar.make(view, "Data inserted",
+                                            Snackbar.LENGTH_LONG)
+                                            .setAction("Action", null).show();
+
+                                    //Cursor dataExtras = myDbExtras.orderExtras("Coffee_0", restaurantName);
+                                    Cursor dataExtras = myDbExtras.getColumnData("EXTRA");
+
+                                    Log.d("Database Size", String.valueOf(dataExtras.getCount()));
+
+                                    //Iterates through the database for all extras
+                                    while(dataExtras.moveToNext()){
+                                        Log.d("Extra", dataExtras.getString(0));
+                                    }
+
+
+                                } else {
+                                    Snackbar.make(view, "Error adding item to cart",
+                                            Snackbar.LENGTH_LONG)
+                                            .setAction("Action", null).show();
+                                }
+                            }
+                        });
+
+/*                viewHolder.extraName.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        Log.d("Extra Type", viewHolder.extraParent.getText().toString());
+
+                        Cursor dataExtrasAll = myDbExtras.getAllData();
+                        //adding the item to the database for receipt
+                        *//*boolean isInserted = myDbExtras.insertData(restaurantName,       //The restaurant name
+                                itemName,     //The item name
+                                String.valueOf(model.getCost()),       //The item cost
+                                "Coffee_" + String.valueOf(dataExtrasAll.getCount() + 1), //Unique tag for the item
+                                model.getName(),    //The extra name
+                                "1");                                //Adds the item at at the specific position to the database
+                        //Default Quantity is 1*//*
+
+                       boolean isInserted = myDbExtras.insertData(restaurantName,       //The restaurant name
+                                itemName,     //The item name
+                                String.valueOf(model.getCost()),       //The item cost
+                                itemName + "_0", //TODO: Make this a unique tag for each item on the card when the user is able to select more than one item
+                                model.getName(),    //The extra name
+                                viewHolder.extraCount.getText().toString(), //The quantity of the specific extra
+                                viewHolder.extraParent.getText().toString());                                //Adds the item at at the specific position to the database
+                        //Default Quantity is 1
+
+                        if (isInserted == true) {
+                            Snackbar.make(view, "Data inserted",
+                                    Snackbar.LENGTH_LONG)
+                                    .setAction("Action", null).show();
+
+                            //Cursor dataExtras = myDbExtras.orderExtras("Coffee_0", restaurantName);
+                            Cursor dataExtras = myDbExtras.getColumnData("EXTRA");
+
+                            Log.d("Database Size", String.valueOf(dataExtras.getCount()));
+
+                            //Iterates through the database for all extras
+                            while(dataExtras.moveToNext()){
+                                Log.d("Extra", dataExtras.getString(0));
+                            }
+
+
+                        } else {
+                            Snackbar.make(view, "Error adding item to cart",
+                                    Snackbar.LENGTH_LONG)
+                                    .setAction("Action", null).show();
+                        }
+                    }
+                });*/
+
+
+                    }
+                };
+
+                mFirebaseAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver(){
+                    @Override
+                    public void onItemRangeInserted(int positionStart, int itemCount) {
+                        super.onItemRangeInserted(positionStart, itemCount);
+                        int restaurantCount = mFirebaseAdapter.getItemCount();
+                        //mRestaurantRecyclerView.scrollToPosition(cardPosition);
+                        mRestaurantRecyclerView.setLayoutManager(mLinearLayoutManager);
+                        mRestaurantRecyclerView.setAdapter(mFirebaseAdapter);
+
+                    }
+                });
+            }
+        });
+
+
 
 
 

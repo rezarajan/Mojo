@@ -103,6 +103,15 @@
                 </android.support.v7.widget.RecyclerView>
             </android.support.v4.widget.NestedScrollView>
 
+            <Button
+                android:id="@+id/addSameItem"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:fontFamily="@font/montserrat"
+                android:text="Add Another" />
+
         </RelativeLayout>
 
     </android.support.v7.widget.CardView>
