@@ -19,10 +19,11 @@ public class DatabaseHelperExtras extends SQLiteOpenHelper{
     public static final String RESTAURANT = "RESTAURANT";       //column 2    //String 1
     public static final String ITEM = "ITEM";       //column 3      //String 2
     public static final String COST = "COST";       //column 4      //String 3
-    public static final String UNIQUETAG = "UNIQUETAG";       //column 5      //String 7
-    public static final String EXTRA = "EXTRA";       //column 6      //String 5
+    public static final String EXTRA = "EXTRA";       //column 6      //String 4
     public static final String QUANTITY = "QUANTITY";       //column 7      //String 5
     public static final String TYPE = "TYPE";       //column 8      //String 6
+    public static final String UNIQUETAG = "UNIQUETAG";       //column 5      //String 7
+
 
 
     public DatabaseHelperExtras(Context context) {
@@ -50,10 +51,11 @@ public class DatabaseHelperExtras extends SQLiteOpenHelper{
         contentValues.put(RESTAURANT, restaurant);
         contentValues.put(ITEM, item);
         contentValues.put(COST, cost);
-        contentValues.put(UNIQUETAG, uniquetag);
         contentValues.put(EXTRA, extra);
         contentValues.put(QUANTITY, quantity);
         contentValues.put(TYPE, type);
+        contentValues.put(UNIQUETAG, uniquetag);
+
         long result = db.insert(TABLE_NAME, null, contentValues);
         return result != -1;
     }

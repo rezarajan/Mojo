@@ -78,6 +78,8 @@ public class detailActivity extends Fragment{
     DecimalFormat df = new DecimalFormat("#.##");
     Integer extraCountValue = 0;
 
+    private Integer identifier = 0;
+
 
 
     @Override
@@ -467,9 +469,24 @@ public class detailActivity extends Fragment{
                     @Override
                     public void onClick(View view) {
 
+
+                        Cursor dataExtras;
+
+                        //identifier = -1;
+
+                        //This would have created an identifier to circle through and find any
+                        // previous item of the same kind, then append an identifier for any
+                        // new item
+/*                        do {
+                            //TODO: Change this to an actual number when the user selects the number of items of a particular kind
+                            identifier++;
+                            dataExtras = myDbExtras.orderExtras(itemName + "_" + String.valueOf(identifier), restaurantName);    //uniquetag = itemId + (_0), restaurant;
+
+                        } while (dataExtras.getCount() > 0);*/
+
                         //increasing the value of the extra by 1
                         extraCountValue = Integer.parseInt(viewHolder.extraCount.getText().toString()) + 1;
-                        myDbExtras.updateQuantity(String.valueOf(extraCountValue), itemName + "_0", String.valueOf(extraCountValue-1), restaurantName, model.getName());
+                        //myDbExtras.updateQuantity(String.valueOf(extraCountValue), itemName + "_" + String.valueOf(identifier), String.valueOf(extraCountValue-1), restaurantName, model.getName());
 
                         viewHolder.extraCount.setText(String.valueOf(extraCountValue));
 
@@ -488,7 +505,7 @@ public class detailActivity extends Fragment{
                         boolean isInserted = myDbExtras.insertData(restaurantName,       //The restaurant name
                                 itemName,     //The item name
                                 String.valueOf(model.getCost()),       //The item cost
-                                itemName + "_0", //TODO: Make this a unique tag for each item on the card when the user is able to select more than one item
+                                itemName + "_1", //TODO: Make this a unique tag for each item on the card when the user is able to select more than one item
                                 model.getName(),    //The extra name
                                 viewHolder.extraCount.getText().toString(), //The quantity of the specific extra
                                 viewHolder.extraParent.getText().toString());                                //Adds the item at at the specific position to the database
@@ -500,7 +517,7 @@ public class detailActivity extends Fragment{
                                     .setAction("Action", null).show();
 
                             //Cursor dataExtras = myDbExtras.orderExtras("Coffee_0", restaurantName);
-                            Cursor dataExtras = myDbExtras.getColumnData("EXTRA");
+                            dataExtras = myDbExtras.getColumnData("EXTRA");
 
                             Log.d("Database Size", String.valueOf(dataExtras.getCount()));
 
@@ -548,7 +565,7 @@ public class detailActivity extends Fragment{
                         boolean isInserted = myDbExtras.insertData(restaurantName,       //The restaurant name
                                 itemName,     //The item name
                                 String.valueOf(model.getCost()),       //The item cost
-                                itemName + "_0", //TODO: Make this a unique tag for each item on the card when the user is able to select more than one item
+                                itemName + "_1", //TODO: Make this a unique tag for each item on the card when the user is able to select more than one item
                                 model.getName(),    //The extra name
                                 viewHolder.extraCount.getText().toString(), //The quantity of the specific extra
                                 viewHolder.extraParent.getText().toString());                                //Adds the item at at the specific position to the database

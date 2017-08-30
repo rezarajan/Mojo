@@ -66,6 +66,7 @@ public class cart extends FragmentActivity {
 
     private CardView pay;
 
+    private Integer identifier = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -271,11 +272,24 @@ public class cart extends FragmentActivity {
                 itemListing.put(data.getString(2), data.getString(4));    //itemId, quantity
                 costListing.put(data.getString(2), data.getString(3));    //itemId, cost
 
-                itemRef = data.getString(2) + "_0";     //uniquetag = itemId + (_0)
+
+                identifier = 0;
+                do {
+                    //TODO: Change this to an actual number when the user selects the number of items of a particular kind
+                    identifier++;
+                    dataExtras = myDbExtras.orderExtras(data.getString(2) + "_" + String.valueOf(identifier), data.getString(1));    //uniquetag = itemId + (_0), restaurant;
+
+                } while (dataExtras.getCount() > 0);
+
+                identifier--;       //to normalize it since the previous loop checks if the next value is 0 or not
+
+                itemRef = data.getString(2) + "_" + String.valueOf(identifier);     //uniquetag = itemId + (_0)
                 Log.d("Item Ref", itemRef);
 
+                Log.d("Identifier", String.valueOf(identifier));
 
-                dataExtras = myDbExtras.orderExtras(data.getString(2) + "_0", data.getString(1));    //uniquetag = itemId + (_0), restaurant
+
+                dataExtras = myDbExtras.orderExtras(data.getString(2) + "_" + String.valueOf(identifier), data.getString(1));    //uniquetag = itemId + (_0), restaurant
 
 
                 if(dataExtras == null){
@@ -351,12 +365,23 @@ public class cart extends FragmentActivity {
                     itemListing.put(data.getString(2), data.getString(4));    //itemId, quantity
                     costListing.put(data.getString(2), data.getString(3));    //itemId, cost
 
-                    itemRef = data.getString(2) + "_0";     //uniquetag = itemId + (_0)
+                    //itemRef = data.getString(2) + "_0";     //uniquetag = itemId + (_0)
                     Log.d("Location_1", data.getString(2) + "_" + String.valueOf(indexItems));
 
                     //dataExtras = myDbExtras.orderExtras(data.getString(2), data.getString(1));    //uniquetag = itemId + (_0), restaurant
-                    dataExtras = myDbExtras.orderExtras(data.getString(2) + "_0", data.getString(1));    //uniquetag = itemId + (_0), restaurant
+                    //dataExtras = myDbExtras.orderExtras(data.getString(2) + "_0", data.getString(1));    //uniquetag = itemId + (_0), restaurant
 
+                    identifier = 0;
+                    do {
+                        //TODO: Change this to an actual number when the user selects the number of items of a particular kind
+                        identifier++;
+                        dataExtras = myDbExtras.orderExtras(data.getString(2) + "_" + String.valueOf(identifier), data.getString(1));    //uniquetag = itemId + (_0), restaurant;
+
+                    } while (dataExtras.getCount() > 0);
+
+                    identifier--;       //to normalize it since the previous loop checks if the next value is 0 or not
+
+                    itemRef = data.getString(2) + "_" + String.valueOf(identifier);     //uniquetag = itemId + (_0)
 
                     //Iterates through the database for all extras
                     if(dataExtras == null){
@@ -433,14 +458,25 @@ public class cart extends FragmentActivity {
                     itemListing.put(data.getString(2), data.getString(4));    //itemId, quantity
                     costListing.put(data.getString(2), data.getString(3));    //itemId, cost
 
-                    itemRef = data.getString(2) + "_0";     //uniquetag = itemId + (_0)
+                    //itemRef = data.getString(2) + "_0";     //uniquetag = itemId + (_0)
 
                     Log.d("Location_3", data.getString(2) + "_" + String.valueOf(indexItems));
 
 
                     //dataExtras = myDbExtras.orderExtras(data.getString(2), data.getString(1));    //uniquetag = itemId + (_0), restaurant
-                    dataExtras = myDbExtras.orderExtras(data.getString(2) + "_0", data.getString(1));    //uniquetag = itemId + (_0), restaurant
+                    //dataExtras = myDbExtras.orderExtras(data.getString(2) + "_0", data.getString(1));    //uniquetag = itemId + (_0), restaurant
 
+                    identifier = 0;
+                    do {
+                        //TODO: Change this to an actual number when the user selects the number of items of a particular kind
+                        identifier++;
+                        dataExtras = myDbExtras.orderExtras(data.getString(2) + "_" + String.valueOf(identifier), data.getString(1));    //uniquetag = itemId + (_0), restaurant;
+
+                    } while (dataExtras.getCount() > 0);
+
+                    identifier--;       //to normalize it since the previous loop checks if the next value is 0 or not
+
+                    itemRef = data.getString(2) + "_" + String.valueOf(identifier);     //uniquetag = itemId + (_0)
 
                     //Iterates through the database for all extras
                     if(dataExtras == null){
@@ -529,13 +565,24 @@ public class cart extends FragmentActivity {
                     itemListing.put(data.getString(2), data.getString(4));    //itemId, quantity
                     costListing.put(data.getString(2), data.getString(3));    //itemId, cost
 
-                    itemRef = data.getString(2) + "_0";     //uniquetag = itemId + (_0)
+                    //itemRef = data.getString(2) + "_0";     //uniquetag = itemId + (_0)
                     Log.d("Location_5", data.getString(2) + "_" + String.valueOf(indexItems));
 
 
                     //dataExtras = myDbExtras.orderExtras(data.getString(2), data.getString(1));    //uniquetag = itemId + (_0), restaurant
-                    dataExtras = myDbExtras.orderExtras(data.getString(2) + "_0", data.getString(1));    //uniquetag = itemId + (_0), restaurant
+                    //dataExtras = myDbExtras.orderExtras(data.getString(2) + "_0", data.getString(1));    //uniquetag = itemId + (_0), restaurant
 
+                    identifier = 0;
+                    do {
+                        //TODO: Change this to an actual number when the user selects the number of items of a particular kind
+                        identifier++;
+                        dataExtras = myDbExtras.orderExtras(data.getString(2) + "_" + String.valueOf(identifier), data.getString(1));    //uniquetag = itemId + (_0), restaurant;
+
+                    } while (dataExtras.getCount() > 0);
+
+                    identifier--;       //to normalize it since the previous loop checks if the next value is 0 or not
+
+                    itemRef = data.getString(2) + "_" + String.valueOf(identifier);     //uniquetag = itemId + (_0)
 
                     //Iterates through the database for all extras
                     while (dataExtras.moveToNext()) {
