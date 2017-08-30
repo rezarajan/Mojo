@@ -283,107 +283,18 @@ public class cart extends FragmentActivity {
 
                 identifier--;       //to normalize it since the previous loop checks if the next value is 0 or not
 
-                itemRef = data.getString(2) + "_" + String.valueOf(identifier);     //uniquetag = itemId + (_0)
-                Log.d("Item Ref", itemRef);
+
 
                 Log.d("Identifier", String.valueOf(identifier));
 
 
-                dataExtras = myDbExtras.orderExtras(data.getString(2) + "_" + String.valueOf(identifier), data.getString(1));    //uniquetag = itemId + (_0), restaurant
+                for(int idCount = 0; idCount <= identifier; idCount++){
+
+                    itemRef = data.getString(2) + "_" + String.valueOf(idCount);     //uniquetag = itemId + (_0)
+                    Log.d("Item Ref", itemRef);
+                    dataExtras = myDbExtras.orderExtras(data.getString(2) + "_" + String.valueOf(idCount), data.getString(1));    //uniquetag = itemId + (_0), restaurant
 
 
-                if(dataExtras == null){
-                    Log.d("dataExtras", "null");
-                }
-                else {
-                    Log.d("dataExtras", "not null");
-                    Log.d("dataExtras", "Size: " + dataExtras.getCount());
-
-                    if(dataExtras.getCount() == 0){
-                        reference.child(pushId).child("user_token").setValue(FirebaseInstanceId.getInstance().getToken());
-                        reference.child(pushId).child("customeruid_to").setValue(user.getUid());
-                        reference.child(pushId).child("customeruid_from").setValue("none");
-                        reference.child(pushId).child("vendoruid").setValue(data.getString(1));
-                        reference.child(pushId).child("postid").setValue(pushId);
-                        //reference.child(pushId).child("items").child(data.getString(2)).setValue(data.getString(4));
-                        reference.child(pushId).child("cost").child(data.getString(2)).setValue(data.getString(3));
-                        reference.child(pushId).child("items").child(itemRef).child("name").setValue(data.getString(2));
-                        reference.child(pushId).child("items").child(itemRef).child("cost").setValue(data.getString(3));
-                    }
-                    else {
-                        for(int i = 0; i < dataExtras.getCount(); i++){
-                            dataExtras.moveToPosition(i);
-                            Log.d("dataExtra", dataExtras.getString(0));
-
-
-                            //checking for any extra reading 0 quantity and excluding it
-                            if (Integer.parseInt(dataExtras.getString(2)) > 0) {
-                                Log.d("Extra for Upload", dataExtras.getString(0));
-                                extrasListing.put("name", dataExtras.getString(0));    //name, extraName
-                                extrasListing.put("cost", dataExtras.getString(1));    //cost, extraCost
-                                extrasListing.put("quantity", dataExtras.getString(2));    //cost, extraQuantity
-                                extrasListing.put("parent", dataExtras.getString(3));    //parent(type) of extra, type
-                            }
-
-                            Log.d("ExtraListing", extrasListing.toString());
-
-                            reference.child(pushId).child("user_token").setValue(FirebaseInstanceId.getInstance().getToken());
-                            reference.child(pushId).child("customeruid_to").setValue(user.getUid());
-                            reference.child(pushId).child("customeruid_from").setValue("none");
-                            reference.child(pushId).child("vendoruid").setValue(data.getString(1));
-                            reference.child(pushId).child("postid").setValue(pushId);
-                            //reference.child(pushId).child("items").child(data.getString(2)).setValue(data.getString(4));
-                            reference.child(pushId).child("cost").child(data.getString(2)).setValue(data.getString(3));
-                            reference.child(pushId).child("items").child(itemRef).child("extras").child(dataExtras.getString(0)).setValue(extrasListing);
-                            reference.child(pushId).child("items").child(itemRef).child("name").setValue(data.getString(2));
-                            reference.child(pushId).child("items").child(itemRef).child("cost").setValue(data.getString(3));
-
-
-                            Log.d("Location_0", data.getString(2) + "_" + String.valueOf(indexItems));
-                            extrasListing.clear();
-
-                        }
-                    }
-
-
-
-                }
-
-                //data.moveToPosition(position + 1);
-                if (data.moveToNext()) {
-                    indexItems++;
-
-                    //get the value from the database in column
-                    //then add it to the ArrayList
-                    //listData.add(data.getString(2));
-                    notification.put("user_token", FirebaseInstanceId.getInstance().getToken());
-                    notification.put("customeruid_to", user.getUid());
-                    notification.put("customeruid_from", "none");
-                    notification.put("vendoruid", data.getString(1));
-                    //notification.put("runneruid", "Runner");
-                    notification.put("postid", pushId);
-                    itemListing.put(data.getString(2), data.getString(4));    //itemId, quantity
-                    costListing.put(data.getString(2), data.getString(3));    //itemId, cost
-
-                    //itemRef = data.getString(2) + "_0";     //uniquetag = itemId + (_0)
-                    Log.d("Location_1", data.getString(2) + "_" + String.valueOf(indexItems));
-
-                    //dataExtras = myDbExtras.orderExtras(data.getString(2), data.getString(1));    //uniquetag = itemId + (_0), restaurant
-                    //dataExtras = myDbExtras.orderExtras(data.getString(2) + "_0", data.getString(1));    //uniquetag = itemId + (_0), restaurant
-
-                    identifier = -1;
-                    do {
-                        //TODO: Change this to an actual number when the user selects the number of items of a particular kind
-                        identifier++;
-                        dataExtras = myDbExtras.orderExtras(data.getString(2) + "_" + String.valueOf(identifier), data.getString(1));    //uniquetag = itemId + (_0), restaurant;
-
-                    } while (dataExtras.getCount() > 0);
-
-                    identifier--;       //to normalize it since the previous loop checks if the next value is 0 or not
-
-                    itemRef = data.getString(2) + "_" + String.valueOf(identifier);     //uniquetag = itemId + (_0)
-
-                    //Iterates through the database for all extras
                     if(dataExtras == null){
                         Log.d("dataExtras", "null");
                     }
@@ -435,6 +346,109 @@ public class cart extends FragmentActivity {
                                 extrasListing.clear();
 
                             }
+                        }
+
+
+
+                    }
+
+                }
+
+
+                //data.moveToPosition(position + 1);
+                if (data.moveToNext()) {
+                    indexItems++;
+
+                    //get the value from the database in column
+                    //then add it to the ArrayList
+                    //listData.add(data.getString(2));
+                    notification.put("user_token", FirebaseInstanceId.getInstance().getToken());
+                    notification.put("customeruid_to", user.getUid());
+                    notification.put("customeruid_from", "none");
+                    notification.put("vendoruid", data.getString(1));
+                    //notification.put("runneruid", "Runner");
+                    notification.put("postid", pushId);
+                    itemListing.put(data.getString(2), data.getString(4));    //itemId, quantity
+                    costListing.put(data.getString(2), data.getString(3));    //itemId, cost
+
+                    //itemRef = data.getString(2) + "_0";     //uniquetag = itemId + (_0)
+                    Log.d("Location_1", data.getString(2) + "_" + String.valueOf(indexItems));
+
+                    //dataExtras = myDbExtras.orderExtras(data.getString(2), data.getString(1));    //uniquetag = itemId + (_0), restaurant
+                    //dataExtras = myDbExtras.orderExtras(data.getString(2) + "_0", data.getString(1));    //uniquetag = itemId + (_0), restaurant
+
+                    identifier = -1;
+                    do {
+                        //TODO: Change this to an actual number when the user selects the number of items of a particular kind
+                        identifier++;
+                        dataExtras = myDbExtras.orderExtras(data.getString(2) + "_" + String.valueOf(identifier), data.getString(1));    //uniquetag = itemId + (_0), restaurant;
+
+                    } while (dataExtras.getCount() > 0);
+
+                    identifier--;       //to normalize it since the previous loop checks if the next value is 0 or not
+
+                    for(int idCount = 0; idCount <= identifier; idCount++){
+
+                        itemRef = data.getString(2) + "_" + String.valueOf(idCount);     //uniquetag = itemId + (_0)
+                        Log.d("Item Ref", itemRef);
+                        dataExtras = myDbExtras.orderExtras(data.getString(2) + "_" + String.valueOf(idCount), data.getString(1));    //uniquetag = itemId + (_0), restaurant
+
+
+                        if(dataExtras == null){
+                            Log.d("dataExtras", "null");
+                        }
+                        else {
+                            Log.d("dataExtras", "not null");
+                            Log.d("dataExtras", "Size: " + dataExtras.getCount());
+
+                            if(dataExtras.getCount() == 0){
+                                reference.child(pushId).child("user_token").setValue(FirebaseInstanceId.getInstance().getToken());
+                                reference.child(pushId).child("customeruid_to").setValue(user.getUid());
+                                reference.child(pushId).child("customeruid_from").setValue("none");
+                                reference.child(pushId).child("vendoruid").setValue(data.getString(1));
+                                reference.child(pushId).child("postid").setValue(pushId);
+                                //reference.child(pushId).child("items").child(data.getString(2)).setValue(data.getString(4));
+                                reference.child(pushId).child("cost").child(data.getString(2)).setValue(data.getString(3));
+                                reference.child(pushId).child("items").child(itemRef).child("name").setValue(data.getString(2));
+                                reference.child(pushId).child("items").child(itemRef).child("cost").setValue(data.getString(3));
+                            }
+                            else {
+                                for(int i = 0; i < dataExtras.getCount(); i++){
+                                    dataExtras.moveToPosition(i);
+                                    Log.d("dataExtra", dataExtras.getString(0));
+
+
+                                    //checking for any extra reading 0 quantity and excluding it
+                                    if (Integer.parseInt(dataExtras.getString(2)) > 0) {
+                                        Log.d("Extra for Upload", dataExtras.getString(0));
+                                        extrasListing.put("name", dataExtras.getString(0));    //name, extraName
+                                        extrasListing.put("cost", dataExtras.getString(1));    //cost, extraCost
+                                        extrasListing.put("quantity", dataExtras.getString(2));    //cost, extraQuantity
+                                        extrasListing.put("parent", dataExtras.getString(3));    //parent(type) of extra, type
+                                    }
+
+                                    Log.d("ExtraListing", extrasListing.toString());
+
+                                    reference.child(pushId).child("user_token").setValue(FirebaseInstanceId.getInstance().getToken());
+                                    reference.child(pushId).child("customeruid_to").setValue(user.getUid());
+                                    reference.child(pushId).child("customeruid_from").setValue("none");
+                                    reference.child(pushId).child("vendoruid").setValue(data.getString(1));
+                                    reference.child(pushId).child("postid").setValue(pushId);
+                                    //reference.child(pushId).child("items").child(data.getString(2)).setValue(data.getString(4));
+                                    reference.child(pushId).child("cost").child(data.getString(2)).setValue(data.getString(3));
+                                    reference.child(pushId).child("items").child(itemRef).child("extras").child(dataExtras.getString(0)).setValue(extrasListing);
+                                    reference.child(pushId).child("items").child(itemRef).child("name").setValue(data.getString(2));
+                                    reference.child(pushId).child("items").child(itemRef).child("cost").setValue(data.getString(3));
+
+
+                                    Log.d("Location_0", data.getString(2) + "_" + String.valueOf(indexItems));
+                                    extrasListing.clear();
+
+                                }
+                            }
+
+
+
                         }
 
                     }
@@ -476,44 +490,21 @@ public class cart extends FragmentActivity {
 
                     identifier--;       //to normalize it since the previous loop checks if the next value is 0 or not
 
-                    itemRef = data.getString(2) + "_" + String.valueOf(identifier);     //uniquetag = itemId + (_0)
+                    for(int idCount = 0; idCount <= identifier; idCount++){
 
-                    //Iterates through the database for all extras
-                    if(dataExtras == null){
-                        Log.d("dataExtras", "null");
-                    }
-                    else {
-                        Log.d("dataExtras", "not null");
-                        Log.d("dataExtras", "Size: " + dataExtras.getCount());
+                        itemRef = data.getString(2) + "_" + String.valueOf(idCount);     //uniquetag = itemId + (_0)
+                        Log.d("Item Ref", itemRef);
+                        dataExtras = myDbExtras.orderExtras(data.getString(2) + "_" + String.valueOf(idCount), data.getString(1));    //uniquetag = itemId + (_0), restaurant
 
-                        if(dataExtras.getCount() == 0){
-                            reference.child(pushId).child("user_token").setValue(FirebaseInstanceId.getInstance().getToken());
-                            reference.child(pushId).child("customeruid_to").setValue(user.getUid());
-                            reference.child(pushId).child("customeruid_from").setValue("none");
-                            reference.child(pushId).child("vendoruid").setValue(data.getString(1));
-                            reference.child(pushId).child("postid").setValue(pushId);
-                            //reference.child(pushId).child("items").child(data.getString(2)).setValue(data.getString(4));
-                            reference.child(pushId).child("cost").child(data.getString(2)).setValue(data.getString(3));
-                            reference.child(pushId).child("items").child(itemRef).child("name").setValue(data.getString(2));
-                            reference.child(pushId).child("items").child(itemRef).child("cost").setValue(data.getString(3));
+
+                        if(dataExtras == null){
+                            Log.d("dataExtras", "null");
                         }
                         else {
-                            for(int i = 0; i < dataExtras.getCount(); i++){
-                                dataExtras.moveToPosition(i);
-                                Log.d("dataExtra", dataExtras.getString(0));
+                            Log.d("dataExtras", "not null");
+                            Log.d("dataExtras", "Size: " + dataExtras.getCount());
 
-
-                                //checking for any extra reading 0 quantity and excluding it
-                                if (Integer.parseInt(dataExtras.getString(2)) > 0) {
-                                    Log.d("Extra for Upload", dataExtras.getString(0));
-                                    extrasListing.put("name", dataExtras.getString(0));    //name, extraName
-                                    extrasListing.put("cost", dataExtras.getString(1));    //cost, extraCost
-                                    extrasListing.put("quantity", dataExtras.getString(2));    //cost, extraQuantity
-                                    extrasListing.put("parent", dataExtras.getString(3));    //parent(type) of extra, type
-                                }
-
-                                Log.d("ExtraListing", extrasListing.toString());
-
+                            if(dataExtras.getCount() == 0){
                                 reference.child(pushId).child("user_token").setValue(FirebaseInstanceId.getInstance().getToken());
                                 reference.child(pushId).child("customeruid_to").setValue(user.getUid());
                                 reference.child(pushId).child("customeruid_from").setValue("none");
@@ -521,15 +512,46 @@ public class cart extends FragmentActivity {
                                 reference.child(pushId).child("postid").setValue(pushId);
                                 //reference.child(pushId).child("items").child(data.getString(2)).setValue(data.getString(4));
                                 reference.child(pushId).child("cost").child(data.getString(2)).setValue(data.getString(3));
-                                reference.child(pushId).child("items").child(itemRef).child("extras").child(dataExtras.getString(0)).setValue(extrasListing);
                                 reference.child(pushId).child("items").child(itemRef).child("name").setValue(data.getString(2));
                                 reference.child(pushId).child("items").child(itemRef).child("cost").setValue(data.getString(3));
-
-
-                                Log.d("Location_0", data.getString(2) + "_" + String.valueOf(indexItems));
-                                extrasListing.clear();
-
                             }
+                            else {
+                                for(int i = 0; i < dataExtras.getCount(); i++){
+                                    dataExtras.moveToPosition(i);
+                                    Log.d("dataExtra", dataExtras.getString(0));
+
+
+                                    //checking for any extra reading 0 quantity and excluding it
+                                    if (Integer.parseInt(dataExtras.getString(2)) > 0) {
+                                        Log.d("Extra for Upload", dataExtras.getString(0));
+                                        extrasListing.put("name", dataExtras.getString(0));    //name, extraName
+                                        extrasListing.put("cost", dataExtras.getString(1));    //cost, extraCost
+                                        extrasListing.put("quantity", dataExtras.getString(2));    //cost, extraQuantity
+                                        extrasListing.put("parent", dataExtras.getString(3));    //parent(type) of extra, type
+                                    }
+
+                                    Log.d("ExtraListing", extrasListing.toString());
+
+                                    reference.child(pushId).child("user_token").setValue(FirebaseInstanceId.getInstance().getToken());
+                                    reference.child(pushId).child("customeruid_to").setValue(user.getUid());
+                                    reference.child(pushId).child("customeruid_from").setValue("none");
+                                    reference.child(pushId).child("vendoruid").setValue(data.getString(1));
+                                    reference.child(pushId).child("postid").setValue(pushId);
+                                    //reference.child(pushId).child("items").child(data.getString(2)).setValue(data.getString(4));
+                                    reference.child(pushId).child("cost").child(data.getString(2)).setValue(data.getString(3));
+                                    reference.child(pushId).child("items").child(itemRef).child("extras").child(dataExtras.getString(0)).setValue(extrasListing);
+                                    reference.child(pushId).child("items").child(itemRef).child("name").setValue(data.getString(2));
+                                    reference.child(pushId).child("items").child(itemRef).child("cost").setValue(data.getString(3));
+
+
+                                    Log.d("Location_0", data.getString(2) + "_" + String.valueOf(indexItems));
+                                    extrasListing.clear();
+
+                                }
+                            }
+
+
+
                         }
 
                     }
@@ -582,38 +604,21 @@ public class cart extends FragmentActivity {
 
                     identifier--;       //to normalize it since the previous loop checks if the next value is 0 or not
 
-                    itemRef = data.getString(2) + "_" + String.valueOf(identifier);     //uniquetag = itemId + (_0)
+                    for(int idCount = 0; idCount <= identifier; idCount++){
 
-                    //Iterates through the database for all extras
-                    while (dataExtras.moveToNext()) {
-                        if(dataExtras.getCount() == 0){
-                            reference.child(pushId).child("user_token").setValue(FirebaseInstanceId.getInstance().getToken());
-                            reference.child(pushId).child("customeruid_to").setValue(user.getUid());
-                            reference.child(pushId).child("customeruid_from").setValue("none");
-                            reference.child(pushId).child("vendoruid").setValue(data.getString(1));
-                            reference.child(pushId).child("postid").setValue(pushId);
-                            //reference.child(pushId).child("items").child(data.getString(2)).setValue(data.getString(4));
-                            reference.child(pushId).child("cost").child(data.getString(2)).setValue(data.getString(3));
-                            reference.child(pushId).child("items").child(itemRef).child("name").setValue(data.getString(2));
-                            reference.child(pushId).child("items").child(itemRef).child("cost").setValue(data.getString(3));
+                        itemRef = data.getString(2) + "_" + String.valueOf(idCount);     //uniquetag = itemId + (_0)
+                        Log.d("Item Ref", itemRef);
+                        dataExtras = myDbExtras.orderExtras(data.getString(2) + "_" + String.valueOf(idCount), data.getString(1));    //uniquetag = itemId + (_0), restaurant
+
+
+                        if(dataExtras == null){
+                            Log.d("dataExtras", "null");
                         }
                         else {
-                            for(int i = 0; i < dataExtras.getCount(); i++){
-                                dataExtras.moveToPosition(i);
-                                Log.d("dataExtra", dataExtras.getString(0));
+                            Log.d("dataExtras", "not null");
+                            Log.d("dataExtras", "Size: " + dataExtras.getCount());
 
-
-                                //checking for any extra reading 0 quantity and excluding it
-                                if (Integer.parseInt(dataExtras.getString(2)) > 0) {
-                                    Log.d("Extra for Upload", dataExtras.getString(0));
-                                    extrasListing.put("name", dataExtras.getString(0));    //name, extraName
-                                    extrasListing.put("cost", dataExtras.getString(1));    //cost, extraCost
-                                    extrasListing.put("quantity", dataExtras.getString(2));    //cost, extraQuantity
-                                    extrasListing.put("parent", dataExtras.getString(3));    //parent(type) of extra, type
-                                }
-
-                                Log.d("ExtraListing", extrasListing.toString());
-
+                            if(dataExtras.getCount() == 0){
                                 reference.child(pushId).child("user_token").setValue(FirebaseInstanceId.getInstance().getToken());
                                 reference.child(pushId).child("customeruid_to").setValue(user.getUid());
                                 reference.child(pushId).child("customeruid_from").setValue("none");
@@ -621,15 +626,46 @@ public class cart extends FragmentActivity {
                                 reference.child(pushId).child("postid").setValue(pushId);
                                 //reference.child(pushId).child("items").child(data.getString(2)).setValue(data.getString(4));
                                 reference.child(pushId).child("cost").child(data.getString(2)).setValue(data.getString(3));
-                                reference.child(pushId).child("items").child(itemRef).child("extras").child(dataExtras.getString(0)).setValue(extrasListing);
                                 reference.child(pushId).child("items").child(itemRef).child("name").setValue(data.getString(2));
                                 reference.child(pushId).child("items").child(itemRef).child("cost").setValue(data.getString(3));
-
-
-                                Log.d("Location_0", data.getString(2) + "_" + String.valueOf(indexItems));
-                                extrasListing.clear();
-
                             }
+                            else {
+                                for(int i = 0; i < dataExtras.getCount(); i++){
+                                    dataExtras.moveToPosition(i);
+                                    Log.d("dataExtra", dataExtras.getString(0));
+
+
+                                    //checking for any extra reading 0 quantity and excluding it
+                                    if (Integer.parseInt(dataExtras.getString(2)) > 0) {
+                                        Log.d("Extra for Upload", dataExtras.getString(0));
+                                        extrasListing.put("name", dataExtras.getString(0));    //name, extraName
+                                        extrasListing.put("cost", dataExtras.getString(1));    //cost, extraCost
+                                        extrasListing.put("quantity", dataExtras.getString(2));    //cost, extraQuantity
+                                        extrasListing.put("parent", dataExtras.getString(3));    //parent(type) of extra, type
+                                    }
+
+                                    Log.d("ExtraListing", extrasListing.toString());
+
+                                    reference.child(pushId).child("user_token").setValue(FirebaseInstanceId.getInstance().getToken());
+                                    reference.child(pushId).child("customeruid_to").setValue(user.getUid());
+                                    reference.child(pushId).child("customeruid_from").setValue("none");
+                                    reference.child(pushId).child("vendoruid").setValue(data.getString(1));
+                                    reference.child(pushId).child("postid").setValue(pushId);
+                                    //reference.child(pushId).child("items").child(data.getString(2)).setValue(data.getString(4));
+                                    reference.child(pushId).child("cost").child(data.getString(2)).setValue(data.getString(3));
+                                    reference.child(pushId).child("items").child(itemRef).child("extras").child(dataExtras.getString(0)).setValue(extrasListing);
+                                    reference.child(pushId).child("items").child(itemRef).child("name").setValue(data.getString(2));
+                                    reference.child(pushId).child("items").child(itemRef).child("cost").setValue(data.getString(3));
+
+
+                                    Log.d("Location_0", data.getString(2) + "_" + String.valueOf(indexItems));
+                                    extrasListing.clear();
+
+                                }
+                            }
+
+
+
                         }
 
                     }
