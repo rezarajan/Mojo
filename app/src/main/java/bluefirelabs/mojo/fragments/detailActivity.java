@@ -57,7 +57,7 @@ public class detailActivity extends Fragment{
 
     private LinearLayout listContainer;
 
-    private TextView restaurantNameHolder;
+    private TextView restaurantNameHolder, itemNameExtras;
 
     LinearLayout linearLayout;
     RelativeLayout detail_item;
@@ -114,6 +114,9 @@ public class detailActivity extends Fragment{
             //Setting the restaurant name on the top of the card
             restaurantNameHolder = view.findViewById(R.id.restaurantNameHolder);
             restaurantNameHolder.setText(restaurantName);
+
+            itemNameExtras = getActivity().findViewById(R.id.itemName);
+
 
             nestedScrollView = (NestedScrollView) view.findViewById(R.id.scrollView);
             nestedScrollViewExtras = (NestedScrollView) view.findViewById(R.id.scrollViewExtras);
@@ -314,6 +317,8 @@ public class detailActivity extends Fragment{
 
                                                                             //brings up the sliding panel if the item has extras
                                                                             slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
+
+                                                                            itemNameExtras.setText(item_details.getText().toString());
 
 
                                                                         } else {
